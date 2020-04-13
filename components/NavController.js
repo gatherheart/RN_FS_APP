@@ -1,6 +1,7 @@
 import React from "react";
-import { Text, View, TouchableOpacity } from "react-native";
+import MainStack from "../navigation/MainNavigation";
 import { userIsLoggedIn, useLogIn, useLogOut } from "../context/AuthContext";
+import { NavigationContainer } from "@react-navigation/native";
 
 // Wrapper which is for braches between loggedIn User or not
 export default () => {
@@ -9,16 +10,8 @@ export default () => {
   const logIn = useLogIn();
   const logOut = useLogOut();
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      {isLoggedIn ? (
-        <TouchableOpacity onPress={logOut}>
-          <Text>Log Out</Text>
-        </TouchableOpacity>
-      ) : (
-        <TouchableOpacity onPress={logIn}>
-          <Text>Log in</Text>
-        </TouchableOpacity>
-      )}
-    </View>
+    <NavigationContainer>
+      <MainStack></MainStack>
+    </NavigationContainer>
   );
 };
