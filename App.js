@@ -8,10 +8,12 @@ import { ThemeProvider } from "styled-components";
 import { persistCache } from "apollo-cache-persist";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import { ApolloProvider } from "react-apollo-hooks";
-import ApolloClient, { gql } from "apollo-boost";
+import ApolloClient from "apollo-boost";
 import apolloClientOptions from "./apollo";
 import NodeList from "./components/List";
 import styles from "./styles";
+import NavController from "./components/NavController";
+import { AuthProvider } from "./context/AuthContext";
 
 /**
  * By Using Apollo-cache-* modules,
@@ -24,8 +26,6 @@ export default function App() {
   const [loaded, setLoaded] = useState(false);
   // Apollo Client
   const [client, setClient] = useState(null);
-  // To Check Logged in or not
-  const [isLoggedIn, setIsLoggedIn] = useState(null);
 
   // Prefeching Image Cache
   const cacheImages = (images) =>
@@ -62,12 +62,6 @@ export default function App() {
         cache,
         ...apolloClientOptions,
       });
-      const isLoggedIn = await AsyncStorage.getItem("isLoggedIn");
-      if (isLoggedIn === null || isLoggedIn === false) {
-        setIsLoggedIn(false);
-      } else {
-        setIsLoggedIn(true);
-      }
       setLoaded(true);
       setClient(client);
     } catch (e) {
@@ -78,12 +72,11 @@ export default function App() {
   useEffect(() => {
     preload();
   }, []);
-  return loaded && client && isLoggedIn !== null ? (
+  return loaded && client ? (
     <ApolloProvider client={client}>
-      <View>
-        <Text>"Hello World"</Text>
-      </View>
-      <NodeList></NodeList>
+      <ThemeProvider theme={styles}>
+        <AuthProvider></AuthProvider>
+      </ThemeProvider>
     </ApolloProvider>
   ) : (
     <AppLoading></AppLoading>
