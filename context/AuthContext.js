@@ -7,9 +7,9 @@ import { AppLoading } from "expo";
 export const AuthContext = createContext();
 
 // Make a Component that provide context regarding to authorization
-export const AuthProvider = ({ children }) => {
+export const AuthProvider = ({ isLoggedIn: isLoggedInProp, children }) => {
   // Context Variable to Check Logged in or not
-  const [isLoggedIn, setIsLoggedIn] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(isLoggedInProp);
 
   // Context Functions regarding to authorization
   const logUserIn = async () => {
@@ -38,7 +38,7 @@ export const AuthProvider = ({ children }) => {
 };
 
 // Return context variable
-export const userLoggedIn = () => {
+export const userIsLoggedIn = () => {
   const { isLoggedIn } = useContext(AuthContext);
   return isLoggedIn;
 };
