@@ -7,7 +7,8 @@ import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import { persistCache } from "apollo-cache-persist";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import { ApolloProvider } from "react-apollo-hooks";
-import ApolloClient from "apollo-boost";
+import ApolloClient, { gql } from "apollo-boost";
+import { useQuery } from "react-apollo-hooks";
 import apolloClientOptions from "./apollo";
 
 /**
@@ -16,11 +17,20 @@ import apolloClientOptions from "./apollo";
  * the execution of queries that don't rely on real-time data
  */
 
+const QUERY = gql`
+  {
+    allUsers {
+      id
+    }
+  }
+`;
+
 export default function App() {
   // For checking if app is loading or not
   const [loaded, setLoaded] = useState(false);
   // Apollo Client
   const [client, setClient] = useState(null);
+
   // Prefeching Image Cache
   const cacheImages = (images) =>
     images.map((image) => {
@@ -56,24 +66,23 @@ export default function App() {
         cache,
         ...apolloClientOptions,
       });
+      setLoaded(true);
+      setClient(client);
     } catch (e) {
       console.log(e);
     }
-    setLoaded(true);
-    console.log(client);
-    setClient(client);
   };
 
   useEffect(() => {
     preload();
   }, []);
-  return loaded ? (
-    //<ApolloClient client={client}>
-    <View>
-      <Text>"Hello World"</Text>
-    </View>
+  return loaded && client ? (
+    <ApolloProvider client={client}>
+      <View>
+        <Text>"Hello World"</Text>
+      </View>
+    </ApolloProvider>
   ) : (
-    //</ApolloClient>
     <AppLoading></AppLoading>
   );
 }
