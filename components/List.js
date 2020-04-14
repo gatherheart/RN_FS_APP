@@ -2,9 +2,7 @@ import React from "react";
 import Title from "./Title";
 import styled from "styled-components/native";
 
-const Container = styled.View`
-  margin-top: 20px;
-`;
+const Container = styled.View``;
 
 const List = ({ title, children }) => {
   return (

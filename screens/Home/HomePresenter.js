@@ -4,33 +4,43 @@ import { Dimensions } from "react-native";
 import ScrollContainer from "../../components/ScrollContainer";
 import Horizontal from "../../components/Horizontal";
 import List from "../../components/List";
+import TodaySchedule from "../../components/TodaySchedule";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
-const Container = styled.View``;
+const GroupContainer = styled.View`
+  justify-content: center;
+`;
+
+const ScheduleContainer = styled.View`
+  justify-content: center;
+`;
 
 const result = {
   groups: [
     {
-      name: "Golf Groups",
+      groupName: "Golf Groups",
       id: 1,
       tag: ["Game", "Play", "Sports"],
+      vote: "Vote #1",
       schedule: "Schedule #1",
       notice: "Go to Home",
       poster: "",
     },
     {
-      name: "Soccer Groups",
+      groupName: "Soccer Groups",
       id: 2,
       tag: ["Game", "Sports"],
+      vote: "Vote #2",
       schedule: "Schedule #1",
       notice: "Go to School",
       poster: "",
     },
     {
-      name: "Golf Groups",
+      groupName: "Golf Groups",
       id: 3,
       tag: [],
+      vote: "Vote #3",
       schedule: "Schedule #3",
       notice: "Go to Home",
       poster: "",
@@ -38,32 +48,22 @@ const result = {
   ],
 };
 
-const SliderContainer = styled.View`
-  width: 100%;
-  height: ${HEIGHT / 4}px;
-  margin-bottom: 40px;
-`;
-
 export default ({ refreshFn, loading }) => {
   const { groups } = result;
+  const schedules = groups.map((group) => group.schedule);
   return (
     <ScrollContainer refreshFn={refreshFn} loading={loading}>
       <>
-        <Container>
+        <ScheduleContainer>
+          <TodaySchedule schedules={schedules}></TodaySchedule>
+        </ScheduleContainer>
+        <GroupContainer>
           <List title={"Groups"}>
             {groups.map((group) => (
-              <Horizontal
-                key={group.id}
-                id={group.id}
-                tag={group.tag}
-                schedule={group.schedule}
-                notice={group.notice}
-                groupName={group.name}
-                poster={group.poster}
-              ></Horizontal>
+              <Horizontal key={group.id} {...group}></Horizontal>
             ))}
           </List>
-        </Container>
+        </GroupContainer>
       </>
     </ScrollContainer>
   );

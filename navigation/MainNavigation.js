@@ -15,10 +15,6 @@ export default () => (
     screenOptions={({ route, navigation }) => ({
       gestureEnabled: true,
       cardOverlayEnabled: true,
-      headerStatusBarHeight:
-        navigation.dangerouslyGetState().routes.indexOf(route) > 0
-          ? 0
-          : undefined,
     })}
   >
     <Stack.Screen name="Tabs" component={Tabs}></Stack.Screen>

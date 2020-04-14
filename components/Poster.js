@@ -8,6 +8,8 @@ const Image = styled.Image`
   height: 100px;
   resize-mode: cover;
   border-radius: 5px;
+  align-items: center;
+  justify-content: center;
 `;
 
 const Poster = ({ url }) => {

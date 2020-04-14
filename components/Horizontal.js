@@ -16,7 +16,7 @@ import { trimText } from "../utils/String";
 */
 
 const CardContainer = styled.View`
-  padding: 30px 30px 10px 10px;
+  padding: 30px 30px 10px 0px;
   border-width: 0.2px;
   border-radius: 10px;
   border-color: grey;
@@ -29,7 +29,7 @@ const Container = styled.View`
   padding: 0px 30px;
   margin-bottom: 15px;
   flex-direction: row;
-  align-items: flex-start;
+  align-items: center;
 `;
 
 const Data = styled.View`
@@ -41,40 +41,71 @@ const Data = styled.View`
 const Title = styled.Text`
   color: black;
   font-weight: bold;
+  margin-bottom: 13px;
+`;
+
+const Vote = styled.Text`
+  color: black;
+  font-weight: 500;
   margin-bottom: 10px;
 `;
 
 const Schedule = styled.Text`
   color: black;
-  font-weight: bold;
+  font-weight: 500;
   margin-bottom: 10px;
 `;
 
 const Notice = styled.Text`
   color: black;
-  font-weight: bold;
+  font-weight: 500;
   margin-bottom: 10px;
 `;
 
-const Horizontal = ({ id, groupName, schedule, poster, tag, notice }) => {
+const HashContainer = styled.View`
+  flex-direction: row;
+  margin-bottom: 10px;
+`;
+
+const Hash = styled.View`
+  background-color: #0f3;
+  border-radius: 15px;
+  margin-right: 2px;
+`;
+
+const Text = styled.Text`
+  color: black;
+  font-weight: 500;
+  padding: 2px;
+  font-size: 11px;
+`;
+
+const Horizontal = ({ id, groupName, schedule, poster, tag, vote, notice }) => {
   const navigation = useNavigation();
   const goToGroup = () => {
     navigation.navigate("Group", { id, groupName });
   };
   return (
     <CardContainer>
-      <TouchableOpacity
-        onPress={goToGroup}
-        style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-      >
+      <TouchableOpacity onPress={goToGroup}>
         <Container>
           <Poster url={poster} />
           <Data>
             {groupName ? <Title>{trimText(groupName, 30)}</Title> : null}
+            <HashContainer>
+              {tag
+                ? tag.map((hash, index) => (
+                    <Hash key={id + index}>
+                      <Text> #{trimText(hash, 7)} </Text>
+                    </Hash>
+                  ))
+                : null}
+            </HashContainer>
+            {vote ? <Vote>{trimText(vote, 130)}</Vote> : null}
             {schedule ? (
               <Schedule>sched: {trimText(schedule, 130)}</Schedule>
             ) : null}
-            {notice ? <Notice> {trimText(notice, 130)}</Notice> : null}
+            {notice ? <Notice>{trimText(notice, 130)}</Notice> : null}
           </Data>
         </Container>
       </TouchableOpacity>
