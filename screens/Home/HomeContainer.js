@@ -1,8 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { View, Text } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { useLogOut } from "../../context/AuthContext";
+import HomePresenter from "./HomePresenter";
 
+export default () => {
+  const [results, setResults] = useState({
+    loading: true,
+    nowPlaying: [],
+    popular: [],
+    upcoming: [],
+    nowPlayingError: null,
+    popularError: null,
+    upcomingError: null,
+  });
+  const getData = async () => {
+    setResults({
+      loading: false,
+    });
+    // To do things
+  };
+  useEffect(() => {
+    getData();
+  }, []);
+  return <HomePresenter {...results} refreshFn={getData} />;
+};
+/*
 export default ({ navigation }) => {
   const logOut = useLogOut();
   return (
@@ -25,3 +46,4 @@ export default ({ navigation }) => {
     </View>
   );
 };
+*/

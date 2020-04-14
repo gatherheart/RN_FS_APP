@@ -1,4 +1,4 @@
-export const BG_COLOR = "black";
+export const BG_COLOR = "white";
 export const GREY_COLOR = "#bdc3c7";
 export const RED_COLOR = "red";
 export const TINT_COLOR = "white";

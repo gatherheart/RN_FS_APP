@@ -10,15 +10,15 @@ const Stack = createStackNavigator();
 
 export default () => (
   <Stack.Navigator
-    screenOptions={{
-      headerStyle: {
-        backgroundColor: Color.BG_COLOR,
-        borderBottomColor: Color.BG_COLOR,
-        shadowColor: Color.BG_COLOR,
-      },
-      headerTintColor: Color.TINT_COLOR,
-      headerBackTitleVisible: false,
-    }}
+    initialRouteName="Home"
+    screenOptions={({ route, navigation }) => ({
+      gestureEnabled: true,
+      cardOverlayEnabled: true,
+      headerStatusBarHeight:
+        navigation.dangerouslyGetState().routes.indexOf(route) > 0
+          ? 0
+          : undefined,
+    })}
   >
     <Stack.Screen name="Tabs" component={Tabs}></Stack.Screen>
     <Stack.Screen name="GroupStack" component={GroupStack}></Stack.Screen>

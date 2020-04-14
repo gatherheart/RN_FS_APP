@@ -1,20 +1,18 @@
 import React from "react";
-import { useQuery } from "react-apollo-hooks";
-import { gql } from "apollo-boost";
+import Title from "./Title";
+import styled from "styled-components/native";
 
-const QUERY = gql`
-  {
-    allUsers {
-      id
-    }
-  }
+const Container = styled.View`
+  margin-top: 20px;
 `;
-function NoteList() {
-  const { loading, error, data } = useQuery(QUERY);
-  if (loading) console.log(loading);
-  if (error) console.log(error);
-  console.log(data);
-  return <></>;
-}
 
-export default NoteList;
+const List = ({ title, children }) => {
+  return (
+    <>
+      <Title title={title}></Title>
+      <Container>{children}</Container>
+    </>
+  );
+};
+
+export default List;
