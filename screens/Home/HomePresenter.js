@@ -58,7 +58,7 @@ export default ({ refreshFn, loading }) => {
                 tag={group.tag}
                 schedule={group.schedule}
                 notice={group.notice}
-                title={group.name}
+                groupName={group.name}
                 poster={group.poster}
               ></Horizontal>
             ))}

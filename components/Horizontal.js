@@ -56,10 +56,10 @@ const Notice = styled.Text`
   margin-bottom: 10px;
 `;
 
-const Horizontal = ({ id, title, schedule, poster, tag, notice }) => {
+const Horizontal = ({ id, groupName, schedule, poster, tag, notice }) => {
   const navigation = useNavigation();
   const goToGroup = () => {
-    navigation.navigate("GroupStack", { id });
+    navigation.navigate("Group", { id, groupName });
   };
   return (
     <CardContainer>
@@ -70,7 +70,7 @@ const Horizontal = ({ id, title, schedule, poster, tag, notice }) => {
         <Container>
           <Poster url={poster} />
           <Data>
-            {title ? <Title>{trimText(title, 30)}</Title> : null}
+            {groupName ? <Title>{trimText(groupName, 30)}</Title> : null}
             {schedule ? (
               <Schedule>sched: {trimText(schedule, 130)}</Schedule>
             ) : null}

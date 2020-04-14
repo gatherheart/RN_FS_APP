@@ -9,11 +9,14 @@ const View = styled.View`
   align-items: center;
 `;
 
-export default ({ navigation }) => {
+export default ({ navigation, id, groupName }) => {
+  console.log(id, groupName);
   return (
     <View>
       <Text>Group</Text>
-      <TouchableOpacity onPress={() => navigation.navigate("Chat")}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("Chat", { id, groupName })}
+      >
         <Text>Chat Button</Text>
       </TouchableOpacity>
     </View>

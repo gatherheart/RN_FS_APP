@@ -5,7 +5,7 @@ export default ({ navigation }) => {
   return (
     <View>
       <Text>Notice</Text>
-      <TouchableOpacity onPress={() => navigation.navigate("GroupStack")}>
+      <TouchableOpacity onPress={() => navigation.navigate("Group")}>
         <Text>Group Button</Text>
       </TouchableOpacity>
     </View>
