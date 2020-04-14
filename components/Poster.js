@@ -5,11 +5,14 @@ import getImage from "../utils/GetImage";
 
 const Image = styled.Image`
   width: 100px;
-  height: 160px;
-  border-radius: 4px;
+  height: 100px;
+  resize-mode: cover;
+  border-radius: 5px;
 `;
 
-const Poster = ({ url }) => <Image source={{ uri: getImage(url) }}></Image>;
+const Poster = ({ url }) => {
+  return <Image source={{ uri: getImage(url) }}></Image>;
+};
 
 Poster.prototype = {};
 

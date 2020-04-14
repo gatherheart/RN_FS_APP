@@ -9,26 +9,60 @@ const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
 const Container = styled.View``;
 
+const result = {
+  groups: [
+    {
+      name: "Golf Groups",
+      id: 1,
+      tag: ["Game", "Play", "Sports"],
+      schedule: "Schedule #1",
+      notice: "Go to Home",
+      poster: "",
+    },
+    {
+      name: "Soccer Groups",
+      id: 2,
+      tag: ["Game", "Sports"],
+      schedule: "Schedule #1",
+      notice: "Go to School",
+      poster: "",
+    },
+    {
+      name: "Golf Groups",
+      id: 3,
+      tag: [],
+      schedule: "Schedule #3",
+      notice: "Go to Home",
+      poster: "",
+    },
+  ],
+};
+
 const SliderContainer = styled.View`
   width: 100%;
   height: ${HEIGHT / 4}px;
   margin-bottom: 40px;
 `;
 
-export default ({ refreshFn, loading }) => (
-  <ScrollContainer refreshFn={refreshFn} loading={loading}>
-    <>
-      <Container>
-        <List title={"Groups"}>
-          <Horizontal
-            key={1}
-            id={1}
-            title={"title"}
-            poster={null}
-            overview={null}
-          ></Horizontal>
-        </List>
-      </Container>
-    </>
-  </ScrollContainer>
-);
+export default ({ refreshFn, loading }) => {
+  const { groups } = result;
+  return (
+    <ScrollContainer refreshFn={refreshFn} loading={loading}>
+      <>
+        <Container>
+          <List title={"Groups"}>
+            {groups.map((group) => (
+              <Horizontal
+                key={group.id}
+                id={group.id}
+                title={group.name}
+                poster={group.poster}
+                overview={null}
+              ></Horizontal>
+            ))}
+          </List>
+        </Container>
+      </>
+    </ScrollContainer>
+  );
+};
