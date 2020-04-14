@@ -17,3 +17,5 @@ NoticeStack (Stack.Navigator) <br />
 &nbsp; &nbsp; &nbsp; &nbsp; GroupStack (Stack.Navigator) <br />
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Chat (Screen) <br />
 ProfileStack (Stack.Navigator) <br />
+&nbsp; &nbsp; Profile (Screen) <br />
+&nbsp; &nbsp; EditProfile (Screen) <br />

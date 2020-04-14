@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState } from "react";
 import { AsyncStorage } from "react-native";
-import { AppLoading } from "expo";
 
 // Create Context That is regarding to authorization,
 // which can accessed all the children
