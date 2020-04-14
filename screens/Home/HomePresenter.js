@@ -55,9 +55,11 @@ export default ({ refreshFn, loading }) => {
               <Horizontal
                 key={group.id}
                 id={group.id}
+                tag={group.tag}
+                schedule={group.schedule}
+                notice={group.notice}
                 title={group.name}
                 poster={group.poster}
-                overview={null}
               ></Horizontal>
             ))}
           </List>

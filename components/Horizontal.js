@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components/native";
 import PropTypes from "prop-types";
 import Poster from "./Poster";
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { trimText } from "../utils/String";
 
@@ -15,9 +15,19 @@ import { trimText } from "../utils/String";
                 Notice
 */
 
+const CardContainer = styled.View`
+  padding: 30px 30px 10px 10px;
+  border-width: 0.2px;
+  border-radius: 10px;
+  border-color: grey;
+  margin: 0px 15px 15px 15px;
+  flex-direction: row;
+  align-items: flex-start;
+`;
+
 const Container = styled.View`
   padding: 0px 30px;
-  margin-bottom: 30px;
+  margin-bottom: 15px;
   flex-direction: row;
   align-items: flex-start;
 `;
@@ -34,28 +44,41 @@ const Title = styled.Text`
   margin-bottom: 10px;
 `;
 
-const Horizontal = ({
-  isTv = false,
-  id,
-  title,
-  releaseDate,
-  poster,
-  overview,
-}) => {
+const Schedule = styled.Text`
+  color: black;
+  font-weight: bold;
+  margin-bottom: 10px;
+`;
+
+const Notice = styled.Text`
+  color: black;
+  font-weight: bold;
+  margin-bottom: 10px;
+`;
+
+const Horizontal = ({ id, title, schedule, poster, tag, notice }) => {
   const navigation = useNavigation();
   const goToGroup = () => {
-    navigation.navigate("GroupStack", {});
+    navigation.navigate("GroupStack", { id });
   };
   return (
-    <TouchableOpacity onPress={goToGroup}>
-      <Container>
-        <Poster url={poster} />
-        <Data>
-          {title ? <Title>{trimText(title, 30)}</Title> : null}
-          {overview ? <Overview>{trimText(overview, 130)}</Overview> : null}
-        </Data>
-      </Container>
-    </TouchableOpacity>
+    <CardContainer>
+      <TouchableOpacity
+        onPress={goToGroup}
+        style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+      >
+        <Container>
+          <Poster url={poster} />
+          <Data>
+            {title ? <Title>{trimText(title, 30)}</Title> : null}
+            {schedule ? (
+              <Schedule>sched: {trimText(schedule, 130)}</Schedule>
+            ) : null}
+            {notice ? <Notice> {trimText(notice, 130)}</Notice> : null}
+          </Data>
+        </Container>
+      </TouchableOpacity>
+    </CardContainer>
   );
 };
 
