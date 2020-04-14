@@ -4,9 +4,9 @@ import { View, Text, TouchableOpacity } from "react-native";
 export default ({ navigation }) => {
   return (
     <View>
-      <Text>Notice</Text>
+      <Text>Group Search</Text>
       <TouchableOpacity onPress={() => navigation.navigate("GroupStack")}>
-        <Text>Group Button</Text>
+        <Text>Group</Text>
       </TouchableOpacity>
     </View>
   );

@@ -2,10 +2,10 @@ import React, { useEffect, useLayoutEffect } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { StyleSheet } from "react-native";
 import HomeScreen from "../screens/Home";
-import ChatScreen from "../screens/Chat";
-import FeedScreen from "../screens/Feed";
+import ChatStack from "../navigation/ChatNavigation";
+import FeedStack from "../navigation/FeedNavigation";
 import NoticeScreen from "../screens/Notice";
-import ProfileScreen from "../screens/Profile";
+import ProfileStack from "../navigation/ProfileNavigation";
 import TabBarIcon from "../components/TabBarIcon";
 import * as Color from "../constants/Color";
 import {
@@ -53,10 +53,10 @@ export default ({ navigation, route }) => {
       }}
     >
       <Tabs.Screen name="Home" component={HomeScreen}></Tabs.Screen>
-      <Tabs.Screen name="Chat" component={ChatScreen}></Tabs.Screen>
-      <Tabs.Screen name="Feed" component={FeedScreen}></Tabs.Screen>
+      <Tabs.Screen name="ChatStack" component={ChatStack}></Tabs.Screen>
+      <Tabs.Screen name="FeedStack" component={FeedStack}></Tabs.Screen>
       <Tabs.Screen name="Notice" component={NoticeScreen}></Tabs.Screen>
-      <Tabs.Screen name="Profile" component={ProfileScreen}></Tabs.Screen>
+      <Tabs.Screen name="ProfileStack" component={ProfileStack}></Tabs.Screen>
     </Tabs.Navigator>
   );
 };

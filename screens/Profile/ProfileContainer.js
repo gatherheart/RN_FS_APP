@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { View, Text } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 
-export default () => {
+export default ({ navigation }) => {
   return (
     <View>
       <Text>Profile</Text>
+      <TouchableOpacity onPress={() => navigation.navigate("EditProfile")}>
+        <Text>Edit</Text>
+      </TouchableOpacity>
     </View>
   );
 };

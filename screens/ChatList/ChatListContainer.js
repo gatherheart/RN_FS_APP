@@ -3,9 +3,13 @@ import { View, Text } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 export default ({ navigation }) => {
+  console.log(navigation);
   return (
     <View>
-      <Text>Chat</Text>
+      <Text>ChatList</Text>
+      <TouchableOpacity onPress={() => navigation.navigate("Chat")}>
+        <Text>Chat</Text>
+      </TouchableOpacity>
     </View>
   );
 };
