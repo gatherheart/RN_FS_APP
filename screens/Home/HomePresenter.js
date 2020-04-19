@@ -1,10 +1,11 @@
 import React from "react";
 import styled from "styled-components/native";
-import { Dimensions } from "react-native";
+import { Dimensions, TouchableOpacity, Text } from "react-native";
 import ScrollContainer from "../../components/ScrollContainer";
 import Horizontal from "../../components/Horizontal";
 import List from "../../components/List";
 import TodaySchedule from "../../components/TodaySchedule";
+import GroupButton from "../../components/GroupButton";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
@@ -14,6 +15,11 @@ const GroupContainer = styled.View`
 
 const ScheduleContainer = styled.View`
   justify-content: center;
+`;
+
+const ButtonContainer = styled.View`
+  flex-direction: row;
+  justify-content: space-around;
 `;
 
 const result = {
@@ -48,23 +54,45 @@ const result = {
   ],
 };
 
-export default ({ refreshFn, loading }) => {
+export default ({ refreshFn, loading, navigation }) => {
   const { groups } = result;
   const schedules = groups.map((group) => group.schedule);
   return (
-    <ScrollContainer refreshFn={refreshFn} loading={loading}>
+    <ScrollContainer
+      refreshFn={refreshFn}
+      loading={loading}
+      contentContainerStyle={contentContainerStyle}
+    >
       <>
         <ScheduleContainer>
           <TodaySchedule schedules={schedules}></TodaySchedule>
         </ScheduleContainer>
         <GroupContainer>
-          <List title={"Groups"}>
+          <List title={""}>
             {groups.map((group) => (
               <Horizontal key={group.id} {...group}></Horizontal>
             ))}
           </List>
+          <ButtonContainer>
+            <GroupButton
+              title={"Group Create"}
+              onclickFunc={() => {
+                navigation.navigate("GroupCreate");
+              }}
+            ></GroupButton>
+            <GroupButton
+              title={"Group Search"}
+              onclickFunc={() => {
+                navigation.navigate("GroupSearch");
+              }}
+            ></GroupButton>
+          </ButtonContainer>
         </GroupContainer>
       </>
     </ScrollContainer>
   );
+};
+
+const contentContainerStyle = {
+  backgroundColor: "#fbfafc",
 };

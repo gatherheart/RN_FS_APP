@@ -1,3 +1,3 @@
 export const defaultPoster =
-  "https://unsplash.com/photos/vlQnJZ5rOwY/download?force=true&w=640";
-export const imageApiPath = "http://localhost/";
+  "https://images.unsplash.com/photo-1503610594381-aed30c818b8e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1949&q=80";
+export const imageApiPath = "";

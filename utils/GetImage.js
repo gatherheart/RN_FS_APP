@@ -1,6 +1,6 @@
 import { defaultPoster, imagePath } from "../constants/Urls";
 const getImage = (path) => {
-  return path ? `${imagePath}${path}` : defaultPoster;
+  return path ? `${path}` : defaultPoster;
 };
 
 export default getImage;

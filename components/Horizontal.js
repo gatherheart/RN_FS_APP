@@ -2,9 +2,11 @@ import React from "react";
 import styled from "styled-components/native";
 import PropTypes from "prop-types";
 import Poster from "./Poster";
-import { TouchableOpacity, View } from "react-native";
+import { TouchableOpacity, View, StyleSheet, Dimensions } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { trimText } from "../utils/String";
+
+const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
 // Horizontal Components
 
@@ -16,17 +18,25 @@ import { trimText } from "../utils/String";
 */
 
 const CardContainer = styled.View`
-  padding: 30px 30px 10px 0px;
+  width: ${(WIDTH * 90) / 100}px;
+  height: ${(HEIGHT * 20) / 100}px;
   border-width: 0.2px;
   border-radius: 10px;
   border-color: grey;
-  margin: 0px 15px 15px 15px;
-  flex-direction: row;
-  align-items: flex-start;
+  margin: 0px 0px 15px 0px;
+  align-items: center;
+  justify-content: center;
+`;
+
+const BG = styled.View`
+  height: 100%;
+  width: 100%;
+  opacity: 0.03;
+  position: absolute;
 `;
 
 const Container = styled.View`
-  padding: 0px 30px;
+  padding: 0px 0px 0px 30px;
   margin-bottom: 15px;
   flex-direction: row;
   align-items: center;
@@ -35,7 +45,7 @@ const Container = styled.View`
 const Data = styled.View`
   align-items: flex-start;
   width: 60%;
-  margin-left: 25px;
+  margin: 25px 25px;
 `;
 
 const Title = styled.Text`
@@ -59,7 +69,7 @@ const Schedule = styled.Text`
 const Notice = styled.Text`
   color: black;
   font-weight: 500;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 `;
 
 const HashContainer = styled.View`
@@ -86,7 +96,8 @@ const Horizontal = ({ id, groupName, schedule, poster, tag, vote, notice }) => {
     navigation.navigate("Group", { id, groupName });
   };
   return (
-    <CardContainer>
+    <CardContainer style={styles.withShadow}>
+      <BG></BG>
       <TouchableOpacity onPress={goToGroup}>
         <Container>
           <Poster url={poster} />
@@ -112,6 +123,20 @@ const Horizontal = ({ id, groupName, schedule, poster, tag, vote, notice }) => {
     </CardContainer>
   );
 };
+
+const styles = StyleSheet.create({
+  withShadow: {
+    backgroundColor: "#FFF",
+    borderWidth: 0,
+    shadowColor: "#000000",
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    shadowOffset: {
+      height: 2.5,
+      width: 2.5,
+    },
+  },
+});
 
 Horizontal.propTypes = {};
 

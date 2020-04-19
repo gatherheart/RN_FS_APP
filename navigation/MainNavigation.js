@@ -9,24 +9,29 @@ import * as Color from "../constants/Color";
 
 const Stack = createStackNavigator();
 
-export default () => (
-  <Stack.Navigator
-    initialRouteName="Home"
-    screenOptions={({ route, navigation }) => ({
-      gestureEnabled: true,
-      cardOverlayEnabled: true,
-    })}
-  >
-    <Stack.Screen name="Tabs" component={Tabs}></Stack.Screen>
-    <Stack.Screen name="Group" component={GroupScreen}></Stack.Screen>
-    <Stack.Screen name="Chat" component={ChatScreen}></Stack.Screen>
-    <Stack.Screen
-      name="GroupSearch"
-      component={GroupSearchScreen}
-    ></Stack.Screen>
-    <Stack.Screen
-      name="GroupCreate"
-      component={GroupCreateScreen}
-    ></Stack.Screen>
-  </Stack.Navigator>
-);
+export default () => {
+  return (
+    <Stack.Navigator
+      initialRouteName="Home"
+      screenOptions={({ route, navigation }) => {
+        return {
+          gestureEnabled: true,
+          cardOverlayEnabled: true,
+          headerBackTitleVisible: !/Group\w+/.test(route.name),
+        };
+      }}
+    >
+      <Stack.Screen name="Tabs" component={Tabs}></Stack.Screen>
+      <Stack.Screen name="Group" component={GroupScreen}></Stack.Screen>
+      <Stack.Screen name="Chat" component={ChatScreen}></Stack.Screen>
+      <Stack.Screen
+        name="GroupSearch"
+        component={GroupSearchScreen}
+      ></Stack.Screen>
+      <Stack.Screen
+        name="GroupCreate"
+        component={GroupCreateScreen}
+      ></Stack.Screen>
+    </Stack.Navigator>
+  );
+};

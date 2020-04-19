@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text } from "react-native";
 import HomePresenter from "./HomePresenter";
 
-export default () => {
+export default ({ navigation }) => {
   const [results, setResults] = useState({
     loading: true,
     nowPlaying: [],
@@ -21,7 +21,9 @@ export default () => {
   useEffect(() => {
     getData();
   }, []);
-  return <HomePresenter {...results} refreshFn={getData} />;
+  return (
+    <HomePresenter {...results} refreshFn={getData} navigation={navigation} />
+  );
 };
 /*
 export default ({ navigation }) => {

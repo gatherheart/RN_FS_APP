@@ -26,10 +26,11 @@ const ScrollContainer = ({
           tintColor={"green"}
         ></RefreshControl>
       }
-      style={{ backgroundColor: BG_COLOR }}
+      style={{}}
       contentContainerStyle={{
         flex: loading ? 1 : 0,
-        justifyContent: loading ? "center" : "flex-start",
+        justifyContent: "center",
+        alignItems: "center",
         ...contentContainerStyle,
       }}
     >

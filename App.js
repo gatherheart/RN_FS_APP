@@ -13,6 +13,7 @@ import apolloClientOptions from "./apollo";
 import styles from "./styles";
 import NavController from "./components/NavController";
 import { AuthProvider } from "./context/AuthContext";
+import { defaultPoster } from "./constants/Urls";
 
 /**
  * By Using Apollo-cache-* modules,
@@ -44,6 +45,7 @@ export default function App() {
     const images = cacheImages([
       require("./assets/splash.png"),
       require("./assets/icon.png"),
+      defaultPoster,
     ]);
 
     const fonts = cacheFonts([Ionicons.font, FontAwesome.font]);
