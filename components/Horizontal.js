@@ -19,20 +19,10 @@ const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
 const CardContainer = styled.View`
   width: ${(WIDTH * 90) / 100}px;
-  height: ${(HEIGHT * 20) / 100}px;
-  border-width: 0.2px;
   border-radius: 10px;
   border-color: grey;
   margin: 0px 0px 15px 0px;
-  align-items: center;
-  justify-content: center;
-`;
-
-const BG = styled.View`
-  height: 100%;
-  width: 100%;
-  opacity: 0.03;
-  position: absolute;
+  padding: 5px 10px 0px 0px;
 `;
 
 const Container = styled.View`
@@ -43,27 +33,26 @@ const Container = styled.View`
 `;
 
 const Data = styled.View`
-  align-items: flex-start;
   width: 60%;
-  margin: 25px 25px;
+  margin: 10px 25px;
 `;
 
 const Title = styled.Text`
   color: black;
   font-weight: bold;
-  margin-bottom: 13px;
+  margin-bottom: 10px;
 `;
 
 const Vote = styled.Text`
   color: black;
   font-weight: 500;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 `;
 
 const Schedule = styled.Text`
   color: black;
   font-weight: 500;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 `;
 
 const Notice = styled.Text`
@@ -97,7 +86,6 @@ const Horizontal = ({ id, groupName, schedule, poster, tag, vote, notice }) => {
   };
   return (
     <CardContainer style={styles.withShadow}>
-      <BG></BG>
       <TouchableOpacity onPress={goToGroup}>
         <Container>
           <Poster url={poster} />
@@ -128,9 +116,10 @@ const styles = StyleSheet.create({
   withShadow: {
     backgroundColor: "#FFF",
     borderWidth: 0,
-    shadowColor: "#000000",
+    shadowColor: "#000",
     shadowOpacity: 0.3,
     shadowRadius: 5,
+    elevation: 1,
     shadowOffset: {
       height: 2.5,
       width: 2.5,

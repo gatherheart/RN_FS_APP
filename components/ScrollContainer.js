@@ -29,7 +29,6 @@ const ScrollContainer = ({
       style={{}}
       contentContainerStyle={{
         flex: loading ? 1 : 0,
-        justifyContent: "center",
         alignItems: "center",
         ...contentContainerStyle,
       }}

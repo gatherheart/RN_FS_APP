@@ -4,12 +4,10 @@ import styled from "styled-components/native";
 import getImage from "../utils/GetImage";
 
 const Image = styled.Image`
-  width: 100px;
-  height: 100px;
+  width: 110px;
+  height: 110px;
   resize-mode: cover;
   border-radius: 5px;
-  align-items: center;
-  justify-content: center;
 `;
 
 const Poster = ({ url }) => {

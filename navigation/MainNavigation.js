@@ -2,7 +2,7 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import Tabs from "./TabNavigation";
 import GroupScreen from "../screens/Group";
-import GroupSearchScreen from "../screens/Group/GroupSearch";
+import GroupSearchNav from "./GroupSearchNavigation";
 import GroupCreateScreen from "../screens/Group/GroupCreate";
 import ChatScreen from "../screens/Chat";
 import * as Color from "../constants/Color";
@@ -25,8 +25,8 @@ export default () => {
       <Stack.Screen name="Group" component={GroupScreen}></Stack.Screen>
       <Stack.Screen name="Chat" component={ChatScreen}></Stack.Screen>
       <Stack.Screen
-        name="GroupSearch"
-        component={GroupSearchScreen}
+        name="GroupSearchNav"
+        component={GroupSearchNav}
       ></Stack.Screen>
       <Stack.Screen
         name="GroupCreate"

@@ -9,13 +9,9 @@ import GroupButton from "../../components/GroupButton";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
-const GroupContainer = styled.View`
-  justify-content: center;
-`;
+const GroupContainer = styled.View``;
 
-const ScheduleContainer = styled.View`
-  justify-content: center;
-`;
+const ScheduleContainer = styled.View``;
 
 const ButtonContainer = styled.View`
   flex-direction: row;
@@ -63,32 +59,30 @@ export default ({ refreshFn, loading, navigation }) => {
       loading={loading}
       contentContainerStyle={contentContainerStyle}
     >
-      <>
-        <ScheduleContainer>
-          <TodaySchedule schedules={schedules}></TodaySchedule>
-        </ScheduleContainer>
-        <GroupContainer>
-          <List title={""}>
-            {groups.map((group) => (
-              <Horizontal key={group.id} {...group}></Horizontal>
-            ))}
-          </List>
-          <ButtonContainer>
-            <GroupButton
-              title={"Group Create"}
-              onclickFunc={() => {
-                navigation.navigate("GroupCreate");
-              }}
-            ></GroupButton>
-            <GroupButton
-              title={"Group Search"}
-              onclickFunc={() => {
-                navigation.navigate("GroupSearch");
-              }}
-            ></GroupButton>
-          </ButtonContainer>
-        </GroupContainer>
-      </>
+      <ScheduleContainer>
+        <TodaySchedule schedules={schedules}></TodaySchedule>
+      </ScheduleContainer>
+      <GroupContainer>
+        <List title={""}>
+          {groups.map((group) => (
+            <Horizontal key={group.id} {...group}></Horizontal>
+          ))}
+        </List>
+        <ButtonContainer>
+          <GroupButton
+            title={"Group Create"}
+            onclickFunc={() => {
+              navigation.navigate("GroupCreate");
+            }}
+          ></GroupButton>
+          <GroupButton
+            title={"Group Search"}
+            onclickFunc={() => {
+              navigation.navigate("GroupSearchNav");
+            }}
+          ></GroupButton>
+        </ButtonContainer>
+      </GroupContainer>
     </ScrollContainer>
   );
 };
