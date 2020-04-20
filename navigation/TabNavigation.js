@@ -1,4 +1,5 @@
-import React, { useEffect, useLayoutEffect } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
+import { TouchableOpacity, Alert } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { StyleSheet } from "react-native";
 import HomeScreen from "../screens/Home";
@@ -8,6 +9,8 @@ import NoticeScreen from "../screens/Notice";
 import ProfileStack from "../navigation/ProfileNavigation";
 import TabBarIcon from "../components/TabBarIcon";
 import * as Color from "../constants/Color";
+import Icon from "../components/Icon";
+import Loader from "../components/Loader";
 import {
   firstTabIcon,
   secondTabIcon,
@@ -21,17 +24,61 @@ const getHeaderName = (route) =>
   route?.state?.routeNames[route.state.index] || "Home";
 
 export default ({ navigation, route }) => {
+  const [headerBtnLoading, setHeaderBtnLoading] = useState(false);
+
+  const headerBtnPress = () => {
+    setHeaderBtnLoading((prevState) => !prevState);
+    Alert.alert(
+      "Alert Title",
+      "My Alert Msg",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        {
+          text: "OK",
+          onPress: () => setHeaderBtnLoading((prevState) => !prevState),
+        },
+      ],
+      { cancelable: false }
+    );
+  };
   useLayoutEffect(() => {
     // Optional Chaining
     const name = getHeaderName(route);
     navigation.setOptions({
       title: name,
-      headerShown: name !== "Chat",
+      headerShown: name !== "ChatStack",
       //headerStyle: {
       //  backgroundColor: name === 'TV' ? 'red' : 'black',
       //},
     });
   }, [route]);
+
+  useEffect(() => {
+    console.log(headerBtnLoading);
+    navigation.setOptions({
+      headerRight:
+        route?.state?.index || route?.name != "Tabs"
+          ? null
+          : () => (
+              <TouchableOpacity
+                onPress={headerBtnPress}
+                title="Refresh"
+                color="#fff"
+                style={{ marginRight: 20 }}
+              >
+                {headerBtnLoading ? (
+                  <Loader size={"small"}></Loader>
+                ) : (
+                  <Icon name={"refresh"} size={24}></Icon>
+                )}
+              </TouchableOpacity>
+            ),
+    });
+  }, [headerBtnLoading]);
   return (
     <Tabs.Navigator
       screenOptions={({ route }) => ({

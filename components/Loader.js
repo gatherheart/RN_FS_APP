@@ -11,10 +11,10 @@ const Container = styled.View`
 `;
 */
 
-const Loader = function () {
+const Loader = function ({ size = "large" }) {
   return (
     <View style={styles.container}>
-      <ActivityIndicator color={RED_COLOR} size="large"></ActivityIndicator>
+      <ActivityIndicator color={RED_COLOR} size={size}></ActivityIndicator>
     </View>
   );
 };

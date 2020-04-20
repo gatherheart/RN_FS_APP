@@ -24,7 +24,7 @@ const ScrollContainer = ({
           refreshing={refreshing}
           enabled={true}
           tintColor={RED_COLOR}
-          colors={[255, 255, 255]}
+          colors={["#ff0000", "#00ff00", "#0000ff"]}
         ></RefreshControl>
       }
       style={{}}

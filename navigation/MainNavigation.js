@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Button, Text, Alert } from "react-native";
 import Tabs from "./TabNavigation";
@@ -7,8 +7,6 @@ import GroupSearchNav from "./GroupSearchNavigation";
 import GroupCreateScreen from "../screens/Group/GroupCreate";
 import ChatScreen from "../screens/Chat";
 import * as Color from "../constants/Color";
-import Icon from "../components/Icon";
-import { TouchableOpacity } from "react-native-gesture-handler";
 
 const Stack = createStackNavigator();
 
@@ -18,23 +16,10 @@ export default () => {
       initialRouteName="Home"
       screenOptions={({ route, navigation }) => {
         console.log(route);
-        console.log(route?.state?.index);
         return {
           gestureEnabled: true,
           cardOverlayEnabled: true,
           headerBackTitleVisible: false,
-          headerRight: route?.state?.index
-            ? null
-            : () => (
-                <TouchableOpacity
-                  onPress={() => alert("This is a button!")}
-                  title="Info"
-                  color="#fff"
-                  style={{ marginRight: 20 }}
-                >
-                  <Icon name={"refresh"} size={24}></Icon>
-                </TouchableOpacity>
-              ),
         };
       }}
     >
