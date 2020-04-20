@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { ScrollView, RefreshControl } from "react-native";
 import Loader from "./Loader";
-import { BG_COLOR } from "../constants/Color";
+import { BG_COLOR, RED_COLOR } from "../constants/Color";
 
 const ScrollContainer = ({
   loading,
@@ -23,7 +23,8 @@ const ScrollContainer = ({
           onRefresh={onRefresh}
           refreshing={refreshing}
           enabled={true}
-          tintColor={"green"}
+          tintColor={RED_COLOR}
+          colors={[255, 255, 255]}
         ></RefreshControl>
       }
       style={{}}
