@@ -58,7 +58,6 @@ export default ({ navigation, route }) => {
   }, [route]);
 
   useEffect(() => {
-    console.log(headerBtnLoading);
     navigation.setOptions({
       headerRight:
         route?.state?.index || route?.name != "Tabs"
@@ -78,7 +77,7 @@ export default ({ navigation, route }) => {
               </TouchableOpacity>
             ),
     });
-  }, [headerBtnLoading]);
+  }, [headerBtnLoading, route]);
   return (
     <Tabs.Navigator
       screenOptions={({ route }) => ({

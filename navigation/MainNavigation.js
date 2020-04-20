@@ -15,11 +15,12 @@ export default () => {
     <Stack.Navigator
       initialRouteName="Home"
       screenOptions={({ route, navigation }) => {
-        console.log(route);
         return {
           gestureEnabled: true,
           cardOverlayEnabled: true,
           headerBackTitleVisible: false,
+          headerMode: "float",
+          headerTransitionPreset: "fade-in-place",
         };
       }}
     >
