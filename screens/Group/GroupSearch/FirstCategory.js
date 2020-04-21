@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import styled from "styled-components/native";
 import { useNavigation } from "@react-navigation/native";
-import GroupSearchBtn from "../../../components/Group/GroupButtonSearch";
+import GroupButtonSearch from "../../../components/Group/GroupButtonSearch";
 import { TextInput } from "react-native-gesture-handler";
 
 const Container = styled.View``;
@@ -49,14 +49,15 @@ export default () => {
         <View key={column} style={{ flexDirection: "row" }}>
           {row.map((category, index) => {
             return (
-              <GroupSearchBtn
+              <GroupButtonSearch
                 size={"large"}
                 key={rowLength * column + index}
                 onPress={() =>
                   goToSecond(navigation, rowLength * column + index)
                 }
                 title={category}
-              ></GroupSearchBtn>
+                animation={rowLength * column + index == 2 ? true : false}
+              ></GroupButtonSearch>
             );
           })}
         </View>

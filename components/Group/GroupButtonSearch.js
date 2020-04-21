@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
-import { Dimensions, StyleSheet } from "react-native";
+import { Dimensions, StyleSheet, Animated } from "react-native";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
@@ -33,7 +33,38 @@ const ButtonText = styled.Text`
   font-weight: 400;
 `;
 
-const GroupButtonSearch = ({ size = "small", title, onPress }) => {
+const GroupButtonSearch = ({
+  size = "small",
+  title,
+  onPress,
+  animation = false,
+}) => {
+  const position = new Animated.ValueXY({ x: 0, y: 20 });
+
+  useEffect(() => {
+    Animated.spring(position, {
+      toValue: { x: 0, y: 0 },
+      bounciness: 25,
+    }).start();
+    console.log(position);
+  }, []);
+
+  if (animation) {
+    return (
+      <Animated.View
+        style={{
+          ...styles.container,
+          ...styles.withShadow,
+          transform: [...position.getTranslateTransform()],
+        }}
+      >
+        <Button onPress={onPress}>
+          <ButtonText>{title}</ButtonText>
+        </Button>
+      </Animated.View>
+    );
+  }
+
   if (size === "large")
     return (
       <Container style={styles.withShadow}>
@@ -63,6 +94,16 @@ const styles = StyleSheet.create({
       height: 2,
       width: 2,
     },
+  },
+  container: {
+    backgroundColor: "#b1fbb1",
+    width: (WIDTH * 25) / 100,
+    height: (HEIGHT * 9) / 100,
+    borderRadius: 15,
+    justifyContent: "center",
+    marginRight: 7,
+    marginLeft: 7,
+    marginBottom: 15,
   },
 });
 
