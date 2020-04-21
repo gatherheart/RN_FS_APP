@@ -1,10 +1,9 @@
 import React from "react";
 import styled from "styled-components/native";
-import PropTypes from "prop-types";
-import Poster from "./Poster";
+import Poster from "../Poster";
 import { TouchableOpacity, View, StyleSheet, Dimensions } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { trimText } from "../utils/String";
+import { trimText } from "../../utils/String";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 

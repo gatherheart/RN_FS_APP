@@ -2,10 +2,10 @@ import React from "react";
 import styled from "styled-components/native";
 import { Dimensions, TouchableOpacity, Text } from "react-native";
 import ScrollContainer from "../../components/ScrollContainer";
-import Horizontal from "../../components/Horizontal";
+import GroupCard from "../../components/Home/GroupCard";
 import List from "../../components/List";
-import TodaySchedule from "../../components/TodaySchedule";
-import GroupButton from "../../components/GroupButton";
+import TodaySchedule from "../../components/Home/TodaySchedule";
+import GroupButton from "../../components/Home/HomeBottomBtn";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
@@ -65,7 +65,7 @@ export default ({ refreshFn, loading, navigation }) => {
       <GroupContainer>
         <List title={""}>
           {groups.map((group) => (
-            <Horizontal key={group.id} {...group}></Horizontal>
+            <GroupCard key={group.id} {...group}></GroupCard>
           ))}
         </List>
         <ButtonContainer>

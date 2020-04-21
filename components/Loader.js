@@ -1,6 +1,6 @@
 import React from "react";
 import { ActivityIndicator, View, StyleSheet } from "react-native";
-import { RED_COLOR, BG_COLOR } from "../constants/Color";
+import { GREEN_COLOR, BG_COLOR } from "../constants/Color";
 import styled from "styled-components";
 
 /*
@@ -14,7 +14,7 @@ const Container = styled.View`
 const Loader = function ({ size = "large" }) {
   return (
     <View style={styles.container}>
-      <ActivityIndicator color={RED_COLOR} size={size}></ActivityIndicator>
+      <ActivityIndicator color={GREEN_COLOR} size={size}></ActivityIndicator>
     </View>
   );
 };
