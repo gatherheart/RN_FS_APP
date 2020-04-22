@@ -56,7 +56,12 @@ export default () => {
                   goToSecond(navigation, rowLength * column + index)
                 }
                 title={category}
-                animation={rowLength * column + index == 2 ? true : false}
+                animation={
+                  rowLength * column + index ===
+                  Math.floor(Math.random() * 10 + 1)
+                    ? true
+                    : false
+                }
               ></GroupButtonSearch>
             );
           })}

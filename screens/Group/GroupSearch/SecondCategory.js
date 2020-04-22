@@ -66,9 +66,19 @@ export default () => {
                 size={"small"}
                 key={rowLength * column + index}
                 onPress={() =>
-                  goToSecond(navigation, rowLength * column + index)
+                  goToSecond(
+                    navigation,
+                    firstSelected,
+                    rowLength * column + index
+                  )
                 }
                 title={category}
+                animation={
+                  rowLength * column + index ===
+                  Math.floor(Math.random() * 20 + 1)
+                    ? true
+                    : false
+                }
               ></GroupSearchBtn>
             );
           })}

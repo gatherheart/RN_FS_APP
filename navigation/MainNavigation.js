@@ -21,6 +21,7 @@ export default () => {
           headerBackTitleVisible: false,
           headerMode: "float",
           headerTransitionPreset: "fade-in-place",
+          headerShown: route.name === "GroupSearchNav" ? false : true,
         };
       }}
     >
@@ -30,6 +31,7 @@ export default () => {
       <Stack.Screen
         name="GroupSearchNav"
         component={GroupSearchNav}
+        options={{ title: "Group Search" }}
       ></Stack.Screen>
       <Stack.Screen
         name="GroupCreate"
