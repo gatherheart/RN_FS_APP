@@ -66,16 +66,11 @@ export default () => {
                 size={"small"}
                 key={rowLength * column + index}
                 onPress={() =>
-                  goToSecond(
-                    navigation,
-                    firstSelected,
-                    rowLength * column + index
-                  )
+                  goToSecond(navigation, firstSelected, 3 * column + index)
                 }
                 title={category}
                 animation={
-                  rowLength * column + index ===
-                  Math.floor(Math.random() * 20 + 1)
+                  3 * column + index === Math.floor(Math.random() * 20 + 1)
                     ? true
                     : false
                 }

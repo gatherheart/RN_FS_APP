@@ -52,13 +52,10 @@ export default () => {
               <GroupButtonSearch
                 size={"large"}
                 key={rowLength * column + index}
-                onPress={() =>
-                  goToSecond(navigation, rowLength * column + index)
-                }
+                onPress={() => goToSecond(navigation, 3 * column + index)}
                 title={category}
                 animation={
-                  rowLength * column + index ===
-                  Math.floor(Math.random() * 10 + 1)
+                  3 * column + index === Math.floor(Math.random() * 10 + 1)
                     ? true
                     : false
                 }

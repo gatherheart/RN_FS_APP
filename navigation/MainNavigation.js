@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import { Button, Text, Alert } from "react-native";
+import { Button, Text, Alert, TouchableOpacity } from "react-native";
 import Tabs from "./TabNavigation";
 import GroupScreen from "../screens/Group";
 import GroupSearchNav from "./GroupSearchNavigation";
 import GroupCreateScreen from "../screens/Group/GroupCreate";
 import ChatScreen from "../screens/Chat";
 import * as Color from "../constants/Color";
+import Loader from "../components/Loader";
+import Icon from "../components/Icon";
 
 const Stack = createStackNavigator();
 
@@ -15,12 +17,13 @@ export default () => {
     <Stack.Navigator
       initialRouteName="Home"
       screenOptions={({ route, navigation }) => {
+        console.log(route.name);
         return {
           gestureEnabled: true,
           cardOverlayEnabled: true,
           headerBackTitleVisible: false,
-          headerMode: "float",
           headerTransitionPreset: "fade-in-place",
+          headerMode: "screen",
           headerShown: route.name === "GroupSearchNav" ? false : true,
         };
       }}
