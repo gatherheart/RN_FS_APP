@@ -27,7 +27,7 @@ const ScrollContainer = ({
           colors={["#ff0000", "#00ff00", "#0000ff"]}
         ></RefreshControl>
       }
-      style={{}}
+      style={{ backgroundColor: BG_COLOR }}
       contentContainerStyle={{
         flex: loading ? 1 : 0,
         alignItems: "center",

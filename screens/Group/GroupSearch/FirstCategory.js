@@ -4,6 +4,7 @@ import styled from "styled-components/native";
 import { useNavigation } from "@react-navigation/native";
 import GroupButtonSearch from "../../../components/Group/GroupButtonSearch";
 import { TextInput } from "react-native-gesture-handler";
+import { BG_COLOR } from "../../../constants/Color";
 
 const Container = styled.View``;
 
@@ -70,7 +71,8 @@ export default () => {
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: "center",
+    height: "100%",
+    backgroundColor: BG_COLOR,
     alignItems: "center",
   },
 });

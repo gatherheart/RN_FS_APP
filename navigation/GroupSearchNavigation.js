@@ -1,9 +1,9 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import * as Color from "../constants/Color";
-import GroupSearch from "../screens/Group/GroupSearch/GroupSearch";
 import FirstCategory from "../screens/Group/GroupSearch/FirstCategory";
 import SecondCategory from "../screens/Group/GroupSearch/SecondCategory";
+import GroupSearch from "../screens/Group/GroupSearch/GroupSearch";
 import { TouchableOpacity } from "react-native";
 import Loader from "../components/Loader";
 import Icon from "../components/Icon";
@@ -19,6 +19,8 @@ export default ({ navigation, route }) => {
           borderBottomColor: Color.BG_COLOR,
           shadowColor: Color.BG_COLOR,
           borderWidth: 0,
+          elevation: 0,
+          shadowOpacity: 0,
         },
         headerBackTitleVisible: false,
         headerShown: () => {

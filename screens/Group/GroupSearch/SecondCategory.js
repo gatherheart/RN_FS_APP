@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import styled from "styled-components/native";
 import GroupSearchBtn from "../../../components/Group/GroupButtonSearch";
+import { BG_COLOR } from "../../../constants/Color";
 
 const Container = styled.View``;
 
@@ -37,11 +38,14 @@ const MainText = styled.Text`
   font-size: 25px;
   font-weight: 500;
   opacity: 0.7;
-  margin: 50px 0px 80px 0px;
+  margin: 50px 0px 50px 0px;
 `;
 
 const goToSecond = (navigation, firstSelected = 0, secondSelected = 0) => {
-  navigation.navigate("GroupSearch", { firstSelected, secondSelected });
+  navigation.navigate("GroupSearch", {
+    firstSelected,
+    secondSelected,
+  });
 };
 
 export default () => {
@@ -85,7 +89,8 @@ export default () => {
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: "center",
+    height: "100%",
+    backgroundColor: BG_COLOR,
     alignItems: "center",
   },
 });
