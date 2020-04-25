@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { createStackNavigator } from "@react-navigation/stack";
+import {
+  createStackNavigator,
+  CardStyleInterpolators,
+} from "@react-navigation/stack";
 import { Button, Text, Alert, TouchableOpacity } from "react-native";
 import Tabs from "./TabNavigation";
 import GroupScreen from "../screens/Group";
@@ -34,7 +37,10 @@ export default () => {
       <Stack.Screen
         name="GroupSearchNav"
         component={GroupSearchNav}
-        options={{ title: "Group Search" }}
+        options={{
+          title: "Group Search",
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
       ></Stack.Screen>
       <Stack.Screen
         name="GroupCreate"

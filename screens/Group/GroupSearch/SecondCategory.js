@@ -73,11 +73,7 @@ export default () => {
                   goToSecond(navigation, firstSelected, 3 * column + index)
                 }
                 title={category}
-                animation={
-                  3 * column + index === Math.floor(Math.random() * 20 + 1)
-                    ? true
-                    : false
-                }
+                animation={rowLength * column + index === 0 ? true : false}
               ></GroupSearchBtn>
             );
           })}

@@ -55,11 +55,7 @@ export default () => {
                 key={rowLength * column + index}
                 onPress={() => goToSecond(navigation, 3 * column + index)}
                 title={category}
-                animation={
-                  3 * column + index === Math.floor(Math.random() * 10 + 1)
-                    ? true
-                    : false
-                }
+                animation={rowLength * column + index === 0 ? true : false}
               ></GroupButtonSearch>
             );
           })}

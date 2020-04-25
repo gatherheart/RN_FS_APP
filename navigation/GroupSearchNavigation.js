@@ -1,9 +1,13 @@
 import React from "react";
-import { createStackNavigator } from "@react-navigation/stack";
+import {
+  createStackNavigator,
+  TransitionSpecs,
+  CardStyleInterpolators,
+} from "@react-navigation/stack";
 import * as Color from "../constants/Color";
 import FirstCategory from "../screens/Group/GroupSearch/FirstCategory";
 import SecondCategory from "../screens/Group/GroupSearch/SecondCategory";
-import GroupSearch from "../screens/Group/GroupSearch/GroupSearch";
+import GroupSearch from "../screens/Group/GroupSearch";
 import { TouchableOpacity } from "react-native";
 import Loader from "../components/Loader";
 import Icon from "../components/Icon";
@@ -22,11 +26,15 @@ export default ({ navigation, route }) => {
           elevation: 0,
           shadowOpacity: 0,
         },
+        gestureEnabled: true,
+        gestureDirection: "horizontal",
         headerBackTitleVisible: false,
+        mode: "modal",
+        headerMode: "slide",
         headerShown: () => {
           return route.state?.index ? true : false;
         },
-        headerLeft: () =>
+        headerRight: () =>
           route.name === "GroupSearchNav" ? (
             <TouchableOpacity
               onPress={() => {
@@ -49,14 +57,25 @@ export default ({ navigation, route }) => {
       <Stack.Screen
         name="FirstCategory"
         component={FirstCategory}
-        options={{ title: "My home" }}
+        options={{
+          title: "My home",
+        }}
       ></Stack.Screen>
       <Stack.Screen
         name="SecondCategory"
         component={SecondCategory}
-        options={{ title: "My home" }}
+        options={{
+          title: "My home",
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
       ></Stack.Screen>
-      <Stack.Screen name="GroupSearch" component={GroupSearch}></Stack.Screen>
+      <Stack.Screen
+        name="GroupSearch"
+        component={GroupSearch}
+        options={{
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      ></Stack.Screen>
     </Stack.Navigator>
   );
 };
