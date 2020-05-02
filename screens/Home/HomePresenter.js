@@ -32,7 +32,7 @@ const result = {
     {
       groupName: "Soccer Groups",
       id: 2,
-      tag: ["Game", "Sports"],
+      tag: ["Game", "Play", "Sports"],
       vote: "Vote #2",
       schedule: "Schedule #1",
       notice: "Go to School",
@@ -41,7 +41,7 @@ const result = {
     {
       groupName: "Golf Groups",
       id: 3,
-      tag: [],
+      tag: ["Play", "Soccer", "Sports"],
       vote: "Vote #3",
       schedule: "Schedule #3",
       notice: "Go to Home",
