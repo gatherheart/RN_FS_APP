@@ -38,7 +38,6 @@ export default ({ navigation, route }) => {
           route.name === "GroupSearchNav" ? (
             <TouchableOpacity
               onPress={() => {
-                console.log("Pressed");
                 navigation.goBack();
               }}
               title="Refresh"

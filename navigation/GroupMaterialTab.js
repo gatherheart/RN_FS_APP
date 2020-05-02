@@ -7,7 +7,6 @@ import * as Color from "../constants/Color";
 const Tab = createMaterialTopTabNavigator();
 
 const GroupMaterialTab = ({ route, navigation }) => {
-  console.log(route);
   return (
     <Tab.Navigator
       navigationOptions={{
