@@ -4,19 +4,17 @@ import { Dimensions, StyleSheet } from "react-native";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
-const Container = styled.View`
+const Container = styled.TouchableOpacity`
   background-color: #b1fbb1;
   width: ${(WIDTH * 40) / 100}px;
   height: ${(HEIGHT * 5) / 100}px;
   border-radius: 5px;
   justify-content: center;
+  align-items: center;
   margin: 10px 0px 10px 0px;
 `;
 
-const Button = styled.TouchableOpacity`
-  align-items: center;
-  justify-content: center;
-`;
+const Button = styled.TouchableOpacity``;
 
 const ButtonText = styled.Text`
   font-weight: 400;
@@ -24,10 +22,8 @@ const ButtonText = styled.Text`
 
 const GroupButton = ({ title, onclickFunc }) => {
   return (
-    <Container style={styles.withShadow}>
-      <Button onPress={onclickFunc}>
-        <ButtonText>{title}</ButtonText>
-      </Button>
+    <Container style={styles.withShadow} onPress={onclickFunc}>
+      <ButtonText>{title}</ButtonText>
     </Container>
   );
 };

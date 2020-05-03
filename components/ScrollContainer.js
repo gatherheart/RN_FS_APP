@@ -9,6 +9,8 @@ const ScrollContainer = ({
   children,
   contentContainerStyle,
   refreshFn,
+  onScroll,
+  scrollEventThrottle,
 }) => {
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = async () => {
@@ -18,6 +20,9 @@ const ScrollContainer = ({
   };
   return (
     <ScrollView
+      showsVerticalScrollIndicator={false}
+      onScroll={onScroll}
+      scrollEventThrottle={scrollEventThrottle}
       refreshControl={
         <RefreshControl
           onRefresh={onRefresh}

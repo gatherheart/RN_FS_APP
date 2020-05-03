@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Proptypes from "prop-types";
 import styled from "styled-components/native";
 import {
@@ -31,9 +31,17 @@ const Name = styled.Text`
   margin: 0px 0px 0px 15px;
 `;
 
-const SearchModal = ({ type, setSelection, changeModal, isModalVisible }) => {
-  const [names, setNames] = useState(type == 0 ? areasName : schoolNames);
+const SearchModal = ({
+  pageType,
+  setSelection,
+  changeModal,
+  isModalVisible,
+}) => {
+  const [names, setNames] = useState(pageType == 0 ? areasName : schoolNames);
 
+  useEffect(() => {
+    setNames(pageType == 0 ? areasName : schoolNames);
+  }, [pageType]);
   return (
     <Modal isVisible={isModalVisible} onBackdropPress={changeModal}>
       <View
@@ -49,7 +57,14 @@ const SearchModal = ({ type, setSelection, changeModal, isModalVisible }) => {
           {names
             ? names.map((name, idx) => {
                 return (
-                  <TouchableOpacity key={idx} style={styles.ButtonContainer}>
+                  <TouchableOpacity
+                    key={idx}
+                    style={styles.ButtonContainer}
+                    onPress={() => {
+                      setSelection(idx);
+                      changeModal();
+                    }}
+                  >
                     <Name>{name}</Name>
                   </TouchableOpacity>
                 );

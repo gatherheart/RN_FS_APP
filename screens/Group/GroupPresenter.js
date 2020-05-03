@@ -10,7 +10,6 @@ const View = styled.View`
 `;
 
 export default ({ navigation, id, groupName }) => {
-  console.log(id, groupName);
   return (
     <View>
       <Text>Group</Text>

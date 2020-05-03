@@ -16,7 +16,6 @@ export default ({
     params: { id, groupName },
   },
 }) => {
-  console.log(id, groupName);
   return (
     <GroupPrenster
       navigation={navigation}
