@@ -12,9 +12,10 @@ import styled from "styled-components/native";
 import Input from "../../../components/Group/GroupSearchInput";
 import SearchModal from "../../../components/Group/GroupSearchModal";
 import HorizontalGroup from "../../../components/Group/SmallGroupCard";
+import { schoolNames, areasName } from "../../../constants/Names";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
-const HEADER_MAX_HEIGHT = (HEIGHT * 12) / 100; // set the initial height
+const HEADER_MAX_HEIGHT = (HEIGHT * 15) / 100; // set the initial height
 const HEADER_MIN_HEIGHT = HEIGHT / 30; // set the height on scroll
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
@@ -36,7 +37,25 @@ const SearchContainer = styled.View`
   align-items: flex-start;
   justify-content: flex-start;
   width: 100%;
-  height: ${(HEIGHT * 30) / 100}px;
+`;
+
+const OptionContainer = styled.View`
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+`;
+
+const OptionButton = styled.TouchableOpacity`
+  border-radius: 7px;
+  padding: 5px 20px 5px 20px;
+  border: #b2b2b2;
+  margin: 10px 0px 0px 20px;
+`;
+
+const OptionText = styled.Text`
+  margin: 10px 0px 0px 20px;
+  text-align: auto;
+  color: #b2b2b2;
 `;
 
 const EmptySpace = styled.View`
@@ -49,7 +68,8 @@ export default ({
   selected,
   results,
   pageType,
-  setSelection,
+  setOption,
+  option,
 }) => {
   const [keyword, setKeyword] = useState("");
   const [isModalVisible, setModalVisible] = useState(false);
@@ -83,9 +103,16 @@ export default ({
           </TouchableOpacity>
         </TitleContainer>
         <SearchContainer>
-          <TouchableOpacity onPress={changeModal}>
-            <Text>Search</Text>
-          </TouchableOpacity>
+          <OptionContainer>
+            <OptionButton onPress={changeModal}>
+              <Text style={{ textAlign: "center" }}>
+                {pageType == 0 ? "학교" : "지역"}
+              </Text>
+            </OptionButton>
+            <OptionText>
+              {pageType == 0 ? schoolNames[option] : areasName[option]}
+            </OptionText>
+          </OptionContainer>
           <Input
             placeholder={"Write a keyword"}
             value={keyword}
@@ -111,7 +138,7 @@ export default ({
         <EmptySpace></EmptySpace>
         <SearchModal
           pageType={pageType}
-          setSelection={setSelection}
+          setOption={setOption}
           changeModal={changeModal}
           isModalVisible={isModalVisible}
         ></SearchModal>

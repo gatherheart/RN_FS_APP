@@ -9,8 +9,10 @@ export default ({}) => {
   });
 
   const [searchParam, setSearchParam] = useState(true);
+  // Page type School Search 0 or Area Search 1
   const [pageType, setPageType] = useState(1);
-  const [selection, setSelection] = useState(0);
+  // selected option for school search or Area search
+  const [option, setOption] = useState(0);
 
   const getData = async () => {
     //const [result, error] = await movieApi.nowPlaying();
@@ -39,9 +41,9 @@ export default ({}) => {
   });
 
   useEffect(() => {
-    console.log(pageType, selection);
+    console.log(pageType, option);
     getData();
-  }, [selection]);
+  }, [option]);
 
   return (
     <GroupSearchPrenster
@@ -50,8 +52,8 @@ export default ({}) => {
       results={results}
       selected={secondSelected}
       pageType={pageType}
-      selection={selection}
-      setSelection={setSelection}
+      option={option}
+      setOption={setOption}
     ></GroupSearchPrenster>
   );
 };

@@ -31,16 +31,11 @@ const Name = styled.Text`
   margin: 0px 0px 0px 15px;
 `;
 
-const SearchModal = ({
-  pageType,
-  setSelection,
-  changeModal,
-  isModalVisible,
-}) => {
+const SearchModal = ({ pageType, setOption, changeModal, isModalVisible }) => {
   const [names, setNames] = useState(pageType == 0 ? areasName : schoolNames);
 
   useEffect(() => {
-    setNames(pageType == 0 ? areasName : schoolNames);
+    setNames(pageType == 0 ? schoolNames : areasName);
   }, [pageType]);
   return (
     <Modal isVisible={isModalVisible} onBackdropPress={changeModal}>
@@ -61,7 +56,7 @@ const SearchModal = ({
                     key={idx}
                     style={styles.ButtonContainer}
                     onPress={() => {
-                      setSelection(idx);
+                      setOption(idx);
                       changeModal();
                     }}
                   >
@@ -88,7 +83,7 @@ const styles = StyleSheet.create({
 
 SearchModal.proptypes = {
   type: Proptypes.number.isRequired,
-  setSelection: Proptypes.func.isRequired,
+  setOption: Proptypes.func.isRequired,
   changeModal: Proptypes.func.isRequired,
   isModalVisible: Proptypes.bool.isRequired,
 };
