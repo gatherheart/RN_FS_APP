@@ -5,17 +5,16 @@ import {
   Dimensions,
   TouchableOpacity,
   StyleSheet,
-  TextInput,
   Animated,
 } from "react-native";
 import ScrollContainer from "../../../components/ScrollContainer";
 import styled from "styled-components/native";
 import Input from "../../../components/Group/GroupSearchInput";
 import SearchModal from "../../../components/Group/GroupSearchModal";
-import HorizontalGroup from "../../../components/Group/HorizontalGroup";
+import HorizontalGroup from "../../../components/Group/SmallGroupCard";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
-const HEADER_MAX_HEIGHT = HEIGHT / 10; // set the initial height
+const HEADER_MAX_HEIGHT = (HEIGHT * 12) / 100; // set the initial height
 const HEADER_MIN_HEIGHT = HEIGHT / 30; // set the height on scroll
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
@@ -25,7 +24,6 @@ const TitleContainer = styled.View`
   align-items: center;
   width: 100%;
   height: ${HEIGHT / 30}px;
-  border: black;
 `;
 
 const Title = styled.Text`
@@ -38,6 +36,10 @@ const SearchContainer = styled.View`
   align-items: flex-start;
   justify-content: flex-start;
   width: 100%;
+  height: ${(HEIGHT * 30) / 100}px;
+`;
+
+const EmptySpace = styled.View`
   height: ${HEIGHT / 10}px;
 `;
 
@@ -99,12 +101,14 @@ export default ({
         onScroll={Animated.event([
           { nativeEvent: { contentOffset: { y: position.y } } },
         ])}
+        contentContainerStyle={{ marginTop: 30 }}
       >
         {results?.groups
           ? results.groups.map((group, idx) => {
               return <HorizontalGroup {...group} key={idx}></HorizontalGroup>;
             })
           : null}
+        <EmptySpace></EmptySpace>
         <SearchModal
           pageType={pageType}
           setSelection={setSelection}
