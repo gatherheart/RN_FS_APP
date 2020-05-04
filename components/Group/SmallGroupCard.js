@@ -1,5 +1,5 @@
-import React from "react";
-import styled from "styled-components/native";
+import React, { useContext } from "react";
+import styled, { ThemeContext } from "styled-components/native";
 import SmallPoster from "../SmallPoster";
 import PropTypes from "prop-types";
 import { TouchableOpacity, View, StyleSheet, Dimensions } from "react-native";
@@ -21,7 +21,7 @@ const CardContainer = styled.View`
   width: ${(WIDTH * 100) / 100}px;
   height: ${(HEIGHT * 13) / 100}px;
   border-style: solid;
-  border-top-color: #ebebeb;
+  border-top-color: ${(props) => props.theme.moreLightGreyColor};
   border-top-width: 1px;
   margin: 0px 0px 0px 0px;
   padding: 5px 10px 0px 0px;
@@ -83,12 +83,13 @@ const HorizontalGroup = ({
   applicableDate,
   poster,
 }) => {
+  const themeContext = useContext(ThemeContext);
   const navigation = useNavigation();
   const goToGroup = () => {
     navigation.navigate("Group", { id, groupName });
   };
   return (
-    <CardContainer>
+    <CardContainer theme={themeContext}>
       <TouchableOpacity onPress={goToGroup}>
         <Container>
           <PosterContainer>

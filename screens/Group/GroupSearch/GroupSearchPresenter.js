@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useLayoutEffect } from "react";
+import React, { useEffect, useState, useLayoutEffect, useContext } from "react";
 import {
   View,
   Text,
@@ -13,10 +13,11 @@ import Input from "../../../components/Group/GroupSearchInput";
 import SearchModal from "../../../components/Group/GroupSearchModal";
 import HorizontalGroup from "../../../components/Group/SmallGroupCard";
 import { schoolNames, areasName } from "../../../constants/Names";
+import { ThemeContext } from "styled-components";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 const HEADER_MAX_HEIGHT = (HEIGHT * 15) / 100; // set the initial height
-const HEADER_MIN_HEIGHT = HEIGHT / 30; // set the height on scroll
+const HEADER_MIN_HEIGHT = HEIGHT / 11; // set the height on scroll
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
 const TitleContainer = styled.View`
@@ -24,7 +25,7 @@ const TitleContainer = styled.View`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  height: ${HEIGHT / 30}px;
+  height: ${HEIGHT / 27}px;
 `;
 
 const Title = styled.Text`
@@ -43,12 +44,14 @@ const OptionContainer = styled.View`
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  margin: 0px 0px 5px 0px;
 `;
 
+// School option or Area Option
 const OptionButton = styled.TouchableOpacity`
   border-radius: 7px;
   padding: 5px 20px 5px 20px;
-  border: #b2b2b2;
+  border: ${(props) => props.theme.lightGreyColor};
   margin: 10px 0px 0px 20px;
 `;
 
@@ -56,6 +59,15 @@ const OptionText = styled.Text`
   margin: 10px 0px 0px 20px;
   text-align: auto;
   color: #b2b2b2;
+`;
+
+// Applicable or not filtering
+const FilterButton = styled.TouchableOpacity`
+  border-radius: 7px;
+  padding: 7px 10px 7px 10px;
+  border: ${(props) => props.theme.lightGreyColor};
+  margin: 0px 10px 0px 0px;
+  text-align: center;
 `;
 
 const EmptySpace = styled.View`
@@ -71,8 +83,13 @@ export default ({
   setOption,
   option,
 }) => {
+  const themeContext = useContext(ThemeContext);
+  // keyword for search textInput
   const [keyword, setKeyword] = useState("");
+  // Modal for school or area selection
   const [isModalVisible, setModalVisible] = useState(false);
+  // Applicable filtering
+  const [applicableFilter, setApplicableFilter] = useState(false);
 
   const position = new Animated.ValueXY();
 
@@ -98,13 +115,18 @@ export default ({
       >
         <TitleContainer>
           <Title>{selected}</Title>
-          <TouchableOpacity style={styles.ApplicableButton}>
-            <Text>Available</Text>
-          </TouchableOpacity>
+          <FilterButton theme={themeContext}>
+            <Text
+              style={{ fontSize: 12 }}
+              onPress={() => setApplicableFilter((prev) => !prev)}
+            >
+              {applicableFilter ? "전체" : "지원 가능"}
+            </Text>
+          </FilterButton>
         </TitleContainer>
         <SearchContainer>
           <OptionContainer>
-            <OptionButton onPress={changeModal}>
+            <OptionButton onPress={changeModal} theme={themeContext}>
               <Text style={{ textAlign: "center" }}>
                 {pageType == 0 ? "학교" : "지역"}
               </Text>
@@ -132,6 +154,7 @@ export default ({
       >
         {results?.groups
           ? results.groups.map((group, idx) => {
+              if (applicableFilter && !group.applicable) return null;
               return <HorizontalGroup {...group} key={idx}></HorizontalGroup>;
             })
           : null}

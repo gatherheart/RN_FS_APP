@@ -2,6 +2,12 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import { Dimensions, StyleSheet, Animated } from "react-native";
 
+/* 
+Button Components of
+Filtering Page 
+(First Category and Second Category screens of group search navigation)
+*/
+
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
 const Container = styled.View`
@@ -32,6 +38,16 @@ const Button = styled.TouchableOpacity`
 const ButtonText = styled.Text`
   font-weight: 400;
 `;
+
+/**
+ *
+ * @param {String} size button size
+ * @param {String} title text in button
+ * @param {Function} onPress unction on pressing button
+ * @param {Boolean} animation enable animation event
+ * @return {node} button component
+ *
+ */
 
 const GroupButtonSearch = ({
   size = "small",

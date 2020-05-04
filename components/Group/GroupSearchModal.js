@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import Proptypes from "prop-types";
 import styled from "styled-components/native";
 import {
@@ -15,19 +15,25 @@ import { areasName, schoolNames } from "../../constants/Names";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
+const TitleContainer = styled.View`
+  height: ${HEIGHT / 20}px;
+  border-style: solid;
+  border-bottom-color: ${(props) => props.theme.moreLightGreyColor};
+  border-bottom-width: 1px;
+  margin: 20px 0px 0px 0px;
+  padding: 0px 0px 0px 0px;
+`;
+
 const Title = styled.Text`
   text-align: center;
   font-weight: 400;
-  font-size: 30px;
-  border: 1px;
-  margin: 8px 0px 10px 0px;
-  width: 100%;
+  font-size: 20px;
 `;
 
 const Name = styled.Text`
   width: 100%;
   font-weight: 200;
-  font-size: 20px;
+  font-size: 15px;
   margin: 0px 0px 0px 15px;
 `;
 
@@ -46,8 +52,9 @@ const SearchModal = ({ pageType, setOption, changeModal, isModalVisible }) => {
           borderRadius: 10,
         }}
       >
-        <Title>Selection</Title>
-
+        <TitleContainer>
+          <Title>{pageType == 0 ? "학교 선택" : "지역 선택"}</Title>
+        </TitleContainer>
         <ScrollView>
           {names
             ? names.map((name, idx) => {
@@ -75,9 +82,10 @@ const styles = StyleSheet.create({
   ButtonContainer: {
     width: "100%",
     alignItems: "flex-start",
-    justifyContent: "flex-start",
-    height: 30,
+    justifyContent: "center",
+    height: 40,
     marginVertical: 5,
+    marginHorizontal: 10,
   },
 });
 
