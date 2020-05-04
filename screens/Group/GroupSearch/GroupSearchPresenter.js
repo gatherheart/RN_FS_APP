@@ -155,6 +155,8 @@ export default ({
         {results?.groups
           ? results.groups.map((group, idx) => {
               if (applicableFilter && !group.applicable) return null;
+              if (keyword != "" && !group.groupName.includes(keyword))
+                return null;
               return <HorizontalGroup {...group} key={idx}></HorizontalGroup>;
             })
           : null}
