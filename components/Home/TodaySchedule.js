@@ -1,13 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
-import styled from "styled-components/native";
+import styled, { ThemeContext } from "styled-components/native";
 import { Dimensions, StyleSheet } from "react-native";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
 const Card = styled.View`
   width: ${(WIDTH * 90) / 100}px;
-  background-color: #b1fbb1;
   justify-content: center;
   margin: 20px 0px 0px 0px;
   padding-bottom: 10px;
@@ -30,11 +29,16 @@ const RightText = styled.Text`
 `;
 
 const TodaySchedule = ({ schedules }) => {
-  console.log(schedules);
+  const themeContext = useContext(ThemeContext);
   const defaultHeight = schedules ? 50 + schedules.length * 25 : 50;
-  console.log(defaultHeight);
   return (
-    <Card style={{ ...styles.withShadow, ...{ height: defaultHeight } }}>
+    <Card
+      style={{
+        ...themeContext.withShadow,
+        height: defaultHeight,
+        backgroundColor: themeContext.lightGreenColor,
+      }}
+    >
       <Title>Schedule 🗓</Title>
       {schedules
         ? schedules.map((schedule, index) => (

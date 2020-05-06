@@ -11,6 +11,7 @@ import GroupSearch from "../screens/Group/GroupSearch";
 import { TouchableOpacity } from "react-native";
 import Loader from "../components/Loader";
 import Icon from "../components/Icon";
+import GroupTextSearch from "../screens/Group/GroupSearch/GroupTextSearch";
 
 const Stack = createStackNavigator();
 
@@ -71,6 +72,13 @@ export default ({ navigation, route }) => {
       <Stack.Screen
         name="GroupSearch"
         component={GroupSearch}
+        options={{
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      ></Stack.Screen>
+      <Stack.Screen
+        name="GroupTextSearch"
+        component={GroupTextSearch}
         options={{
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         }}

@@ -20,8 +20,8 @@ import {
 import { ThemeContext } from "styled-components";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
-const HEADER_MAX_HEIGHT = (HEIGHT * 15) / 100; // set the initial height
-const HEADER_MIN_HEIGHT = HEIGHT / 11; // set the height on scroll
+const HEADER_MAX_HEIGHT = (HEIGHT * 17) / 100; // set the initial height
+const HEADER_MIN_HEIGHT = HEIGHT / 9; // set the height on scroll
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
 const TitleContainer = styled.View`
@@ -29,7 +29,7 @@ const TitleContainer = styled.View`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  height: ${HEIGHT / 27}px;
+  height: ${HEIGHT / 20}px;
 `;
 
 const Title = styled.Text`
@@ -45,10 +45,12 @@ const SearchContainer = styled.View`
 `;
 
 const OptionContainer = styled.View`
+  width: 100%;
   flex-direction: row;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   margin: 0px 0px 5px 0px;
+  height: ${HEADER_MIN_HEIGHT - HEIGHT / 20}px;
 `;
 
 // School option or Area Option
@@ -69,12 +71,14 @@ const OptionText = styled.Text`
 const FilterButton = styled.TouchableOpacity`
   border-radius: 7px;
   padding: 7px 10px 7px 10px;
-  width: ${(WIDTH * 15.7) / 100}px;
+  width: ${(WIDTH * 18) / 100}px;
   border: ${(props) => props.theme.lightGreyColor};
   margin: 0px 10px 0px 0px;
   text-align: center;
   align-items: center;
 `;
+
+const InputContainer = styled.View``;
 
 const EmptySpace = styled.View`
   height: ${HEIGHT / 10}px;
@@ -101,7 +105,7 @@ export default ({
   const position = new Animated.ValueXY();
 
   const headerHeight = position.y.interpolate({
-    inputRange: [0, HEADER_SCROLL_DISTANCE],
+    inputRange: [0, HEADER_SCROLL_DISTANCE * 2],
     outputRange: [HEADER_MAX_HEIGHT, HEADER_MIN_HEIGHT],
     extrapolate: "clamp",
   });
@@ -115,8 +119,6 @@ export default ({
     setModalVisible((prev) => !prev);
   };
 
-  console.log(firstSelected, secondSelected);
-  console.log(secondCategory[firstSelected][secondSelected]);
   return (
     <>
       <Animated.View
@@ -129,7 +131,7 @@ export default ({
             onPress={() => setApplicableFilter((prev) => !prev)}
           >
             <Text style={{ fontSize: 12 }}>
-              {applicableFilter ? "전체" : "지원 가능"}
+              {applicableFilter ? "전체" : "지원가능"}
             </Text>
           </FilterButton>
         </TitleContainer>
@@ -144,18 +146,20 @@ export default ({
               {pageType == 0 ? schoolNames[option] : areasName[option]}
             </OptionText>
           </OptionContainer>
-          <Input
-            placeholder={"Write a keyword"}
-            value={keyword}
-            onChange={onChange}
-            onSubmit={onSubmit}
-          ></Input>
+          <InputContainer>
+            <Input
+              placeholder={"Write a keyword"}
+              value={keyword}
+              onChange={onChange}
+              onSubmit={onSubmit}
+            ></Input>
+          </InputContainer>
         </SearchContainer>
       </Animated.View>
       <ScrollContainer
         refreshFn={refreshFn}
         loading={loading}
-        scrollEventThrottle={1}
+        scrollEventThrottle={16}
         onScroll={Animated.event([
           { nativeEvent: { contentOffset: { y: position.y } } },
         ])}

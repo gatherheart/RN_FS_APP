@@ -39,6 +39,7 @@ function GroupTextSearch({}) {
         style={{
           marginTop: 50,
           width: "90%",
+          height: "100%",
           borderRadius: 10,
           paddingVertical: 15,
           paddingHorizontal: 10,

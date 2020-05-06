@@ -8,9 +8,9 @@ const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 const TextInput = styled.TextInput`
   background-color: #f2f2f2;
   border-radius: 10px;
-  margin: 10px 0px 10px 10px;
+  margin: 0px 0px 10px 10px;
   width: ${(WIDTH * 95) / 100}px;
-  height: ${HEIGHT / 25}px;
+  height: ${HEIGHT / 20}px;
 `;
 
 const Input = ({ placeholder, value, onChange, onSubmit }) => {

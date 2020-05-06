@@ -1,5 +1,5 @@
-import React from "react";
-import styled from "styled-components/native";
+import React, { useContext } from "react";
+import styled, { ThemeContext } from "styled-components/native";
 import Poster from "../Poster";
 import { TouchableOpacity, View, StyleSheet, Dimensions } from "react-native";
 import { useNavigation } from "@react-navigation/native";
@@ -80,11 +80,12 @@ const Text = styled.Text`
 
 const Horizontal = ({ id, groupName, schedule, poster, tag, vote, notice }) => {
   const navigation = useNavigation();
+  const themeContext = useContext(ThemeContext);
   const goToGroup = () => {
     navigation.navigate("Group", { id, groupName });
   };
   return (
-    <CardContainer style={styles.withShadow}>
+    <CardContainer style={themeContext.withShadow}>
       <TouchableOpacity onPress={goToGroup}>
         <Container>
           <Poster url={poster} />
@@ -110,21 +111,6 @@ const Horizontal = ({ id, groupName, schedule, poster, tag, vote, notice }) => {
     </CardContainer>
   );
 };
-
-const styles = StyleSheet.create({
-  withShadow: {
-    backgroundColor: "#FFF",
-    borderWidth: 0,
-    shadowColor: "#000",
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
-    elevation: 1,
-    shadowOffset: {
-      height: 2.5,
-      width: 2.5,
-    },
-  },
-});
 
 Horizontal.propTypes = {};
 

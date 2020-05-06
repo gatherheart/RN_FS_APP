@@ -1,11 +1,10 @@
-import React from "react";
-import styled from "styled-components";
+import React, { useContext } from "react";
+import styled, { ThemeContext } from "styled-components";
 import { Dimensions, StyleSheet } from "react-native";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
 const Container = styled.TouchableOpacity`
-  background-color: #b1fbb1;
   width: ${(WIDTH * 40) / 100}px;
   height: ${(HEIGHT * 5) / 100}px;
   border-radius: 5px;
@@ -21,24 +20,18 @@ const ButtonText = styled.Text`
 `;
 
 const GroupButton = ({ title, onclickFunc }) => {
+  const themeContext = useContext(ThemeContext);
   return (
-    <Container style={styles.withShadow} onPress={onclickFunc}>
+    <Container
+      style={{
+        ...themeContext.withShadow,
+        backgroundColor: themeContext.lightGreenColor,
+      }}
+      onPress={onclickFunc}
+    >
       <ButtonText>{title}</ButtonText>
     </Container>
   );
 };
-
-const styles = StyleSheet.create({
-  withShadow: {
-    shadowColor: "#000000",
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
-    elevation: 1,
-    shadowOffset: {
-      height: 2,
-      width: 2,
-    },
-  },
-});
 
 export default GroupButton;
