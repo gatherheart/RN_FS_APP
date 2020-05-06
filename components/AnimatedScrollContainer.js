@@ -11,7 +11,6 @@ const ScrollContainer = ({
   refreshFn,
   onScroll,
   scrollEventThrottle,
-  HEADER_MAX_HEIGHT,
 }) => {
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = async () => {
@@ -31,8 +30,6 @@ const ScrollContainer = ({
           enabled={true}
           tintColor={GREEN_COLOR}
           colors={["#ff0000", "#00ff00", "#0000ff"]}
-          // Android offset for RefreshControl
-          progressViewOffset={HEADER_MAX_HEIGHT}
         ></RefreshControl>
       }
       style={{ backgroundColor: BG_COLOR }}

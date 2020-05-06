@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useLayoutEffect, useContext } from "react";
 import { Text, Dimensions, Animated, Platform } from "react-native";
-import ScrollContainer from "../../../components/ScrollContainer";
+import ScrollContainer from "../../../components/AnimatedScrollContainer";
 import styled from "styled-components/native";
 import Input from "../../../components/Group/GroupSearchInput";
 import SearchModal from "../../../components/Group/GroupSearchModal";
@@ -98,7 +98,7 @@ export default ({
   const position = new Animated.ValueXY();
 
   const headerHeight = position.y.interpolate({
-    inputRange: [-6, HEADER_SCROLL_DISTANCE * 2],
+    inputRange: [0, HEADER_SCROLL_DISTANCE * 2],
     outputRange: [HEADER_MAX_HEIGHT, HEADER_MIN_HEIGHT],
     extrapolate: "clamp",
   });
@@ -156,7 +156,18 @@ export default ({
         onScroll={Animated.event([
           { nativeEvent: { contentOffset: { y: position.y } } },
         ])}
-        contentContainerStyle={{ marginTop: 30 }}
+        contentContainerStyle={{
+          marginTop: 30,
+          borderColor: "black",
+          borderWidth: 1,
+        }}
+        contentInset={{
+          top: HEADER_MAX_HEIGHT,
+        }}
+        contentOffset={{
+          y: -HEADER_MAX_HEIGHT,
+        }}
+        HEADER_MAX_HEIGHT={HEADER_MAX_HEIGHT}
       >
         {results?.groups
           ? results.groups.map((group, idx) => {

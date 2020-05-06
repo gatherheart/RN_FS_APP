@@ -45,7 +45,8 @@ export default ({}) => {
   const rowLength = parseInt((secondCategory[firstSelected].length + 2) / 3);
   const categories = secondCategory[firstSelected];
 
-  let rows = [];
+  let rows = [],
+    row = [];
 
   useLayoutEffect(
     () =>
