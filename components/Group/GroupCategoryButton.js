@@ -37,6 +37,7 @@ const Button = styled.TouchableOpacity`
 
 const ButtonText = styled.Text`
   font-weight: 400;
+  font-family: ${(props) => props.theme.regularFont};
 `;
 
 /**

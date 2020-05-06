@@ -12,7 +12,11 @@ import styled from "styled-components/native";
 import Input from "../../../components/Group/GroupSearchInput";
 import SearchModal from "../../../components/Group/GroupSearchModal";
 import HorizontalGroup from "../../../components/Group/SmallGroupCard";
-import { schoolNames, areasName } from "../../../constants/Names";
+import {
+  schoolNames,
+  areasName,
+  secondCategory,
+} from "../../../constants/Names";
 import { ThemeContext } from "styled-components";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
@@ -65,9 +69,11 @@ const OptionText = styled.Text`
 const FilterButton = styled.TouchableOpacity`
   border-radius: 7px;
   padding: 7px 10px 7px 10px;
+  width: ${(WIDTH * 15.7) / 100}px;
   border: ${(props) => props.theme.lightGreyColor};
   margin: 0px 10px 0px 0px;
   text-align: center;
+  align-items: center;
 `;
 
 const EmptySpace = styled.View`
@@ -77,7 +83,8 @@ const EmptySpace = styled.View`
 export default ({
   refreshFn,
   loading,
-  selected,
+  firstSelected,
+  secondSelected,
   results,
   pageType,
   setOption,
@@ -108,18 +115,20 @@ export default ({
     setModalVisible((prev) => !prev);
   };
 
+  console.log(firstSelected, secondSelected);
+  console.log(secondCategory[firstSelected][secondSelected]);
   return (
     <>
       <Animated.View
         style={{ width: WIDTH, height: headerHeight, backgroundColor: "white" }}
       >
         <TitleContainer>
-          <Title>{selected}</Title>
-          <FilterButton theme={themeContext}>
-            <Text
-              style={{ fontSize: 12 }}
-              onPress={() => setApplicableFilter((prev) => !prev)}
-            >
+          <Title>{secondCategory[firstSelected][secondSelected]}</Title>
+          <FilterButton
+            theme={themeContext}
+            onPress={() => setApplicableFilter((prev) => !prev)}
+          >
+            <Text style={{ fontSize: 12 }}>
               {applicableFilter ? "전체" : "지원 가능"}
             </Text>
           </FilterButton>
@@ -171,10 +180,3 @@ export default ({
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  ApplicableButton: {
-    marginRight: 30,
-  },
-  SearchButton: {},
-});

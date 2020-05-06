@@ -48,7 +48,14 @@ export default function App() {
       defaultPoster,
     ]);
 
-    const fonts = cacheFonts([Ionicons.font, FontAwesome.font]);
+    const fonts = cacheFonts([
+      Ionicons.font,
+      FontAwesome.font,
+      {
+        nanumSquareRegular: require("./assets/fonts/NanumSquareRegular.ttf"),
+        nanumSquareBold: require("./assets/fonts/NanumSquareBold.ttf"),
+      },
+    ]);
     return Promise.all([...images, ...fonts]);
   };
   // Preloading all the assets

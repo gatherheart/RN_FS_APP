@@ -1,8 +1,9 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useLayoutEffect } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import GroupSearchPrenster from "./GroupSearchPresenter";
 import Proptypes from "prop-types";
 import styled, { ThemeContext } from "styled-components/native";
+import { firstCategory } from "../../../constants/Names";
 
 const HeaderRightBtn = styled.View`
   border: ${(props) => props.theme.lightGreyColor};
@@ -65,7 +66,7 @@ export default ({}) => {
   // Query Type School Search true or Area Search false
   const [searchParam, setSearchParam] = useState(true);
   // Page type School Search 0 or Area Search 1
-  const [pageType, setPageType] = useState(1);
+  const [pageType, setPageType] = useState(0);
   // selected option for school search or Area search
   const [option, setOption] = useState(0);
 
@@ -87,24 +88,29 @@ export default ({}) => {
   const navigation = useNavigation();
 
   const { firstSelected, secondSelected } = route.params;
-  navigation.setOptions({
-    title: firstSelected,
-    headerRight: () => (
-      <RightHeaderButton
-        leftClick={() => {
-          setPageType(0);
-          setOption(0);
-        }}
-        rightClick={() => {
-          setPageType(1);
-          setOption(0);
-        }}
-        pageType={pageType}
-      ></RightHeaderButton>
-    ),
-  });
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: firstCategory[firstSelected],
+    });
+  }, []);
 
   useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <RightHeaderButton
+          leftClick={() => {
+            setPageType(0);
+            setOption(0);
+          }}
+          rightClick={() => {
+            setPageType(1);
+            setOption(0);
+          }}
+          pageType={pageType}
+        ></RightHeaderButton>
+      ),
+    });
     getData();
   }, [pageType, option]);
 
@@ -113,7 +119,8 @@ export default ({}) => {
       refreshFn={getData}
       loading={results.loading}
       results={results}
-      selected={secondSelected}
+      firstSelected={firstSelected}
+      secondSelected={secondSelected}
       pageType={pageType}
       option={option}
       setOption={setOption}
