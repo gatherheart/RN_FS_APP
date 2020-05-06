@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import styled from "styled-components";
+import React, { useEffect, useContext } from "react";
+import styled, { ThemeContext } from "styled-components";
 import { Dimensions, StyleSheet, Animated } from "react-native";
 
 /* 
@@ -15,7 +15,6 @@ const Container = styled.View`
   width: ${(WIDTH * 25) / 100}px;
   height: ${(HEIGHT * 9) / 100}px;
   border-radius: 15px;
-  justify-content: center;
   margin: 0px 7px 15px 7px;
 `;
 
@@ -24,7 +23,6 @@ const SmallContainer = styled.View`
   width: ${(WIDTH * 25) / 100}px;
   height: ${(HEIGHT * 7) / 100}px;
   border-radius: 15px;
-  justify-content: center;
   margin: 0px 7px 15px 7px;
 `;
 
@@ -56,6 +54,7 @@ const GroupButtonSearch = ({
   onPress,
   animation = false,
 }) => {
+  const themeContext = useContext(ThemeContext);
   const position = new Animated.ValueXY({ x: 0, y: 20 });
 
   useEffect(() => {
@@ -70,7 +69,8 @@ const GroupButtonSearch = ({
       <Animated.View
         style={{
           ...styles.container,
-          ...styles.withShadow,
+          ...themeContext.withShadow,
+          backgroundColor: themeContext.lightGreenColor,
           transform: [...position.getTranslateTransform()],
         }}
       >
@@ -84,7 +84,8 @@ const GroupButtonSearch = ({
       <Animated.View
         style={{
           ...styles.smallContainer,
-          ...styles.withShadow,
+          ...themeContext.withShadow,
+          backgroundColor: themeContext.lightGreenColor,
           transform: [...position.getTranslateTransform()],
         }}
       >
@@ -126,7 +127,6 @@ const styles = StyleSheet.create({
     },
   },
   container: {
-    backgroundColor: "#b1fbb1",
     width: (WIDTH * 25) / 100,
     height: (HEIGHT * 9) / 100,
     borderRadius: 15,
@@ -136,7 +136,6 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   smallContainer: {
-    backgroundColor: "#b1fbb1",
     width: (WIDTH * 25) / 100,
     height: (HEIGHT * 7) / 100,
     borderRadius: 15,

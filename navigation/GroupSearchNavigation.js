@@ -35,6 +35,7 @@ export default ({ navigation, route }) => {
         headerShown: () => {
           return route.state?.index ? true : false;
         },
+
         headerRight: () =>
           route.name === "GroupSearchNav" ? (
             <TouchableOpacity

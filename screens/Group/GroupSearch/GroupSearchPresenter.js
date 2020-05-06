@@ -1,12 +1,5 @@
 import React, { useEffect, useState, useLayoutEffect, useContext } from "react";
-import {
-  View,
-  Text,
-  Dimensions,
-  TouchableOpacity,
-  StyleSheet,
-  Animated,
-} from "react-native";
+import { Text, Dimensions, Animated, Platform } from "react-native";
 import ScrollContainer from "../../../components/ScrollContainer";
 import styled from "styled-components/native";
 import Input from "../../../components/Group/GroupSearchInput";
@@ -105,7 +98,7 @@ export default ({
   const position = new Animated.ValueXY();
 
   const headerHeight = position.y.interpolate({
-    inputRange: [0, HEADER_SCROLL_DISTANCE * 2],
+    inputRange: [-6, HEADER_SCROLL_DISTANCE * 2],
     outputRange: [HEADER_MAX_HEIGHT, HEADER_MIN_HEIGHT],
     extrapolate: "clamp",
   });
@@ -159,7 +152,7 @@ export default ({
       <ScrollContainer
         refreshFn={refreshFn}
         loading={loading}
-        scrollEventThrottle={16}
+        scrollEventThrottle={Platform.OS === "ios" ? 16 : 0}
         onScroll={Animated.event([
           { nativeEvent: { contentOffset: { y: position.y } } },
         ])}

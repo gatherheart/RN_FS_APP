@@ -1,11 +1,19 @@
 import React, { useEffect, useState, useLayoutEffect } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Dimensions,
+} from "react-native";
 import styled from "styled-components/native";
 import { useNavigation } from "@react-navigation/native";
 import GroupButtonSearch from "../../../components/Group/GroupCategoryButton";
-import { TextInput } from "react-native-gesture-handler";
 import { BG_COLOR } from "../../../constants/Color";
 import { firstCategory } from "../../../constants/Names";
+import Icon from "../../../components/Icon";
+
+const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
 const Container = styled.View``;
 
@@ -22,6 +30,21 @@ const MainText = styled.Text`
   font-family: ${(props) => props.theme.regularFont};
 `;
 
+const SearchButton = styled.TouchableOpacity`
+  margin: 30px 0px 0px 0px;
+  width: ${(WIDTH * 85) / 100}px;
+  height: ${(HEIGHT * 5) / 100}px;
+  border-radius: 10px;
+  background-color: ${(props) => props.theme.moreLightGreyColor};
+  justify-content: center;
+`;
+
+const SearchButtonText = styled.Text`
+  margin: 0px 0px 0px 20px;
+  color: ${(props) => props.theme.greyColor};
+  font-family: ${(props) => props.theme.regularFont};
+`;
+
 const goToSecond = (navigation, selected = 0) => {
   navigation.navigate("SecondCategory", { selected: selected });
 };
@@ -33,6 +56,17 @@ export default () => {
     () =>
       navigation.setOptions({
         title: "숲 검색",
+        headerLeft: () => (
+          <TouchableOpacity
+            onPress={() => {
+              navigation.goBack();
+            }}
+            title="goBack"
+            style={{ marginHorizontal: 10 }}
+          >
+            <Icon name={"arrow-back"} size={32}></Icon>
+          </TouchableOpacity>
+        ),
       }),
     []
   );
@@ -61,6 +95,9 @@ export default () => {
           })}
         </View>
       ))}
+      <SearchButton>
+        <SearchButtonText>모임 명으로 검색하기</SearchButtonText>
+      </SearchButton>
     </Container>
   );
 };
