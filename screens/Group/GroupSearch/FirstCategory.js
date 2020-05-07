@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import styled from "styled-components/native";
 import { useNavigation } from "@react-navigation/native";
-import GroupButtonSearch from "../../../components/Group/GroupCategoryButton";
+import GroupSearchBtn from "../../../components/Group/GroupCategoryButton";
 import { BG_COLOR } from "../../../constants/Color";
 import { firstCategory } from "../../../constants/Names";
 import Icon from "../../../components/Icon";
@@ -78,23 +78,23 @@ export default () => {
   return (
     <Container style={styles.container}>
       <MainText>어떤 숲을 검색해볼까요?</MainText>
-      {rows.map((row, column) => (
-        <View key={column} style={{ flexDirection: "row" }}>
-          {row.map((category, index) => {
-            return (
-              <GroupButtonSearch
-                size={"large"}
-                key={3 * column + index}
-                onPress={() =>
-                  goToSecond(navigation, column + rowLength * index)
-                }
-                title={category}
-                animation={rowLength * column + index === 0 ? true : false}
-              ></GroupButtonSearch>
-            );
-          })}
-        </View>
-      ))}
+      <View
+        style={{
+          flexWrap: "wrap",
+          flexDirection: "row",
+          justifyContent: "center",
+        }}
+      >
+        {categories.map((category, idx) => (
+          <GroupSearchBtn
+            size={"small"}
+            key={idx}
+            onPress={() => goToSecond(navigation, firstSelected, idx)}
+            title={category}
+            animation={idx === 0 ? true : false}
+          ></GroupSearchBtn>
+        ))}
+      </View>
       <SearchButton>
         <SearchButtonText>모임 명으로 검색하기</SearchButtonText>
       </SearchButton>

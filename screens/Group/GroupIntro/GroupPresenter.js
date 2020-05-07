@@ -7,6 +7,7 @@ import {
   ImageBackground,
   Platform,
   Animated,
+  View,
 } from "react-native";
 import { Block, Text, theme } from "galio-framework";
 import { useNavigation } from "@react-navigation/native";
@@ -14,7 +15,7 @@ import { useNavigation } from "@react-navigation/native";
 import Button from "../../components/Group/ArgonButton";
 import Images from "../../constants/ArgonImages";
 import argonTheme from "../../constants/ArgonTheme";
-import { HeaderHeight } from "../../utils/HeaderHeight";
+import { HeaderHeight } from  ../../utils/HeaderHeight";
 import styled from "styled-components/native";
 
 const { width, height } = Dimensions.get("screen");
@@ -186,8 +187,8 @@ export default ({ id, groupName, loading, refreshFn }) => {
                     View all
                   </Button>
                 </Block>
-                <Block style={{ paddingBottom: -HeaderHeight * 2 }}>
-                  <Block row space="between" style={{ flexWrap: "wrap" }}>
+                <View style={{ paddingBottom: -HeaderHeight * 2 }}>
+                  <View row space="between" style={{ flexWrap: "wrap" }}>
                     {Images.Viewed.map((img, imgIndex) => (
                       <Image
                         source={{ uri: img }}
@@ -196,10 +197,10 @@ export default ({ id, groupName, loading, refreshFn }) => {
                         style={styles.thumb}
                       />
                     ))}
-                  </Block>
-                </Block>
-                <Block style={{ paddingBottom: -HeaderHeight * 2 }}>
-                  <Block row space="between" style={{ flexWrap: "wrap" }}>
+                  </View>
+                </View>
+                <View style={{ paddingBottom: -HeaderHeight * 2 }}>
+                  <View style={{ flexWrap: "wrap" }}>
                     {Images.Viewed.map((img, imgIndex) => (
                       <Image
                         source={{ uri: img }}
@@ -208,10 +209,10 @@ export default ({ id, groupName, loading, refreshFn }) => {
                         style={styles.thumb}
                       />
                     ))}
-                  </Block>
-                </Block>
-                <Block style={{ paddingBottom: -HeaderHeight * 2 }}>
-                  <Block row space="between" style={{ flexWrap: "wrap" }}>
+                  </View>
+                </View>
+                <View style={{ paddingBottom: -HeaderHeight * 2 }}>
+                  <View row space="between" style={{ flexWrap: "wrap" }}>
                     {Images.Viewed.map((img, imgIndex) => (
                       <Image
                         source={{ uri: img }}
@@ -220,8 +221,8 @@ export default ({ id, groupName, loading, refreshFn }) => {
                         style={styles.thumb}
                       />
                     ))}
-                  </Block>
-                </Block>
+                  </View>
+                </View>
                 <EmptySpace></EmptySpace>
               </Block>
             </Block>

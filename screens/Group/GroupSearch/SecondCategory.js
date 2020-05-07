@@ -72,40 +72,29 @@ export default ({}) => {
     []
   );
 
-  for (let i = 0; i < rowLength; i++) {
-    row = [categories[3 * i + 0], categories[3 * i + 1], categories[3 * i + 2]];
-    row = row.filter((r) => r != undefined);
-    rows.push(row);
-  }
-
   return (
     <Container style={styles.container}>
       <TextContainer>
         <MainText>어떤 숲을 검색해볼까요?</MainText>
       </TextContainer>
-      {rows.map((row, rowNum) => (
+      <View style={{ marginLeft: "7%" }}>
         <View
-          key={rowNum}
           style={{
+            flexWrap: "wrap",
             flexDirection: "row",
-            marginHorizontal: (WIDTH * 7) / 100,
           }}
         >
-          {row.map((category, colNum) => {
-            return (
-              <GroupSearchBtn
-                size={"small"}
-                key={rowLength * rowNum + colNum}
-                onPress={() =>
-                  goToSecond(navigation, firstSelected, rowNum * 3 + colNum)
-                }
-                title={category}
-                animation={rowLength * rowNum + colNum === 0 ? true : false}
-              ></GroupSearchBtn>
-            );
-          })}
+          {categories.map((category, idx) => (
+            <GroupSearchBtn
+              size={"small"}
+              key={idx}
+              onPress={() => goToSecond(navigation, firstSelected, idx)}
+              title={category}
+              animation={idx === 0 ? true : false}
+            ></GroupSearchBtn>
+          ))}
         </View>
-      ))}
+      </View>
     </Container>
   );
 };
