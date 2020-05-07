@@ -97,11 +97,7 @@ export default ({}) => {
                 size={"small"}
                 key={rowLength * rowNum + colNum}
                 onPress={() =>
-                  goToSecond(
-                    navigation,
-                    firstSelected,
-                    rowNum * rowLength + colNum
-                  )
+                  goToSecond(navigation, firstSelected, rowNum * 3 + colNum)
                 }
                 title={category}
                 animation={rowLength * rowNum + colNum === 0 ? true : false}

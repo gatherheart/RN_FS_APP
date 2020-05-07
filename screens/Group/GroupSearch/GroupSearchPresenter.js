@@ -9,6 +9,7 @@ import {
   schoolNames,
   areasName,
   secondCategory,
+  firstCategory,
 } from "../../../constants/Names";
 import { ThemeContext } from "styled-components";
 
@@ -97,7 +98,7 @@ export default ({
   const position = new Animated.ValueXY(0);
 
   const headerHeight = position.y.interpolate({
-    inputRange: [0, HEADER_SCROLL_DISTANCE],
+    inputRange: [0, HEADER_MAX_HEIGHT],
     outputRange: [0, -HEADER_MAX_HEIGHT],
     extrapolate: "clamp",
   });

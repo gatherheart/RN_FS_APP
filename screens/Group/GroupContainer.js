@@ -16,11 +16,26 @@ export default ({
     params: { id, groupName },
   },
 }) => {
-  return (
-    <GroupPrenster
-      navigation={navigation}
-      id={id}
-      groupName={groupName}
-    ></GroupPrenster>
-  );
+  const [group, setGroup] = useState({
+    loading: true,
+  });
+
+  const getData = async () => {
+    setGroup({
+      loading: false,
+      id: 1,
+      groupName: "Test Group",
+      fieldTag: [],
+      joiningCondition: [],
+      vote: [],
+      schedule: [],
+      notice: [],
+      poster: "",
+    });
+  };
+  useEffect(() => {
+    getData();
+  }, []);
+
+  return <GroupPrenster {...group} refreshFn={getData}></GroupPrenster>;
 };

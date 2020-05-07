@@ -12,6 +12,7 @@ const ScrollContainer = ({
   onScroll,
   scrollEventThrottle,
   HEADER_MAX_HEIGHT,
+  style,
 }) => {
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = async () => {
@@ -35,7 +36,7 @@ const ScrollContainer = ({
           progressViewOffset={HEADER_MAX_HEIGHT}
         ></RefreshControl>
       }
-      style={{ backgroundColor: BG_COLOR }}
+      style={{ backgroundColor: BG_COLOR, ...style }}
       contentContainerStyle={{
         flex: loading ? 1 : 0,
         alignItems: "center",
