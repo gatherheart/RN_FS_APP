@@ -71,10 +71,6 @@ export default () => {
     []
   );
 
-  let rows = [];
-  for (let i = 0; i < rowLength; i++) {
-    rows.push(categories.filter((_, index) => index % rowLength === i));
-  }
   return (
     <Container style={styles.container}>
       <MainText>어떤 숲을 검색해볼까요?</MainText>
@@ -89,7 +85,7 @@ export default () => {
           <GroupSearchBtn
             size={"small"}
             key={idx}
-            onPress={() => goToSecond(navigation, firstSelected, idx)}
+            onPress={() => goToSecond(navigation, idx)}
             title={category}
             animation={idx === 0 ? true : false}
           ></GroupSearchBtn>

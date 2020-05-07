@@ -1,6 +1,7 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import styled, { ThemeContext } from "styled-components";
 import { Dimensions, StyleSheet, Animated } from "react-native";
+import { useRoute } from "@react-navigation/native";
 
 /* 
 Button Components of
@@ -55,14 +56,16 @@ const GroupButtonSearch = ({
   animation = false,
 }) => {
   const themeContext = useContext(ThemeContext);
-  const position = new Animated.ValueXY({ x: 0, y: 20 });
+  const position = new Animated.ValueXY({ x: 0, y: loaded ? 0 : 15 });
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     Animated.spring(position, {
       toValue: { x: 0, y: 0 },
-      bounciness: 25,
+      bounciness: 20,
     }).start();
-  }, []);
+    setLoaded(true);
+  }, [loaded]);
 
   if (animation && size === "large") {
     return (
@@ -98,7 +101,12 @@ const GroupButtonSearch = ({
 
   if (size === "large")
     return (
-      <Container style={styles.withShadow}>
+      <Container
+        style={{
+          ...themeContext.withShadow,
+          backgroundColor: themeContext.lightGreenColor,
+        }}
+      >
         <Button onPress={onPress}>
           <ButtonText>{title}</ButtonText>
         </Button>
@@ -106,7 +114,12 @@ const GroupButtonSearch = ({
     );
   else {
     return (
-      <SmallContainer style={styles.withShadow}>
+      <SmallContainer
+        style={{
+          ...themeContext.withShadow,
+          backgroundColor: themeContext.lightGreenColor,
+        }}
+      >
         <Button onPress={onPress}>
           <ButtonText>{title}</ButtonText>
         </Button>
