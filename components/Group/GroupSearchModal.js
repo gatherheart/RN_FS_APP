@@ -44,7 +44,13 @@ const SearchModal = ({ pageType, setOption, changeModal, isModalVisible }) => {
     setNames(pageType == 0 ? schoolNames : areasName);
   }, [pageType]);
   return (
-    <Modal isVisible={isModalVisible} onBackdropPress={changeModal}>
+    <Modal
+      isVisible={isModalVisible}
+      onBackdropPress={changeModal}
+      animationIn={"fadeIn"}
+      animationOut={"fadeOut"}
+      useNativeDriver
+    >
       <View
         style={{
           flex: 0.5,

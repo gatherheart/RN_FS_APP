@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useLayoutEffect, useContext } from "react";
-import { Text, Dimensions, Animated, Platform } from "react-native";
+import { Text, Dimensions, Animated, Platform, View } from "react-native";
 import ScrollContainer from "../../../components/AnimatedScrollContainer";
 import styled from "styled-components/native";
 import Input from "../../../components/Group/GroupSearchInput";
@@ -43,7 +43,6 @@ const OptionContainer = styled.View`
   justify-content: flex-start;
   align-items: center;
   margin: 0px 0px 5px 0px;
-  height: ${HEADER_MIN_HEIGHT - HEIGHT / 20}px;
 `;
 
 // School option or Area Option
@@ -95,11 +94,11 @@ export default ({
   // Applicable filtering
   const [applicableFilter, setApplicableFilter] = useState(false);
 
-  const position = new Animated.ValueXY();
+  const position = new Animated.ValueXY(0);
 
   const headerHeight = position.y.interpolate({
-    inputRange: [0, HEADER_SCROLL_DISTANCE * 2],
-    outputRange: [HEADER_MAX_HEIGHT, HEADER_MIN_HEIGHT],
+    inputRange: [0, HEADER_SCROLL_DISTANCE],
+    outputRange: [0, -HEADER_MAX_HEIGHT],
     extrapolate: "clamp",
   });
 
@@ -113,9 +112,54 @@ export default ({
   };
 
   return (
-    <>
+    <View style={{ flex: 1 }}>
+      <ScrollContainer
+        style={{ flex: 1 }}
+        refreshFn={refreshFn}
+        loading={loading}
+        scrollEventThrottle={1}
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { y: position.y } } }],
+          { useNativeDriver: true }
+        )}
+        contentContainerStyle={{}}
+        HEADER_MAX_HEIGHT={HEADER_MAX_HEIGHT}
+      >
+        <View
+          style={{ paddingTop: Platform.OS !== "ios" ? HEADER_MAX_HEIGHT : 0 }}
+        >
+          {results?.groups
+            ? results.groups.map((group, idx) => {
+                if (applicableFilter && !group.applicable) return null;
+                if (keyword != "" && !group.groupName.includes(keyword))
+                  return null;
+                return <HorizontalGroup {...group} key={idx}></HorizontalGroup>;
+              })
+            : null}
+        </View>
+        <EmptySpace></EmptySpace>
+        <SearchModal
+          pageType={pageType}
+          setOption={setOption}
+          changeModal={changeModal}
+          isModalVisible={isModalVisible}
+        ></SearchModal>
+      </ScrollContainer>
       <Animated.View
-        style={{ width: WIDTH, height: headerHeight, backgroundColor: "white" }}
+        style={[
+          {
+            backgroundColor: "white",
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            overflow: "hidden",
+            height: HEADER_MAX_HEIGHT,
+          },
+          {
+            transform: [{ translateY: headerHeight }],
+          },
+        ]}
       >
         <TitleContainer>
           <Title>{secondCategory[firstSelected][secondSelected]}</Title>
@@ -149,42 +193,6 @@ export default ({
           </InputContainer>
         </SearchContainer>
       </Animated.View>
-      <ScrollContainer
-        refreshFn={refreshFn}
-        loading={loading}
-        scrollEventThrottle={Platform.OS === "ios" ? 16 : 0}
-        onScroll={Animated.event([
-          { nativeEvent: { contentOffset: { y: position.y } } },
-        ])}
-        contentContainerStyle={{
-          marginTop: 30,
-          borderColor: "black",
-          borderWidth: 1,
-        }}
-        contentInset={{
-          top: HEADER_MAX_HEIGHT,
-        }}
-        contentOffset={{
-          y: -HEADER_MAX_HEIGHT,
-        }}
-        HEADER_MAX_HEIGHT={HEADER_MAX_HEIGHT}
-      >
-        {results?.groups
-          ? results.groups.map((group, idx) => {
-              if (applicableFilter && !group.applicable) return null;
-              if (keyword != "" && !group.groupName.includes(keyword))
-                return null;
-              return <HorizontalGroup {...group} key={idx}></HorizontalGroup>;
-            })
-          : null}
-        <EmptySpace></EmptySpace>
-        <SearchModal
-          pageType={pageType}
-          setOption={setOption}
-          changeModal={changeModal}
-          isModalVisible={isModalVisible}
-        ></SearchModal>
-      </ScrollContainer>
-    </>
+    </View>
   );
 };
