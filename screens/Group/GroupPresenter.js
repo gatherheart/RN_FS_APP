@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useLayoutEffect } from "react";
 import {
   StyleSheet,
   Dimensions,
@@ -6,6 +6,7 @@ import {
   Image,
   ImageBackground,
   Platform,
+  Animated,
 } from "react-native";
 import { Block, Text, theme } from "galio-framework";
 import { useNavigation } from "@react-navigation/native";
@@ -25,11 +26,24 @@ const backgroundImg =
 const profileImg =
   "https://images.unsplash.com/photo-1588785392665-f6d4a541417d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=320";
 
+const HEADER_SCROLL_DISTANCE = 100;
+
 export default ({ id, groupName, loading, refreshFn }) => {
   const navigation = useNavigation();
-  navigation.setOptions({
-    headerShown: false,
+  const position = new Animated.ValueXY(0);
+
+  const profileOpacity = position.y.interpolate({
+    inputRange: [0, HEADER_SCROLL_DISTANCE],
+    outputRange: [1, 0],
+    extrapolate: "clamp",
   });
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerShown: false,
+    });
+  }, []);
+
   return (
     <Block flex style={styles.profile}>
       <Block flex>
@@ -38,14 +52,21 @@ export default ({ id, groupName, loading, refreshFn }) => {
           style={styles.profileContainer}
           imageStyle={styles.profileBackground}
         >
-          <ScrollView
+          <Animated.ScrollView
             showsVerticalScrollIndicator={false}
             style={{ width, paddingTop: "25%" }}
+            onScroll={Animated.event(
+              [{ nativeEvent: { contentOffset: { y: position.y } } }],
+              { useNativeDriver: true }
+            )}
+            scrollEventThrottle={1}
           >
             <Block flex style={styles.profileCard}>
-              <Block middle style={styles.avatarContainer}>
-                <Image source={{ uri: profileImg }} style={styles.avatar} />
-              </Block>
+              <Animated.View style={{ opacity: profileOpacity }}>
+                <Block middle style={styles.avatarContainer}>
+                  <Image source={{ uri: profileImg }} style={styles.avatar} />
+                </Block>
+              </Animated.View>
               <Block style={styles.info}>
                 <Block
                   middle
@@ -184,9 +205,21 @@ export default ({ id, groupName, loading, refreshFn }) => {
                     ))}
                   </Block>
                 </Block>
+                <Block style={{ paddingBottom: -HeaderHeight * 2 }}>
+                  <Block row space="between" style={{ flexWrap: "wrap" }}>
+                    {Images.Viewed.map((img, imgIndex) => (
+                      <Image
+                        source={{ uri: img }}
+                        key={`viewed-${img}`}
+                        resizeMode="cover"
+                        style={styles.thumb}
+                      />
+                    ))}
+                  </Block>
+                </Block>
               </Block>
             </Block>
-          </ScrollView>
+          </Animated.ScrollView>
         </ImageBackground>
       </Block>
     </Block>
