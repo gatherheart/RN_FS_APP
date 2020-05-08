@@ -15,7 +15,7 @@ import { useNavigation } from "@react-navigation/native";
 import Button from "../../components/Group/ArgonButton";
 import Images from "../../constants/ArgonImages";
 import argonTheme from "../../constants/ArgonTheme";
-import { HeaderHeight } from  ../../utils/HeaderHeight";
+import { HeaderHeight } from "../../utils/HeaderHeight";
 import styled from "styled-components/native";
 
 const { width, height } = Dimensions.get("screen");
@@ -67,12 +67,23 @@ export default ({ id, groupName, loading, refreshFn }) => {
             )}
             scrollEventThrottle={1}
           >
+            <Block
+              flex
+              style={{ width, borderColor: "black", borderWidth: 1 }}
+            ></Block>
             <Block flex style={styles.profileCard}>
               <Animated.View style={{ opacity: profileOpacity }}>
                 <Block middle style={styles.avatarContainer}>
                   <Image source={{ uri: profileImg }} style={styles.avatar} />
                 </Block>
               </Animated.View>
+              <Block
+                middle
+                height={50}
+                style={{ borderColor: "black", borderWidth: 1 }}
+              >
+                <Text>{groupName}</Text>
+              </Block>
               <Block style={styles.info}>
                 <Block
                   middle
@@ -187,8 +198,8 @@ export default ({ id, groupName, loading, refreshFn }) => {
                     View all
                   </Button>
                 </Block>
-                <View style={{ paddingBottom: -HeaderHeight * 2 }}>
-                  <View row space="between" style={{ flexWrap: "wrap" }}>
+                <Block style={{ paddingBottom: -HeaderHeight * 2 }}>
+                  <Block row space="between" style={{ flexWrap: "wrap" }}>
                     {Images.Viewed.map((img, imgIndex) => (
                       <Image
                         source={{ uri: img }}
@@ -197,10 +208,10 @@ export default ({ id, groupName, loading, refreshFn }) => {
                         style={styles.thumb}
                       />
                     ))}
-                  </View>
-                </View>
-                <View style={{ paddingBottom: -HeaderHeight * 2 }}>
-                  <View style={{ flexWrap: "wrap" }}>
+                  </Block>
+                </Block>
+                <Block style={{ paddingBottom: -HeaderHeight * 2 }}>
+                  <Block row space="between" style={{ flexWrap: "wrap" }}>
                     {Images.Viewed.map((img, imgIndex) => (
                       <Image
                         source={{ uri: img }}
@@ -209,10 +220,10 @@ export default ({ id, groupName, loading, refreshFn }) => {
                         style={styles.thumb}
                       />
                     ))}
-                  </View>
-                </View>
-                <View style={{ paddingBottom: -HeaderHeight * 2 }}>
-                  <View row space="between" style={{ flexWrap: "wrap" }}>
+                  </Block>
+                </Block>
+                <Block style={{ paddingBottom: -HeaderHeight * 2 }}>
+                  <Block row space="between" style={{ flexWrap: "wrap" }}>
                     {Images.Viewed.map((img, imgIndex) => (
                       <Image
                         source={{ uri: img }}
@@ -221,8 +232,8 @@ export default ({ id, groupName, loading, refreshFn }) => {
                         style={styles.thumb}
                       />
                     ))}
-                  </View>
-                </View>
+                  </Block>
+                </Block>
                 <EmptySpace></EmptySpace>
               </Block>
             </Block>
@@ -272,7 +283,7 @@ const styles = StyleSheet.create({
     zIndex: 2,
   },
   info: {
-    borderColor: "black",
+    borderColor: "blue",
     borderWidth: 1,
     paddingHorizontal: 40,
   },

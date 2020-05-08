@@ -27,7 +27,13 @@ export default () => {
       }}
     >
       <Stack.Screen name="Tabs" component={Tabs}></Stack.Screen>
-      <Stack.Screen name="Group" component={GroupScreen}></Stack.Screen>
+      <Stack.Screen
+        name="Group"
+        component={GroupScreen}
+        options={{
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      ></Stack.Screen>
       <Stack.Screen name="Chat" component={ChatScreen}></Stack.Screen>
       <Stack.Screen
         name="GroupSearchNav"

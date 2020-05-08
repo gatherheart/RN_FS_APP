@@ -2,7 +2,7 @@ export default {
   backgroundColor: "#FFF",
   blackColor: "#262626",
   greyColor: "#090909",
-  lightGreenColor: "#b1fbb1",
+  lightGreenColor: "#A6E971",
   darkGreyColor: "#999",
   lightGreyColor: "#b2b2b2",
   moreLightGreyColor: "#ebebeb",
