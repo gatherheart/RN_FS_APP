@@ -38,6 +38,7 @@ export default ({
       fieldTag: ["미술", "친목", "문화감상"],
       introTag: ["미술", "가족같은"],
       memberCount: 32,
+      followerCount: 30,
       members: [{ name: "김현우", id: 342324 }], // [User!]! exclude the owner and managers
       owner: [{ name: "이안수", id: 12345 }],
       manager: [{ name: "장강우", id: 6844 }],
@@ -45,7 +46,10 @@ export default ({
       joiningConditions: [
         {
           school: [{ name: "성균관대학교", id: 22 }],
-          college: [{ name: "자연과학캠퍼스", id: 32 },  {name: "인문사회캠퍼스", id: 33 }],
+          college: [
+            { name: "자연과학캠퍼스", id: 32 },
+            { name: "인문사회캠퍼스", id: 33 },
+          ],
           major: [],
           class: [], // 학번 condition
         },
@@ -114,5 +118,5 @@ export default ({
     getData();
   }, []);
 
-  return <GroupPrenster {...group} refreshFn={getData}></GroupPrenster>;
+  return <GroupPrenster group={group} refreshFn={getData}></GroupPrenster>;
 };

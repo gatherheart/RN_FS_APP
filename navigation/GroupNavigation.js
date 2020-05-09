@@ -19,7 +19,7 @@ export default () => {
       initialRouteName="Group"
       screenOptions={({ route, navigation }) => {
         return {
-          gestureEnabled: false,
+          gestureEnabled: true,
           headerShown: false,
         };
       }}

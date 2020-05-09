@@ -2,7 +2,6 @@ import React, { useEffect, useState, useLayoutEffect, useContext } from "react";
 import {
   StyleSheet,
   Dimensions,
-  ScrollView,
   Image,
   ImageBackground,
   Platform,
@@ -12,25 +11,20 @@ import {
 } from "react-native";
 import { Block, Text, theme } from "galio-framework";
 import { useNavigation } from "@react-navigation/native";
-import Icon from "../../components/Icon";
 import Button from "../../components/Group/ArgonButton";
 import Images from "../../constants/ArgonImages";
-import argonTheme from "../../constants/ArgonTheme";
-import {
-  HeaderHeight,
-  StatusHeight,
-  Sat,
-  UnderHeader,
-} from "../../utils/HeaderHeight";
+import PropTypes from "prop-types";
+import { HeaderHeight, UnderHeader } from "../../utils/HeaderHeight";
 import styled, { ThemeContext } from "styled-components/native";
+import CustomHeader from "../../components/CustomHeader";
 
-const { width, height } = Dimensions.get("screen");
+const { width: WIDHT, height: HEIGHT } = Dimensions.get("screen");
 
 const EmptySpace = styled.View`
   height: 150px;
 `;
 
-const thumbMeasure = (width - 48 - 32) / 3;
+const thumbMeasure = (WIDHT - 48 - 32) / 3;
 
 const backgroundImg =
   "https://images.unsplash.com/photo-1588780530902-bbc23735248c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=650";
@@ -42,12 +36,54 @@ const HEADER_SCROLL_DISTANCE = 100;
 
 const GroupName = styled.Text`
   font-size: 20px;
-  font-weight: 600;
+  font-weight: bold;
+  margin: 0px 0px 5px 0px;
 `;
 
-export default ({ id, groupName, loading, refreshFn }) => {
+const SchoolName = styled.Text`
+  font-size: 14px;
+  color: ${(props) => props.theme.greyColor};
+  opacity: 0.6;
+`;
+
+const CountText = styled.Text`
+  color: ${(props) => props.theme.greyColor};
+  font-size: 18px;
+  margin-bottom: 4px;
+`;
+
+/**
+ * 공지 히스토리 버튼
+ * @param {String} title
+ * @param {Number} page
+ * @param {Function} setPage
+ * @param {Number} clickedPage
+ * @param {String} color
+ *
+ */
+const PageButton = ({ title, page, setPage, clickedPage, color }) => {
+  const underBar =
+    clickedPage == page
+      ? { borderBottomColor: color, borderBottomWidth: 2.3 }
+      : null;
+  const changePage = () => {
+    if (page == clickedPage) return;
+    setPage(clickedPage);
+  };
+  return (
+    <TouchableOpacity
+      style={{ ...styles.pageButton, ...underBar }}
+      onPress={() => changePage()}
+    >
+      <Text>{title}</Text>
+    </TouchableOpacity>
+  );
+};
+
+export default ({ id, group, loading, refreshFn }) => {
   const navigation = useNavigation();
   const themeContext = useContext(ThemeContext);
+  const [page, setPage] = useState(0);
   const position = new Animated.ValueXY(0);
 
   const profileOpacity = position.y.interpolate({
@@ -85,50 +121,13 @@ export default ({ id, groupName, loading, refreshFn }) => {
           style={styles.profileContainer}
           imageStyle={styles.profileBackground}
         >
-          <Animated.View
-            style={{
-              height: UnderHeader,
-              backgroundColor: "white",
-              opacity: headerOpacity,
-            }}
-          />
-          <Animated.View
-            style={{
-              transform: [{ translateY: headerPosition }],
-              opacity: headerOpacity,
-              ...styles.header,
-            }}
-          >
-            <TouchableOpacity
-              onPress={() => {
-                navigation.goBack();
-              }}
-              title="goBack"
-              style={{ marginHorizontal: 20 }}
-            >
-              <Icon
-                name={"arrow-back"}
-                color={themeContext.lightGreenColor}
-                size={30}
-              ></Icon>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.openDrawer();
-              }}
-              title="goBack"
-              style={{ marginHorizontal: 20 }}
-            >
-              <Icon
-                name={"menu"}
-                color={themeContext.lightGreenColor}
-                size={30}
-              ></Icon>
-            </TouchableOpacity>
-          </Animated.View>
+          <CustomHeader
+            headerPosition={headerPosition}
+            headerOpacity={headerOpacity}
+          ></CustomHeader>
           <Animated.ScrollView
             showsVerticalScrollIndicator={false}
-            style={{ width, paddingTop: "25%" }}
+            style={{ width: WIDHT, paddingTop: "25%" }}
             onScroll={Animated.event(
               [{ nativeEvent: { contentOffset: { y: position.y } } }],
               { useNativeDriver: true }
@@ -143,104 +142,54 @@ export default ({ id, groupName, loading, refreshFn }) => {
               </Animated.View>
               <Block
                 middle
-                height={50}
+                height={60}
                 style={{ borderColor: "black", borderWidth: 1 }}
               >
-                <GroupName>{groupName}</GroupName>
+                <GroupName>{group?.groupName}</GroupName>
+                <SchoolName>
+                  {group?.school?.name + " " + group?.campus?.name}
+                </SchoolName>
               </Block>
               <Block style={styles.info}>
+                <Block row space="around">
+                  <Block middle>
+                    <CountText>{group?.memberCount}</CountText>
+                    <Text size={12}>Members</Text>
+                  </Block>
+                  <Block middle>
+                    <CountText>{group?.followerCount}</CountText>
+                    <Text size={12}>Followers</Text>
+                  </Block>
+                </Block>
                 <Block
                   middle
                   row
-                  space="evenly"
-                  style={{ marginTop: 20, paddingBottom: 24 }}
+                  space="around"
+                  style={{
+                    marginTop: 40,
+                    paddingBottom: 24,
+                    marginHorizontal: -30,
+                  }}
                 >
-                  <Button
-                    small
-                    style={{ backgroundColor: argonTheme.COLORS.INFO }}
-                  >
-                    CONNECT
-                  </Button>
-                  <Button
-                    small
-                    style={{ backgroundColor: argonTheme.COLORS.DEFAULT }}
-                  >
-                    MESSAGE
-                  </Button>
-                </Block>
-                <Block row space="between">
-                  <Block middle>
-                    <Text
-                      bold
-                      size={18}
-                      color="#525F7F"
-                      style={{ marginBottom: 4 }}
-                    >
-                      2K
-                    </Text>
-                    <Text size={12} color={argonTheme.COLORS.TEXT}>
-                      Orders
-                    </Text>
-                  </Block>
-                  <Block middle>
-                    <Text
-                      bold
-                      color="#525F7F"
-                      size={18}
-                      style={{ marginBottom: 4 }}
-                    >
-                      10
-                    </Text>
-                    <Text size={12} color={argonTheme.COLORS.TEXT}>
-                      Photos
-                    </Text>
-                  </Block>
-                  <Block middle>
-                    <Text
-                      bold
-                      color="#525F7F"
-                      size={18}
-                      style={{ marginBottom: 4 }}
-                    >
-                      89
-                    </Text>
-                    <Text size={12} color={argonTheme.COLORS.TEXT}>
-                      Comments
-                    </Text>
-                  </Block>
+                  <PageButton
+                    title="공지"
+                    page={page}
+                    setPage={setPage}
+                    clickedPage={0}
+                    color={themeContext.lightGreenColor}
+                  ></PageButton>
+                  <PageButton
+                    title="히스토리"
+                    page={page}
+                    setPage={setPage}
+                    clickedPage={1}
+                    color={themeContext.lightGreenColor}
+                  ></PageButton>
                 </Block>
               </Block>
               <Block flex>
-                <Block middle style={styles.nameInfo}>
-                  <Text bold size={28} color="#32325D">
-                    Jessica Jones, 27
-                  </Text>
-                  <Text size={16} color="#32325D" style={{ marginTop: 10 }}>
-                    San Francisco, USA
-                  </Text>
-                </Block>
-                <Block middle style={{ marginTop: 30, marginBottom: 16 }}>
+                <Block middle style={{ marginTop: 5, marginBottom: 16 }}>
                   <Block style={styles.divider} />
-                </Block>
-                <Block middle>
-                  <Text
-                    size={16}
-                    color="#525F7F"
-                    style={{ textAlign: "center" }}
-                  >
-                    An artist of considerable range, Jessica name taken by
-                    Melbourne …
-                  </Text>
-                  <Button
-                    color="transparent"
-                    textStyle={{
-                      color: "#233DD2",
-                      fontWeight: "500",
-                      fontSize: 16,
-                    }}
-                  >
-                    Show more
-                  </Button>
                 </Block>
                 <Block
                   row
@@ -309,17 +258,6 @@ export default ({ id, groupName, loading, refreshFn }) => {
 };
 
 const styles = StyleSheet.create({
-  header: {
-    flexDirection: "row",
-    position: "absolute",
-    width,
-    height: StatusHeight * 1.15,
-    top: UnderHeader,
-    backgroundColor: "white",
-    justifyContent: "space-between",
-    alignItems: "center",
-    zIndex: 2,
-  },
   profile: {
     borderColor: "black",
     borderWidth: 1,
@@ -330,14 +268,14 @@ const styles = StyleSheet.create({
   profileContainer: {
     borderColor: "black",
     borderWidth: 1,
-    width: width,
-    height: height + HeaderHeight,
+    width: WIDHT,
+    height: HEIGHT + HeaderHeight,
     padding: 0,
     zIndex: 1,
   },
   profileBackground: {
-    width: width,
-    height: height / 2,
+    width: WIDHT,
+    height: HEIGHT / 2,
   },
   profileCard: {
     // position: "relative",
@@ -356,6 +294,7 @@ const styles = StyleSheet.create({
     zIndex: 2,
   },
   info: {
+    marginTop: 8,
     borderColor: "blue",
     borderWidth: 1,
     paddingHorizontal: 40,
@@ -380,6 +319,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginTop: 35,
   },
+  pageButton: {
+    width: (WIDHT * 3) / 10,
+    fontSize: 12,
+    alignItems: "center",
+    paddingVertical: 10,
+  },
   divider: {
     width: "90%",
     borderWidth: 1,
@@ -395,3 +340,11 @@ const styles = StyleSheet.create({
     height: thumbMeasure,
   },
 });
+
+PageButton.propTypes = {
+  title: PropTypes.string.isRequired,
+  page: PropTypes.number.isRequired,
+  setPage: PropTypes.func.isRequired,
+  clickedPage: PropTypes.number.isRequired,
+  color: PropTypes.string.isRequired,
+};
