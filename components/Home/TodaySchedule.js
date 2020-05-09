@@ -52,20 +52,6 @@ const TodaySchedule = ({ schedules }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  withShadow: {
-    shadowColor: "#000000",
-    borderWidth: 0,
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
-    elevation: 1,
-    shadowOffset: {
-      height: 2.5,
-      width: 2.5,
-    },
-  },
-});
-
 TodaySchedule.prototype = {};
 
 export default TodaySchedule;

@@ -3,8 +3,9 @@ import {
   createStackNavigator,
   CardStyleInterpolators,
 } from "@react-navigation/stack";
+import { createDrawerNavigator } from "@react-navigation/drawer";
 import Tabs from "./TabNavigation";
-import GroupScreen from "../screens/Group";
+import GroupScreen from "./GroupNavigation";
 import GroupSearchNav from "./GroupSearchNavigation";
 import GroupCreateScreen from "../screens/Group/GroupCreate";
 import ChatScreen from "../screens/Chat";
@@ -18,17 +19,14 @@ export default () => {
       screenOptions={({ route, navigation }) => {
         return {
           gestureEnabled: true,
-          cardOverlayEnabled: true,
           headerBackTitleVisible: false,
-          headerTransitionPreset: "fade-in-place",
-          headerMode: "screen",
-          headerShown: route.name === "GroupSearchNav" ? false : true,
+          headerShown: false,
         };
       }}
     >
       <Stack.Screen name="Tabs" component={Tabs}></Stack.Screen>
       <Stack.Screen
-        name="Group"
+        name="GroupNav"
         component={GroupScreen}
         options={{
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,

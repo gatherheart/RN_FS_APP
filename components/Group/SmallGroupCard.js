@@ -86,7 +86,7 @@ const HorizontalGroup = ({
   const themeContext = useContext(ThemeContext);
   const navigation = useNavigation();
   const goToGroup = () => {
-    navigation.navigate("Group", { id, groupName });
+    navigation.navigate("GroupNav", { id, groupName });
   };
   return (
     <CardContainer theme={themeContext}>

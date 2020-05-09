@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useLayoutEffect } from "react";
+import React, { useEffect, useState, useLayoutEffect, useContext } from "react";
 import {
   StyleSheet,
   Dimensions,
@@ -8,15 +8,21 @@ import {
   Platform,
   Animated,
   View,
+  TouchableOpacity,
 } from "react-native";
 import { Block, Text, theme } from "galio-framework";
 import { useNavigation } from "@react-navigation/native";
-
+import Icon from "../../components/Icon";
 import Button from "../../components/Group/ArgonButton";
 import Images from "../../constants/ArgonImages";
 import argonTheme from "../../constants/ArgonTheme";
-import { HeaderHeight } from "../../utils/HeaderHeight";
-import styled from "styled-components/native";
+import {
+  HeaderHeight,
+  StatusHeight,
+  Sat,
+  UnderHeader,
+} from "../../utils/HeaderHeight";
+import styled, { ThemeContext } from "styled-components/native";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -34,13 +40,31 @@ const profileImg =
 
 const HEADER_SCROLL_DISTANCE = 100;
 
+const GroupName = styled.Text`
+  font-size: 20px;
+  font-weight: 600;
+`;
+
 export default ({ id, groupName, loading, refreshFn }) => {
   const navigation = useNavigation();
+  const themeContext = useContext(ThemeContext);
   const position = new Animated.ValueXY(0);
 
   const profileOpacity = position.y.interpolate({
     inputRange: [0, HEADER_SCROLL_DISTANCE],
-    outputRange: [1, 0],
+    outputRange: [1.5, 0],
+    extrapolate: "clamp",
+  });
+
+  const headerPosition = position.y.interpolate({
+    inputRange: [0, HEADER_SCROLL_DISTANCE],
+    outputRange: [-UnderHeader * 1.5, 0],
+    extrapolate: "clamp",
+  });
+
+  const headerOpacity = position.y.interpolate({
+    inputRange: [0, HEADER_SCROLL_DISTANCE],
+    outputRange: [0, 1],
     extrapolate: "clamp",
   });
 
@@ -51,13 +75,57 @@ export default ({ id, groupName, loading, refreshFn }) => {
   }, []);
 
   return (
-    <Block flex style={styles.profile}>
+    <Block
+      flex
+      style={{ ...styles.profile, fontFamily: themeContext.regularFont }}
+    >
       <Block flex>
         <ImageBackground
           source={{ uri: backgroundImg }}
           style={styles.profileContainer}
           imageStyle={styles.profileBackground}
         >
+          <Animated.View
+            style={{
+              height: UnderHeader,
+              backgroundColor: "white",
+              opacity: headerOpacity,
+            }}
+          />
+          <Animated.View
+            style={{
+              transform: [{ translateY: headerPosition }],
+              opacity: headerOpacity,
+              ...styles.header,
+            }}
+          >
+            <TouchableOpacity
+              onPress={() => {
+                navigation.goBack();
+              }}
+              title="goBack"
+              style={{ marginHorizontal: 20 }}
+            >
+              <Icon
+                name={"arrow-back"}
+                color={themeContext.lightGreenColor}
+                size={30}
+              ></Icon>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.goBack();
+              }}
+              title="goBack"
+              style={{ marginHorizontal: 20 }}
+            >
+              <Icon
+                name={"menu"}
+                color={themeContext.lightGreenColor}
+                size={30}
+              ></Icon>
+            </TouchableOpacity>
+          </Animated.View>
           <Animated.ScrollView
             showsVerticalScrollIndicator={false}
             style={{ width, paddingTop: "25%" }}
@@ -67,22 +135,18 @@ export default ({ id, groupName, loading, refreshFn }) => {
             )}
             scrollEventThrottle={1}
           >
-            <Block
-              flex
-              style={{ width, borderColor: "black", borderWidth: 1 }}
-            ></Block>
             <Block flex style={styles.profileCard}>
               <Animated.View style={{ opacity: profileOpacity }}>
-                <Block middle style={styles.avatarContainer}>
+                <View style={styles.avatarContainer}>
                   <Image source={{ uri: profileImg }} style={styles.avatar} />
-                </Block>
+                </View>
               </Animated.View>
               <Block
                 middle
                 height={50}
                 style={{ borderColor: "black", borderWidth: 1 }}
               >
-                <Text>{groupName}</Text>
+                <GroupName>{groupName}</GroupName>
               </Block>
               <Block style={styles.info}>
                 <Block
@@ -234,9 +298,9 @@ export default ({ id, groupName, loading, refreshFn }) => {
                     ))}
                   </Block>
                 </Block>
-                <EmptySpace></EmptySpace>
               </Block>
             </Block>
+            <EmptySpace></EmptySpace>
           </Animated.ScrollView>
         </ImageBackground>
       </Block>
@@ -245,6 +309,17 @@ export default ({ id, groupName, loading, refreshFn }) => {
 };
 
 const styles = StyleSheet.create({
+  header: {
+    flexDirection: "row",
+    position: "absolute",
+    width,
+    height: StatusHeight * 1.15,
+    top: UnderHeader,
+    backgroundColor: "white",
+    justifyContent: "space-between",
+    alignItems: "center",
+    zIndex: 2,
+  },
   profile: {
     borderColor: "black",
     borderWidth: 1,
@@ -256,13 +331,11 @@ const styles = StyleSheet.create({
     borderColor: "black",
     borderWidth: 1,
     width: width,
-    height: height,
+    height: height + HeaderHeight,
     padding: 0,
     zIndex: 1,
   },
   profileBackground: {
-    borderColor: "black",
-    borderWidth: 1,
     width: width,
     height: height / 2,
   },
@@ -289,6 +362,7 @@ const styles = StyleSheet.create({
   },
   avatarContainer: {
     borderColor: "black",
+    alignItems: "center",
     borderWidth: 1,
     position: "relative",
     marginTop: -80,

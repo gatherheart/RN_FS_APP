@@ -114,7 +114,7 @@ export default ({ id, groupName, loading, refreshFn }) => {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                navigation.goBack();
+                navigation.openDrawer();
               }}
               title="goBack"
               style={{ marginHorizontal: 20 }}

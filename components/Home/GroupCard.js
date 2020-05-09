@@ -82,7 +82,7 @@ const Horizontal = ({ id, groupName, schedule, poster, tag, vote, notice }) => {
   const navigation = useNavigation();
   const themeContext = useContext(ThemeContext);
   const goToGroup = () => {
-    navigation.navigate("Group", { id, groupName });
+    navigation.navigate("GroupNav", { id, groupName });
   };
   return (
     <CardContainer style={themeContext.withShadow}>
