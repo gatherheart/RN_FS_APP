@@ -8,6 +8,7 @@ import {
   Animated,
   View,
   TouchableOpacity,
+  PanResponder,
 } from "react-native";
 import { Block, Text, theme } from "galio-framework";
 import { useNavigation } from "@react-navigation/native";
@@ -80,11 +81,25 @@ const PageButton = ({ title, page, setPage, clickedPage, color }) => {
   );
 };
 
+const position = new Animated.ValueXY(0);
+
 export default ({ id, group, loading, refreshFn }) => {
   const navigation = useNavigation();
   const themeContext = useContext(ThemeContext);
   const [page, setPage] = useState(0);
-  const position = new Animated.ValueXY(0);
+
+  const panResponder = PanResponder.create({
+    onStartShouldSetPanResponder: () => true,
+
+    onPanResponderMove: (evt, { x0: x, y0: y }) => {
+      position.setValue({ x: x, y: y });
+    },
+  });
+
+  useEffect(() => {
+    console.log("Rendering");
+    console.log(position.y);
+  }, [position.y]);
 
   const profileOpacity = position.y.interpolate({
     inputRange: [0, HEADER_SCROLL_DISTANCE],
@@ -133,6 +148,7 @@ export default ({ id, group, loading, refreshFn }) => {
               { useNativeDriver: true }
             )}
             scrollEventThrottle={1}
+            {...panResponder.panHandlers}
           >
             <Block flex style={styles.profileCard}>
               <Animated.View style={{ opacity: profileOpacity }}>
@@ -193,11 +209,23 @@ export default ({ id, group, loading, refreshFn }) => {
                 </Block>
                 <Block
                   row
-                  style={{ paddingVertical: 14, alignItems: "baseline" }}
+                  style={{
+                    paddingVertical: 14,
+                    alignItems: "baseline",
+                    borderWidth: 1,
+                  }}
                 >
-                  <Text bold size={16} color="#525F7F">
-                    Album
-                  </Text>
+                  <Block
+                    style={{
+                      backgroundColor: "#FF574D",
+                      padding: 5,
+                      marginHorizontal: 5,
+                    }}
+                  >
+                    <Text bold size={13} style={{ color: "white" }}>
+                      필독
+                    </Text>
+                  </Block>
                 </Block>
                 <Block
                   row
