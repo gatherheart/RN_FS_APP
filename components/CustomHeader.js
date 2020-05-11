@@ -12,7 +12,7 @@ import { useNavigation } from "@react-navigation/native";
 
 const { width: WIDTH, height } = Dimensions.get("screen");
 
-export default ({ headerPosition, headerOpacity }) => {
+export default ({ headerPosition, headerOpacity, style }) => {
   const themeContext = useContext(ThemeContext);
   const navigation = useNavigation();
   return (
@@ -22,6 +22,7 @@ export default ({ headerPosition, headerOpacity }) => {
           height: UnderHeader,
           backgroundColor: "white",
           opacity: headerOpacity,
+          ...style,
         }}
       />
       <Animated.View
@@ -29,6 +30,7 @@ export default ({ headerPosition, headerOpacity }) => {
           transform: [{ translateY: headerPosition }],
           opacity: headerOpacity,
           ...styles.header,
+          ...style,
         }}
       >
         <TouchableOpacity

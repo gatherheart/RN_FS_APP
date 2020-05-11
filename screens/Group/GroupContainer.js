@@ -3,6 +3,7 @@ import { Text } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import styled from "styled-components/native";
 import GroupPrenster from "./GroupPresenter";
+import Loader from "../../components/Loader";
 
 const View = styled.View`
   flex: 1;
@@ -56,37 +57,51 @@ export default ({
       ],
       votes: [
         {
-          id: 132,
+          type: "vote",
+          id: 132352,
           title: "4월 회식 날짜",
-          date: "2020-04-20",
+          date: "2020-04-21",
         },
         {
-          id: 1241,
+          type: "vote",
+          id: 12341,
           title: "5월 회식 날짜",
-          date: "2020-05-01",
+          date: "2019-05-01",
         },
       ],
       schedules: [
         {
-          id: 112,
+          type: "schedule",
+
+          id: 115532,
           title: "4월 회식",
-          date: "2020-04-20",
+          date: "2020-04-19",
         },
       ],
       mandatoryNotice: ["4월 회식"],
       notices: [
         {
+          type: "notice",
           id: 112,
           title: "4월 회식",
-          date: "2020-04-20",
+          date: "2020-04-19",
         },
       ],
       bills: [
         {
-          id: 112,
+          type: "bill",
+          id: 112342,
           title: "4월 회식",
           date: "2020-04-20",
           amount: 20000,
+          members: [{ name: "김현우", id: 342324 }],
+        },
+        {
+          type: "bill",
+          id: 11222,
+          title: "2월 회식",
+          date: "2020-02-20",
+          amount: 30000,
           members: [{ name: "김현우", id: 342324 }],
         },
       ],
@@ -119,5 +134,9 @@ export default ({
     getData();
   }, []);
 
-  return <GroupPrenster group={group} refreshFn={getData}></GroupPrenster>;
+  return !group.loading ? (
+    <GroupPrenster group={group} refreshFn={getData}></GroupPrenster>
+  ) : (
+    <Loader></Loader>
+  );
 };

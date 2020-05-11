@@ -3,7 +3,11 @@ import { StyleSheet, Image, Text, View, AsyncStorage } from "react-native";
 import { AppLoading } from "expo";
 import { Asset } from "expo-asset";
 import * as Font from "expo-font";
-import { Ionicons, FontAwesome } from "@expo/vector-icons";
+import {
+  Ionicons,
+  FontAwesome,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 import { ThemeProvider } from "styled-components";
 import { persistCache } from "apollo-cache-persist";
 import { InMemoryCache } from "apollo-cache-inmemory";
@@ -51,6 +55,7 @@ export default function App() {
     const fonts = cacheFonts([
       Ionicons.font,
       FontAwesome.font,
+      MaterialCommunityIcons.font,
       {
         nanumSquareRegular: require("./assets/fonts/NanumSquareRegular.ttf"),
         nanumSquareBold: require("./assets/fonts/NanumSquareBold.ttf"),

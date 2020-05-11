@@ -22,14 +22,16 @@ export default () => {
       >
         <ActionButton.Item
           buttonColor="#9b59b6"
-          title="New Task"
+          title="투표 작성"
+          hideLabelShadow={true}
           onPress={() => console.log("notes tapped!")}
         >
           <CustumIcon name="create" style={styles.actionButtonIcon} />
         </ActionButton.Item>
         <ActionButton.Item
           buttonColor="#3498db"
-          title="Notifications"
+          title="수금 작성"
+          hideLabelShadow={true}
           onPress={() => {}}
         >
           <CustumIcon
@@ -39,7 +41,8 @@ export default () => {
         </ActionButton.Item>
         <ActionButton.Item
           buttonColor="#1abc9c"
-          title="All Tasks"
+          title="공지 작성"
+          hideLabelShadow={true}
           onPress={() => {}}
         >
           <CustumIcon name="done-all" style={styles.actionButtonIcon} />
@@ -55,17 +58,21 @@ export default () => {
           zIndex: 4,
         }}
       >
-        <ActionButton buttonColor="rgb(166,233,113)" hideShadow={true}>
+        <ActionButton
+          buttonColor="rgb(166,233,113)"
+          hideShadow={true}
+          useNativeFeedback={true}
+        >
           <ActionButton.Item
             buttonColor="#9b59b6"
-            title="New Task"
+            title="투표 작성"
             onPress={() => console.log("notes tapped!")}
           >
             <CustumIcon name="create" style={styles.actionButtonIcon} />
           </ActionButton.Item>
           <ActionButton.Item
             buttonColor="#3498db"
-            title="Notifications"
+            title="수금 작성"
             onPress={() => {}}
           >
             <CustumIcon
@@ -75,7 +82,7 @@ export default () => {
           </ActionButton.Item>
           <ActionButton.Item
             buttonColor="#1abc9c"
-            title="All Tasks"
+            title="공지 작성"
             onPress={() => {}}
           >
             <CustumIcon name="done-all" style={styles.actionButtonIcon} />

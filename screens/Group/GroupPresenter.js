@@ -21,6 +21,7 @@ import CustomHeader from "../../components/CustomHeader";
 import { trimText } from "../../utils/String";
 import ImageGrid from "../../components/ImageGrid";
 import GroupActionButton from "../../components/GroupActionButton";
+import NoticeList from "../../components/Group/NoticeList";
 
 const { width: WIDHT, height: HEIGHT } = Dimensions.get("screen");
 
@@ -137,6 +138,7 @@ export default ({ id, group, loading, refreshFn }) => {
           <CustomHeader
             headerPosition={headerPosition}
             headerOpacity={headerOpacity}
+            style={{ zIndex: 4 }}
           ></CustomHeader>
           <Animated.ScrollView
             showsVerticalScrollIndicator={false}
@@ -246,32 +248,32 @@ export default ({ id, group, loading, refreshFn }) => {
                   </Block>
                 </Block>
 
-                <Block
-                  row
-                  style={{
-                    marginTop: 20,
-                    justifyContent: "flex-end",
-                  }}
-                >
-                  <Button
-                    small
-                    color="transparent"
-                    textStyle={{ color: "#5E72E4", fontSize: 13 }}
-                  >
-                    View all
-                  </Button>
-                </Block>
-
-                <Block
-                  style={{ paddingBottom: HeaderHeight, height: HEIGHT / 2 }}
-                >
+                <Block style={{ paddingBottom: HeaderHeight, height: HEIGHT }}>
                   {page == 0 ? (
                     <Block>
-                      <Text>Hello World</Text>
+                      <NoticeList
+                        votes={group.votes}
+                        notices={group.notices}
+                        bills={group.bills}
+                      ></NoticeList>
                     </Block>
                   ) : (
                     <>
-                      <ImageGrid></ImageGrid>
+                      <Block
+                        row
+                        style={{
+                          marginTop: 20,
+                          justifyContent: "flex-end",
+                        }}
+                      >
+                        <Button
+                          small
+                          color="transparent"
+                          textStyle={{ color: "#5E72E4", fontSize: 13 }}
+                        >
+                          View all
+                        </Button>
+                      </Block>
                       <ImageGrid></ImageGrid>
                     </>
                   )}
