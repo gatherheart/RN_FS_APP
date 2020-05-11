@@ -140,12 +140,18 @@ export default ({ id, group, loading, refreshFn }) => {
           ></CustomHeader>
           <Animated.ScrollView
             showsVerticalScrollIndicator={false}
-            style={{ width: WIDHT, paddingTop: "25%", borderRadius: 8 }}
+            style={{
+              width: WIDHT,
+              paddingTop: "25%",
+              borderRadius: 8,
+              zIndex: 3,
+            }}
             onScroll={Animated.event(
               [{ nativeEvent: { contentOffset: { y: position.y } } }],
               { useNativeDriver: true }
             )}
             scrollEventThrottle={1}
+            contentContainerStyle={{ zIndex: 3 }}
           >
             <Block flex style={styles.profileCard}>
               <Animated.View style={{ opacity: profileOpacity }}>
@@ -239,7 +245,6 @@ export default ({ id, group, loading, refreshFn }) => {
                     </TouchableOpacity>
                   </Block>
                 </Block>
-                <GroupActionButton></GroupActionButton>
 
                 <Block
                   row
@@ -278,6 +283,7 @@ export default ({ id, group, loading, refreshFn }) => {
           </Animated.ScrollView>
         </ImageBackground>
       </Block>
+      <GroupActionButton></GroupActionButton>
     </Block>
   );
 };
@@ -296,7 +302,7 @@ const styles = StyleSheet.create({
     width: WIDHT,
     height: HEIGHT + HeaderHeight,
     padding: 0,
-    zIndex: 1,
+    zIndex: 0,
   },
   profileBackground: {
     width: WIDHT,
@@ -316,7 +322,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 0 },
     shadowRadius: 8,
     shadowOpacity: 0.2,
-    zIndex: 2,
+    zIndex: 1,
   },
   info: {
     marginTop: 8,

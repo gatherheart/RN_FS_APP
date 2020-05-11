@@ -1,12 +1,25 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Platform } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Platform,
+  Dimensions,
+  TouchableOpacity,
+} from "react-native";
 import ActionButton from "react-native-action-button";
 import CustumIcon from "./CustomIcon";
+const { width: WIDHT, height: HEIGHT } = Dimensions.get("screen");
 
 export default () => {
   if (Platform.OS === "android")
     return (
-      <ActionButton buttonColor="rgba(231,76,60,1)" hideShadow={true}>
+      <ActionButton
+        offsetX={30}
+        offsetY={10}
+        buttonColor="#A6E971"
+        hideShadow={true}
+        useNativeFeedback={true}
+      >
         <ActionButton.Item
           buttonColor="#9b59b6"
           title="New Task"
@@ -35,8 +48,14 @@ export default () => {
     );
   else if (Platform.OS === "ios") {
     return (
-      <View style={{ flex: 1, backgroundColor: "#f3f3f3", zIndex: 4 }}>
-        <ActionButton buttonColor="rgba(231,76,60,1)" hideShadow={true}>
+      <View
+        style={{
+          left: WIDHT / 100,
+          top: -(HEIGHT * 15) / 100,
+          zIndex: 4,
+        }}
+      >
+        <ActionButton buttonColor="rgb(166,233,113)" hideShadow={true}>
           <ActionButton.Item
             buttonColor="#9b59b6"
             title="New Task"
