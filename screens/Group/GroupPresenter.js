@@ -18,14 +18,15 @@ import PropTypes from "prop-types";
 import { HeaderHeight, UnderHeader } from "../../utils/HeaderHeight";
 import styled, { ThemeContext } from "styled-components/native";
 import CustomHeader from "../../components/CustomHeader";
+import { trimText } from "../../utils/String";
+import ImageGrid from "../../components/ImageGrid";
+import GroupActionButton from "../../components/GroupActionButton";
 
 const { width: WIDHT, height: HEIGHT } = Dimensions.get("screen");
 
 const EmptySpace = styled.View`
   height: 150px;
 `;
-
-const thumbMeasure = (WIDHT - 48 - 32) / 3;
 
 const backgroundImg =
   "https://images.unsplash.com/photo-1588780530902-bbc23735248c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=650";
@@ -82,6 +83,25 @@ const PageButton = ({ title, page, setPage, clickedPage, color }) => {
 };
 
 const position = new Animated.ValueXY(0);
+const gradient = new Animated.ValueXY(0);
+
+const profileOpacity = position.y.interpolate({
+  inputRange: [0, HEADER_SCROLL_DISTANCE],
+  outputRange: [1.5, 0],
+  extrapolate: "clamp",
+});
+
+const headerPosition = position.y.interpolate({
+  inputRange: [0, HEADER_SCROLL_DISTANCE],
+  outputRange: [-UnderHeader, 0],
+  extrapolate: "clamp",
+});
+
+const headerOpacity = position.y.interpolate({
+  inputRange: [0, HEADER_SCROLL_DISTANCE],
+  outputRange: [0, 1],
+  extrapolate: "clamp",
+});
 
 export default ({ id, group, loading, refreshFn }) => {
   const navigation = useNavigation();
@@ -90,33 +110,11 @@ export default ({ id, group, loading, refreshFn }) => {
 
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
+    onMoveShouldSetPanResponder: () => true,
 
-    onPanResponderMove: (evt, { x0: x, y0: y }) => {
-      position.setValue({ x: x, y: y });
+    onPanResponderMove: (evt, { dx: x, dy: y }) => {
+      gradient.setValue({ x: x, y: y });
     },
-  });
-
-  useEffect(() => {
-    console.log("Rendering");
-    console.log(position.y);
-  }, [position.y]);
-
-  const profileOpacity = position.y.interpolate({
-    inputRange: [0, HEADER_SCROLL_DISTANCE],
-    outputRange: [1.5, 0],
-    extrapolate: "clamp",
-  });
-
-  const headerPosition = position.y.interpolate({
-    inputRange: [0, HEADER_SCROLL_DISTANCE],
-    outputRange: [-UnderHeader * 1.5, 0],
-    extrapolate: "clamp",
-  });
-
-  const headerOpacity = position.y.interpolate({
-    inputRange: [0, HEADER_SCROLL_DISTANCE],
-    outputRange: [0, 1],
-    extrapolate: "clamp",
   });
 
   useLayoutEffect(() => {
@@ -142,13 +140,12 @@ export default ({ id, group, loading, refreshFn }) => {
           ></CustomHeader>
           <Animated.ScrollView
             showsVerticalScrollIndicator={false}
-            style={{ width: WIDHT, paddingTop: "25%" }}
+            style={{ width: WIDHT, paddingTop: "25%", borderRadius: 8 }}
             onScroll={Animated.event(
               [{ nativeEvent: { contentOffset: { y: position.y } } }],
               { useNativeDriver: true }
             )}
             scrollEventThrottle={1}
-            {...panResponder.panHandlers}
           >
             <Block flex style={styles.profileCard}>
               <Animated.View style={{ opacity: profileOpacity }}>
@@ -226,57 +223,57 @@ export default ({ id, group, loading, refreshFn }) => {
                       필독
                     </Text>
                   </Block>
+                  <Block
+                    style={{
+                      borderWidth: 1,
+                      width: WIDHT / 3,
+                      marginHorizontal: 30,
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <TouchableOpacity>
+                      <Text size={13} style={{ color: "black" }}>
+                        {trimText(group?.mandatoryNotice)}
+                      </Text>
+                    </TouchableOpacity>
+                  </Block>
                 </Block>
+                <GroupActionButton></GroupActionButton>
+
                 <Block
                   row
-                  style={{ paddingBottom: 20, justifyContent: "flex-end" }}
+                  style={{
+                    marginTop: 20,
+                    justifyContent: "flex-end",
+                  }}
                 >
                   <Button
                     small
                     color="transparent"
-                    textStyle={{ color: "#5E72E4", fontSize: 12 }}
+                    textStyle={{ color: "#5E72E4", fontSize: 13 }}
                   >
                     View all
                   </Button>
                 </Block>
-                <Block style={{ paddingBottom: -HeaderHeight * 2 }}>
-                  <Block row space="between" style={{ flexWrap: "wrap" }}>
-                    {Images.Viewed.map((img, imgIndex) => (
-                      <Image
-                        source={{ uri: img }}
-                        key={`viewed-${img}`}
-                        resizeMode="cover"
-                        style={styles.thumb}
-                      />
-                    ))}
-                  </Block>
-                </Block>
-                <Block style={{ paddingBottom: -HeaderHeight * 2 }}>
-                  <Block row space="between" style={{ flexWrap: "wrap" }}>
-                    {Images.Viewed.map((img, imgIndex) => (
-                      <Image
-                        source={{ uri: img }}
-                        key={`viewed-${img}`}
-                        resizeMode="cover"
-                        style={styles.thumb}
-                      />
-                    ))}
-                  </Block>
-                </Block>
-                <Block style={{ paddingBottom: -HeaderHeight * 2 }}>
-                  <Block row space="between" style={{ flexWrap: "wrap" }}>
-                    {Images.Viewed.map((img, imgIndex) => (
-                      <Image
-                        source={{ uri: img }}
-                        key={`viewed-${img}`}
-                        resizeMode="cover"
-                        style={styles.thumb}
-                      />
-                    ))}
-                  </Block>
+
+                <Block
+                  style={{ paddingBottom: HeaderHeight, height: HEIGHT / 2 }}
+                >
+                  {page == 0 ? (
+                    <Block>
+                      <Text>Hello World</Text>
+                    </Block>
+                  ) : (
+                    <>
+                      <ImageGrid></ImageGrid>
+                      <ImageGrid></ImageGrid>
+                    </>
+                  )}
                 </Block>
               </Block>
             </Block>
+
             <EmptySpace></EmptySpace>
           </Animated.ScrollView>
         </ImageBackground>
@@ -357,15 +354,6 @@ const styles = StyleSheet.create({
     width: "90%",
     borderWidth: 1,
     borderColor: "#E9ECEF",
-  },
-  thumb: {
-    borderColor: "black",
-    borderWidth: 1,
-    borderRadius: 4,
-    marginVertical: 4,
-    alignSelf: "center",
-    width: thumbMeasure,
-    height: thumbMeasure,
   },
 });
 

@@ -9,7 +9,7 @@ import NoticeScreen from "../screens/Notice";
 import ProfileStack from "../navigation/ProfileNavigation";
 import TabBarIcon from "../components/TabBarIcon";
 import * as Color from "../constants/Color";
-import Icon from "../components/Icon";
+import Icon from "../components/CustomIcon";
 import Loader from "../components/Loader";
 import {
   firstTabIcon,

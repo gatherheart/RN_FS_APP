@@ -4,7 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { ACTIVE_COLOR, INACTIVE_COLOR } from "../constants/Color";
 import { Platform } from "react-native";
 
-const TabBarIcon = function ({ name, size = 20, color }) {
+const CustumIcon = function ({ name, size = 20, color }) {
   return (
     <Ionicons
       size={size}
@@ -14,8 +14,8 @@ const TabBarIcon = function ({ name, size = 20, color }) {
   );
 };
 
-TabBarIcon.propTypes = {
+CustumIcon.propTypes = {
   name: PropTypes.string.isRequired,
 };
 
-export default TabBarIcon;
+export default CustumIcon;

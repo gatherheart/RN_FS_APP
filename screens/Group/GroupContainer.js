@@ -73,7 +73,7 @@ export default ({
           date: "2020-04-20",
         },
       ],
-      haveToRead: [],
+      mandatoryNotice: ["4월 회식"],
       notices: [
         {
           id: 112,

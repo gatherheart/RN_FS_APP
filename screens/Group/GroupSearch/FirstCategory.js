@@ -11,7 +11,7 @@ import { useNavigation } from "@react-navigation/native";
 import GroupSearchBtn from "../../../components/Group/GroupCategoryButton";
 import { BG_COLOR } from "../../../constants/Color";
 import { firstCategory } from "../../../constants/Names";
-import Icon from "../../../components/Icon";
+import Icon from "../../../components/CustomIcon";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 

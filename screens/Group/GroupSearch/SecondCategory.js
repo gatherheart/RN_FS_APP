@@ -11,7 +11,7 @@ import styled from "styled-components/native";
 import GroupSearchBtn from "../../../components/Group/GroupCategoryButton";
 import { BG_COLOR } from "../../../constants/Color";
 import { secondCategory, firstCategory } from "../../../constants/Names";
-import Icon from "../../../components/Icon";
+import Icon from "../../../components/CustomIcon";
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
 const Container = styled.View``;
