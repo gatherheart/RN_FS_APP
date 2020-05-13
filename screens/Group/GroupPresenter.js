@@ -17,7 +17,7 @@ import Images from "../../constants/ArgonImages";
 import PropTypes from "prop-types";
 import { HeaderHeight, UnderHeader } from "../../utils/HeaderHeight";
 import styled, { ThemeContext } from "styled-components/native";
-import CustomHeader from "../../components/CustomHeader";
+import CustomHeader from "../../components/AnimatedCustomHeader";
 import { trimText } from "../../utils/String";
 import ImageGrid from "../../components/ImageGrid";
 import GroupActionButton from "../../components/GroupActionButton";
@@ -108,6 +108,7 @@ export default ({ id, group, loading, refreshFn }) => {
   const navigation = useNavigation();
   const themeContext = useContext(ThemeContext);
   const [page, setPage] = useState(0);
+  navigation.navigate("GroupWriteVote", { id: group.id });
 
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
@@ -285,7 +286,15 @@ export default ({ id, group, loading, refreshFn }) => {
           </Animated.ScrollView>
         </ImageBackground>
       </Block>
-      <GroupActionButton></GroupActionButton>
+      <GroupActionButton
+        firstClicked={() =>
+          navigation.navigate("GroupWriteVote", { id: group.id })
+        }
+        secondClicked={() =>
+          navigation.navigate("GroupReadVote", { id: group.id })
+        }
+        thridClicked={() => console.log("Hello World")}
+      ></GroupActionButton>
     </Block>
   );
 };
@@ -294,7 +303,6 @@ const styles = StyleSheet.create({
   profile: {
     borderColor: "black",
     borderWidth: 1,
-    marginTop: Platform.OS === "android" ? -HeaderHeight : 0,
     // marginBottom: -HeaderHeight * 2,
     flex: 1,
   },

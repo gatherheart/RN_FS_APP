@@ -13,14 +13,14 @@ const TextInput = styled.TextInput`
   height: ${HEIGHT / 20}px;
 `;
 
-const Input = ({ placeholder, value, onChange, onSubmit }) => {
+const Input = ({ placeholder, value, onChange, onSubmit, returnKeyType }) => {
   return (
     <TextInput
       value={value}
       placeholder={placeholder}
       onChangeText={onChange}
       onSubmitEditing={onSubmit}
-      returnKeyType={"search"}
+      returnKeyType={returnKeyType}
     ></TextInput>
   );
 };
@@ -30,6 +30,7 @@ Input.proptypes = {
   value: Proptypes.string.isRequired,
   onChange: Proptypes.func.isRequired,
   onSubmit: Proptypes.func.isRequired,
+  returnKeyType: Proptypes.string.isRequired,
 };
 
 export default Input;

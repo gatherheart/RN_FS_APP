@@ -63,6 +63,21 @@ const getMinMaxYear = (targets) => {
   return [Math.min(...convertedDates), Math.max(...convertedDates)];
 };
 
+/**
+ *
+ * @param {[Object]} target
+ *
+ * This function classify all elements into
+ *
+ * Year -> Month -> list of elements
+ *
+ * structures
+ *
+ * classified[year][month] = [elem1, elem2, elem3]
+ *
+ * You would better sort all the elements before use this function
+ *
+ */
 const classifyYearMonth = (target) => {
   let classfied = {};
   const [minYear, maxYear] = getMinMaxYear(target);

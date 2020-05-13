@@ -8,9 +8,12 @@ import {
 } from "react-native";
 import ActionButton from "react-native-action-button";
 import CustumIcon from "./CustomIcon";
+import { useNavigation } from "@react-navigation/native";
 const { width: WIDHT, height: HEIGHT } = Dimensions.get("screen");
 
-export default () => {
+export default ({ firstClicked, secondClicked, thridClicked }) => {
+  const navigation = useNavigation();
+
   if (Platform.OS === "android")
     return (
       <ActionButton
@@ -24,7 +27,7 @@ export default () => {
           buttonColor="#9b59b6"
           title="투표 작성"
           hideLabelShadow={true}
-          onPress={() => console.log("notes tapped!")}
+          onPress={firstClicked}
         >
           <CustumIcon name="create" style={styles.actionButtonIcon} />
         </ActionButton.Item>
@@ -32,7 +35,7 @@ export default () => {
           buttonColor="#3498db"
           title="수금 작성"
           hideLabelShadow={true}
-          onPress={() => {}}
+          onPress={secondClicked}
         >
           <CustumIcon
             name="notifications-off"
@@ -43,7 +46,7 @@ export default () => {
           buttonColor="#1abc9c"
           title="공지 작성"
           hideLabelShadow={true}
-          onPress={() => {}}
+          onPress={thridClicked}
         >
           <CustumIcon name="done-all" style={styles.actionButtonIcon} />
         </ActionButton.Item>
@@ -66,14 +69,14 @@ export default () => {
           <ActionButton.Item
             buttonColor="#9b59b6"
             title="투표 작성"
-            onPress={() => console.log("notes tapped!")}
+            onPress={firstClicked}
           >
             <CustumIcon name="create" style={styles.actionButtonIcon} />
           </ActionButton.Item>
           <ActionButton.Item
             buttonColor="#3498db"
             title="수금 작성"
-            onPress={() => {}}
+            onPress={secondClicked}
           >
             <CustumIcon
               name="notifications-off"
@@ -83,7 +86,7 @@ export default () => {
           <ActionButton.Item
             buttonColor="#1abc9c"
             title="공지 작성"
-            onPress={() => {}}
+            onPress={thridClicked}
           >
             <CustumIcon name="done-all" style={styles.actionButtonIcon} />
           </ActionButton.Item>

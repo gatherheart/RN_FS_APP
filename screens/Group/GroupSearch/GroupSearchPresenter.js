@@ -190,6 +190,7 @@ export default ({
               value={keyword}
               onChange={onChange}
               onSubmit={onSubmit}
+              returnKeyType="search"
             ></Input>
           </InputContainer>
         </SearchContainer>

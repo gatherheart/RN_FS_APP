@@ -26,6 +26,7 @@ import { defaultPoster } from "./constants/Urls";
  */
 
 export default function App() {
+  console.log("APP");
   // For checking if app is loading or not
   const [loaded, setLoaded] = useState(false);
   // Apollo Client
@@ -95,6 +96,8 @@ export default function App() {
   useEffect(() => {
     preload();
   }, []);
+
+  console.log(loaded, client?.cache?.data?.data, isLoggedIn);
   return loaded && client && isLoggedIn !== null ? (
     <ApolloProvider client={client}>
       <ThemeProvider theme={styles}>

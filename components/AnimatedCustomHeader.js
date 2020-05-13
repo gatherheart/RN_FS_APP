@@ -4,33 +4,31 @@ import {
   TouchableOpacity,
   StyleSheet,
   Dimensions,
-  View,
 } from "react-native";
 import { HeaderHeight, StatusHeight, UnderHeader } from "../utils/HeaderHeight";
 import Icon from "./CustomIcon";
 import { ThemeContext } from "styled-components";
 import { useNavigation } from "@react-navigation/native";
-import styled from "styled-components/native";
 
 const { width: WIDTH, height } = Dimensions.get("screen");
 
-const Title = styled.Text``;
-
-export default ({ style, title = "" }) => {
+export default ({ headerPosition, headerOpacity, style }) => {
   const themeContext = useContext(ThemeContext);
   const navigation = useNavigation();
-
   return (
     <>
-      <View
+      <Animated.View
         style={{
           height: UnderHeader,
           backgroundColor: "white",
+          opacity: headerOpacity,
           ...style,
         }}
       />
-      <View
+      <Animated.View
         style={{
+          transform: [{ translateY: headerPosition }],
+          opacity: headerOpacity,
           ...styles.header,
           ...style,
         }}
@@ -48,12 +46,9 @@ export default ({ style, title = "" }) => {
             size={30}
           ></Icon>
         </TouchableOpacity>
-        <Title style={{ fontSize: 15, fontFamily: themeContext.regularFont }}>
-          {title}
-        </Title>
         <TouchableOpacity
           onPress={() => {
-            console.log("Right Header Button");
+            navigation.openDrawer();
           }}
           title="goBack"
           style={{ marginHorizontal: 20 }}
@@ -64,7 +59,7 @@ export default ({ style, title = "" }) => {
             size={30}
           ></Icon>
         </TouchableOpacity>
-      </View>
+      </Animated.View>
     </>
   );
 };
@@ -72,8 +67,10 @@ export default ({ style, title = "" }) => {
 const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
+    position: "absolute",
     width: WIDTH,
     height: StatusHeight * 1.15,
+    top: UnderHeader,
     backgroundColor: "white",
     justifyContent: "space-between",
     alignItems: "center",
