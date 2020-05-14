@@ -1,10 +1,18 @@
 export const formatDate = (date) => {
   const theDate = new Date(date);
-  return theDate.toLocaleDateString("en", {
+  return theDate.toLocaleDateString("ko-KR", {
     day: "numeric",
     month: "long",
     year: "numeric",
   });
+};
+
+export const timePickedConverter = (date) => {
+  const theDate = new Date(date);
+  const convertedDate = formatDate(date);
+  const convertedTime =
+    theDate.getHours() + "시 " + theDate.getMinutes() + "분";
+  return convertedDate + " " + convertedTime;
 };
 
 export const getMonth = (date) => {

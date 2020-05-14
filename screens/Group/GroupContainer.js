@@ -42,7 +42,7 @@ export default ({
       followerCount: 30,
       members: [{ name: "김현우", id: 342324 }], // [User!]! exclude the owner and managers
       owner: [{ name: "이안수", id: 12345 }],
-      manager: [{ name: "장강우", id: 6844 }],
+      managers: [{ name: "장강우", id: 6844 }],
       description: "우리는 Pixel입니다",
       joiningConditions: [
         {

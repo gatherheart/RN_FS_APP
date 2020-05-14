@@ -97,7 +97,7 @@ export default function App() {
     preload();
   }, []);
 
-  console.log(loaded, client?.cache?.data?.data, isLoggedIn);
+  //console.log(loaded, client?.cache?.data?.data, isLoggedIn);
   return loaded && client && isLoggedIn !== null ? (
     <ApolloProvider client={client}>
       <ThemeProvider theme={styles}>

@@ -16,23 +16,21 @@ const { width: WIDTH, height } = Dimensions.get("screen");
 
 const Title = styled.Text``;
 
-export default ({ style, title = "" }) => {
+export default ({ headerStyle, title = "" }) => {
   const themeContext = useContext(ThemeContext);
   const navigation = useNavigation();
-
   return (
     <>
       <View
         style={{
           height: UnderHeader,
-          backgroundColor: "white",
-          ...style,
+          backgroundColor: "whitee",
         }}
       />
       <View
         style={{
           ...styles.header,
-          ...style,
+          ...headerStyle,
         }}
       >
         <TouchableOpacity

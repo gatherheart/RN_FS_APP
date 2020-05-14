@@ -10,6 +10,7 @@ import { useRoute } from "@react-navigation/native";
 import { ThemeContext } from "styled-components";
 import GroupWriteVote from "../screens/Group/GroupVote/WriteVote";
 import GroupReadVote from "../screens/Group/GroupVote/ReadVote";
+import MemberList from "../screens/Group/MemberList";
 
 DrawerNavigatorConfig = {
   drawerPosition: "right",
@@ -38,8 +39,27 @@ export default () => {
         component={DrawerNav}
         initialParams={route.params}
       />
-      <Stack.Screen name="GroupWriteVote" component={GroupWriteVote} />
-      <Stack.Screen name="GroupReadVote" component={GroupReadVote} />
+      <Stack.Screen
+        name="GroupWriteVote"
+        component={GroupWriteVote}
+        options={{
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      />
+      <Stack.Screen
+        name="GroupReadVote"
+        component={GroupReadVote}
+        options={{
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      />
+      <Stack.Screen
+        name="VoteMemberList"
+        component={MemberList}
+        options={{
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      />
     </Stack.Navigator>
   );
 };

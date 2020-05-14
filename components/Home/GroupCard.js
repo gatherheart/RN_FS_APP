@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import styled, { ThemeContext } from "styled-components/native";
-import Poster from "../Poster";
+import Poster from "../GroupPoster";
 import { TouchableOpacity, View, StyleSheet, Dimensions } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { trimText } from "../../utils/String";
