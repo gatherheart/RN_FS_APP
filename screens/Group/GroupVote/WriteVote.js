@@ -136,7 +136,7 @@ const VoteList = ({
   );
 };
 
-export default () => {
+export default ({ id }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [voteTitle, setVoteTitle] = useState("");
   const [voteMemo, setVoteMemo] = useState("");
@@ -145,10 +145,19 @@ export default () => {
   const [deadline, setDeadline] = useState(null);
   const [multipleOption, setMultipleOption] = useState(false);
   const [anonymousOption, setAnonymousOption] = useState(false);
-  const [memberList, setMemberList] = useState([]);
+  const [message, setMessage] = useState("");
 
   const navigation = useNavigation();
   const themeContext = useContext(ThemeContext);
+
+  const submitVote = () => {
+    if (voteList[0] === "" || voteList[1] === "") {
+      setMessage("선택지를 채워주세요.");
+    } else {
+      setMessage("투표를 등록하였습니다.");
+    }
+    changeModal();
+  };
 
   const onSubmitVoteTitle = () => {
     if (voteTitle === "") return;
@@ -186,6 +195,9 @@ export default () => {
     setModalVisible((prev) => !prev);
   };
 
+  if (message === "투표를 등록하였습니다." && !modalVisible)
+    navigation.navigate("GroupDrawer", { id: id });
+
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -197,13 +209,15 @@ export default () => {
           borderBottomWidth: 1,
           borderBottomColor: themeContext.moreLightGreyColor,
         }}
-        rightButton={changeModal}
+        rightButton={() => {
+          submitVote();
+        }}
       ></CustomHeader>
       <AlertModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
         title={""}
-        body={"이미 학교 인증이 완료되었습니다."}
+        body={message}
       ></AlertModal>
       <ScrollView
         style={{
