@@ -154,13 +154,7 @@ export default ({}) => {
   return data.loading ? (
     <Loader></Loader>
   ) : (
-    <ScrollView
-      style={{
-        backgroundColor: themeContext.backgroundColor,
-        fontFamily: themeContext.regularFont,
-      }}
-      showsVerticalScrollIndicator={false}
-    >
+    <>
       <CustomHeader
         title={"투표할 대상 선택"}
         headerStyle={{
@@ -168,43 +162,56 @@ export default ({}) => {
           borderBottomColor: themeContext.moreLightGreyColor,
         }}
       ></CustomHeader>
-      <EmptySpace></EmptySpace>
-      <SearchInput
-        placeholder={"이름 검색"}
-        value={keyword}
-        onChange={onChange}
-        onSubmit={onSubmit}
-        returnKeyType="search"
-      ></SearchInput>
-      {Object.keys(checkState).length !== 0 ? (
-        <>
-          <MemberClassify
-            title="회장"
-            members={data.members}
-            type={0}
-            checkState={checkState}
-            setCheckState={setCheckState}
-            keyword={keyword}
-          ></MemberClassify>
-          <MemberClassify
-            title="운영진"
-            members={data.members}
-            type={1}
-            checkState={checkState}
-            setCheckState={setCheckState}
-            keyword={keyword}
-          ></MemberClassify>
-          <MemberClassify
-            title="멤버"
-            members={data.members}
-            type={2}
-            checkState={checkState}
-            setCheckState={setCheckState}
-            keyword={keyword}
-          ></MemberClassify>
-        </>
-      ) : null}
-    </ScrollView>
+      <ScrollView
+        style={{
+          backgroundColor: themeContext.backgroundColor,
+          fontFamily: themeContext.regularFont,
+          paddingTop: "15%",
+        }}
+        showsVerticalScrollIndicator={false}
+      >
+        <EmptySpace></EmptySpace>
+        <SearchInput
+          placeholder={"이름 검색"}
+          value={keyword}
+          onChange={onChange}
+          onSubmit={onSubmit}
+          returnKeyType="search"
+        ></SearchInput>
+        {Object.keys(checkState).length !== 0 ? (
+          <>
+            <MemberClassify
+              title="회장"
+              members={data.members}
+              type={0}
+              checkState={checkState}
+              setCheckState={setCheckState}
+              keyword={keyword}
+            ></MemberClassify>
+            <MemberClassify
+              title="운영진"
+              members={data.members}
+              type={1}
+              checkState={checkState}
+              setCheckState={setCheckState}
+              keyword={keyword}
+            ></MemberClassify>
+            <MemberClassify
+              title="멤버"
+              members={data.members}
+              type={2}
+              checkState={checkState}
+              setCheckState={setCheckState}
+              keyword={keyword}
+            ></MemberClassify>
+          </>
+        ) : null}
+        <EmptySpace></EmptySpace>
+        <EmptySpace></EmptySpace>
+        <EmptySpace></EmptySpace>
+        <EmptySpace></EmptySpace>
+      </ScrollView>
+    </>
   );
 };
 

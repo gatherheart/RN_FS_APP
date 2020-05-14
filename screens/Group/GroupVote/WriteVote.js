@@ -21,6 +21,7 @@ import CustomIcon from "../../../components/CustomIcon";
 import { useNavigation } from "@react-navigation/native";
 import CustumIcon from "../../../components/CustomIcon";
 import { MaterialCommunityIcons, FontAwesome } from "@expo/vector-icons";
+import AlertModal from "../../../components/AlertModal";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
@@ -190,21 +191,31 @@ export default () => {
       style={{ flex: 1 }}
       behavior={Platform.OS == "ios" ? "height" : "height"}
     >
+      <CustomHeader
+        title={"투표 작성"}
+        headerStyle={{
+          borderBottomWidth: 1,
+          borderBottomColor: themeContext.moreLightGreyColor,
+        }}
+        rightButton={changeModal}
+      ></CustomHeader>
+      <AlertModal
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        title={""}
+        body={"이미 학교 인증이 완료되었습니다."}
+      ></AlertModal>
       <ScrollView
-        style={{ backgroundColor: themeContext.backgroundColor }}
+        style={{
+          backgroundColor: themeContext.backgroundColor,
+          paddingTop: "15%",
+        }}
         contentContainerStyle={{
           fontFamily: themeContext.regularFont,
           alignItems: "center",
         }}
+        showsVerticalScrollIndicator={false}
       >
-        <CustomHeader
-          title={"투표 작성"}
-          headerStyle={{
-            borderBottomWidth: 1,
-            borderBottomColor: themeContext.moreLightGreyColor,
-          }}
-        ></CustomHeader>
-
         <Container>
           <OptionContainer>
             <TouchableOpacity
