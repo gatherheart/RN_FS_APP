@@ -15,6 +15,13 @@ export const timePickedConverter = (date) => {
   return convertedDate + " " + convertedTime;
 };
 
+export const simplifiedFormat = (date) => {
+  const theDate = new Date(date);
+  const convertedDate = formatDate(date);
+  const convertedTime = theDate.getHours() + ":" + theDate.getMinutes();
+  return convertedDate.slice(2) + " " + convertedTime;
+};
+
 export const getMonth = (date) => {
   const theDate = new Date(date);
   return theDate.getMonth();

@@ -16,8 +16,8 @@ const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 */
 
 const CardContainer = styled.View`
-  width: ${(WIDTH * 70) / 100}px;
-  height: ${(WIDTH * 25) / 100}px;
+  width: ${(WIDTH * 50) / 100}px;
+  height: ${(HEIGHT * 8.5) / 100}px;
   margin: 0px 0px 0px 0px;
   padding: 5px 10px 5px 0px;
 `;
@@ -52,14 +52,14 @@ const Major = styled.Text`
   font-family: ${(props) => props.theme.regularFont};
 `;
 
-const SmallUserCard = ({ id, name, major, avatar }) => {
+const SmallUserCard = ({ id, name, major, avatar, style }) => {
   const themeContext = useContext(ThemeContext);
   const navigation = useNavigation();
   const goToUser = () => {
     //navigation.navigate("GroupNav", { id, groupName });
   };
   return (
-    <CardContainer>
+    <CardContainer style={style}>
       <TouchableOpacity onPress={goToUser}>
         <Container>
           <AvatarContainer>
