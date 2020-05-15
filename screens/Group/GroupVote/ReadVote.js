@@ -6,6 +6,7 @@ import {
   Animated,
   Dimensions,
   PanResponder,
+  Easing,
 } from "react-native";
 import styled, { ThemeContext } from "styled-components/native";
 import CustomHeader from "../../../components/CustomHeader";
@@ -26,7 +27,6 @@ export default () => {
 
     onPanResponderGrant: (e, gestureState) => {
       position.setOffset({ x: position.x._value, y: position.y._value });
-      console.log(position.x);
       position.setValue({ x: 0, y: 0 });
     },
 
@@ -34,8 +34,15 @@ export default () => {
       null,
       { dx: position.x, dy: position.y },
     ]),
-    onPanResponderRelease: (e, { dx, dy }) => {
+    onPanResponderRelease: (e, { vx, vy, dx, dy }) => {
       position.flattenOffset();
+      Animated.parallel([
+        Animated.decay(position, {
+          toValue: { x: dx, y: dy },
+          velocity: { x: vx, y: vy },
+          easing: Easing.linear,
+        }).start(),
+      ]);
     },
   });
   const themeContext = useContext(ThemeContext);
