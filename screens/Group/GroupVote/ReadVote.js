@@ -17,6 +17,7 @@ import PropTypes from "prop-types";
 import Loader from "../../../components/Loader";
 import CustumIcon from "../../../components/CustomIcon";
 import UsersTable from "../../../components/User/UsersTable";
+import { useNavigation } from "@react-navigation/native";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
@@ -71,9 +72,10 @@ const BarText = styled.Text`
 `;
 const CHART_WIDTH = new Animated.Value(0);
 
-const RatioBar = ({ percent, textInBar, textOutBar }) => {
+const RatioBar = ({ percent, textInBar, textOutBar, params }) => {
   const themeContext = useContext(ThemeContext);
-
+  const navigation = useNavigation();
+  navigation.navigate("VoteResult", { users: params });
   useEffect(() => {
     Animated.timing(CHART_WIDTH, {
       toValue: 1,
@@ -83,36 +85,41 @@ const RatioBar = ({ percent, textInBar, textOutBar }) => {
   }, []);
 
   return (
-    <BarContainer>
-      <BarStartContainer>
-        <Animated.View
-          style={{
-            height: (HEIGHT * 5) / 100,
-            opacity: 0.7,
-            width: 1,
-            backgroundColor: themeContext.darkGreenColor,
-            transform: [
-              {
-                translateX: CHART_WIDTH.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [0, (WIDTH * 90 * percent) / 200],
-                }),
-              },
-              {
-                scaleX: CHART_WIDTH.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [1, (WIDTH * 90 * percent) / 100],
-                }),
-              },
-            ],
-          }}
-        ></Animated.View>
-        <BarText style={{ marginHorizontal: 10 }}>{textInBar}</BarText>
-      </BarStartContainer>
-      <BarEndContainer>
-        <BarText>{textOutBar}</BarText>
-      </BarEndContainer>
-    </BarContainer>
+    <TouchableOpacity
+      activeOpacity={1}
+      onPress={() => navigation.navigate("VoteResult", { users: params })}
+    >
+      <BarContainer>
+        <BarStartContainer>
+          <Animated.View
+            style={{
+              height: (HEIGHT * 5) / 100,
+              opacity: 0.7,
+              width: 1,
+              backgroundColor: themeContext.darkGreenColor,
+              transform: [
+                {
+                  translateX: CHART_WIDTH.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [0, (WIDTH * 90 * percent) / 200],
+                  }),
+                },
+                {
+                  scaleX: CHART_WIDTH.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [1, (WIDTH * 90 * percent) / 100],
+                  }),
+                },
+              ],
+            }}
+          ></Animated.View>
+          <BarText style={{ marginHorizontal: 10 }}>{textInBar}</BarText>
+        </BarStartContainer>
+        <BarEndContainer>
+          <BarText>{textOutBar}</BarText>
+        </BarEndContainer>
+      </BarContainer>
+    </TouchableOpacity>
   );
 };
 
@@ -120,6 +127,7 @@ RatioBar.propTypes = {
   percent: PropTypes.number.isRequired,
   textInBar: PropTypes.string,
   textOutBar: PropTypes.string,
+  params: PropTypes.array,
 };
 
 export default () => {
@@ -164,6 +172,7 @@ export default () => {
         const ret = member.vote.some((value) => value === idx);
         if (ret && idx === 0) nonParticipants.push(member);
         else if (ret) participants.push(member);
+        return ret;
       });
     });
     setVoteResult({
@@ -216,6 +225,7 @@ export default () => {
           </SubContainer>
           {data.voteList.map((vote, idx) => {
             if (idx === 0) return null;
+            console.log(vote, voteResult.result[vote]);
             return (
               <RatioBar
                 key={`vote-${vote}-${idx}`}
@@ -225,6 +235,7 @@ export default () => {
                   voteResult.result[vote].length /
                   voteResult.participants.length
                 }
+                params={voteResult.result[vote]}
               ></RatioBar>
             );
           })}
@@ -309,11 +320,13 @@ export default () => {
                     {voteResult.nonParticipants.length}명
                   </NanumText>
                 </View>
+                <View style={{ alignItems: "center" }}>
+                  <UsersTable users={voteResult.nonParticipants}></UsersTable>
+                </View>
               </View>
             ) : null}
           </Collapsible>
         </Container>
-        <EmptySpace></EmptySpace>
         <EmptySpace></EmptySpace>
         <EmptySpace></EmptySpace>
       </ScrollView>
@@ -343,6 +356,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     flexDirection: "row",
     width: WIDTH,
+    height: (HEIGHT * 5) / 100,
+    alignItems: "center",
   },
   memberTableText: {
     marginHorizontal: 20,
@@ -376,7 +391,7 @@ const membersData = [
     avatar: avatarUrl,
     type: 1,
     major: "소프트웨어학과",
-    vote: [0],
+    vote: [4],
   },
   {
     name: "김자운",

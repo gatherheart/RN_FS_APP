@@ -11,6 +11,7 @@ import { ThemeContext } from "styled-components";
 import GroupWriteVote from "../screens/Group/GroupVote/WriteVote";
 import GroupReadVote from "../screens/Group/GroupVote/ReadVote";
 import MemberList from "../screens/Group/MemberList";
+import VoteResult from "../screens/Group/GroupVote/VoteResult";
 
 DrawerNavigatorConfig = {
   drawerPosition: "right",
@@ -56,6 +57,13 @@ export default () => {
       <Stack.Screen
         name="VoteMemberList"
         component={MemberList}
+        options={{
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      />
+      <Stack.Screen
+        name="VoteResult"
+        component={VoteResult}
         options={{
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         }}

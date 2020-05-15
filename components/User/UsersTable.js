@@ -20,7 +20,6 @@ const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 const CardContainer = styled.View`
   margin: 0px 0px 0px 5px;
   padding: 5px 10px 5px 0px;
-  border-width: 1px;
   flex-direction: row;
   width: ${(WIDTH * 90) / 100}px;
   align-items: center;
@@ -29,7 +28,6 @@ const CardContainer = styled.View`
 const AvatarContainer = styled.View`
   align-items: center;
   justify-content: center;
-  border-width: 1px;
   margin: 10px 10px 10px 10px;
 `;
 
@@ -46,8 +44,8 @@ const Data = styled.View`
 `;
 const Name = styled.Text`
   font-weight: 400;
-  font-size: 15px;
-  margin-bottom: 3px;
+  font-size: 12px;
+  margin-vertical: 3px;
   font-family: ${(props) => props.theme.regularFont};
 `;
 
