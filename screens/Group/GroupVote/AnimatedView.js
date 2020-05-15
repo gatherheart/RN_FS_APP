@@ -26,14 +26,12 @@ export default () => {
 
     onPanResponderGrant: (e, gestureState) => {
       position.setOffset({ x: position.x._value, y: position.y._value });
-      console.log(position.x);
       position.setValue({ x: 0, y: 0 });
     },
 
-    onPanResponderMove: Animated.event([
-      null,
-      { dx: position.x, dy: position.y },
-    ]),
+    onPanResponderMove: (e, { dx, dy }) => {
+      position.setValue({ x: dx, y: dy });
+    },
     onPanResponderRelease: (e, { dx, dy }) => {
       position.flattenOffset();
     },

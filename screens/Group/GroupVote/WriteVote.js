@@ -145,6 +145,7 @@ export default ({ id }) => {
   const [deadline, setDeadline] = useState(null);
   const [multipleOption, setMultipleOption] = useState(false);
   const [anonymousOption, setAnonymousOption] = useState(false);
+  const [voteMemberList, setVoteMemberList] = useState([]);
   const [message, setMessage] = useState("");
 
   const navigation = useNavigation();
@@ -153,6 +154,8 @@ export default ({ id }) => {
   const submitVote = () => {
     if (voteList[0] === "" || voteList[1] === "") {
       setMessage("선택지를 채워주세요.");
+    } else if (voteTitle === "") {
+      setMessage("제목을 입력해주세요.");
     } else {
       setMessage("투표를 등록하였습니다.");
     }
