@@ -18,6 +18,7 @@ import Loader from "../../../components/Loader";
 import CustumIcon from "../../../components/CustomIcon";
 import UsersTable from "../../../components/User/UsersTable";
 import { useNavigation } from "@react-navigation/native";
+import VoteModal from "../../../components/Group/Vote/VoteModal";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
@@ -26,8 +27,8 @@ const NanumText = styled.Text`
 `;
 
 const SubContainer = styled.View`
-  border-width: 1px;
-  border-color: red;
+  border-top-width: 1px;
+  border-top-color: ${(props) => props.theme.darkGreenColor};
   width: 100%;
   height: ${(HEIGHT * 8.5) / 100}px;
   flex-direction: row;
@@ -36,8 +37,6 @@ const SubContainer = styled.View`
   padding: 0px 5px 0px 10px;
 `;
 const Container = styled.View`
-  border-width: 2px;
-  border-color: blue;
   align-items: center;
 `;
 
@@ -72,10 +71,9 @@ const BarText = styled.Text`
 `;
 const CHART_WIDTH = new Animated.Value(0);
 
-const RatioBar = ({ percent, textInBar, textOutBar, params }) => {
+const RatioBar = ({ percent, textInBar, textOutBar, users }) => {
   const themeContext = useContext(ThemeContext);
   const navigation = useNavigation();
-  navigation.navigate("VoteResult", { users: params });
   useEffect(() => {
     Animated.timing(CHART_WIDTH, {
       toValue: 1,
@@ -87,7 +85,9 @@ const RatioBar = ({ percent, textInBar, textOutBar, params }) => {
   return (
     <TouchableOpacity
       activeOpacity={1}
-      onPress={() => navigation.navigate("VoteResult", { users: params })}
+      onPress={() =>
+        navigation.navigate("VoteResult", { users: users, vote: textInBar })
+      }
     >
       <BarContainer>
         <BarStartContainer>
@@ -127,12 +127,14 @@ RatioBar.propTypes = {
   percent: PropTypes.number.isRequired,
   textInBar: PropTypes.string,
   textOutBar: PropTypes.string,
-  params: PropTypes.array,
+  users: PropTypes.array,
 };
 
 export default () => {
   const themeContext = useContext(ThemeContext);
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true);
+  const [modalVisible, setModalVisible] = useState(true);
+
   const [data, setData] = useState({
     loading: true,
     voteTitle: "",
@@ -187,8 +189,20 @@ export default () => {
     <Loader></Loader>
   ) : (
     <>
-      <CustomHeader title={"투표글 보기"}></CustomHeader>
-
+      <CustomHeader
+        title={"투표글 보기"}
+        rightButton={() => setModalVisible((prev) => !prev)}
+      ></CustomHeader>
+      <VoteModal
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        voteTitle={data.voteTitle}
+        voteMemo={data.voteMemo}
+        voteList={data.voteList}
+        deadline={data.deadline}
+        multipleOption={data.multipleOption}
+        anonymousOption={data.anonymousOption}
+      ></VoteModal>
       <ScrollView
         style={{
           backgroundColor: themeContext.backgroundColor,
@@ -203,16 +217,20 @@ export default () => {
           <NanumText>{data.voteTitle}</NanumText>
           <Text>~{simplifiedFormat(data.deadline)}</Text>
         </SubContainer>
-        <SubContainer>
+        <SubContainer style={{ borderWidth: 0 }}>
           <SmallUserCard
             name={data.author.name}
             major={data.author.major}
             avatar={data.author.avatar}
-            style={{ borderWidth: 1 }}
           ></SmallUserCard>
           <Text>{simplifiedFormat(data.createdAt)}</Text>
         </SubContainer>
-        <Container style={styles.memoContainer}>
+        <Container
+          style={{
+            ...styles.memoContainer,
+            borderColor: themeContext.darkGreenColor,
+          }}
+        >
           <Text>{data.voteMemo}</Text>
         </Container>
 
@@ -225,7 +243,6 @@ export default () => {
           </SubContainer>
           {data.voteList.map((vote, idx) => {
             if (idx === 0) return null;
-            console.log(vote, voteResult.result[vote]);
             return (
               <RatioBar
                 key={`vote-${vote}-${idx}`}
@@ -235,12 +252,12 @@ export default () => {
                   voteResult.result[vote].length /
                   voteResult.participants.length
                 }
-                params={voteResult.result[vote]}
+                users={voteResult.result[vote]}
               ></RatioBar>
             );
           })}
         </Container>
-        <SubContainer style={{ justifyContent: "center" }}>
+        <SubContainer style={{ justifyContent: "center", borderTopWidth: 0 }}>
           <TouchableOpacity>
             <BarContainer
               style={{
@@ -278,7 +295,6 @@ export default () => {
               <View
                 style={{
                   justifyContent: "flex-start",
-                  borderWidth: 1,
                   width: WIDTH,
                 }}
               >
@@ -337,6 +353,7 @@ export default () => {
 const styles = StyleSheet.create({
   memoContainer: {
     paddingVertical: 20,
+    borderTopWidth: 1,
   },
   reVoteContainer: {
     opacity: 0.7,
