@@ -8,6 +8,12 @@ import PropTypes from "prop-types";
 import SearchInput from "../../components/SearchInput";
 import SmallUserCard from "../../components/User/SmallUserCard";
 import { CheckBox } from "react-native-elements";
+import {
+  UnderHeader,
+  HeaderHeight,
+  StatusHeight,
+} from "../../utils/HeaderHeight";
+import UsersTable from "../../components/User/UsersTable";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
@@ -157,16 +163,33 @@ export default ({}) => {
     <>
       <CustomHeader
         title={"투표할 대상 선택"}
-        headerStyle={{
-          borderBottomWidth: 1,
-          borderBottomColor: themeContext.moreLightGreyColor,
-        }}
+        headerStyle={{ borderBottomWidth: 1 }}
       ></CustomHeader>
+
+      <View
+        style={{
+          borderWidth: 2,
+          paddingTop: UnderHeader,
+          borderWidth: 1,
+          backgroundColor: themeContext.backgroundColor,
+        }}
+      >
+        <ScrollView
+          horizontal={true}
+          showsHorizontalScrollIndicator={true}
+          style={{
+            backgroundColor: themeContext.backgroundColor,
+          }}
+          contentContainerStyle={{
+            height: StatusHeight * 2,
+          }}
+        >
+          <UsersTable users={data.members}></UsersTable>
+        </ScrollView>
+      </View>
       <ScrollView
         style={{
           backgroundColor: themeContext.backgroundColor,
-          fontFamily: themeContext.regularFont,
-          paddingTop: "15%",
         }}
         showsVerticalScrollIndicator={false}
       >

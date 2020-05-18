@@ -49,11 +49,11 @@ const Name = styled.Text`
   font-family: ${(props) => props.theme.regularFont};
 `;
 
-const UsersTable = ({ users, style = {} }) => {
+const UsersTable = ({ users, style = {}, horizontal = false }) => {
   const themeContext = useContext(ThemeContext);
   const navigation = useNavigation();
   return (
-    <CardContainer style={{ flexWrap: "wrap", ...style }}>
+    <CardContainer style={{ flexWrap: "nowrap", ...style }}>
       {users.map((user) => {
         const { avatar, name } = user;
         console.log(name);

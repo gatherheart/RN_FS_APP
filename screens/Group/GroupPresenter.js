@@ -108,7 +108,7 @@ export default ({ id, group, loading, refreshFn }) => {
   const navigation = useNavigation();
   const themeContext = useContext(ThemeContext);
   const [page, setPage] = useState(0);
-  navigation.navigate("GroupReadVote", { id: group.id });
+  navigation.navigate("GroupWriteVote", { id: group.id });
 
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,

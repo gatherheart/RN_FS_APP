@@ -21,4 +21,4 @@ export const StatusHeight = Platform.select({
   default: 0,
 });
 export const HeaderHeight = StatusHeight || 0;
-export const UnderHeader = Platform.OS === "ios" ? StatusHeight : StatusHeight;
+export const UnderHeader = StatusHeight * 1.15;
