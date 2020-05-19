@@ -81,6 +81,7 @@ const RatioBar = ({ percent, textInBar, textOutBar, users }) => {
       useNativeDriver: true,
     }).start();
   }, []);
+
   return (
     <TouchableOpacity
       activeOpacity={1}
@@ -94,13 +95,13 @@ const RatioBar = ({ percent, textInBar, textOutBar, users }) => {
             style={{
               height: (HEIGHT * 5) / 100,
               opacity: 0.7,
-              width: percent != 0 ? 1 : 0,
+              width: 1,
               backgroundColor: themeContext.darkGreenColor,
               transform: [
                 {
                   translateX: CHART_WIDTH.interpolate({
                     inputRange: [0, 1],
-                    outputRange: [0, (WIDTH * 90 * percent) / 200 - 1],
+                    outputRange: [0, (WIDTH * 90 * percent) / 200],
                   }),
                 },
                 {
@@ -132,7 +133,7 @@ RatioBar.propTypes = {
 export default () => {
   const themeContext = useContext(ThemeContext);
   const [isCollapsed, setIsCollapsed] = useState(true);
-  const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState(true);
 
   const [data, setData] = useState({
     loading: true,
@@ -168,19 +169,14 @@ export default () => {
     let newDict = {};
     let participants = [];
     let nonParticipants = [];
-
-    Object.keys(data.voteList).forEach((vote) => (newDict[vote] = []));
-    data.voteMemberList.map((member) => {
-      Object.keys(data.voteList).map((vote, idx) => {
-        if (idx == 0 && data.voteList[vote].includes(member.id))
-          nonParticipants.push(member);
-        else if (data.voteList[vote].includes(member.id)) {
-          newDict[vote].push(member);
-          if (!participants.includes(member)) participants.push(member);
-        }
+    data.voteList.map((vote, idx) => {
+      newDict[vote] = data.voteMemberList.filter((member) => {
+        const ret = member.vote.some((value) => value === idx);
+        if (ret && idx === 0) nonParticipants.push(member);
+        else if (ret) participants.push(member);
+        return ret;
       });
     });
-
     setVoteResult({
       result: newDict,
       participants,
@@ -241,13 +237,11 @@ export default () => {
         <Container>
           <SubContainer style={{ justifyContent: "flex-start" }}>
             <NanumText>투표 결과 </NanumText>
-            <NanumText
-              style={{ marginHorizontal: 10, color: themeContext.greenColor }}
-            >
+            <NanumText style={{ marginHorizontal: 10 }}>
               {voteResult.participants.length}명 참여
             </NanumText>
           </SubContainer>
-          {Object.keys(data.voteList).map((vote, idx) => {
+          {data.voteList.map((vote, idx) => {
             if (idx === 0) return null;
             return (
               <RatioBar
@@ -276,18 +270,13 @@ export default () => {
           </TouchableOpacity>
         </SubContainer>
         <Container>
-          <SubContainer
-            style={{
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
+          <SubContainer>
             <TouchableOpacity
               onPress={() => setIsCollapsed((prev) => !prev)}
               style={styles.collapsibleButton}
             >
               <View style={styles.collapsibleContainer}>
-                <NanumText style={{ marginHorizontal: 5 }}>
+                <NanumText>
                   {data.anonymousOption ? "익명 투표" : "실명 투표"}
                 </NanumText>
                 <NanumText style={{ color: themeContext.greenColor }}>
@@ -298,7 +287,6 @@ export default () => {
                 name={"arrow-down"}
                 size={26}
                 color={themeContext.darkGreenColor}
-                style={{ marginHorizontal: 20 }}
               ></CustumIcon>
             </TouchableOpacity>
           </SubContainer>
@@ -375,7 +363,6 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
   },
   collapsibleContainer: {
     flexDirection: "row",
@@ -405,6 +392,7 @@ const membersData = [
       "https://images.unsplash.com/photo-1589411454940-67a017535ecf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=320&q=80",
     type: 0,
     major: "소프트웨어학과",
+    vote: [1],
   },
   {
     name: "이진우",
@@ -412,6 +400,7 @@ const membersData = [
     avatar: avatarUrl,
     type: 1,
     major: "소프트웨어학과",
+    vote: [3],
   },
   {
     name: "상미이",
@@ -419,6 +408,7 @@ const membersData = [
     avatar: avatarUrl,
     type: 1,
     major: "소프트웨어학과",
+    vote: [4],
   },
   {
     name: "김자운",
@@ -426,6 +416,7 @@ const membersData = [
     avatar: avatarUrl,
     type: 2,
     major: "소프트웨어학과",
+    vote: [0],
   },
   {
     name: "장안구",
@@ -515,19 +506,13 @@ const membersData = [
 const voteData = {
   voteTitle: "4월 회식 날짜",
   voteMemo: "4월 회식은 편의점 포차에서 진행할 예정입니다.",
-  voteList: {
-    null: ["1", "2"],
-    "4월 15일": ["3", "4"],
-    "4월 20일": ["14", "13"],
-    "4월 25일": [],
-    "4월 30일": ["5"],
-  },
+  voteList: ["null", "4월 15일", "4월 20일", "4월 30일", "4월 31일"],
   deadline: "2020-05-14T09:43:54.107Z",
   multipleOption: false,
   anonymousOption: false,
   closed: false,
   voteMemberList: membersData,
-  createdAt: "2020-05-19T08:14:00.000Z",
+  createdAt: "2020-12-12T15:43:54.107Z",
   author: {
     name: "장안구",
     id: "7",

@@ -27,6 +27,8 @@ const CardContainer = styled.View`
   margin: 0px 0px 0px 5px;
   flex-direction: row;
   align-items: center;
+  border-bottom-width: 1px;
+  border-bottom-color: ${(props) => props.theme.lightGreyColor};
 `;
 
 const AvatarContainer = styled.View`
@@ -35,7 +37,6 @@ const AvatarContainer = styled.View`
   margin: 15px 5px 10px 0px;
   height: 100%;
   width: ${(WIDTH * 15) / 100}px;
-  border-width: 1px;
 `;
 
 const Container = styled.View`
@@ -78,6 +79,8 @@ const UsersTable = ({ users, changeChecked, usersId, style = {} }) => {
         const { avatar, name } = user;
         return usersId.includes(user.id) ? (
           <AvatarContainer key={"avatar-" + user.id}>
+            <Avatar url={avatar} />
+            {name ? <Name>{name}</Name> : null}
             <RemoveButton onPress={() => changeChecked(user.id)}>
               <CustomIcon
                 name={"close-circle"}
@@ -85,8 +88,6 @@ const UsersTable = ({ users, changeChecked, usersId, style = {} }) => {
                 color={themeContext.greyColor}
               ></CustomIcon>
             </RemoveButton>
-            <Avatar url={avatar} />
-            {name ? <Name>{name}</Name> : null}
           </AvatarContainer>
         ) : null;
       })}

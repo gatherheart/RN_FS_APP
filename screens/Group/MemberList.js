@@ -68,21 +68,9 @@ const MemberClassify = ({
   setCheckState,
   keyword,
   setMemberList,
-  memberList,
+  changeChecked,
 }) => {
-  console.log("Rendering2");
   const themeContext = useContext(ThemeContext);
-
-  const changeChecked = (id) => {
-    let newChecked = { ...checkState };
-    newChecked[id] = !newChecked[id];
-    if (newChecked[id] && !memberList.includes(id))
-      setMemberList([...memberList, id]);
-    else if (!newChecked[id] && memberList.includes(id))
-      setMemberList(memberList.filter((memberId) => memberId != id));
-
-    setCheckState(newChecked);
-  };
 
   const changeAllChecked = () => {
     let newChecked = { ...checkState };
@@ -98,7 +86,6 @@ const MemberClassify = ({
     setCheckState(newChecked);
     setMemberList(newMembers);
   };
-
   return (
     <View>
       <RowContainer style={{ marginVertical: 10 }}>
@@ -180,20 +167,18 @@ export default ({}) => {
     });
     setCheckState(newDict);
   }, [data.loading]);
-
+  useEffect(() => {
+    console.log(memberList);
+  }, [memberList]);
   return data.loading ? (
     <Loader></Loader>
   ) : (
     <>
-      <CustomHeader
-        title={"투표할 대상 선택"}
-        headerStyle={{ borderBottomWidth: 1 }}
-      ></CustomHeader>
+      <CustomHeader title={"투표할 대상 선택"} headerStyle={{}}></CustomHeader>
 
       <View
         style={{
           paddingTop: UnderHeader,
-          borderWidth: 1,
           backgroundColor: themeContext.backgroundColor,
         }}
       >
@@ -204,7 +189,9 @@ export default ({}) => {
             backgroundColor: themeContext.backgroundColor,
           }}
           contentContainerStyle={{
-            height: StatusHeight * 2,
+            height: memberList.some((member) => member != null)
+              ? StatusHeight * 2
+              : 0,
           }}
         >
           <UsersTable
@@ -240,6 +227,7 @@ export default ({}) => {
               keyword={keyword}
               setMemberList={setMemberList}
               memberList={memberList}
+              changeChecked={changeChecked}
             ></MemberClassify>
             <MemberClassify
               title="운영진"
@@ -250,6 +238,7 @@ export default ({}) => {
               keyword={keyword}
               setMemberList={setMemberList}
               memberList={memberList}
+              changeChecked={changeChecked}
             ></MemberClassify>
             <MemberClassify
               title="멤버"
@@ -260,6 +249,7 @@ export default ({}) => {
               keyword={keyword}
               setMemberList={setMemberList}
               memberList={memberList}
+              changeChecked={changeChecked}
             ></MemberClassify>
           </>
         ) : null}

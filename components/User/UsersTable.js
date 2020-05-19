@@ -61,7 +61,6 @@ const UsersTable = ({ users, style = {} }) => {
     >
       {users.map((user) => {
         const { avatar, name } = user;
-        console.log(name);
         return (
           <AvatarContainer key={"avatar-" + user.id}>
             <Avatar url={avatar} />

@@ -20,8 +20,8 @@ const Title = styled.Text`
 `;
 const Deadline = styled.Text`
   font-size: 13px;
-  left: 50%;
-  margin: 0px 0px 20px 20px;
+  text-align: right;
+  margin: 0px 10px 20px 0px;
   font-family: ${(props) => props.theme.regularFont};
 `;
 
@@ -50,6 +50,13 @@ const OkButtonText = styled.Text`
   font-size: 12px;
   color: ${(props) => props.theme.darkGreyColor};
   font-family: ${(props) => props.theme.regularFont};
+`;
+
+const ButtonContainer = styled.View`
+  width: 100%;
+  border-width: 1px;
+  align-items: center;
+  top: 10px;
 `;
 
 export default ({
@@ -97,6 +104,20 @@ export default ({
               <Option>단일 투표</Option>
             )}
           </OptionContainer>
+          <ButtonContainer>
+            <TouchableOpacity>
+              <Text>ABCD</Text>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Text>ABCD</Text>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Text>ABCD</Text>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Text>ABCD</Text>
+            </TouchableOpacity>
+          </ButtonContainer>
           <TouchableOpacity
             style={{
               marginVertical: 20,

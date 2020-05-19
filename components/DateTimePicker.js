@@ -16,8 +16,8 @@ const DateTimePicker = ({
   };
 
   const handleConfirm = (date) => {
-    setDeadline(date);
     hideDatePicker();
+    setDeadline(date);
   };
 
   return (

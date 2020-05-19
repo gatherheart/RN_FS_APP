@@ -9,17 +9,21 @@ export const formatDate = (date) => {
 
 export const timePickedConverter = (date) => {
   const theDate = new Date(date);
-  const convertedDate = formatDate(date);
+  const convertedDate =
+    Number(theDate.getYear() + 1900) +
+    "년 " +
+    Number(theDate.getMonth() + 1) +
+    "월 " +
+    theDate.getDate() +
+    "일";
   const convertedTime =
     theDate.getHours() + "시 " + theDate.getMinutes() + "분";
+
   return convertedDate + " " + convertedTime;
 };
 
 export const simplifiedFormat = (date) => {
-  const theDate = new Date(date);
-  const convertedDate = formatDate(date);
-  const convertedTime = theDate.getHours() + ":" + theDate.getMinutes();
-  return convertedDate.slice(2) + " " + convertedTime;
+  return timePickedConverter(date).slice(2);
 };
 
 export const getMonth = (date) => {

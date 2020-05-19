@@ -81,7 +81,7 @@ const DrawerNav = () => {
   const themeContext = React.useContext(ThemeContext);
   return (
     <Drawer.Navigator
-      initialRouteName="Group"
+      initialRouteName="GroupDrawerMain"
       drawerContentOptions={{
         activeTintColor: themeContext.lightGreenColor,
         itemStyle: { marginVertical: 10 },
