@@ -1,15 +1,21 @@
 import React, { useContext } from "react";
 import styled, { ThemeContext } from "styled-components/native";
 import PropTypes from "prop-types";
-import { TouchableOpacity, View, StyleSheet, Dimensions } from "react-native";
+import {
+  TouchableOpacity,
+  View,
+  StyleSheet,
+  Text,
+  Dimensions,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { trimText } from "../../utils/String";
-import Avatar from "./ProfileAvatar";
-
+import Avatar from "./InteractiveProfileAvatar";
+import CustomIcon from "../CustomIcon";
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
 // Organization of Small Components
-
+// Copied file of User Table
 /*
   [ Avatar ]     
     name
@@ -19,7 +25,6 @@ const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
 const CardContainer = styled.View`
   margin: 0px 0px 0px 5px;
-  padding: 5px 10px 5px 0px;
   flex-direction: row;
   align-items: center;
 `;
@@ -27,7 +32,10 @@ const CardContainer = styled.View`
 const AvatarContainer = styled.View`
   align-items: center;
   justify-content: center;
-  margin: 10px 10px 10px 10px;
+  margin: 15px 5px 10px 0px;
+  height: 100%;
+  width: ${(WIDTH * 15) / 100}px;
+  border-width: 1px;
 `;
 
 const Container = styled.View`
@@ -48,26 +56,39 @@ const Name = styled.Text`
   font-family: ${(props) => props.theme.regularFont};
 `;
 
-const UsersTable = ({ users, style = {} }) => {
+const RemoveButton = styled.TouchableOpacity`
+  align-items: center;
+  justify-content: flex-start;
+  position: absolute;
+  right: 7%;
+  top: 7%;
+  z-index: 1;
+`;
+const UsersTable = ({ users, changeChecked, usersId, style = {} }) => {
   const themeContext = useContext(ThemeContext);
   const navigation = useNavigation();
+
   return (
     <CardContainer
       style={{
-        flexWrap: "wrap",
-        width: (WIDTH * 90) / 100,
         ...style,
       }}
     >
       {users.map((user) => {
         const { avatar, name } = user;
-        console.log(name);
-        return (
+        return usersId.includes(user.id) ? (
           <AvatarContainer key={"avatar-" + user.id}>
+            <RemoveButton onPress={() => changeChecked(user.id)}>
+              <CustomIcon
+                name={"close-circle"}
+                size={20}
+                color={themeContext.greyColor}
+              ></CustomIcon>
+            </RemoveButton>
             <Avatar url={avatar} />
             {name ? <Name>{name}</Name> : null}
           </AvatarContainer>
-        );
+        ) : null;
       })}
     </CardContainer>
   );

@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { TouchableOpacity, View, StyleSheet, Dimensions } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { trimText } from "../../utils/String";
-import Avatar from "../ProfileAvatar";
+import Avatar from "./ProfileAvatar";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 

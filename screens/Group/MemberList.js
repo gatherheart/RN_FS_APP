@@ -13,7 +13,7 @@ import {
   HeaderHeight,
   StatusHeight,
 } from "../../utils/HeaderHeight";
-import UsersTable from "../../components/User/UsersTable";
+import UsersTable from "../../components/User/HorizontalUsersTable";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
@@ -67,6 +67,8 @@ const MemberClassify = ({
   checkState,
   setCheckState,
   keyword,
+  setMemberList,
+  memberList,
 }) => {
   console.log("Rendering2");
   const themeContext = useContext(ThemeContext);
@@ -74,17 +76,27 @@ const MemberClassify = ({
   const changeChecked = (id) => {
     let newChecked = { ...checkState };
     newChecked[id] = !newChecked[id];
+    if (newChecked[id] && !memberList.includes(id))
+      setMemberList([...memberList, id]);
+    else if (!newChecked[id] && memberList.includes(id))
+      setMemberList(memberList.filter((memberId) => memberId != id));
+
     setCheckState(newChecked);
   };
 
   const changeAllChecked = () => {
     let newChecked = { ...checkState };
-    members
-      .filter((member) => member.type === type)
-      .forEach((member) => {
+    const newMembers = members.map((member) => {
+      if (member.type === type) {
         newChecked[member.id] = !newChecked[member.id];
-      });
+        return newChecked[member.id] ? member.id : null;
+      } else {
+        return newChecked[member.id] ? member.id : null;
+      }
+    });
+
     setCheckState(newChecked);
+    setMemberList(newMembers);
   };
 
   return (
@@ -146,6 +158,18 @@ export default ({}) => {
       members: membersData,
     });
   };
+
+  const changeChecked = (id) => {
+    let newChecked = { ...checkState };
+    newChecked[id] = !newChecked[id];
+    if (newChecked[id] && !memberList.includes(id))
+      setMemberList([...memberList, id]);
+    else if (!newChecked[id] && memberList.includes(id))
+      setMemberList(memberList.filter((memberId) => memberId != id));
+
+    setCheckState(newChecked);
+  };
+
   useEffect(() => {
     getData();
   }, []);
@@ -168,7 +192,6 @@ export default ({}) => {
 
       <View
         style={{
-          borderWidth: 2,
           paddingTop: UnderHeader,
           borderWidth: 1,
           backgroundColor: themeContext.backgroundColor,
@@ -176,7 +199,7 @@ export default ({}) => {
       >
         <ScrollView
           horizontal={true}
-          showsHorizontalScrollIndicator={true}
+          showsHorizontalScrollIndicator={false}
           style={{
             backgroundColor: themeContext.backgroundColor,
           }}
@@ -184,7 +207,12 @@ export default ({}) => {
             height: StatusHeight * 2,
           }}
         >
-          <UsersTable users={data.members}></UsersTable>
+          <UsersTable
+            users={data.members}
+            usersId={memberList}
+            setUsers={setMemberList}
+            changeChecked={changeChecked}
+          ></UsersTable>
         </ScrollView>
       </View>
       <ScrollView
@@ -210,6 +238,8 @@ export default ({}) => {
               checkState={checkState}
               setCheckState={setCheckState}
               keyword={keyword}
+              setMemberList={setMemberList}
+              memberList={memberList}
             ></MemberClassify>
             <MemberClassify
               title="운영진"
@@ -218,6 +248,8 @@ export default ({}) => {
               checkState={checkState}
               setCheckState={setCheckState}
               keyword={keyword}
+              setMemberList={setMemberList}
+              memberList={memberList}
             ></MemberClassify>
             <MemberClassify
               title="멤버"
@@ -226,6 +258,8 @@ export default ({}) => {
               checkState={checkState}
               setCheckState={setCheckState}
               keyword={keyword}
+              setMemberList={setMemberList}
+              memberList={memberList}
             ></MemberClassify>
           </>
         ) : null}

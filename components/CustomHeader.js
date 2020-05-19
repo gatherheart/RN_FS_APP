@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
     width: WIDTH,
-    height: StatusHeight * 1.15,
+    height: StatusHeight * 1.25,
     backgroundColor: "white",
     justifyContent: "space-between",
     alignItems: "center",
