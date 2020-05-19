@@ -22,6 +22,9 @@ import { useNavigation } from "@react-navigation/native";
 import CustumIcon from "../../../components/CustomIcon";
 import { MaterialCommunityIcons, FontAwesome } from "@expo/vector-icons";
 import AlertModal from "../../../components/AlertModal";
+import RNPickerSelect from "react-native-picker-select";
+import axios from "axios";
+import * as WebBrowser from "expo-web-browser";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
@@ -56,7 +59,6 @@ const VoteListElement = styled.View`
 const RowContainer = styled.View`
   flex-direction: row;
   align-items: center;
-
   justify-content: space-between;
   width: 100%;
   height: 100%;
@@ -69,7 +71,14 @@ const IconTextContainer = styled.View`
   margin: 0px 0px 0px 10px;
 `;
 
-const TextContainer = styled.View``;
+const Calculated = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 100%;
+  height: 100%;
+  background-color: ${(props) => props.theme.moreLightGreyColor};
+`;
 
 const EmptySpace = styled.View`
   height: ${HEIGHT / 2}px;
@@ -81,58 +90,76 @@ const AlginedText = styled.Text`
   font-family: ${(props) => props.theme.regularFont}
 `;
 
-const Title = styled.Text``;
+const NanumText = styled.Text`
+  font-family: ${(props) => props.theme.regularFont};
+`;
 
-const VoteList = ({
-  idx,
-  vote,
-  onChangeText,
-  onSubmitEditing,
-  spliceElem,
-  style,
-}) => {
+export const Dropdown = () => {
   const themeContext = useContext(ThemeContext);
 
   return (
-    <VoteListElement style={styles.withShadow}>
-      <TextInput
-        value={vote}
-        placeholder={"선택지를 입력하세요"}
-        onChangeText={(text) => onChangeText(text, idx)}
-        onSubmitEditing={() => onSubmitEditing(idx)}
-        returnKeyType="next"
+    <View style={{ flexDirection: "row", alignItems: "center" }}>
+      <RNPickerSelect
+        onValueChange={(value) => console.log(value)}
+        items={[
+          { label: "신한", value: "신한" },
+          { label: "국민", value: "국민" },
+          { label: "Hockey", value: "hockey" },
+          { label: "Football", value: "football" },
+          { label: "Baseball", value: "baseball" },
+          { label: "Hockey", value: "hockey" },
+          { label: "Football", value: "football" },
+          { label: "Baseball", value: "baseball" },
+          { label: "Hockey", value: "hockey" },
+          { label: "Football", value: "football" },
+          { label: "Baseball", value: "baseball" },
+          { label: "Hockey", value: "hockey" },
+          { label: "Football", value: "football" },
+          { label: "Baseball", value: "baseball" },
+          { label: "Hockey", value: "hockey" },
+          { label: "Football", value: "football" },
+          { label: "Baseball", value: "baseball" },
+          { label: "Hockey", value: "hockey" },
+          { label: "Football", value: "football" },
+          { label: "Baseball", value: "baseball" },
+          { label: "Hockey", value: "hockey" },
+        ]}
+        placeholder={{ label: "은행", value: "은행" }}
         style={{
-          height: "100%",
-          width: "90%",
-          paddingHorizontal: 15,
-          ...style,
+          inputIOS: {
+            fontSize: 15,
+            fontFamily: themeContext.regularFont,
+            paddingVertical: 12,
+            paddingHorizontal: 12,
+            borderRadius: 4,
+            width: (WIDTH * 30) / 100,
+            color: "black",
+            paddingRight: 30, // to ensure the text is never behind the icon
+          },
+          inputAndroid: {
+            fontSize: 15,
+            fontFamily: themeContext.regularFont,
+            paddingHorizontal: 12,
+            paddingVertical: 8,
+            borderRadius: 4,
+            width: (WIDTH * 30) / 100,
+            color: "black",
+            paddingRight: 20, // to ensure the text is never behind the icon
+          },
+          iconContainer: {
+            top: "25%",
+            right: "5%",
+          },
         }}
-      ></TextInput>
-      {idx >= 2 ? (
-        <View
-          style={{
-            height: "100%",
-            width: "10%",
-          }}
-        >
-          <TouchableOpacity
-            style={{
-              height: "100%",
-              width: "100%",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-            onPress={() => spliceElem(idx)}
-          >
-            <CustomIcon
-              name={"close"}
-              size={25}
-              color={themeContext.lightGreyColor}
-            ></CustomIcon>
-          </TouchableOpacity>
-        </View>
-      ) : null}
-    </VoteListElement>
+        useNativeAndroidPickerStyle={false}
+      />
+
+      <CustomIcon
+        name="arrow-down"
+        size={20}
+        color={themeContext.lightGreyColor}
+      />
+    </View>
   );
 };
 
@@ -140,6 +167,8 @@ export default ({ id }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [voteTitle, setVoteTitle] = useState("");
   const [voteMemo, setVoteMemo] = useState("");
+  const [billAmount, setBillAmount] = useState("");
+
   const [voteList, setVoteList] = useState(["", ""]);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [deadline, setDeadline] = useState(null);
@@ -147,6 +176,7 @@ export default ({ id }) => {
   const [anonymousOption, setAnonymousOption] = useState(false);
   const [voteMemberList, setVoteMemberList] = useState([]);
   const [message, setMessage] = useState("");
+  const [bank, setBank] = useState("");
 
   const navigation = useNavigation();
   const themeContext = useContext(ThemeContext);
@@ -168,9 +198,18 @@ export default ({ id }) => {
   const onSubmitVoteMemo = () => {
     if (voteMemo === "") return;
   };
+  const onSubmitBillAmount = () => {
+    if (voteMemo === "") return;
+  };
+
   const onChangeVoteTitle = (text) => setVoteTitle(text);
   const onChangeVoteMemo = (text) => {
     setVoteMemo(text);
+  };
+  const onChangeBillAmount = (amount) => {
+    //console.log(isNaN(amount));
+
+    setBillAmount(amount);
   };
 
   const onSubmitVoteList = (idx) => {
@@ -193,7 +232,29 @@ export default ({ id }) => {
     newArr.splice(idx, 1);
     setVoteList(newArr);
   };
+  const _handleOpenWithWebBrowser = (url) => {
+    WebBrowser.openBrowserAsync(url);
+  };
+  const test = async () => {
+    const _tossApiKey = "7fdab359e56848fca91ac00d6a4f87c1";
+    const ret = await axios
+      .post("https://toss.im/transfer-web/linkgen-api/link", {
+        apiKey: _tossApiKey,
+        bankName: "신한",
+        bankAccountNo: "110384479842",
+        amount: "1000",
+        message: "입금 버튼",
+      })
+      .then((response) => {
+        console.log(response.data.success.scheme);
+        _handleOpenWithWebBrowser(response.data.success.scheme);
+      })
+      .catch((err) => console.log(err));
+  };
 
+  useEffect(() => {
+    test();
+  }, []);
   const changeModal = () => {
     setModalVisible((prev) => !prev);
   };
@@ -207,7 +268,7 @@ export default ({ id }) => {
       behavior={Platform.OS == "ios" ? "height" : "height"}
     >
       <CustomHeader
-        title={"투표 작성"}
+        title={"수금 작성"}
         headerStyle={{
           borderBottomWidth: 1,
           borderBottomColor: themeContext.moreLightGreyColor,
@@ -243,140 +304,76 @@ export default ({ id }) => {
                 borderBottomColor: "white",
               }}
             >
-              <AlginedText>투표할 대상 선택</AlginedText>
+              <AlginedText>수금할 대상 선택</AlginedText>
             </TouchableOpacity>
           </OptionContainer>
           <OptionContainer>
             <TextInput
               value={voteTitle}
-              placeholder={"투표 제목"}
+              placeholder={"수금 제목"}
               onChangeText={onChangeVoteTitle}
               onSubmitEditing={onSubmitVoteTitle}
               returnKeyType="next"
-              style={{ height: "100%", paddingHorizontal: 10 }}
+              style={{
+                ...styles.keyboard,
+                fontFamily: themeContext.regularFont,
+              }}
             ></TextInput>
           </OptionContainer>
-          <VoteListContainer>
-            {voteList.map((vote, idx) => {
-              return (
-                <VoteList
-                  key={"voteList-" + idx}
-                  idx={idx}
-                  value={voteList[idx]}
-                  placeholder={"선택지를 입력하세요"}
-                  onChangeText={onChangeVoteList}
-                  onSubmitEditing={onSubmitVoteList}
-                  spliceElem={spliceElem}
-                  returnKeyType="next"
-                  style={{ height: "100%" }}
-                ></VoteList>
-              );
-            })}
-
-            <VoteListElement style={styles.withShadow}>
-              <TouchableOpacity
-                style={{ ...styles.voteAddList }}
-                onPress={addVoteList}
-              >
-                <CustumIcon
-                  name={"add"}
-                  size={30}
-                  color={themeContext.lightGreyColor}
-                ></CustumIcon>
-                <AlginedText>선택지를 추가하세요</AlginedText>
-              </TouchableOpacity>
-            </VoteListElement>
-          </VoteListContainer>
-
           <OptionContainer>
-            <TouchableOpacity
-              style={{ height: "100%" }}
-              onPress={() => setDatePickerVisibility((prev) => !prev)}
+            <TextInput
+              value={billAmount}
+              placeholder={"총 금액"}
+              onChangeText={onChangeBillAmount}
+              onSubmitEditing={onSubmitBillAmount}
+              keyboardType="number-pad"
+              returnKeyType="next"
+              style={{
+                ...styles.keyboard,
+                fontFamily: themeContext.regularFont,
+              }}
+            ></TextInput>
+          </OptionContainer>
+          <OptionContainer>
+            <Calculated
+              style={{
+                ...themeContext.withShadow,
+                backgroundColor: themeContext.moreLightGreyColor,
+              }}
             >
-              <RowContainer>
-                <IconTextContainer style={{ marginLeft: 7 }}>
-                  <MaterialCommunityIcons
-                    name={"clock-outline"}
-                    size={25}
-                    color={themeContext.greyColor}
-                  ></MaterialCommunityIcons>
-                  <AlginedText
-                    style={{
-                      color: themeContext.greyColor,
-                    }}
-                  >
-                    투표 마감 시간 설정
-                  </AlginedText>
-                </IconTextContainer>
-                <AlginedText
-                  style={{
-                    color: themeContext.greyColor,
-                  }}
-                >
-                  {deadline ? timePickedConverter(deadline) : null}
-                </AlginedText>
-              </RowContainer>
-            </TouchableOpacity>
-            <DateTimePicker
-              setDeadline={setDeadline}
-              isDatePickerVisible={isDatePickerVisible}
-              setDatePickerVisibility={setDatePickerVisibility}
-            ></DateTimePicker>
+              <NanumText style={{ color: themeContext.greenColor }}>
+                1 인당
+              </NanumText>
+              <NanumText>{Math.ceil(billAmount / 13)} 원</NanumText>
+            </Calculated>
           </OptionContainer>
           <OptionContainer>
-            <RowContainer>
-              <IconTextContainer>
-                <CustomIcon
-                  name={"done-all"}
-                  size={25}
-                  color={themeContext.greyColor}
-                ></CustomIcon>
-                <AlginedText
-                  style={{
-                    color: themeContext.greyColor,
-                  }}
-                >
-                  복수 선택
-                </AlginedText>
-              </IconTextContainer>
-
-              <CheckBox
-                right={true}
-                iconRight={true}
-                checkedColor={themeContext.lightGreenColor}
-                checkedIcon="check-circle"
-                uncheckedIcon="check-circle"
-                checked={multipleOption}
-                onPress={() => setMultipleOption((prev) => !prev)}
-              />
-            </RowContainer>
+            <TextInput
+              value={voteTitle}
+              placeholder={"예금주"}
+              onChangeText={onChangeVoteTitle}
+              onSubmitEditing={onSubmitVoteTitle}
+              returnKeyType="next"
+              style={{
+                ...styles.keyboard,
+                fontFamily: themeContext.regularFont,
+              }}
+            ></TextInput>
           </OptionContainer>
           <OptionContainer>
-            <RowContainer>
-              <IconTextContainer>
-                <FontAwesome
-                  name={"user"}
-                  size={27}
-                  color={themeContext.greyColor}
-                ></FontAwesome>
-                <AlginedText
-                  style={{
-                    color: themeContext.greyColor,
-                  }}
-                >
-                  익명 투표
-                </AlginedText>
-              </IconTextContainer>
-
-              <CheckBox
-                right={true}
-                iconRight={true}
-                checkedColor={themeContext.lightGreenColor}
-                checkedIcon="check-circle"
-                uncheckedIcon="check-circle"
-                checked={anonymousOption}
-                onPress={() => setAnonymousOption((prev) => !prev)}
-              />
+            <RowContainer style={{ alignItems: "center" }}>
+              <Dropdown></Dropdown>
+              <TextInput
+                value={voteTitle}
+                placeholder={"예금주"}
+                onChangeText={onChangeVoteTitle}
+                onSubmitEditing={onSubmitVoteTitle}
+                returnKeyType="next"
+                style={{
+                  ...styles.keyboard,
+                  fontFamily: themeContext.regularFont,
+                }}
+              ></TextInput>
             </RowContainer>
           </OptionContainer>
           <TextInput
@@ -402,6 +399,10 @@ export default ({ id }) => {
 };
 
 const styles = StyleSheet.create({
+  keyboard: {
+    height: "100%",
+    paddingHorizontal: 10,
+  },
   voteTargetButton: {
     width: "100%",
     height: "100%",

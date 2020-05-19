@@ -108,16 +108,8 @@ export default ({ id, group, loading, refreshFn }) => {
   const navigation = useNavigation();
   const themeContext = useContext(ThemeContext);
   const [page, setPage] = useState(0);
-  navigation.navigate("GroupReadVote", { id: group.id });
 
-  const panResponder = PanResponder.create({
-    onStartShouldSetPanResponder: () => true,
-    onMoveShouldSetPanResponder: () => true,
-
-    onPanResponderMove: (evt, { dx: x, dy: y }) => {
-      gradient.setValue({ x: x, y: y });
-    },
-  });
+  navigation.navigate("GroupWriteBill", { id: id });
 
   useLayoutEffect(() => {
     navigation.setOptions({
