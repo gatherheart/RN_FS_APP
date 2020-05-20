@@ -22,6 +22,7 @@ import { trimText } from "../../utils/String";
 import ImageGrid from "../../components/ImageGrid";
 import GroupActionButton from "../../components/GroupActionButton";
 import NoticeList from "../../components/Group/NoticeList";
+import { useHeaderHeight } from "@react-navigation/stack";
 
 const { width: WIDHT, height: HEIGHT } = Dimensions.get("screen");
 
@@ -109,7 +110,7 @@ export default ({ id, group, loading, refreshFn }) => {
   const themeContext = useContext(ThemeContext);
   const [page, setPage] = useState(0);
 
-  navigation.navigate("GroupWriteVote", { id: id });
+  navigation.navigate("GroupReadBill", { id: id });
 
   useLayoutEffect(() => {
     navigation.setOptions({

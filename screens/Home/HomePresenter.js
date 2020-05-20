@@ -6,6 +6,8 @@ import GroupCard from "../../components/Home/GroupCard";
 import List from "../../components/List";
 import TodaySchedule from "../../components/Home/TodaySchedule";
 import GroupButton from "../../components/Home/HomeBottomBtn";
+import { useHeaderHeight } from "@react-navigation/stack";
+import { StatusHeight } from "../../utils/HeaderHeight";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
@@ -26,6 +28,7 @@ export default ({ refreshFn, loading, navigation }) => {
   const { groups } = result;
   const schedules = groups.map((group) => group.schedule);
   const themeContext = useContext(ThemeContext);
+
   return (
     <ScrollContainer
       refreshFn={refreshFn}

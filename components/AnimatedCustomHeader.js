@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     position: "absolute",
     width: WIDTH,
-    height: StatusHeight * 1.15,
+    height: HeaderHeight,
     top: UnderHeader,
     backgroundColor: "white",
     justifyContent: "space-between",

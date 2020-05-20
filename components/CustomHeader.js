@@ -6,7 +6,7 @@ import {
   Dimensions,
   View,
 } from "react-native";
-import { HeaderHeight, StatusHeight } from "../utils/HeaderHeight";
+import { HeaderHeight, StatusHeight, UnderHeader } from "../utils/HeaderHeight";
 import Icon from "./CustomIcon";
 import { ThemeContext } from "styled-components";
 import { useNavigation } from "@react-navigation/native";
@@ -19,6 +19,7 @@ const Title = styled.Text``;
 export default ({ headerStyle, title = "", rightButton }) => {
   const themeContext = useContext(ThemeContext);
   const navigation = useNavigation();
+
   return (
     <>
       <View
@@ -29,7 +30,7 @@ export default ({ headerStyle, title = "", rightButton }) => {
       />
       <View
         style={{
-          top: StatusHeight,
+          top: UnderHeader,
           ...styles.header,
           ...headerStyle,
           position: "absolute",
@@ -69,10 +70,11 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
     width: WIDTH,
-    height: StatusHeight * 1.25,
+    height: HeaderHeight,
     backgroundColor: "white",
     justifyContent: "space-between",
     alignItems: "center",
     zIndex: 2,
+    borderWidth: 1,
   },
 });

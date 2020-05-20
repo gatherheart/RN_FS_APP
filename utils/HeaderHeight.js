@@ -1,7 +1,7 @@
 import { Platform, StatusBar, Dimensions } from "react-native";
 import { theme } from "galio-framework";
 
-const { width, height } = Dimensions.get("screen");
+const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
 const X_WIDTH = 375;
 const X_HEIGHT = 812;
@@ -11,8 +11,8 @@ const XSMAX_HEIGHT = 896;
 
 export const isIPhoneX = () =>
   Platform.OS === "ios" && !Platform.isPad && !Platform.isTVOS
-    ? (width === X_WIDTH && height === X_HEIGHT) ||
-      (width === XSMAX_WIDTH && height === XSMAX_HEIGHT)
+    ? (WIDTH === X_WIDTH && HEIGHT === X_HEIGHT) ||
+      (WIDTH === XSMAX_WIDTH && HEIGHT === XSMAX_HEIGHT)
     : false;
 
 export const StatusHeight = Platform.select({
@@ -20,5 +20,11 @@ export const StatusHeight = Platform.select({
   android: StatusBar.currentHeight,
   default: 0,
 });
-export const HeaderHeight = StatusHeight || 0;
-export const UnderHeader = StatusHeight * 1.15;
+const CUSTOM_HEADER_HEIGHT = (HEIGHT * 6) / 100;
+export const HeaderHeight = Platform.select({
+  ios: isIPhoneX() ? 44 : 44,
+  android: 56,
+  default: 0,
+});
+export const UnderHeader = StatusHeight;
+console.log("A", StatusHeight, CUSTOM_HEADER_HEIGHT, HeaderHeight);
