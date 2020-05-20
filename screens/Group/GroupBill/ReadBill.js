@@ -22,6 +22,9 @@ import VoteModal from "../../../components/Group/Vote/VoteModal";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
+const NanumText = styled.Text`
+  font-family: ${(props) => props.theme.regularFont};
+`;
 const SubContainer = styled.View`
   border-top-width: 1px;
   border-top-color: ${(props) => props.theme.darkGreenColor};

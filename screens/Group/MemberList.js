@@ -14,6 +14,7 @@ import {
   StatusHeight,
 } from "../../utils/HeaderHeight";
 import UsersTable from "../../components/User/HorizontalUsersTable";
+import { useNavigation } from "@react-navigation/native";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
@@ -132,7 +133,7 @@ export default ({}) => {
   const [keyword, setKeyword] = useState("");
   const [checkState, setCheckState] = useState({});
   const [memberList, setMemberList] = useState([]);
-
+  const navigation = useNavigation();
   const onSubmit = () => {
     if (keyword === "") return;
     setKeyword("");
@@ -174,7 +175,13 @@ export default ({}) => {
     <Loader></Loader>
   ) : (
     <>
-      <CustomHeader title={"투표할 대상 선택"} headerStyle={{}}></CustomHeader>
+      <CustomHeader
+        title={"투표할 대상 선택"}
+        headerStyle={{}}
+        rightButton={() => {
+          navigation.navigate("GroupWriteVote", { memberList: memberList });
+        }}
+      ></CustomHeader>
 
       <View
         style={{

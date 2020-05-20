@@ -145,9 +145,12 @@ export default ({ id }) => {
   const [deadline, setDeadline] = useState(null);
   const [multipleOption, setMultipleOption] = useState(false);
   const [anonymousOption, setAnonymousOption] = useState(false);
-  const [voteMemberList, setVoteMemberList] = useState([]);
+  const [memberList, setMemberList] = useState([]);
   const [message, setMessage] = useState("");
 
+  useEffect(() => {
+    console.log(memberList);
+  }, [memberList]);
   const navigation = useNavigation();
   const themeContext = useContext(ThemeContext);
 
@@ -199,7 +202,7 @@ export default ({ id }) => {
   };
 
   if (message === "투표를 등록하였습니다." && !modalVisible)
-    navigation.navigate("GroupDrawer", { id: id });
+    navigation.goBack("GroupDrawer", { id: id });
 
   return (
     <KeyboardAvoidingView
@@ -236,7 +239,12 @@ export default ({ id }) => {
         <Container>
           <OptionContainer>
             <TouchableOpacity
-              onPress={() => navigation.navigate("VoteMemberList", {})}
+              onPress={() =>
+                navigation.navigate("VoteMemberList", {
+                  setMemberList: setMemberList,
+                  memberList: memberList,
+                })
+              }
               style={{
                 ...styles.voteTargetButton,
                 borderColor: themeContext.moreLightGreyColor,

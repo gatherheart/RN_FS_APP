@@ -18,7 +18,7 @@ import DateTimePicker from "../../../components/DateTimePicker";
 import { timePickedConverter } from "../../../utils/DateFormat";
 import { CheckBox } from "react-native-elements";
 import CustomIcon from "../../../components/CustomIcon";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import CustumIcon from "../../../components/CustomIcon";
 import { MaterialCommunityIcons, FontAwesome } from "@expo/vector-icons";
 import AlertModal from "../../../components/AlertModal";
@@ -38,22 +38,6 @@ const OptionContainer = styled.View`
   height: 60px;
   border-bottom-width: 1px;
   border-bottom-color: ${(props) => props.theme.lightGreyColor};
-`;
-
-const VoteListContainer = styled.View`
-  width: 100%;
-  border-bottom-width: 1px;
-  border-bottom-color: ${(props) => props.theme.lightGreyColor};
-  padding-vertical: 20px;
-  padding-horizontal: 10px;
-`;
-
-const VoteListElement = styled.View`
-  height: 60px;
-  margin: 0px 0px 10px 0px;
-  flex-direction: row;
-  border-radius: 10px;
-  background-color: ${(props) => props.theme.moreLightGreyColor};
 `;
 
 const RowContainer = styled.View`
@@ -165,26 +149,25 @@ export const Dropdown = () => {
 
 export default ({ id }) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [voteTitle, setVoteTitle] = useState("");
-  const [voteMemo, setVoteMemo] = useState("");
+  const [billTitle, setBillTitle] = useState("");
+  const [billMemo, setBillMemo] = useState("");
   const [billAmount, setBillAmount] = useState("");
 
-  const [voteList, setVoteList] = useState(["", ""]);
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [deadline, setDeadline] = useState(null);
-  const [multipleOption, setMultipleOption] = useState(false);
-  const [anonymousOption, setAnonymousOption] = useState(false);
-  const [voteMemberList, setVoteMemberList] = useState([]);
   const [message, setMessage] = useState("");
   const [bank, setBank] = useState("");
 
   const navigation = useNavigation();
+  const route = useRoute();
+  useEffect(() => {
+    console.log(route);
+  }, [route]);
+  console.log(typeof route);
   const themeContext = useContext(ThemeContext);
 
   const submitVote = () => {
-    if (voteList[0] === "" || voteList[1] === "") {
-      setMessage("선택지를 채워주세요.");
-    } else if (voteTitle === "") {
+    if (billTitle === "") {
+      setMessage("제목을 채워주세요.");
+    } else if (billTitle === "") {
       setMessage("제목을 입력해주세요.");
     } else {
       setMessage("투표를 등록하였습니다.");
@@ -192,19 +175,19 @@ export default ({ id }) => {
     changeModal();
   };
 
-  const onSubmitVoteTitle = () => {
-    if (voteTitle === "") return;
+  const onSubmitbillTitle = () => {
+    if (billTitle === "") return;
   };
-  const onSubmitVoteMemo = () => {
-    if (voteMemo === "") return;
+  const onSubmitbillMemo = () => {
+    if (billMemo === "") return;
   };
   const onSubmitBillAmount = () => {
-    if (voteMemo === "") return;
+    if (billMemo === "") return;
   };
 
-  const onChangeVoteTitle = (text) => setVoteTitle(text);
-  const onChangeVoteMemo = (text) => {
-    setVoteMemo(text);
+  const onChangebillTitle = (text) => setBillTitle(text);
+  const onChangebillMemo = (text) => {
+    setBillMemo(text);
   };
   const onChangeBillAmount = (amount) => {
     //console.log(isNaN(amount));
@@ -212,49 +195,6 @@ export default ({ id }) => {
     setBillAmount(amount);
   };
 
-  const onSubmitVoteList = (idx) => {
-    if (voteList[idx] === "") return;
-  };
-  const onChangeVoteList = (text, idx) => {
-    let newArr = [...voteList];
-    newArr[idx] = text;
-    setVoteList(newArr);
-  };
-
-  const addVoteList = () => {
-    let newArr = [...voteList];
-    newArr.push("");
-    setVoteList(newArr);
-  };
-
-  const spliceElem = (idx) => {
-    let newArr = [...voteList];
-    newArr.splice(idx, 1);
-    setVoteList(newArr);
-  };
-  const _handleOpenWithWebBrowser = (url) => {
-    WebBrowser.openBrowserAsync(url);
-  };
-  const test = async () => {
-    const _tossApiKey = "7fdab359e56848fca91ac00d6a4f87c1";
-    const ret = await axios
-      .post("https://toss.im/transfer-web/linkgen-api/link", {
-        apiKey: _tossApiKey,
-        bankName: "신한",
-        bankAccountNo: "110384479842",
-        amount: "1000",
-        message: "입금 버튼",
-      })
-      .then((response) => {
-        console.log(response.data.success.scheme);
-        _handleOpenWithWebBrowser(response.data.success.scheme);
-      })
-      .catch((err) => console.log(err));
-  };
-
-  useEffect(() => {
-    test();
-  }, []);
   const changeModal = () => {
     setModalVisible((prev) => !prev);
   };
@@ -309,10 +249,10 @@ export default ({ id }) => {
           </OptionContainer>
           <OptionContainer>
             <TextInput
-              value={voteTitle}
+              value={billTitle}
               placeholder={"수금 제목"}
-              onChangeText={onChangeVoteTitle}
-              onSubmitEditing={onSubmitVoteTitle}
+              onChangeText={onChangebillTitle}
+              onSubmitEditing={onSubmitbillTitle}
               returnKeyType="next"
               style={{
                 ...styles.keyboard,
@@ -349,10 +289,10 @@ export default ({ id }) => {
           </OptionContainer>
           <OptionContainer>
             <TextInput
-              value={voteTitle}
+              value={billTitle}
               placeholder={"예금주"}
-              onChangeText={onChangeVoteTitle}
-              onSubmitEditing={onSubmitVoteTitle}
+              onChangeText={onChangebillTitle}
+              onSubmitEditing={onSubmitbillTitle}
               returnKeyType="next"
               style={{
                 ...styles.keyboard,
@@ -364,10 +304,11 @@ export default ({ id }) => {
             <RowContainer style={{ alignItems: "center" }}>
               <Dropdown></Dropdown>
               <TextInput
-                value={voteTitle}
-                placeholder={"예금주"}
-                onChangeText={onChangeVoteTitle}
-                onSubmitEditing={onSubmitVoteTitle}
+                value={billTitle}
+                placeholder={"계좌번호"}
+                onChangeText={onChangebillTitle}
+                onSubmitEditing={onSubmitbillTitle}
+                keyboardType="number-pad"
                 returnKeyType="next"
                 style={{
                   ...styles.keyboard,
@@ -376,11 +317,16 @@ export default ({ id }) => {
               ></TextInput>
             </RowContainer>
           </OptionContainer>
+          <OptionContainer>
+            <RowContainer style={{ alignItems: "center" }}>
+              <Text>QR Code</Text>
+            </RowContainer>
+          </OptionContainer>
           <TextInput
-            value={voteMemo}
+            value={billMemo}
             placeholder={"투표 메모"}
-            onChangeText={onChangeVoteMemo}
-            onSubmitEditing={onSubmitVoteMemo}
+            onChangeText={onChangebillMemo}
+            onSubmitEditing={onSubmitbillMemo}
             underlineColorAndroid="transparent"
             returnKeyType="none"
             style={{
