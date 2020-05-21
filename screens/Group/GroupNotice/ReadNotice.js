@@ -69,5 +69,7 @@ const noticeData = {
     major: "소프트웨어학과",
   },
   createdAt: "2020-05-19T08:14:00.000Z",
+  files: ["http://dicl.skku.edu/class/fall2019/pl/PL_Syllabus_2019_Fall.pdf"],
+  images: ["https://unsplash.com/photos/zwUN_PalZdI"],
   isMandatory: true,
 };

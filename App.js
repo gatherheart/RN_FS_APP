@@ -50,6 +50,8 @@ export default function App() {
     const images = cacheImages([
       require("./assets/splash.png"),
       require("./assets/icon.png"),
+      require("./assets/imgs/kakao.png"),
+      require("./assets/imgs/toss.png"),
       defaultPoster,
     ]);
 

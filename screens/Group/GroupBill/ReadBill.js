@@ -18,7 +18,7 @@ import Loader from "../../../components/Loader";
 import CustumIcon from "../../../components/CustomIcon";
 import UsersTable from "../../../components/User/UsersTable";
 import { useNavigation } from "@react-navigation/native";
-import VoteModal from "../../../components/Group/Vote/VoteModal";
+import BillModal from "../../../components/Group/Bill/BillModal";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
@@ -109,7 +109,7 @@ export default () => {
   const getData = async () => {
     setData({
       loading: false,
-      ...voteData,
+      ...billData,
     });
   };
   useEffect(() => {
@@ -124,13 +124,11 @@ export default () => {
         title={"더치페이글 보기"}
         rightButton={() => setModalVisible((prev) => !prev)}
       ></CustomHeader>
-      <VoteModal
+      <BillModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
-        billTitle={data.billTitle}
-        multipleOption={data.multipleOption}
-        anonymousOption={data.anonymousOption}
-      ></VoteModal>
+        {...data}
+      ></BillModal>
       <ScrollView
         style={{
           backgroundColor: themeContext.backgroundColor,
@@ -403,15 +401,14 @@ const membersData = [
   },
 ];
 
-const voteData = {
+const billData = {
   billTitle: "4월 개강 총회 회비",
   billMemo: "회식비에 사용",
   deadline: "2020-05-14T09:43:54.107Z",
   billAmount: 100000,
-  account: "1102424124124",
-  accountOwner: "김진우",
-  kakaoUri: "",
-  tossUri: "",
+  account: "110384479842",
+  accountOwner: "김현우",
+  kakaoUri: "https://qr.kakaopay.com/281006011000001135744526",
   bank: "신한",
   closed: false,
   memberList: membersData,

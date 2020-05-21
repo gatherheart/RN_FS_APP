@@ -85,18 +85,18 @@ const Title = styled.Text``;
 
 const VoteList = ({
   idx,
-  vote,
+  value,
   onChangeText,
   onSubmitEditing,
   spliceElem,
   style,
 }) => {
   const themeContext = useContext(ThemeContext);
-
+  console.log("Vote Render ", value);
   return (
     <VoteListElement style={styles.withShadow}>
       <TextInput
-        value={vote}
+        value={value}
         placeholder={"선택지를 입력하세요"}
         onChangeText={(text) => onChangeText(text, idx)}
         onSubmitEditing={() => onSubmitEditing(idx)}
@@ -287,11 +287,12 @@ export default ({ id }) => {
           </OptionContainer>
           <VoteListContainer>
             {voteList.map((vote, idx) => {
+              console.log(vote);
               return (
                 <VoteList
                   key={"voteList-" + idx}
                   idx={idx}
-                  value={voteList[idx]}
+                  value={vote}
                   placeholder={"선택지를 입력하세요"}
                   onChangeText={onChangeVoteList}
                   onSubmitEditing={onSubmitVoteList}
