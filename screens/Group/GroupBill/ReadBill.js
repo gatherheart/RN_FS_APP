@@ -33,7 +33,7 @@ const SubContainer = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 0px 5px 0px 10px;
+  padding: 0px 9px 0px 18px;
 `;
 const Container = styled.View`
   align-items: center;
@@ -64,70 +64,23 @@ const BarStartContainer = styled.View`
   border-radius: 10px;
 `;
 
+const OptionContainer = styled.View`
+  width: 100%;
+  height: 60px;
+`;
+const Calculated = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background-color: ${(props) => props.theme.moreLightGreyColor};
+`;
+
 const BarText = styled.Text`
   color: ${(props) => props.theme.blackColor};
   font-family: ${(props) => props.theme.regularFont};
 `;
-const CHART_WIDTH = new Animated.Value(0);
-
-const RatioBar = ({ percent, textInBar, textOutBar, users }) => {
-  const themeContext = useContext(ThemeContext);
-  const navigation = useNavigation();
-  useEffect(() => {
-    Animated.timing(CHART_WIDTH, {
-      toValue: 1,
-      duration: 1000,
-      useNativeDriver: true,
-    }).start();
-  }, []);
-
-  return (
-    <TouchableOpacity
-      activeOpacity={1}
-      onPress={() =>
-        navigation.navigate("VoteResult", { users: users, vote: textInBar })
-      }
-    >
-      <BarContainer>
-        <BarStartContainer>
-          <Animated.View
-            style={{
-              height: (HEIGHT * 5) / 100,
-              opacity: 0.7,
-              width: 1,
-              backgroundColor: themeContext.darkGreenColor,
-              transform: [
-                {
-                  translateX: CHART_WIDTH.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [0, (WIDTH * 90 * percent) / 200],
-                  }),
-                },
-                {
-                  scaleX: CHART_WIDTH.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [1, (WIDTH * 90 * percent) / 100],
-                  }),
-                },
-              ],
-            }}
-          ></Animated.View>
-          <BarText style={{ marginHorizontal: 10 }}>{textInBar}</BarText>
-        </BarStartContainer>
-        <BarEndContainer>
-          <BarText>{textOutBar}</BarText>
-        </BarEndContainer>
-      </BarContainer>
-    </TouchableOpacity>
-  );
-};
-
-RatioBar.propTypes = {
-  percent: PropTypes.number.isRequired,
-  textInBar: PropTypes.string,
-  textOutBar: PropTypes.string,
-  users: PropTypes.array,
-};
 
 export default () => {
   const themeContext = useContext(ThemeContext);
@@ -136,18 +89,17 @@ export default () => {
 
   const [data, setData] = useState({
     loading: true,
-    voteTitle: "",
-    voteMemo: "",
-    voteList: [],
+    billTitle: "",
+    billMemo: "",
     deadline: "",
-    multipleOption: false,
-    anonymousOption: false,
     closed: false,
-    voteMemberList: [],
+    memberList: [],
     createdAt: "",
     author: {},
+    billAmount: 0,
+    bank: "",
   });
-  const [voteResult, setVoteResult] = useState({
+  const [billResult, setbillResult] = useState({
     result: {},
     participants: 0,
     nonParticipants: 0,
@@ -163,42 +115,19 @@ export default () => {
   useEffect(() => {
     getData();
   }, []);
-  useEffect(() => {
-    if (data.loading) return;
-    let newDict = {};
-    let participants = [];
-    let nonParticipants = [];
-    data.voteList.map((vote, idx) => {
-      newDict[vote] = data.voteMemberList.filter((member) => {
-        const ret = member.vote.some((value) => value === idx);
-        if (ret && idx === 0) nonParticipants.push(member);
-        else if (ret) participants.push(member);
-        return ret;
-      });
-    });
-    setVoteResult({
-      result: newDict,
-      participants,
-      nonParticipants,
-      classified: true,
-    });
-  }, [data.loading]);
 
-  return data?.loading || !voteResult?.classified ? (
+  return data?.loading ? (
     <Loader></Loader>
   ) : (
     <>
       <CustomHeader
-        title={"투표글 보기"}
+        title={"더치페이글 보기"}
         rightButton={() => setModalVisible((prev) => !prev)}
       ></CustomHeader>
       <VoteModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
-        voteTitle={data.voteTitle}
-        voteMemo={data.voteMemo}
-        voteList={data.voteList}
-        deadline={data.deadline}
+        billTitle={data.billTitle}
         multipleOption={data.multipleOption}
         anonymousOption={data.anonymousOption}
       ></VoteModal>
@@ -213,61 +142,54 @@ export default () => {
         showsVerticalScrollIndicator={false}
       >
         <SubContainer>
-          <NanumText>{data.voteTitle}</NanumText>
+          <NanumText>{data.billTitle}</NanumText>
           <Text>~{simplifiedFormat(data.deadline)}</Text>
         </SubContainer>
         <SubContainer style={{ borderWidth: 0 }}>
-          <SmallUserCard
-            name={data.author.name}
-            major={data.author.major}
-            avatar={data.author.avatar}
-          ></SmallUserCard>
-          <Text>{simplifiedFormat(data.createdAt)}</Text>
+          <Text style={{ fontSize: 15, fontWeight: "500" }}>
+            총 {data.billAmount.toLocaleString()}원
+          </Text>
+        </SubContainer>
+        <OptionContainer>
+          <Calculated
+            style={{
+              backgroundColor: themeContext.moreLightGreyColor,
+            }}
+          >
+            <NanumText
+              style={{ color: themeContext.greenColor, marginRight: 35 }}
+            >
+              1 인당
+            </NanumText>
+            <NanumText>
+              {Math.ceil(
+                data.billAmount / data.memberList.length
+              ).toLocaleString()}
+              원
+            </NanumText>
+          </Calculated>
+        </OptionContainer>
+        <SubContainer>
+          <NanumText>{data.accountOwner}</NanumText>
+          <NanumText>{data.account}</NanumText>
         </SubContainer>
         <Container
           style={{
             ...styles.memoContainer,
             borderColor: themeContext.darkGreenColor,
+            alignItems: "flex-start",
           }}
         >
-          <Text>{data.voteMemo}</Text>
+          <View style={{ marginLeft: 20 }}>
+            <NanumText
+              style={{ color: themeContext.greenColor, marginBottom: 20 }}
+            >
+              메모
+            </NanumText>
+            <NanumText>{data.billMemo}</NanumText>
+          </View>
         </Container>
 
-        <Container>
-          <SubContainer style={{ justifyContent: "flex-start" }}>
-            <NanumText>투표 결과 </NanumText>
-            <NanumText style={{ marginHorizontal: 10 }}>
-              {voteResult.participants.length}명 참여
-            </NanumText>
-          </SubContainer>
-          {data.voteList.map((vote, idx) => {
-            if (idx === 0) return null;
-            return (
-              <RatioBar
-                key={`vote-${vote}-${idx}`}
-                textInBar={vote}
-                textOutBar={`${voteResult.result[vote].length}명`}
-                percent={
-                  voteResult.result[vote].length /
-                  voteResult.participants.length
-                }
-                users={voteResult.result[vote]}
-              ></RatioBar>
-            );
-          })}
-        </Container>
-        <SubContainer style={{ justifyContent: "center", borderTopWidth: 0 }}>
-          <TouchableOpacity>
-            <BarContainer
-              style={{
-                ...styles.reVoteContainer,
-                backgroundColor: themeContext.darkGreenColor,
-              }}
-            >
-              <Text>재투표하기</Text>
-            </BarContainer>
-          </TouchableOpacity>
-        </SubContainer>
         <Container>
           <SubContainer>
             <TouchableOpacity
@@ -276,10 +198,10 @@ export default () => {
             >
               <View style={styles.collapsibleContainer}>
                 <NanumText>
-                  {data.anonymousOption ? "익명 투표" : "실명 투표"}
+                  {data.anonymousOption ? "익명 투표" : "참여 멤버"}
                 </NanumText>
                 <NanumText style={{ color: themeContext.greenColor }}>
-                  총 {data.voteMemberList.length}명
+                  총 {data.memberList.length}명
                 </NanumText>
               </View>
               <CustumIcon
@@ -311,32 +233,11 @@ export default () => {
                       fontFamily: themeContext.regularFont,
                     }}
                   >
-                    {voteResult.participants.length}명
-                  </NanumText>
-                </View>
-
-                <View style={{ alignItems: "center" }}>
-                  <UsersTable users={voteResult.participants}></UsersTable>
-                </View>
-
-                <View
-                  style={{
-                    ...styles.memberTableLabel,
-                    backgroundColor: themeContext.pastelGreenColor,
-                  }}
-                >
-                  <NanumText>미참여 멤버</NanumText>
-                  <NanumText
-                    style={{
-                      ...styles.memberTableText,
-                      color: themeContext.greenColor,
-                    }}
-                  >
-                    {voteResult.nonParticipants.length}명
+                    {data.memberList.length}명
                   </NanumText>
                 </View>
                 <View style={{ alignItems: "center" }}>
-                  <UsersTable users={voteResult.nonParticipants}></UsersTable>
+                  <UsersTable users={data.memberList}></UsersTable>
                 </View>
               </View>
             ) : null}
@@ -503,21 +404,21 @@ const membersData = [
 ];
 
 const voteData = {
-  voteTitle: "4월 회식 날짜",
-  voteMemo: "4월 회식은 편의점 포차에서 진행할 예정입니다.",
-  voteList: ["null", "4월 15일", "4월 20일", "4월 30일", "4월 31일"],
+  billTitle: "4월 개강 총회 회비",
+  billMemo: "회식비에 사용",
   deadline: "2020-05-14T09:43:54.107Z",
-  multipleOption: false,
-  anonymousOption: false,
+  billAmount: 100000,
+  account: "1102424124124",
+  accountOwner: "김진우",
+  kakaoUri: "",
+  tossUri: "",
+  bank: "신한",
   closed: false,
-  voteMemberList: membersData,
+  memberList: membersData,
   createdAt: "2020-12-12T15:43:54.107Z",
   author: {
     name: "장안구",
     id: "7",
-    avatar:
-      "https://images.unsplash.com/photo-1589411454940-67a017535ecf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=320&q=80",
     type: 2,
-    major: "소프트웨어학과",
   },
 };

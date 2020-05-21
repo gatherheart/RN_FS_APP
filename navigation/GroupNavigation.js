@@ -12,6 +12,8 @@ import GroupWriteVote from "../screens/Group/GroupVote/WriteVote";
 import GroupReadVote from "../screens/Group/GroupVote/ReadVote";
 import GroupWriteBill from "../screens/Group/GroupBill/WriteBill";
 import GroupReadBill from "../screens/Group/GroupBill/ReadBill";
+import GroupReadNotice from "../screens/Group/GroupNotice/ReadNotice";
+import GroupWriteNotice from "../screens/Group/GroupNotice/WriteNotice";
 import MemberList from "../screens/Group/MemberList";
 import VoteResult from "../screens/Group/GroupVote/VoteResult";
 
@@ -112,6 +114,21 @@ export default () => {
       <Stack.Screen
         name="GroupReadBill"
         component={GroupReadBill}
+        options={{
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      />
+
+      <Stack.Screen
+        name="GroupWriteNotice"
+        component={GroupWriteNotice}
+        options={{
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      />
+      <Stack.Screen
+        name="GroupReadNotice"
+        component={GroupReadNotice}
         options={{
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         }}

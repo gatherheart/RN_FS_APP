@@ -14,7 +14,7 @@ import {
   StatusHeight,
 } from "../../utils/HeaderHeight";
 import UsersTable from "../../components/User/HorizontalUsersTable";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
@@ -134,6 +134,7 @@ export default ({}) => {
   const [checkState, setCheckState] = useState({});
   const [memberList, setMemberList] = useState([]);
   const navigation = useNavigation();
+  const route = useRoute();
   const onSubmit = () => {
     if (keyword === "") return;
     setKeyword("");
@@ -168,47 +169,43 @@ export default ({}) => {
     });
     setCheckState(newDict);
   }, [data.loading]);
-  useEffect(() => {
-    console.log(memberList);
-  }, [memberList]);
   return data.loading ? (
     <Loader></Loader>
   ) : (
     <>
       <CustomHeader
-        title={"투표할 대상 선택"}
+        title={"대상 선택"}
         headerStyle={{}}
         rightButton={() => {
-          navigation.navigate("GroupWriteVote", { memberList: memberList });
+          navigation.navigate(route.params.from, { memberList: memberList });
         }}
       ></CustomHeader>
 
-      <View
+      <ScrollView
+        horizontal={true}
+        showsHorizontalScrollIndicator={false}
         style={{
-          paddingTop: UnderHeader,
-          backgroundColor: themeContext.backgroundColor,
+          backgroundColor: "white",
+          top: HeaderHeight,
+          zIndex: 1,
+          height: memberList.some((member) => member != null)
+            ? (HEIGHT * 12.5) / 100
+            : 0,
+        }}
+        contentContainerStyle={{
+          borderWidth: 1,
+          borderColor: "red",
+          height: "100%",
+          justifyContent: "center",
         }}
       >
-        <ScrollView
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          style={{
-            backgroundColor: themeContext.backgroundColor,
-          }}
-          contentContainerStyle={{
-            height: memberList.some((member) => member != null)
-              ? StatusHeight * 2
-              : 0,
-          }}
-        >
-          <UsersTable
-            users={data.members}
-            usersId={memberList}
-            setUsers={setMemberList}
-            changeChecked={changeChecked}
-          ></UsersTable>
-        </ScrollView>
-      </View>
+        <UsersTable
+          users={data.members}
+          usersId={memberList}
+          setUsers={setMemberList}
+          changeChecked={changeChecked}
+        ></UsersTable>
+      </ScrollView>
       <ScrollView
         style={{
           backgroundColor: themeContext.backgroundColor,
@@ -216,6 +213,9 @@ export default ({}) => {
         showsVerticalScrollIndicator={false}
       >
         <EmptySpace></EmptySpace>
+        <EmptySpace></EmptySpace>
+        <EmptySpace></EmptySpace>
+
         <SearchInput
           placeholder={"이름 검색"}
           value={keyword}

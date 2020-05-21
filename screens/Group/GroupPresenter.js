@@ -110,8 +110,6 @@ export default ({ id, group, loading, refreshFn }) => {
   const themeContext = useContext(ThemeContext);
   const [page, setPage] = useState(0);
 
-  navigation.navigate("GroupReadBill", { id: id });
-
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,
@@ -246,6 +244,7 @@ export default ({ id, group, loading, refreshFn }) => {
                   {page == 0 ? (
                     <Block>
                       <NoticeList
+                        id={id}
                         votes={group.votes}
                         notices={group.notices}
                         bills={group.bills}
@@ -284,9 +283,11 @@ export default ({ id, group, loading, refreshFn }) => {
           navigation.navigate("GroupWriteVote", { id: group.id })
         }
         secondClicked={() =>
-          navigation.navigate("GroupReadVote", { id: group.id })
+          navigation.navigate("GroupWriteBill", { id: group.id })
         }
-        thridClicked={() => console.log("Hello World")}
+        thridClicked={() =>
+          navigation.navigate("GroupWriteNotice", { id: group.id })
+        }
       ></GroupActionButton>
     </Block>
   );

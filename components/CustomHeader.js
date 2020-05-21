@@ -30,7 +30,7 @@ export default ({ headerStyle, title = "", rightButton }) => {
       />
       <View
         style={{
-          top: UnderHeader,
+          top: StatusHeight,
           ...styles.header,
           ...headerStyle,
           position: "absolute",
@@ -75,6 +75,5 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     zIndex: 2,
-    borderWidth: 1,
   },
 });

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 import {
   StyleSheet,
   Text,
@@ -7,7 +7,7 @@ import {
   Dimensions,
 } from "react-native";
 import Modal from "react-native-modal";
-import styled from "styled-components/native";
+import styled, { ThemeContext } from "styled-components/native";
 import { simplifiedFormat } from "../../../utils/DateFormat";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
@@ -54,9 +54,25 @@ const OkButtonText = styled.Text`
 
 const ButtonContainer = styled.View`
   width: 100%;
-  border-width: 1px;
   align-items: center;
+  justify-content: center;
   top: 10px;
+`;
+
+const ChoiceButton = styled.TouchableOpacity`
+  width: 80%;
+  height: ${(HEIGHT * 4.5) / 100}px;
+  margin-vertical: 10px;
+  border-width: 0.5px;
+  align-items: center;
+  background-color: ${(props) => props.theme.pastelGreyColor}
+  justify-content: center;
+  border-radius: 7px;
+`;
+
+const RowContainer = styled.View`
+  flex-direction: row;
+  justify-content: flex-end;
 `;
 
 export default ({
@@ -72,6 +88,10 @@ export default ({
   const changeState = () => {
     setModalVisible((prev) => !prev);
   };
+
+  const themeContext = useContext(ThemeContext);
+
+  const [selection, setSelection] = useState(0);
   return (
     <Modal
       isVisible={modalVisible}
@@ -105,30 +125,48 @@ export default ({
             )}
           </OptionContainer>
           <ButtonContainer>
-            <TouchableOpacity>
-              <Text>ABCD</Text>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Text>ABCD</Text>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Text>ABCD</Text>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Text>ABCD</Text>
-            </TouchableOpacity>
+            {Object.keys(voteList).map((vote, idx) => {
+              if (idx === 0) return null;
+
+              return (
+                <ChoiceButton
+                  key={`vote-list-${idx}`}
+                  style={{
+                    backgroundColor:
+                      selection === idx
+                        ? themeContext.pastelGreenColor
+                        : themeContext.pastelGreyColor,
+                  }}
+                  onPress={() => setSelection(idx)}
+                >
+                  <Text style={{ textAlign: "center" }}>{vote}</Text>
+                </ChoiceButton>
+              );
+            })}
           </ButtonContainer>
-          <TouchableOpacity
-            style={{
-              marginVertical: 20,
-              paddingHorizontal: 30,
-              alignItems: "flex-end",
-              justifyContent: "flex-end",
-            }}
-            onPress={changeState}
-          >
-            <OkButtonText>닫기</OkButtonText>
-          </TouchableOpacity>
+          <RowContainer>
+            <TouchableOpacity
+              style={{
+                marginVertical: 20,
+                alignItems: "flex-end",
+                justifyContent: "flex-end",
+              }}
+              onPress={changeState}
+            >
+              <OkButtonText>확인</OkButtonText>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                marginVertical: 20,
+                paddingHorizontal: 30,
+                alignItems: "flex-end",
+                justifyContent: "flex-end",
+              }}
+              onPress={changeState}
+            >
+              <OkButtonText>닫기</OkButtonText>
+            </TouchableOpacity>
+          </RowContainer>
         </View>
       </View>
     </Modal>

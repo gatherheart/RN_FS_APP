@@ -143,7 +143,7 @@ export default () => {
     multipleOption: false,
     anonymousOption: false,
     closed: false,
-    voteMemberList: [],
+    memberList: [],
     createdAt: "",
     author: {},
   });
@@ -170,7 +170,7 @@ export default () => {
     let nonParticipants = [];
 
     Object.keys(data.voteList).forEach((vote) => (newDict[vote] = []));
-    data.voteMemberList.map((member) => {
+    data.memberList.map((member) => {
       Object.keys(data.voteList).map((vote, idx) => {
         if (idx == 0 && data.voteList[vote].includes(member.id))
           nonParticipants.push(member);
@@ -291,7 +291,7 @@ export default () => {
                   {data.anonymousOption ? "익명 투표" : "실명 투표"}
                 </NanumText>
                 <NanumText style={{ color: themeContext.greenColor }}>
-                  총 {data.voteMemberList.length}명
+                  총 {data.memberList.length}명
                 </NanumText>
               </View>
               <CustumIcon
@@ -526,7 +526,7 @@ const voteData = {
   multipleOption: false,
   anonymousOption: false,
   closed: false,
-  voteMemberList: membersData,
+  memberList: membersData,
   createdAt: "2020-05-19T08:14:00.000Z",
   author: {
     name: "장안구",

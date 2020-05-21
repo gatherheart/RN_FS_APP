@@ -18,7 +18,7 @@ import DateTimePicker from "../../../components/DateTimePicker";
 import { timePickedConverter } from "../../../utils/DateFormat";
 import { CheckBox } from "react-native-elements";
 import CustomIcon from "../../../components/CustomIcon";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import CustumIcon from "../../../components/CustomIcon";
 import { MaterialCommunityIcons, FontAwesome } from "@expo/vector-icons";
 import AlertModal from "../../../components/AlertModal";
@@ -147,10 +147,12 @@ export default ({ id }) => {
   const [anonymousOption, setAnonymousOption] = useState(false);
   const [memberList, setMemberList] = useState([]);
   const [message, setMessage] = useState("");
+  const route = useRoute();
 
   useEffect(() => {
-    console.log(memberList);
-  }, [memberList]);
+    setMemberList(route.params.memberList ? route.params.memberList : []);
+  }, [route]);
+
   const navigation = useNavigation();
   const themeContext = useContext(ThemeContext);
 
@@ -241,8 +243,7 @@ export default ({ id }) => {
             <TouchableOpacity
               onPress={() =>
                 navigation.navigate("VoteMemberList", {
-                  setMemberList: setMemberList,
-                  memberList: memberList,
+                  from: "GroupWriteVote",
                 })
               }
               style={{
@@ -251,7 +252,27 @@ export default ({ id }) => {
                 borderBottomColor: "white",
               }}
             >
-              <AlginedText>투표할 대상 선택</AlginedText>
+              {memberList.length === 0 ? (
+                <AlginedText>투표할 대상 선택</AlginedText>
+              ) : (
+                <RowContainer
+                  style={{ justifyContent: "flex-start", marginHorizontal: 20 }}
+                >
+                  <CustomIcon
+                    name={"person"}
+                    size={25}
+                    color={themeContext.greyColor}
+                  ></CustomIcon>
+                  <Text
+                    style={{
+                      color: themeContext.greenColor,
+                      marginHorizontal: 10,
+                    }}
+                  >
+                    {memberList.filter((member) => member != null).length}명
+                  </Text>
+                </RowContainer>
+              )}
             </TouchableOpacity>
           </OptionContainer>
           <OptionContainer>
@@ -396,6 +417,7 @@ export default ({ id }) => {
             returnKeyType="none"
             style={{
               paddingVertical: 0,
+              paddingHorizontal: 10,
             }}
             autoCorrect={false}
             scrollEnabled={false}

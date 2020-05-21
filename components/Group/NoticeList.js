@@ -12,6 +12,7 @@ import styled from "styled-components/native";
 import { ACTIVE_COLOR } from "../../constants/Color";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import PropTypes from "prop-types";
+import { useNavigation } from "@react-navigation/native";
 const { width: WIDHT, height: HEIGHT } = Dimensions.get("screen");
 
 const Year = styled.View``;
@@ -36,7 +37,7 @@ const RowContainer = styled.View`
 `;
 
 const IconInList = ({ name, size = 20, color, type }) => {
-  const typeConvert = { notice: "공지", bill: "수금", vote: "투표" };
+  const typeConvert = { notice: "공지", bill: "페이", vote: "투표" };
   return (
     <View>
       <MaterialCommunityIcons
@@ -93,10 +94,11 @@ const classifyYearMonth = (target) => {
   return classfied;
 };
 
-export default ({ votes, notices, bills }) => {
+export default ({ id, votes, notices, bills }) => {
   let concatenated = [...votes, ...notices, ...bills];
   sortByDate(concatenated);
   const classified = classifyYearMonth(concatenated);
+  const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
@@ -124,8 +126,21 @@ export default ({ votes, notices, bills }) => {
                             : type === "bill"
                             ? "receipt"
                             : "vote";
+
                         return (
-                          <TouchableOpacity key={element.id}>
+                          <TouchableOpacity
+                            key={element.id}
+                            onPress={() =>
+                              navigation.navigate(
+                                `GroupRead${
+                                  type.charAt(0).toUpperCase() + type.slice(1)
+                                }`,
+                                {
+                                  id: id,
+                                }
+                              )
+                            }
+                          >
                             <RowContainer>
                               <IconInList
                                 name={iconName}

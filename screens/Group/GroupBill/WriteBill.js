@@ -58,7 +58,7 @@ const IconTextContainer = styled.View`
 const Calculated = styled.View`
   flex-direction: row;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: center;
   width: 100%;
   height: 100%;
   background-color: ${(props) => props.theme.moreLightGreyColor};
@@ -152,16 +152,20 @@ export default ({ id }) => {
   const [billTitle, setBillTitle] = useState("");
   const [billMemo, setBillMemo] = useState("");
   const [billAmount, setBillAmount] = useState("");
-
-  const [message, setMessage] = useState("");
+  const [accountOwner, setAccountOwner] = useState("");
+  const [account, setAccount] = useState("");
   const [bank, setBank] = useState("");
+  const [message, setMessage] = useState("");
+
+  const [memberList, setMemberList] = useState([]);
 
   const navigation = useNavigation();
   const route = useRoute();
   useEffect(() => {
-    console.log(route);
+    setMemberList(route.params.memberList ? route.params.memberList : []);
+    console.log(memberList);
   }, [route]);
-  console.log(typeof route);
+
   const themeContext = useContext(ThemeContext);
 
   const submitVote = () => {
@@ -182,17 +186,28 @@ export default ({ id }) => {
     if (billMemo === "") return;
   };
   const onSubmitBillAmount = () => {
-    if (billMemo === "") return;
+    if (billAmount === "") return;
   };
-
+  const onSubmitAccount = () => {
+    if (account === "") return;
+  };
+  const onSubmitAccountOwner = () => {
+    if (accountOwner === "") return;
+  };
   const onChangebillTitle = (text) => setBillTitle(text);
   const onChangebillMemo = (text) => {
     setBillMemo(text);
   };
-  const onChangeBillAmount = (amount) => {
+  const onChangeBillAmount = (text) => {
     //console.log(isNaN(amount));
-
-    setBillAmount(amount);
+    setBillAmount(text);
+  };
+  const onChangeAccountOwner = (text) => {
+    setAccountOwner(text);
+  };
+  const onChangeAccount = (text) => {
+    console.log(text);
+    setAccount(text);
   };
 
   const changeModal = () => {
@@ -237,14 +252,38 @@ export default ({ id }) => {
         <Container>
           <OptionContainer>
             <TouchableOpacity
-              onPress={() => navigation.navigate("VoteMemberList", {})}
+              onPress={() =>
+                navigation.navigate("VoteMemberList", {
+                  from: "GroupWriteBill",
+                })
+              }
               style={{
                 ...styles.voteTargetButton,
                 borderColor: themeContext.moreLightGreyColor,
                 borderBottomColor: "white",
               }}
             >
-              <AlginedText>수금할 대상 선택</AlginedText>
+              {memberList.length === 0 ? (
+                <AlginedText>대상 선택</AlginedText>
+              ) : (
+                <RowContainer
+                  style={{ justifyContent: "flex-start", marginHorizontal: 20 }}
+                >
+                  <CustomIcon
+                    name={"person"}
+                    size={25}
+                    color={themeContext.greyColor}
+                  ></CustomIcon>
+                  <Text
+                    style={{
+                      color: themeContext.greenColor,
+                      marginHorizontal: 10,
+                    }}
+                  >
+                    {memberList.filter((member) => member != null).length}명
+                  </Text>
+                </RowContainer>
+              )}
             </TouchableOpacity>
           </OptionContainer>
           <OptionContainer>
@@ -281,18 +320,26 @@ export default ({ id }) => {
                 backgroundColor: themeContext.moreLightGreyColor,
               }}
             >
-              <NanumText style={{ color: themeContext.greenColor }}>
+              <NanumText
+                style={{ color: themeContext.greenColor, marginRight: 25 }}
+              >
                 1 인당
               </NanumText>
-              <NanumText>{Math.ceil(billAmount / 13)} 원</NanumText>
+              <NanumText>
+                {Math.ceil(
+                  billAmount /
+                    memberList.filter((member) => member != null).length
+                ).toLocaleString()}
+                원
+              </NanumText>
             </Calculated>
           </OptionContainer>
           <OptionContainer>
             <TextInput
-              value={billTitle}
+              value={accountOwner}
               placeholder={"예금주"}
-              onChangeText={onChangebillTitle}
-              onSubmitEditing={onSubmitbillTitle}
+              onChangeText={onChangeAccountOwner}
+              onSubmitEditing={onSubmitAccountOwner}
               returnKeyType="next"
               style={{
                 ...styles.keyboard,
@@ -301,18 +348,25 @@ export default ({ id }) => {
             ></TextInput>
           </OptionContainer>
           <OptionContainer>
-            <RowContainer style={{ alignItems: "center" }}>
+            <RowContainer
+              style={{
+                alignItems: "center",
+              }}
+            >
               <Dropdown></Dropdown>
               <TextInput
-                value={billTitle}
+                value={account}
                 placeholder={"계좌번호"}
-                onChangeText={onChangebillTitle}
-                onSubmitEditing={onSubmitbillTitle}
+                onChangeText={onChangeAccount}
+                onSubmitEditing={onSubmitAccount}
                 keyboardType="number-pad"
                 returnKeyType="next"
                 style={{
                   ...styles.keyboard,
                   fontFamily: themeContext.regularFont,
+                  color: "black",
+                  paddingRight: 20,
+                  width: 200,
                 }}
               ></TextInput>
             </RowContainer>
@@ -324,13 +378,14 @@ export default ({ id }) => {
           </OptionContainer>
           <TextInput
             value={billMemo}
-            placeholder={"투표 메모"}
+            placeholder={"메모"}
             onChangeText={onChangebillMemo}
             onSubmitEditing={onSubmitbillMemo}
             underlineColorAndroid="transparent"
             returnKeyType="none"
             style={{
               paddingVertical: 0,
+              paddingHorizontal: 10,
             }}
             autoCorrect={false}
             scrollEnabled={false}

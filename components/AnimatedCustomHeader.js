@@ -19,7 +19,7 @@ export default ({ headerPosition, headerOpacity, style }) => {
     <>
       <Animated.View
         style={{
-          height: UnderHeader,
+          height: StatusHeight,
           backgroundColor: "white",
           opacity: headerOpacity,
           ...style,
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: WIDTH,
     height: HeaderHeight,
-    top: UnderHeader,
+    top: StatusHeight,
     backgroundColor: "white",
     justifyContent: "space-between",
     alignItems: "center",

@@ -26,5 +26,4 @@ export const HeaderHeight = Platform.select({
   android: 56,
   default: 0,
 });
-export const UnderHeader = StatusHeight;
-console.log("A", StatusHeight, CUSTOM_HEADER_HEIGHT, HeaderHeight);
+export const UnderHeader = StatusHeight + HeaderHeight;
