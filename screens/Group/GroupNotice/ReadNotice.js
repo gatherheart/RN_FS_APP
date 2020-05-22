@@ -136,7 +136,7 @@ export default () => {
         <BodyContainer>
           <NanumText style={{ lineHeight: 25 }}>{data.noticeMemo}</NanumText>
         </BodyContainer>
-        <ImgContainer style={{ height: 100 }}>
+        <ImgContainer>
           <Modal visible={imgViewerVisible} transparent={true}>
             <ImageViewer imageUrls={images} onSwipeDown={changeViewerState} />
           </Modal>
