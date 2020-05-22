@@ -110,6 +110,7 @@ export default ({ id, group, loading, refreshFn }) => {
   const themeContext = useContext(ThemeContext);
   const [page, setPage] = useState(0);
 
+  navigation.navigate("GroupReadNotice", {});
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,
