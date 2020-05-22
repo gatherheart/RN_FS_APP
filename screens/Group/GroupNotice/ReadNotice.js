@@ -140,18 +140,20 @@ export default () => {
           <Modal visible={imgViewerVisible} transparent={true}>
             <ImageViewer imageUrls={images} onSwipeDown={changeViewerState} />
           </Modal>
-          {images.map((image, idx) => (
-            <Image
-              source={image}
-              style={{
-                width: undefined,
-                height: "100%",
-                borderWidth: 1,
-                aspectRatio: 1,
-              }}
-              key={`img-view-${idx}`}
-            ></Image>
-          ))}
+          <ScrollView horizontal={true}>
+            {images.map((image, idx) => (
+              <Image
+                source={image}
+                style={{
+                  width: undefined,
+                  height: "100%",
+                  borderWidth: 1,
+                  aspectRatio: 1,
+                }}
+                key={`img-view-${idx}`}
+              ></Image>
+            ))}
+          </ScrollView>
         </ImgContainer>
       </ScrollView>
     </>
