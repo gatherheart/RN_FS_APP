@@ -13,7 +13,7 @@ import styled, { ThemeContext } from "styled-components/native";
 import { simplifiedFormat } from "../../../utils/DateFormat";
 import CustomIcon from "../../CustomIcon";
 import AlertModal from "../../AlertModal";
-import { WebBrowserResultType } from "expo-web-browser";
+import * as WebBrowser from "expo-web-browser";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
@@ -105,23 +105,27 @@ export default ({
   const changeState = () => {
     setModalVisible((prev) => !prev);
   };
-  const _handleOpenWithWebBrowser = (url) => {
-    WebBrowserResultType.openBrowserAsync(url);
+  const _handleOpenWithWebBrowser = async (url) => {
+    if (url === "") {
+      setMessage("등록되어 있지 않은 주소입니다.");
+      setAlertVisible(true);
+      return;
+    }
+    try {
+      await WebBrowser.openBrowserAsync(url);
+    } catch (err) {
+      console.log("ERROR");
+      setMessage("앱을 여는 데 문제가 발생하였습니다.");
+      setAlertVisible(true);
+    }
   };
-
-  const _kakaoQrGenerate = (url) => {
-    const amount = (
-      Math.ceil(billAmount / memberList.length) * Math.pow(2, 19)
-    ).toString(16);
-    return url + amount;
-  };
-  _kakaoQrGenerate(kakaoUri);
 
   const themeContext = useContext(ThemeContext);
 
   const [clipboardContent, setClipboardContent] = useState("");
   const [message, setMessage] = useState("");
   const [alertVisible, setAlertVisible] = useState(false);
+  const [paid, setPaid] = useState(false);
 
   const readFromClipboard = async () => {
     const clipboardContent = await Clipboard.getString();
@@ -254,13 +258,36 @@ export default ({
               >
                 <NanumText style={{ color: "white" }}>입금 여부</NanumText>
               </CheckContainer>
-              <CheckContainer style={{ borderRadius: 0 }}>
-                <NanumText>O</NanumText>
+              <CheckContainer
+                style={{
+                  borderRadius: 0,
+                  backgroundColor: paid
+                    ? themeContext.lightGreenColor
+                    : themeContext.pastelGreyColor,
+                }}
+              >
+                <TouchableOpacity
+                  style={styles.OXbutton}
+                  onPress={() => setPaid(true)}
+                >
+                  <NanumText>O</NanumText>
+                </TouchableOpacity>
               </CheckContainer>
               <CheckContainer
-                style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
+                style={{
+                  borderTopLeftRadius: 0,
+                  borderBottomLeftRadius: 0,
+                  backgroundColor: !paid
+                    ? themeContext.lightGreenColor
+                    : themeContext.pastelGreyColor,
+                }}
               >
-                <NanumText>X</NanumText>
+                <TouchableOpacity
+                  style={styles.OXbutton}
+                  onPress={() => setPaid(false)}
+                >
+                  <NanumText>X</NanumText>
+                </TouchableOpacity>
               </CheckContainer>
             </RowContainer>
             <RowContainer style={{ marginTop: 10 }}>
@@ -298,17 +325,24 @@ const styles = StyleSheet.create({
     width: (WIDTH * 80) / 100,
     margin: 0,
     backgroundColor: "white",
+    borderRadius: 9,
+    overflow: "hidden",
   },
   innerContainer: {
     backgroundColor: "white",
-    borderRadius: 7,
     alignItems: "center",
-    overflow: "hidden",
+    borderRadius: 8,
   },
   okButton: {
     marginVertical: 20,
     paddingVertical: 10,
     paddingHorizontal: "30%",
     borderRadius: 7,
+  },
+  OXbutton: {
+    width: "100%",
+    height: "100%",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

@@ -28,6 +28,8 @@ const AvatarContainer = styled.View`
   align-items: center;
   justify-content: center;
   margin: 10px 10px 10px 10px;
+  border-width: 1px;
+  padding-left: 3px;
 `;
 
 const Container = styled.View`
@@ -56,6 +58,9 @@ const UsersTable = ({ users, style = {} }) => {
       style={{
         flexWrap: "wrap",
         width: (WIDTH * 90) / 100,
+        borderWidth: 1,
+        alignItems: "center",
+        justifyContent: "flex-start",
         ...style,
       }}
     >

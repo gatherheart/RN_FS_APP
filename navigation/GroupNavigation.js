@@ -14,7 +14,8 @@ import GroupWriteBill from "../screens/Group/GroupBill/WriteBill";
 import GroupReadBill from "../screens/Group/GroupBill/ReadBill";
 import GroupReadNotice from "../screens/Group/GroupNotice/ReadNotice";
 import GroupWriteNotice from "../screens/Group/GroupNotice/WriteNotice";
-import MemberList from "../screens/Group/MemberList";
+import VoteMemberList from "../screens/Group/GroupVote/VoteMemberList";
+import BillMemberList from "../screens/Group/GroupBill/BillMemberList";
 import VoteResult from "../screens/Group/GroupVote/VoteResult";
 
 DrawerNavigatorConfig = {
@@ -92,7 +93,7 @@ export default () => {
       />
       <Stack.Screen
         name="VoteMemberList"
-        component={MemberList}
+        component={VoteMemberList}
         options={{
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         }}
@@ -129,6 +130,13 @@ export default () => {
       <Stack.Screen
         name="GroupReadNotice"
         component={GroupReadNotice}
+        options={{
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      />
+      <Stack.Screen
+        name="BillMemberList"
+        component={BillMemberList}
         options={{
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         }}

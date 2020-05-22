@@ -16,7 +16,13 @@ const { width: WIDTH, height } = Dimensions.get("screen");
 
 const Title = styled.Text``;
 
-export default ({ headerStyle, title = "", rightButton }) => {
+export default ({
+  headerStyle,
+  title = "",
+  rightButton,
+  rightButtonIcon = "",
+  rightButtonText = "",
+}) => {
   const themeContext = useContext(ThemeContext);
   const navigation = useNavigation();
 
@@ -34,6 +40,7 @@ export default ({ headerStyle, title = "", rightButton }) => {
           ...styles.header,
           ...headerStyle,
           position: "absolute",
+          borderWidth: 1,
         }}
       >
         <TouchableOpacity
@@ -57,9 +64,9 @@ export default ({ headerStyle, title = "", rightButton }) => {
             rightButton();
           }}
           title="goBack"
-          style={{ marginHorizontal: 20 }}
+          style={{ marginRight: 20 }}
         >
-          <Title>완료</Title>
+          <Title>{rightButtonText}</Title>
         </TouchableOpacity>
       </View>
     </>

@@ -86,10 +86,11 @@ export default () => {
   const themeContext = useContext(ThemeContext);
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [modalVisible, setModalVisible] = useState(true);
-
+  const navigation = useNavigation();
   const [data, setData] = useState({
     loading: true,
     billTitle: "",
+    billId: "",
     billMemo: "",
     deadline: "",
     closed: false,
@@ -195,18 +196,16 @@ export default () => {
               style={styles.collapsibleButton}
             >
               <View style={styles.collapsibleContainer}>
-                <NanumText>
-                  {data.anonymousOption ? "익명 투표" : "참여 멤버"}
-                </NanumText>
                 <NanumText style={{ color: themeContext.greenColor }}>
                   총 {data.memberList.length}명
                 </NanumText>
+
+                <CustumIcon
+                  name={"arrow-down"}
+                  size={26}
+                  color={themeContext.darkGreenColor}
+                ></CustumIcon>
               </View>
-              <CustumIcon
-                name={"arrow-down"}
-                size={26}
-                color={themeContext.darkGreenColor}
-              ></CustumIcon>
             </TouchableOpacity>
           </SubContainer>
           <Collapsible collapsed={isCollapsed}>
@@ -234,8 +233,18 @@ export default () => {
                     {data.memberList.length}명
                   </NanumText>
                 </View>
-                <View style={{ alignItems: "center" }}>
+                <View style={{ alignItems: "center", borderWidth: 1 }}>
                   <UsersTable users={data.memberList}></UsersTable>
+                </View>
+                <View style={{ marginRight: 40 }}>
+                  <TouchableOpacity
+                    style={{ width: "100%", alignItems: "flex-end" }}
+                    onPress={() =>
+                      navigation.navigate("BillMemberList", { id: data.billId })
+                    }
+                  >
+                    <Text>전체 보기</Text>
+                  </TouchableOpacity>
                 </View>
               </View>
             ) : null}
@@ -261,11 +270,13 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
   },
   collapsibleContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    width: "30%",
+    width: "100%",
+    alignItems: "center",
   },
   memberTableLabel: {
     paddingHorizontal: 20,
@@ -402,6 +413,7 @@ const membersData = [
 ];
 
 const billData = {
+  id: "123",
   billTitle: "4월 개강 총회 회비",
   billMemo: "회식비에 사용",
   deadline: "2020-05-14T09:43:54.107Z",
@@ -409,6 +421,8 @@ const billData = {
   account: "110384479842",
   accountOwner: "김현우",
   kakaoUri: "https://qr.kakaopay.com/281006011000001135744526",
+  tossUri:
+    "supertoss://send?bank=신한&accountNo=110384479842&origin=linkgen&amount=1000&msg=%EC%9E%85%EA%B8%88+%EB%B2%84%ED%8A%BC",
   bank: "신한",
   closed: false,
   memberList: membersData,

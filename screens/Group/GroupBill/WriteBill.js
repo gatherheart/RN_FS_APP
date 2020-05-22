@@ -23,8 +23,7 @@ import CustumIcon from "../../../components/CustomIcon";
 import { MaterialCommunityIcons, FontAwesome } from "@expo/vector-icons";
 import AlertModal from "../../../components/AlertModal";
 import RNPickerSelect from "react-native-picker-select";
-import axios from "axios";
-import * as WebBrowser from "expo-web-browser";
+import { banks } from "../../../constants/Bank";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
@@ -80,34 +79,13 @@ const NanumText = styled.Text`
 
 export const Dropdown = () => {
   const themeContext = useContext(ThemeContext);
+  const items = banks.map((bank) => ({ label: bank, value: bank }));
 
   return (
     <View style={{ flexDirection: "row", alignItems: "center" }}>
       <RNPickerSelect
         onValueChange={(value) => console.log(value)}
-        items={[
-          { label: "신한", value: "신한" },
-          { label: "국민", value: "국민" },
-          { label: "Hockey", value: "hockey" },
-          { label: "Football", value: "football" },
-          { label: "Baseball", value: "baseball" },
-          { label: "Hockey", value: "hockey" },
-          { label: "Football", value: "football" },
-          { label: "Baseball", value: "baseball" },
-          { label: "Hockey", value: "hockey" },
-          { label: "Football", value: "football" },
-          { label: "Baseball", value: "baseball" },
-          { label: "Hockey", value: "hockey" },
-          { label: "Football", value: "football" },
-          { label: "Baseball", value: "baseball" },
-          { label: "Hockey", value: "hockey" },
-          { label: "Football", value: "football" },
-          { label: "Baseball", value: "baseball" },
-          { label: "Hockey", value: "hockey" },
-          { label: "Football", value: "football" },
-          { label: "Baseball", value: "baseball" },
-          { label: "Hockey", value: "hockey" },
-        ]}
+        items={items}
         placeholder={{ label: "은행", value: "은행" }}
         style={{
           inputIOS: {
@@ -156,14 +134,18 @@ export default ({ id }) => {
   const [account, setAccount] = useState("");
   const [bank, setBank] = useState("");
   const [message, setMessage] = useState("");
-
+  let amountPerOne = 0;
   const [memberList, setMemberList] = useState([]);
 
   const navigation = useNavigation();
   const route = useRoute();
+
   useEffect(() => {
-    setMemberList(route.params.memberList ? route.params.memberList : []);
-    console.log(memberList);
+    setMemberList(
+      route.params.memberList
+        ? route.params.memberList.filter((member) => member != null)
+        : []
+    );
   }, [route]);
 
   const themeContext = useContext(ThemeContext);
@@ -280,7 +262,7 @@ export default ({ id }) => {
                       marginHorizontal: 10,
                     }}
                   >
-                    {memberList.filter((member) => member != null).length}명
+                    {memberList.length}명
                   </Text>
                 </RowContainer>
               )}
@@ -326,10 +308,9 @@ export default ({ id }) => {
                 1 인당
               </NanumText>
               <NanumText>
-                {Math.ceil(
-                  billAmount /
-                    memberList.filter((member) => member != null).length
-                ).toLocaleString()}
+                {memberList.length === 0
+                  ? 0
+                  : Math.ceil(billAmount / memberList.length).toLocaleString()}
                 원
               </NanumText>
             </Calculated>

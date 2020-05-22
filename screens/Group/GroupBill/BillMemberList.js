@@ -1,19 +1,19 @@
 import React, { useEffect, useState, useContext, useMemo, useRef } from "react";
 import { View, Text, Dimensions } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
-import CustomHeader from "../../components/CustomHeader";
-import Loader from "../../components/Loader";
+import CustomHeader from "../../../components/CustomHeader";
+import Loader from "../../../components/Loader";
 import styled, { ThemeContext } from "styled-components";
 import PropTypes from "prop-types";
-import SearchInput from "../../components/SearchInput";
-import SmallUserCard from "../../components/User/SmallUserCard";
+import SearchInput from "../../../components/SearchInput";
+import SmallUserCard from "../../../components/User/SmallUserCard";
 import { CheckBox } from "react-native-elements";
 import {
   UnderHeader,
   HeaderHeight,
   StatusHeight,
-} from "../../utils/HeaderHeight";
-import UsersTable from "../../components/User/HorizontalUsersTable";
+} from "../../../utils/HeaderHeight";
+import UsersTable from "../../../components/User/HorizontalUsersTable";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
@@ -73,51 +73,32 @@ const MemberClassify = ({
 }) => {
   const themeContext = useContext(ThemeContext);
 
-  const changeAllChecked = () => {
-    let newChecked = { ...checkState };
-    const newMembers = members.map((member) => {
-      if (member.type === type) {
-        newChecked[member.id] = !newChecked[member.id];
-        return newChecked[member.id] ? member.id : null;
-      } else {
-        return newChecked[member.id] ? member.id : null;
-      }
-    });
-
-    setCheckState(newChecked);
-    setMemberList(newMembers);
-  };
   return (
     <View>
       <RowContainer style={{ marginVertical: 10 }}>
         <MemberType>{title}</MemberType>
-        <TotalButton onPress={changeAllChecked}>
-          <TotalButtonText>전체 선택</TotalButtonText>
-        </TotalButton>
       </RowContainer>
-      {members
-        .filter((member) => member.type === type)
-        .map((member) => {
-          if (keyword != "" && !member.name.includes(keyword)) return null;
-          return (
-            <RowContainer key={"member-" + type + member.id}>
-              <SmallUserCard
-                name={member.name}
-                major={member.major}
-                avatar={member.avatar}
-              ></SmallUserCard>
-              <CheckBox
-                right={true}
-                iconRight={true}
-                checkedColor={themeContext.lightGreenColor}
-                checkedIcon="check-circle"
-                uncheckedIcon="check-circle"
-                checked={checkState[member.id]}
-                onPress={() => changeChecked(member.id)}
-              />
-            </RowContainer>
-          );
-        })}
+      {members.map((member) => {
+        if (keyword != "" && !member.name.includes(keyword)) return null;
+        return (
+          <RowContainer key={"member-" + type + member.id}>
+            <SmallUserCard
+              name={member.name}
+              major={member.major}
+              avatar={member.avatar}
+            ></SmallUserCard>
+            <CheckBox
+              right={true}
+              iconRight={true}
+              checkedColor={themeContext.lightGreenColor}
+              checkedIcon="check-circle"
+              uncheckedIcon="check-circle"
+              checked={checkState[member.id]}
+              onPress={() => changeChecked(member.id)}
+            />
+          </RowContainer>
+        );
+      })}
     </View>
   );
 };
@@ -174,11 +155,12 @@ export default ({}) => {
   ) : (
     <>
       <CustomHeader
-        title={"대상 선택"}
+        title={"미입금 처리"}
         headerStyle={{}}
         rightButton={() => {
           navigation.navigate(route.params.from, { memberList: memberList });
         }}
+        rightButtonText={"완료"}
       ></CustomHeader>
 
       <ScrollView
@@ -226,31 +208,9 @@ export default ({}) => {
         {Object.keys(checkState).length !== 0 ? (
           <>
             <MemberClassify
-              title="회장"
+              title="입금 멤버"
               members={data.members}
               type={0}
-              checkState={checkState}
-              setCheckState={setCheckState}
-              keyword={keyword}
-              setMemberList={setMemberList}
-              memberList={memberList}
-              changeChecked={changeChecked}
-            ></MemberClassify>
-            <MemberClassify
-              title="운영진"
-              members={data.members}
-              type={1}
-              checkState={checkState}
-              setCheckState={setCheckState}
-              keyword={keyword}
-              setMemberList={setMemberList}
-              memberList={memberList}
-              changeChecked={changeChecked}
-            ></MemberClassify>
-            <MemberClassify
-              title="멤버"
-              members={data.members}
-              type={2}
               checkState={checkState}
               setCheckState={setCheckState}
               keyword={keyword}
