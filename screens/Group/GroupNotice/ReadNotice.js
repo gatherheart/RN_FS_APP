@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import {
   View,
   Text,
@@ -14,8 +14,10 @@ import styled from "styled-components/native";
 import SmallUserCard from "../../../components/User/SmallUserCard";
 import { simplifiedFormat } from "../../../utils/DateFormat";
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
-import { Modal } from "react-native";
+import Modal from "react-native-modal";
 import ImageViewer from "react-native-image-zoom-viewer";
+import { UnderHeader, StatusHeight } from "../../../utils/HeaderHeight";
+import { downloadAsync, saveToLibrary } from "../../../utils/GetImage";
 
 const SubContainer = styled.View`
   border-top-width: 1px;
@@ -50,9 +52,13 @@ export default () => {
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [modalVisible, setModalVisible] = useState(true);
   const [imgViewerVisible, setImgViewerVisible] = useState(false);
+  const imageRef = useRef();
 
   const changeViewerState = () => {
-    setImgViewerVisible((prev) => !prev);
+    setImgViewerVisible((prev) => {
+      console.log(prev, "->", !prev);
+      return !prev;
+    });
   };
 
   const images = [
@@ -101,9 +107,20 @@ export default () => {
       ...noticeData,
     });
   };
+
+  const saveImage = async () => {
+    const uri = await downloadAsync(images[0].url);
+    saveToLibrary(uri);
+  };
+
   useEffect(() => {
     getData();
   }, []);
+
+  useEffect(() => {
+    console.log(imageRef);
+    saveImage();
+  }, [imageRef]);
 
   return data?.loading ? (
     <Loader></Loader>
@@ -137,21 +154,57 @@ export default () => {
           <NanumText style={{ lineHeight: 25 }}>{data.noticeMemo}</NanumText>
         </BodyContainer>
         <ImgContainer>
-          <Modal visible={imgViewerVisible} transparent={true}>
-            <ImageViewer imageUrls={images} onSwipeDown={changeViewerState} />
+          <Modal
+            visible={imgViewerVisible}
+            transparent={false}
+            backgroundColor={"black"}
+            onRequestClose={() => changeViewerState()}
+            style={{
+              width: "100%",
+              height: "100%",
+              marginHorizontal: 0,
+              margin: 0,
+              alignItems: "center",
+            }}
+          >
+            <View>
+              <TouchableOpacity onPress={changeViewerState}>
+                <Text style={{ color: "red" }}>ABCD</Text>
+              </TouchableOpacity>
+            </View>
+            <Image
+              source={images[0]}
+              style={{
+                width: "100%",
+                height: undefined,
+                borderWidth: 1,
+                aspectRatio: 1,
+              }}
+              ref={imageRef}
+            ></Image>
           </Modal>
           <ScrollView horizontal={true}>
             {images.map((image, idx) => (
-              <Image
-                source={image}
+              <TouchableOpacity
+                key={`img-view-${idx}`}
+                onPress={changeViewerState}
                 style={{
                   width: undefined,
                   height: "100%",
                   borderWidth: 1,
                   aspectRatio: 1,
                 }}
-                key={`img-view-${idx}`}
-              ></Image>
+              >
+                <Image
+                  source={image}
+                  style={{
+                    width: undefined,
+                    height: "100%",
+                    borderWidth: 1,
+                    aspectRatio: 1,
+                  }}
+                ></Image>
+              </TouchableOpacity>
             ))}
           </ScrollView>
         </ImgContainer>

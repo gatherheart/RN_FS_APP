@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { StyleSheet, Image, Text, View, AsyncStorage } from "react-native";
 import { AppLoading } from "expo";
+import * as MediaLibrary from "expo-media-library";
+import * as Permissions from "expo-permissions";
 import { Asset } from "expo-asset";
 import * as Font from "expo-font";
 import {
@@ -18,6 +20,8 @@ import styles from "./styles";
 import NavController from "./components/NavController";
 import { AuthProvider } from "./context/AuthContext";
 import { defaultPoster } from "./constants/Urls";
+import { StatusBar } from "react-native";
+import { ALBUM_NAME } from "./constants/Systems";
 
 /**
  * By Using Apollo-cache-* modules,
@@ -33,6 +37,34 @@ export default function App() {
   const [client, setClient] = useState(null);
   // Check User logged in or not
   const [isLoggedIn, setIsloggedIn] = useState(null);
+  const [permissions, setPermissions] = useState(false);
+
+  const _getPermissions = async () => {
+    let { status: CAMERA_status } = await Permissions.getAsync(
+      Permissions.CAMERA
+    );
+    let { status: CAMERA_ROLL_status } = await Permissions.getAsync(
+      Permissions.CAMERA_ROLL
+    );
+
+    //const { CAMERA_status } = await Permissions.askAsync(
+    //  Permissions.NOTIFICATIONS
+    //);
+    if (CAMERA_ROLL_status === "granted") {
+      //let album = await MediaLibrary.getAlbumAsync(ALBUM_NAME);
+      //if (album === null) {
+      //  album = await MediaLibrary.createAlbumAsync(ALBUM_NAME);
+      //}
+
+      if (CAMERA_status === "granted") {
+        setPermissions(true);
+      } else {
+        await Permissions.askAsync(Permissions.CAMERA);
+      }
+    } else {
+      await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    }
+  };
 
   // Prefeching Image Cache
   const cacheImages = (images) =>
@@ -99,11 +131,19 @@ export default function App() {
     preload();
   }, []);
 
+  useMemo(() => {
+    _getPermissions();
+  }, []);
+
   //console.log(loaded, client?.cache?.data?.data, isLoggedIn);
   return loaded && client && isLoggedIn !== null ? (
     <ApolloProvider client={client}>
       <ThemeProvider theme={styles}>
         <AuthProvider isLoggedIn={isLoggedIn}>
+          <StatusBar
+            backgroundColor="#fff"
+            barStyle="dark-content" // Here is where you change the font-color
+          />
           <NavController></NavController>
         </AuthProvider>
       </ThemeProvider>
