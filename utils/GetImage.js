@@ -19,6 +19,7 @@ export const saveToLibrary = async (fileUri) => {
   }
 };
 export const downloadAsync = async (source) => {
+  console.log(source.slice(((source.lastIndexOf(".") - 1) >>> 0) + 2));
   const extension = await getExtension(source);
   const randomName = Math.floor(Math.random() * 16777215).toString(16);
 

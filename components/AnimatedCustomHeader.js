@@ -9,10 +9,26 @@ import { HeaderHeight, StatusHeight, UnderHeader } from "../utils/HeaderHeight";
 import Icon from "./CustomIcon";
 import { ThemeContext } from "styled-components";
 import { useNavigation } from "@react-navigation/native";
-
+import styled from "styled-components/native";
 const { width: WIDTH, height } = Dimensions.get("screen");
 
-export default ({ headerPosition, headerOpacity, style }) => {
+const LeftContainer = styled.View`
+  width: ${(WIDTH * 33) / 100}px;
+  left: 10px;
+`;
+const MiddleContainer = styled.View`
+  width: ${(WIDTH * 33) / 100}px;
+  justify-content: center;
+  align-items: center;
+`;
+const RightContainer = styled.View`
+  width: ${(WIDTH * 33) / 100}px;
+  right: 10px;
+  align-items: flex-end;
+`;
+const Title = styled.Text``;
+
+export default ({ headerPosition, headerOpacity, style, title = "" }) => {
   const themeContext = useContext(ThemeContext);
   const navigation = useNavigation();
   return (
@@ -33,32 +49,41 @@ export default ({ headerPosition, headerOpacity, style }) => {
           ...style,
         }}
       >
-        <TouchableOpacity
-          onPress={() => {
-            navigation.goBack();
-          }}
-          title="goBack"
-          style={{ marginHorizontal: 20 }}
-        >
-          <Icon
-            name={"arrow-back"}
-            color={themeContext.lightGreenColor}
-            size={30}
-          ></Icon>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.openDrawer();
-          }}
-          title="goBack"
-          style={{ marginHorizontal: 20 }}
-        >
-          <Icon
-            name={"menu"}
-            color={themeContext.lightGreenColor}
-            size={30}
-          ></Icon>
-        </TouchableOpacity>
+        <LeftContainer>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.goBack();
+            }}
+            title="goBack"
+            style={{ marginHorizontal: 20 }}
+          >
+            <Icon
+              name={"arrow-back"}
+              color={themeContext.lightGreenColor}
+              size={30}
+            ></Icon>
+          </TouchableOpacity>
+        </LeftContainer>
+        <MiddleContainer>
+          <Title style={{ fontSize: 15, fontFamily: themeContext.regularFont }}>
+            {title}
+          </Title>
+        </MiddleContainer>
+        <RightContainer>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.openDrawer();
+            }}
+            title="goBack"
+            style={{ marginHorizontal: 20 }}
+          >
+            <Icon
+              name={"menu"}
+              color={themeContext.lightGreenColor}
+              size={30}
+            ></Icon>
+          </TouchableOpacity>
+        </RightContainer>
       </Animated.View>
     </>
   );

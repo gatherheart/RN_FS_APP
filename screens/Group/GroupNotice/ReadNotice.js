@@ -15,7 +15,6 @@ import SmallUserCard from "../../../components/User/SmallUserCard";
 import { simplifiedFormat } from "../../../utils/DateFormat";
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 import Modal from "react-native-modal";
-import ImageViewer from "react-native-image-zoom-viewer";
 import { UnderHeader, StatusHeight } from "../../../utils/HeaderHeight";
 import { downloadAsync, saveToLibrary } from "../../../utils/GetImage";
 
@@ -64,7 +63,7 @@ export default () => {
   const images = [
     {
       // Simplest usage.
-      url: "https://avatars2.githubusercontent.com/u/7970947?v=3&s=460",
+      uri: "https://avatars2.githubusercontent.com/u/7970947?v=3&s=460",
 
       // width: number
       // height: number
@@ -77,7 +76,7 @@ export default () => {
     },
     {
       // Simplest usage.
-      url: "https://avatars2.githubusercontent.com/u/7970947?v=3&s=460",
+      uri: "https://avatars2.githubusercontent.com/u/7970947?v=3&s=460",
 
       // width: number
       // height: number
@@ -119,7 +118,6 @@ export default () => {
 
   useEffect(() => {
     console.log(imageRef);
-    saveImage();
   }, [imageRef]);
 
   return data?.loading ? (
@@ -193,6 +191,7 @@ export default () => {
                   height: "100%",
                   borderWidth: 1,
                   aspectRatio: 1,
+                  zIndex: 0,
                 }}
               >
                 <Image
@@ -202,6 +201,7 @@ export default () => {
                     height: "100%",
                     borderWidth: 1,
                     aspectRatio: 1,
+                    zIndex: 1,
                   }}
                 ></Image>
               </TouchableOpacity>

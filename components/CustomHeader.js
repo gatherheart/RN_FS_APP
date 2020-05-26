@@ -16,6 +16,21 @@ const { width: WIDTH, height } = Dimensions.get("screen");
 
 const Title = styled.Text``;
 
+const LeftContainer = styled.View`
+  width: ${(WIDTH * 33) / 100}px;
+  left: 10px;
+`;
+const MiddleContainer = styled.View`
+  width: ${(WIDTH * 33) / 100}px;
+  justify-content: center;
+  align-items: center;
+`;
+const RightContainer = styled.View`
+  width: ${(WIDTH * 33) / 100}px;
+  right: 10px;
+  align-items: flex-end;
+`;
+
 export default ({
   headerStyle,
   title = "",
@@ -43,31 +58,37 @@ export default ({
           borderWidth: 1,
         }}
       >
-        <TouchableOpacity
-          onPress={() => {
-            navigation.goBack();
-          }}
-          title="goBack"
-          style={{ marginHorizontal: 20 }}
-        >
-          <Icon
-            name={"arrow-back"}
-            color={themeContext.lightGreenColor}
-            size={30}
-          ></Icon>
-        </TouchableOpacity>
-        <Title style={{ fontSize: 15, fontFamily: themeContext.regularFont }}>
-          {title}
-        </Title>
-        <TouchableOpacity
-          onPress={() => {
-            rightButton();
-          }}
-          title="goBack"
-          style={{ marginRight: 20 }}
-        >
-          <Title>{rightButtonText}</Title>
-        </TouchableOpacity>
+        <LeftContainer>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.goBack();
+            }}
+            title="goBack"
+            style={{}}
+          >
+            <Icon
+              name={"arrow-back"}
+              color={themeContext.lightGreenColor}
+              size={30}
+            ></Icon>
+          </TouchableOpacity>
+        </LeftContainer>
+        <MiddleContainer>
+          <Title style={{ fontSize: 15, fontFamily: themeContext.regularFont }}>
+            {title}
+          </Title>
+        </MiddleContainer>
+        <RightContainer>
+          <TouchableOpacity
+            onPress={() => {
+              rightButton();
+            }}
+            title="goBack"
+            style={{ marginRight: 20 }}
+          >
+            <Title>{rightButtonText}</Title>
+          </TouchableOpacity>
+        </RightContainer>
       </View>
     </>
   );
