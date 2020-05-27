@@ -6,6 +6,7 @@ import {
   ScrollView,
   Dimensions,
   Image,
+  StatusBar,
 } from "react-native";
 import { ThemeContext } from "styled-components";
 import Loader from "../../../components/common/Loader";
@@ -114,6 +115,12 @@ export default () => {
     console.log(imageRef);
   }, [imageRef]);
 
+  useEffect(() => {
+    if (!imgViewerVisible)
+      Platform.OS === "android" && StatusBar.setBackgroundColor("white");
+    else Platform.OS === "android" && StatusBar.setBackgroundColor("black");
+  }, [imgViewerVisible]);
+
   return data?.loading ? (
     <Loader></Loader>
   ) : (
@@ -122,6 +129,7 @@ export default () => {
         title={"공지글 보기"}
         rightButton={() => setModalVisible((prev) => !prev)}
       ></CustomHeader>
+
       <ScrollView
         style={{
           backgroundColor: themeContext.backgroundColor,

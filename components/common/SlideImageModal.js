@@ -10,6 +10,7 @@ import {
   PanResponder,
   Text,
   Animated,
+  StatusBar,
 } from "react-native";
 import Modal from "react-native-modal";
 import CustomIcon from "./CustomIcon";
@@ -29,7 +30,12 @@ const Container = styled.View`
   height: ${HEIGHT}px;
   position: relative;
   justify-content: center;
-  z-index: 2;
+  z-index: 1;
+`;
+const SliderContainer = styled.View`
+  width: 100%;
+  height: ${HEIGHT / 4}px;
+  margin-bottom: 40px;
 `;
 
 const saveImage = async ({ url }) => {
@@ -54,7 +60,8 @@ const SlideImageModal = ({ changeViewerState, imgViewerVisible, images }) => {
     onPanResponderRelease: (event, { dx, dy }) => {
       console.log("RELEASE", dx, dy);
 
-      if (dx >= 90 || dx <= 90) goToNext(1);
+      if (dx >= 40) goToNext(-1);
+      else if (dx <= -40) goToNext(1);
       else {
         console.log("NO Move");
       }
@@ -71,12 +78,16 @@ const SlideImageModal = ({ changeViewerState, imgViewerVisible, images }) => {
       backgroundColor={"black"}
       onRequestClose={() => changeViewerState()}
       style={styles.modal}
+      backdropTransitionOutTiming={0}
+      hideModalContentWhileAnimating={false}
+      useNativeDriver={true}
+      animationIn={{ from: { opacity: 1 }, to: { opacity: 1 } }}
+      animationOut={{ from: { opacity: 0 }, to: { opacity: 0 } }}
     >
       <View style={styles.modalContainer}>
         <ImageSlider images={images} index={0} ref={swiperRef}></ImageSlider>
       </View>
-
-      <Animated.View
+      {/*<Animated.View
         {...panResponder.panHandlers}
         style={{
           borderColor: "white",
@@ -88,10 +99,7 @@ const SlideImageModal = ({ changeViewerState, imgViewerVisible, images }) => {
           position: "absolute",
           zIndex: 2,
         }}
-      >
-        <TouchableWithoutFeedback onPress={() => {}}></TouchableWithoutFeedback>
-      </Animated.View>
-
+      ></Animated.View>*/}
       <FloatingButton
         changeViewerState={changeViewerState}
         goToNext={goToNext}
@@ -126,14 +134,34 @@ const FloatingButton = ({ changeViewerState, goToNext }) => {
           ></CustomIcon>
         </TouchableOpacity>
       </View>
-      <View style={{ ...styles.rightButton }}></View>
     </>
   );
 };
 
 const ImageSlider = forwardRef(({ images, index }, ref) => {
+  const panResponder = PanResponder.create({
+    onMoveShouldSetPanResponder: () => true,
+    onResponderTerminationRequest: () => false,
+    onStartShouldSetPanResponder: (evt, gestureState) => true,
+
+    onPanResponderMove: (event, { dx, dy }) => {
+      console.log("MOVE", dx, dy);
+    },
+    onPanResponderRelease: (event, { dx, dy }) => {
+      console.log("RELEASE", dx, dy);
+    },
+  });
+
   return images ? (
-    <Swiper showsPagination={false} style={{ zIndex: 1 }} ref={ref}>
+    <Swiper
+      showsPagination={false}
+      scrollEnabled={true}
+      ref={ref}
+      index={index}
+      onTouchEnd={() => console.log("A")}
+      style={{}}
+      loop={false}
+    >
       {images.map((image, idx) => (
         <ImageContainer source={image.uri} key={`image-silder-${idx}`} />
       ))}
@@ -142,8 +170,13 @@ const ImageSlider = forwardRef(({ images, index }, ref) => {
 });
 
 const ImageContainer = ({ source }) => (
-  <Container>
-    <Image
+  <Animated.View
+    style={{
+      ...styles.imageContainer,
+      transform: [{ translateY: -WIDTH / 2 }],
+    }}
+  >
+    <Animated.Image
       source={{
         uri: source,
       }}
@@ -153,26 +186,21 @@ const ImageContainer = ({ source }) => (
         aspectRatio: 1,
       }}
     />
-  </Container>
+  </Animated.View>
 );
 
 const styles = StyleSheet.create({
   modal: {
-    width: "100%",
-    height: "100%",
     marginHorizontal: 0,
     margin: 0,
     alignItems: "center",
+    justifyContent: "center",
   },
   modalContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-    zIndex: 1,
+    zIndex: 2,
   },
   buttonContainer: {
-    top: StatusHeight,
-    borderColor: "white",
-    borderBottomWidth: 1,
+    bottom: StatusHeight,
     position: "absolute",
     zIndex: 2,
     width: WIDTH,
@@ -181,18 +209,11 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
-  rightButton: {
-    top: StatusHeight,
-    position: "absolute",
-    zIndex: 1,
-    width: WIDTH,
-    height: HEIGHT - StatusHeight,
-    alignItems: "flex-end",
+  imageContainer: {
     justifyContent: "center",
-  },
-  floatingButton: {
-    height: HEIGHT,
-    width: WIDTH,
+    alignItems: "center",
+    zIndex: 2,
+    top: "50%",
   },
 });
 
