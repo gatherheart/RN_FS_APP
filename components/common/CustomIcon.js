@@ -4,7 +4,13 @@ import { Ionicons } from "@expo/vector-icons";
 import { ACTIVE_COLOR, INACTIVE_COLOR } from "../../constants/Color";
 import { Platform } from "react-native";
 
-const Icon = function ({ name, size = 20, color, isCustom = false, style }) {
+const CustomIcon = function ({
+  name,
+  size = 20,
+  color,
+  isCustom = false,
+  style,
+}) {
   return (
     <Ionicons
       size={size}
@@ -15,8 +21,8 @@ const Icon = function ({ name, size = 20, color, isCustom = false, style }) {
   );
 };
 
-Icon.propTypes = {
+CustomIcon.propTypes = {
   name: PropTypes.string.isRequired,
 };
 
-export default Icon;
+export default CustomIcon;

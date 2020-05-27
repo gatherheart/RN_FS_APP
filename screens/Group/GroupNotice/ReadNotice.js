@@ -14,9 +14,8 @@ import styled from "styled-components/native";
 import SmallUserCard from "../../../components/User/SmallUserCard";
 import { simplifiedFormat } from "../../../utils/DateFormat";
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
-import Modal from "react-native-modal";
-import { UnderHeader, StatusHeight } from "../../../utils/HeaderHeight";
-import { downloadAsync, saveToLibrary } from "../../../utils/GetImage";
+
+import SlideImageModal from "../../../components/common/SlideImageModal";
 
 const SubContainer = styled.View`
   border-top-width: 1px;
@@ -55,7 +54,6 @@ export default () => {
 
   const changeViewerState = () => {
     setImgViewerVisible((prev) => {
-      console.log(prev, "->", !prev);
       return !prev;
     });
   };
@@ -76,7 +74,7 @@ export default () => {
     },
     {
       // Simplest usage.
-      uri: "https://avatars2.githubusercontent.com/u/7970947?v=3&s=460",
+      uri: "https://reactnative.dev/img/tiny_logo.png",
 
       // width: number
       // height: number
@@ -105,11 +103,6 @@ export default () => {
       loading: false,
       ...noticeData,
     });
-  };
-
-  const saveImage = async () => {
-    const uri = await downloadAsync(images[0].url);
-    saveToLibrary(uri);
   };
 
   useEffect(() => {
@@ -152,35 +145,11 @@ export default () => {
           <NanumText style={{ lineHeight: 25 }}>{data.noticeMemo}</NanumText>
         </BodyContainer>
         <ImgContainer>
-          <Modal
-            visible={imgViewerVisible}
-            transparent={false}
-            backgroundColor={"black"}
-            onRequestClose={() => changeViewerState()}
-            style={{
-              width: "100%",
-              height: "100%",
-              marginHorizontal: 0,
-              margin: 0,
-              alignItems: "center",
-            }}
-          >
-            <View>
-              <TouchableOpacity onPress={changeViewerState}>
-                <Text style={{ color: "red" }}>ABCD</Text>
-              </TouchableOpacity>
-            </View>
-            <Image
-              source={images[0]}
-              style={{
-                width: "100%",
-                height: undefined,
-                borderWidth: 1,
-                aspectRatio: 1,
-              }}
-              ref={imageRef}
-            ></Image>
-          </Modal>
+          <SlideImageModal
+            changeViewerState={changeViewerState}
+            imgViewerVisible={imgViewerVisible}
+            images={images}
+          ></SlideImageModal>
           <ScrollView horizontal={true}>
             {images.map((image, idx) => (
               <TouchableOpacity
