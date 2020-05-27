@@ -8,8 +8,8 @@ import {
   Image,
 } from "react-native";
 import { ThemeContext } from "styled-components";
-import Loader from "../../../components/Loader";
-import CustomHeader from "../../../components/CustomHeader";
+import Loader from "../../../components/common/Loader";
+import CustomHeader from "../../../components/common/CustomHeader";
 import styled from "styled-components/native";
 import SmallUserCard from "../../../components/User/SmallUserCard";
 import { simplifiedFormat } from "../../../utils/DateFormat";

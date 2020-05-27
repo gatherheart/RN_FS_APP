@@ -11,8 +11,8 @@ import {
 import Modal from "react-native-modal";
 import styled, { ThemeContext } from "styled-components/native";
 import { simplifiedFormat } from "../../../utils/DateFormat";
-import CustomIcon from "../../CustomIcon";
-import AlertModal from "../../AlertModal";
+import CustomIcon from "../../common/CustomIcon";
+import AlertModal from "../../common/AlertModal";
 import * as WebBrowser from "expo-web-browser";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");

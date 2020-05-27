@@ -7,10 +7,10 @@ import ChatStack from "../navigation/ChatNavigation";
 import FeedStack from "../navigation/FeedNavigation";
 import NoticeScreen from "../screens/Notice";
 import ProfileStack from "../navigation/ProfileNavigation";
-import TabBarIcon from "../components/TabBarIcon";
+import TabBarIcon from "../components/common/TabBarIcon";
 import * as Color from "../constants/Color";
-import Icon from "../components/CustomIcon";
-import Loader from "../components/Loader";
+import Icon from "../components/common/CustomIcon";
+import Loader from "../components/common/Loader";
 import {
   firstTabIcon,
   secondTabIcon,

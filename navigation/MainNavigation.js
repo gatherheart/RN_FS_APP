@@ -3,7 +3,6 @@ import {
   createStackNavigator,
   CardStyleInterpolators,
 } from "@react-navigation/stack";
-import { createDrawerNavigator } from "@react-navigation/drawer";
 import Tabs from "./TabNavigation";
 import GroupScreen from "./GroupNavigation";
 import GroupSearchNav from "./GroupSearchNavigation";

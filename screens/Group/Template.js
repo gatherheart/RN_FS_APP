@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useContext } from "react";
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { ThemeContext } from "styled-components";
-import Loader from "../../../components/Loader";
-import CustomHeader from "../../../components/CustomHeader";
+import Loader from "../../../components/common/Loader";
+import CustomHeader from "../../../components/common/CustomHeader";
 
 export default () => {
   const themeContext = useContext(ThemeContext);

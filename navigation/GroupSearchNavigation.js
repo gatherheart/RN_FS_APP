@@ -9,8 +9,8 @@ import FirstCategory from "../screens/Group/GroupSearch/FirstCategory";
 import SecondCategory from "../screens/Group/GroupSearch/SecondCategory";
 import GroupSearch from "../screens/Group/GroupSearch";
 import { TouchableOpacity } from "react-native";
-import Loader from "../components/Loader";
-import Icon from "../components/CustomIcon";
+import Loader from "../components/common/Loader";
+import Icon from "../components/common/CustomIcon";
 import GroupTextSearch from "../screens/Group/GroupSearch/GroupTextSearch";
 
 const Stack = createStackNavigator();

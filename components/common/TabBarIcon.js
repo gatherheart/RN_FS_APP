@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Ionicons } from "@expo/vector-icons";
-import { ACTIVE_COLOR, INACTIVE_COLOR } from "../constants/Color";
+import { ACTIVE_COLOR, INACTIVE_COLOR } from "../../constants/Color";
 
 const TabBarIcon = function ({ name, focused }) {
   return (

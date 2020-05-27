@@ -11,7 +11,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { trimText } from "../../utils/String";
 import Avatar from "./InteractiveProfileAvatar";
-import CustomIcon from "../CustomIcon";
+import CustomIcon from "../common/CustomIcon";
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
 // Organization of Small Components

@@ -8,8 +8,7 @@ import {
   PanResponder,
 } from "react-native";
 import styled, { ThemeContext } from "styled-components/native";
-import CustomHeader from "../../../components/CustomHeader";
-import AnimatedCustomHeader from "../../../components/AnimatedCustomHeader";
+import CustomHeader from "../../../components/common/CustomHeader";
 const SWIPE_THRESHOLD = 120;
 
 const Container = styled.View`

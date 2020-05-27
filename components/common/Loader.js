@@ -1,6 +1,6 @@
 import React from "react";
 import { ActivityIndicator, View, StyleSheet } from "react-native";
-import { GREEN_COLOR, BG_COLOR } from "../constants/Color";
+import { GREEN_COLOR, BG_COLOR } from "../../constants/Color";
 import styled from "styled-components";
 
 /*

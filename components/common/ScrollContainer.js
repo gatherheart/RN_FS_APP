@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { Animated, RefreshControl } from "react-native";
+import { ScrollView, RefreshControl } from "react-native";
 import Loader from "./Loader";
-import { BG_COLOR, RED_COLOR, GREEN_COLOR } from "../constants/Color";
+import { BG_COLOR, RED_COLOR, GREEN_COLOR } from "../../constants/Color";
 
 const ScrollContainer = ({
   loading,
@@ -12,6 +12,7 @@ const ScrollContainer = ({
   onScroll,
   scrollEventThrottle,
   HEADER_MAX_HEIGHT,
+  style,
 }) => {
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = async () => {
@@ -20,7 +21,7 @@ const ScrollContainer = ({
     setRefreshing(false);
   };
   return (
-    <Animated.ScrollView
+    <ScrollView
       showsVerticalScrollIndicator={false}
       onScroll={onScroll}
       scrollEventThrottle={scrollEventThrottle}
@@ -31,24 +32,19 @@ const ScrollContainer = ({
           enabled={true}
           tintColor={GREEN_COLOR}
           colors={["#ff0000", "#00ff00", "#0000ff"]}
+          // Android offset for RefreshControl
           progressViewOffset={HEADER_MAX_HEIGHT}
         ></RefreshControl>
       }
-      style={{ backgroundColor: BG_COLOR }}
+      style={{ backgroundColor: BG_COLOR, ...style }}
       contentContainerStyle={{
         flex: loading ? 1 : 0,
         alignItems: "center",
         ...contentContainerStyle,
       }}
-      contentInset={{
-        top: HEADER_MAX_HEIGHT,
-      }}
-      contentOffset={{
-        y: -HEADER_MAX_HEIGHT,
-      }}
     >
       {loading ? <Loader></Loader> : children}
-    </Animated.ScrollView>
+    </ScrollView>
   );
 };
 

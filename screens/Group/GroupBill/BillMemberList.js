@@ -1,18 +1,19 @@
 import React, { useEffect, useState, useContext, useMemo, useRef } from "react";
-import { View, Text, Dimensions } from "react-native";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
-import CustomHeader from "../../../components/CustomHeader";
-import Loader from "../../../components/Loader";
+import {
+  View,
+  Text,
+  Dimensions,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
+import CustomHeader from "../../../components/common/CustomHeader";
+import Loader from "../../../components/common/Loader";
 import styled, { ThemeContext } from "styled-components";
 import PropTypes from "prop-types";
-import SearchInput from "../../../components/SearchInput";
+import SearchInput from "../../../components/common/SearchInput";
 import SmallUserCard from "../../../components/User/SmallUserCard";
 import { CheckBox } from "react-native-elements";
-import {
-  UnderHeader,
-  HeaderHeight,
-  StatusHeight,
-} from "../../../utils/HeaderHeight";
+import { HeaderHeight } from "../../../utils/HeaderHeight";
 import UsersTable from "../../../components/User/HorizontalUsersTable";
 import { useNavigation, useRoute } from "@react-navigation/native";
 

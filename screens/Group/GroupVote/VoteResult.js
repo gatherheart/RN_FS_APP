@@ -3,7 +3,7 @@ import styled, { ThemeContext } from "styled-components/native";
 import PropTypes from "prop-types";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Dimensions, View, ScrollView } from "react-native";
-import CustomHeader from "../../../components/CustomHeader";
+import CustomHeader from "../../../components/common/CustomHeader";
 import UsersTable from "../../../components/User/UsersTable";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");

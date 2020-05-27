@@ -1,9 +1,9 @@
 import React from "react";
-import MainStack from "../navigation/MainNavigation";
-import { userIsLoggedIn, useLogIn, useLogOut } from "../context/AuthContext";
+import MainStack from "../../navigation/MainNavigation";
+import { userIsLoggedIn, useLogIn, useLogOut } from "../../context/AuthContext";
 import { NavigationContainer } from "@react-navigation/native";
 import { View, TouchableOpacity, Text } from "react-native";
-import AuthNavigation from "../navigation/AuthNavigation";
+import AuthNavigation from "../../navigation/AuthNavigation";
 
 // Wrapper which is for braches between loggedIn User or not
 export default () => {

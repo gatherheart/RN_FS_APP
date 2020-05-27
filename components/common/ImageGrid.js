@@ -1,6 +1,6 @@
 import React from "react";
 import { Block, Text, theme } from "galio-framework";
-import Images from "../constants/ArgonImages";
+import Images from "../../constants/ArgonImages";
 import { StyleSheet, Dimensions, Image } from "react-native";
 
 const { width: WIDHT, height: HEIGHT } = Dimensions.get("screen");

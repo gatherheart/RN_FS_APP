@@ -13,16 +13,14 @@ import {
 import { Block, Text, theme } from "galio-framework";
 import { useNavigation } from "@react-navigation/native";
 import Button from "../../components/Group/ArgonButton";
-import Images from "../../constants/ArgonImages";
 import PropTypes from "prop-types";
 import { HeaderHeight, UnderHeader } from "../../utils/HeaderHeight";
 import styled, { ThemeContext } from "styled-components/native";
-import CustomHeader from "../../components/AnimatedCustomHeader";
+import CustomHeader from "../../components/common/AnimatedCustomHeader";
 import { trimText } from "../../utils/String";
-import ImageGrid from "../../components/ImageGrid";
-import GroupActionButton from "../../components/GroupActionButton";
+import ImageGrid from "../../components/common/ImageGrid";
+import GroupActionButton from "../../components/common/GroupActionButton";
 import NoticeList from "../../components/Group/NoticeList";
-import { useHeaderHeight } from "@react-navigation/stack";
 
 const { width: WIDHT, height: HEIGHT } = Dimensions.get("screen");
 

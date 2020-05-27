@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useLayoutEffect, useContext } from "react";
 import { Text, Dimensions, Animated, Platform, View } from "react-native";
-import ScrollContainer from "../../../components/AnimatedScrollContainer";
+import ScrollContainer from "../../../components/common/AnimatedScrollContainer";
 import styled from "styled-components/native";
-import Input from "../../../components/SearchInput";
+import Input from "../../../components/common/SearchInput";
 import SearchModal from "../../../components/Group/GroupSearchModal";
 import HorizontalGroup from "../../../components/Group/SmallGroupCard";
 import {

@@ -17,7 +17,7 @@ import { ApolloProvider } from "react-apollo-hooks";
 import ApolloClient from "apollo-boost";
 import apolloClientOptions from "./apollo";
 import styles from "./styles";
-import NavController from "./components/NavController";
+import NavController from "./components/common/NavController";
 import { AuthProvider } from "./context/AuthContext";
 import { defaultPoster } from "./constants/Urls";
 import { StatusBar } from "react-native";

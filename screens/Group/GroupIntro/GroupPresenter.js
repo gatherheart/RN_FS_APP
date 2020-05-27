@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import { Block, Text, theme } from "galio-framework";
 import { useNavigation } from "@react-navigation/native";
-import Icon from "../../components/Icon";
+import Icon from "../../components/common/Icon";
 import Button from "../../components/Group/ArgonButton";
 import Images from "../../constants/ArgonImages";
 import argonTheme from "../../constants/ArgonTheme";

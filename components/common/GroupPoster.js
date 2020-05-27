@@ -1,13 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components/native";
-import getImage from "../utils/GetImage";
+import getImage from "../../utils/GetImage";
 
 const Image = styled.Image`
-  width: 100%;
-  height: 100%;
+  width: 110px;
+  height: 110px;
   resize-mode: cover;
-  border-radius: 75px;
+  border-radius: 5px;
 `;
 
 const Poster = ({ url }) => {

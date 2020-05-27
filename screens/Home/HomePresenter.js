@@ -1,13 +1,11 @@
 import React, { useContext } from "react";
 import styled, { ThemeContext } from "styled-components/native";
 import { Dimensions, TouchableOpacity, Text } from "react-native";
-import ScrollContainer from "../../components/ScrollContainer";
+import ScrollContainer from "../../components/common/ScrollContainer";
 import GroupCard from "../../components/Home/GroupCard";
-import List from "../../components/List";
+import List from "../../components/common/List";
 import TodaySchedule from "../../components/Home/TodaySchedule";
 import GroupButton from "../../components/Home/HomeBottomBtn";
-import { useHeaderHeight } from "@react-navigation/stack";
-import { StatusHeight } from "../../utils/HeaderHeight";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 

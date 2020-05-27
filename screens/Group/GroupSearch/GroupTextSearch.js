@@ -3,7 +3,6 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import styled from "styled-components/native";
 import { useNavigation } from "@react-navigation/native";
 import GroupButtonSearch from "../../../components/Group/GroupCategoryButton";
-import { TextInput } from "react-native-gesture-handler";
 import { BG_COLOR } from "../../../constants/Color";
 import { firstCategory } from "../../../constants/Names";
 

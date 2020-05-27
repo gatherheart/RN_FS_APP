@@ -5,7 +5,11 @@ import {
   StyleSheet,
   Dimensions,
 } from "react-native";
-import { HeaderHeight, StatusHeight, UnderHeader } from "../utils/HeaderHeight";
+import {
+  HeaderHeight,
+  StatusHeight,
+  UnderHeader,
+} from "../../utils/HeaderHeight";
 import Icon from "./CustomIcon";
 import { ThemeContext } from "styled-components";
 import { useNavigation } from "@react-navigation/native";

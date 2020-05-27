@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import styled, { ThemeContext } from "styled-components/native";
-import SmallPoster from "../SmallPoster";
+import SmallPoster from "../common/SmallPoster";
 import PropTypes from "prop-types";
 import { TouchableOpacity, View, StyleSheet, Dimensions } from "react-native";
 import { useNavigation } from "@react-navigation/native";

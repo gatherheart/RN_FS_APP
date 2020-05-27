@@ -9,13 +9,12 @@ import {
   StyleSheet,
 } from "react-native";
 import styled, { ThemeContext } from "styled-components/native";
-import CustomHeader from "../../../components/CustomHeader";
+import CustomHeader from "../../../components/common/CustomHeader";
 import { simplifiedFormat } from "../../../utils/DateFormat";
-import SmallUserCard from "../../../components/User/SmallUserCard";
 import Collapsible from "react-native-collapsible";
 import PropTypes from "prop-types";
-import Loader from "../../../components/Loader";
-import CustumIcon from "../../../components/CustomIcon";
+import Loader from "../../../components/common/Loader";
+import CustumIcon from "../../../components/common/CustomIcon";
 import UsersTable from "../../../components/User/UsersTable";
 import { useNavigation } from "@react-navigation/native";
 import BillModal from "../../../components/Group/Bill/BillModal";

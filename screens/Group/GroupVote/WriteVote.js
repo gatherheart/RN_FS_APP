@@ -13,15 +13,14 @@ import {
   KeyboardAvoidingView,
 } from "react-native";
 import styled, { ThemeContext } from "styled-components/native";
-import CustomHeader from "../../../components/CustomHeader";
-import DateTimePicker from "../../../components/DateTimePicker";
+import CustomHeader from "../../../components/common/CustomHeader";
+import DateTimePicker from "../../../components/common/DateTimePicker";
 import { timePickedConverter } from "../../../utils/DateFormat";
 import { CheckBox } from "react-native-elements";
-import CustomIcon from "../../../components/CustomIcon";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import CustumIcon from "../../../components/CustomIcon";
+import CustumIcon from "../../../components/common/CustomIcon";
 import { MaterialCommunityIcons, FontAwesome } from "@expo/vector-icons";
-import AlertModal from "../../../components/AlertModal";
+import AlertModal from "../../../components/common/AlertModal";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
