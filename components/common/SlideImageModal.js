@@ -1,14 +1,16 @@
-import React, {
-  useState,
-  useRef,
-  forwardRef,
-  useEffect,
-  createRef,
-} from "react";
+import React, { useState, useRef, forwardRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components/native";
 import Swiper from "react-native-swiper";
-import { Dimensions, Image, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  Dimensions,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  PanResponder,
+  Text,
+  Animated,
+} from "react-native";
 import Modal from "react-native-modal";
 import CustomIcon from "./CustomIcon";
 import {
@@ -20,7 +22,6 @@ const SWIPER_HEIGHT = HEIGHT / 2;
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 import { downloadAsync, saveToLibrary } from "../../utils/GetImage";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
-import { Text } from "react-native";
 
 const View = styled.View``;
 
@@ -38,14 +39,35 @@ const saveImage = async ({ url }) => {
 
 const SlideImageModal = ({ changeViewerState, imgViewerVisible, images }) => {
   const swiperRef = useRef(null);
+  const position = new Animated.ValueXY();
 
-  const goToNext = () => {
-    swiperRef.current?.scrollTo(2, true);
+  const panResponder = PanResponder.create({
+    onMoveShouldSetPanResponder: () => true,
+    onResponderTerminationRequest: () => false,
+    onStartShouldSetPanResponder: (evt, gestureState) => true,
+
+    onPanResponderMove: (event, { dx, dy }) => {
+      console.log("MOVE", dx, dy);
+      position.setValue({ x: dx, y: dy });
+      return true;
+    },
+    onPanResponderRelease: (event, { dx, dy }) => {
+      console.log("RELEASE", dx, dy);
+
+      if (dx >= 90 || dx <= 90) goToNext(1);
+      else {
+        console.log("NO Move");
+      }
+      return true;
+    },
+  });
+  const goToNext = (dist = 1) => {
+    swiperRef.current?.scrollBy(dist, true);
   };
   return (
     <Modal
-      visible={imgViewerVisible}
-      transparent={false}
+      isVisible={imgViewerVisible}
+      transparent={true}
       backgroundColor={"black"}
       onRequestClose={() => changeViewerState()}
       style={styles.modal}
@@ -53,6 +75,23 @@ const SlideImageModal = ({ changeViewerState, imgViewerVisible, images }) => {
       <View style={styles.modalContainer}>
         <ImageSlider images={images} index={0} ref={swiperRef}></ImageSlider>
       </View>
+
+      <Animated.View
+        {...panResponder.panHandlers}
+        style={{
+          borderColor: "white",
+          borderWidth: 1,
+          height: HEIGHT,
+          width: WIDTH,
+          backgroundColor: "white",
+          opacity: 0,
+          position: "absolute",
+          zIndex: 2,
+        }}
+      >
+        <TouchableWithoutFeedback onPress={() => {}}></TouchableWithoutFeedback>
+      </Animated.View>
+
       <FloatingButton
         changeViewerState={changeViewerState}
         goToNext={goToNext}
@@ -78,7 +117,7 @@ const FloatingButton = ({ changeViewerState, goToNext }) => {
           ></CustomIcon>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={goToNext}>
+        <TouchableOpacity onPress={() => goToNext(1)}>
           <CustomIcon
             name="download"
             size={30}
@@ -87,27 +126,14 @@ const FloatingButton = ({ changeViewerState, goToNext }) => {
           ></CustomIcon>
         </TouchableOpacity>
       </View>
-      <View style={{ ...styles.rightButton }}>
-        <TouchableWithoutFeedback
-          onPress={changeHeaderState}
-          style={styles.floatingButton}
-        >
-          <Text>ABDDD</Text>
-        </TouchableWithoutFeedback>
-      </View>
+      <View style={{ ...styles.rightButton }}></View>
     </>
   );
 };
 
 const ImageSlider = forwardRef(({ images, index }, ref) => {
   return images ? (
-    <Swiper
-      showsPagination={false}
-      index={index}
-      showsPagination={false}
-      style={{ zIndex: 0 }}
-      ref={ref}
-    >
+    <Swiper showsPagination={false} style={{ zIndex: 1 }} ref={ref}>
       {images.map((image, idx) => (
         <ImageContainer source={image.uri} key={`image-silder-${idx}`} />
       ))}
@@ -141,6 +167,7 @@ const styles = StyleSheet.create({
   modalContainer: {
     justifyContent: "center",
     alignItems: "center",
+    zIndex: 1,
   },
   buttonContainer: {
     top: StatusHeight,

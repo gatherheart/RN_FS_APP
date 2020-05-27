@@ -60,8 +60,9 @@ export default () => {
 
   const images = [
     {
+      uri: "https://reactnative.dev/img/tiny_logo.png",
+
       // Simplest usage.
-      uri: "https://avatars2.githubusercontent.com/u/7970947?v=3&s=460",
 
       // width: number
       // height: number
@@ -74,7 +75,7 @@ export default () => {
     },
     {
       // Simplest usage.
-      uri: "https://reactnative.dev/img/tiny_logo.png",
+      uri: "https://avatars2.githubusercontent.com/u/7970947?v=3&s=460",
 
       // width: number
       // height: number
