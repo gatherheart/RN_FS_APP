@@ -42,6 +42,8 @@ const ImgContainer = styled.View`
   border-width: 1px;
 `;
 
+const FileContainer = styled.View``;
+
 const NanumText = styled.Text`
   font-family: ${(props) => props.theme.regularFont};
 `;
@@ -111,15 +113,7 @@ export default () => {
     getData();
   }, []);
 
-  useEffect(() => {
-    console.log(imageRef);
-  }, [imageRef]);
-
-  useEffect(() => {
-    if (!imgViewerVisible)
-      Platform.OS === "android" && StatusBar.setBackgroundColor("white");
-    else Platform.OS === "android" && StatusBar.setBackgroundColor("black");
-  }, [imgViewerVisible]);
+  useEffect(() => {}, [imgViewerVisible]);
 
   return data?.loading ? (
     <Loader></Loader>
@@ -186,6 +180,7 @@ export default () => {
             ))}
           </ScrollView>
         </ImgContainer>
+        <FileContainer></FileContainer>
       </ScrollView>
     </>
   );

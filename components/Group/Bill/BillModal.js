@@ -14,6 +14,7 @@ import { simplifiedFormat } from "../../../utils/DateFormat";
 import CustomIcon from "../../common/CustomIcon";
 import AlertModal from "../../common/AlertModal";
 import * as WebBrowser from "expo-web-browser";
+import { _kakaoUriGenerate } from "../../../utils/Payment";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
@@ -145,9 +146,11 @@ export default ({
       onBackdropPress={changeState}
       backdropColor={"black"}
       backdropOpacity={0.7}
+      backdropTransitionOutTiming={0}
+      hideModalContentWhileAnimating={false}
+      useNativeDriver={true}
       animationIn={{ from: { opacity: 1 }, to: { opacity: 1 } }}
       animationOut={{ from: { opacity: 0 }, to: { opacity: 0 } }}
-      useNativeDriver={true}
       style={{
         justifyContent: "center",
         alignItems: "center",
@@ -229,7 +232,11 @@ export default ({
               </Caculated>
               <View style={{ marginRight: 5 }}>
                 <TouchableOpacity
-                  onPress={() => _handleOpenWithWebBrowser(kakaoUri)}
+                  onPress={() =>
+                    _handleOpenWithWebBrowser(
+                      _kakaoUriGenerate(kakaoUri, billAmount)
+                    )
+                  }
                 >
                   <Image
                     style={{ width: 40, height: 40 }}

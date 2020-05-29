@@ -1,7 +1,13 @@
-import React, { useState, useRef, forwardRef, useEffect } from "react";
+import React, {
+  useState,
+  useRef,
+  forwardRef,
+  useEffect,
+  createContext,
+  useContext,
+} from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components/native";
-import Swiper from "react-native-swiper";
 import {
   Dimensions,
   Image,
@@ -11,9 +17,11 @@ import {
   Text,
   Animated,
   StatusBar,
+  ScrollView,
 } from "react-native";
 import Modal from "react-native-modal";
 import CustomIcon from "./CustomIcon";
+import { AntDesign } from "@expo/vector-icons";
 import {
   UnderHeader,
   StatusHeight,
@@ -38,84 +46,142 @@ const SliderContainer = styled.View`
   margin-bottom: 40px;
 `;
 
-const saveImage = async ({ url }) => {
-  const uri = await downloadAsync(images[0].url);
+const saveImage = async (url) => {
+  console.log(url);
+  const uri = await downloadAsync(url);
   saveToLibrary(uri);
+};
+
+const ImageContext = createContext();
+
+const useImages = () => {
+  const { images } = useContext(ImageContext);
+  return images;
+};
+const useImgViewerVisible = () => {
+  const { imgViewerVisible } = useContext(ImageContext);
+  return imgViewerVisible;
+};
+const useChangeViewerState = () => {
+  const { changeViewerState } = useContext(ImageContext);
+  return changeViewerState;
+};
+
+// Make a Component that provide context regarding to images
+const ImageProvider = ({
+  images,
+  imgViewerVisible,
+  changeViewerState,
+  children,
+}) => {
+  return (
+    <ImageContext.Provider
+      value={{ images, imgViewerVisible, changeViewerState }}
+    >
+      {children}
+    </ImageContext.Provider>
+  );
 };
 
 const SlideImageModal = ({ changeViewerState, imgViewerVisible, images }) => {
   const swiperRef = useRef(null);
-  const position = new Animated.ValueXY();
 
-  const panResponder = PanResponder.create({
-    onMoveShouldSetPanResponder: () => true,
-    onResponderTerminationRequest: () => false,
-    onStartShouldSetPanResponder: (evt, gestureState) => true,
-
-    onPanResponderMove: (event, { dx, dy }) => {
-      console.log("MOVE", dx, dy);
-      position.setValue({ x: dx, y: dy });
-      return true;
-    },
-    onPanResponderRelease: (event, { dx, dy }) => {
-      console.log("RELEASE", dx, dy);
-
-      if (dx >= 40) goToNext(-1);
-      else if (dx <= -40) goToNext(1);
-      else {
-        console.log("NO Move");
-      }
-      return true;
-    },
-  });
   const goToNext = (dist = 1) => {
     swiperRef.current?.scrollBy(dist, true);
   };
   return (
-    <Modal
-      isVisible={imgViewerVisible}
-      transparent={true}
-      backgroundColor={"black"}
-      onRequestClose={() => changeViewerState()}
-      style={styles.modal}
-      backdropTransitionOutTiming={0}
-      hideModalContentWhileAnimating={false}
-      useNativeDriver={true}
-      animationIn={{ from: { opacity: 1 }, to: { opacity: 1 } }}
-      animationOut={{ from: { opacity: 0 }, to: { opacity: 0 } }}
+    <ImageProvider
+      images={images}
+      imgViewerVisible={imgViewerVisible}
+      changeViewerState={changeViewerState}
     >
-      <View style={styles.modalContainer}>
-        <ImageSlider images={images} index={0} ref={swiperRef}></ImageSlider>
-      </View>
-      {/*<Animated.View
-        {...panResponder.panHandlers}
-        style={{
-          borderColor: "white",
-          borderWidth: 1,
-          height: HEIGHT,
-          width: WIDTH,
-          backgroundColor: "white",
-          opacity: 0,
-          position: "absolute",
-          zIndex: 2,
-        }}
-      ></Animated.View>*/}
-      <FloatingButton
-        changeViewerState={changeViewerState}
-        goToNext={goToNext}
-      ></FloatingButton>
-    </Modal>
+      <Modal
+        isVisible={imgViewerVisible}
+        transparent={true}
+        backgroundColor={"black"}
+        onRequestClose={() => changeViewerState()}
+        style={styles.modal}
+        backdropTransitionOutTiming={0}
+        hideModalContentWhileAnimating={false}
+        useNativeDriver={true}
+        animationIn={{ from: { opacity: 1 }, to: { opacity: 1 } }}
+        animationOut={{ from: { opacity: 0 }, to: { opacity: 0 } }}
+      >
+        <View style={styles.modalContainer}>
+          <ImageSlider
+            goToNext={goToNext}
+            index={0}
+            ref={swiperRef}
+          ></ImageSlider>
+        </View>
+      </Modal>
+    </ImageProvider>
   );
 };
+const animationValue = new Animated.Value(0);
 
-const FloatingButton = ({ changeViewerState, goToNext }) => {
-  const [headerShown, setHeaderShown] = useState(false);
+const ImageSlider = forwardRef(({ index, goToNext }, ref) => {
+  const changeViewerState = useChangeViewerState();
+  const images = useImages();
+  const viewRef = useRef();
+  const [currIndex, setCurrIndex] = useState(index);
+
   const changeHeaderState = () => {
-    setHeaderShown((prev) => !prev);
+    if (animationValue._value === 1) {
+      animationValue.setValue(0);
+    } else {
+      animationValue.setValue(1);
+    }
   };
+
+  return images ? (
+    <>
+      <ScrollView
+        contentContainerStyle={{
+          borderWidth: 1,
+          borderColor: "white",
+        }}
+        horizontal={true}
+        showsPagination={false}
+        scrollEnabled={true}
+        ref={ref}
+        index={index}
+        pagingEnabled={true}
+        onTouchEnd={(event) => {
+          changeHeaderState();
+        }}
+        onMomentumScrollEnd={(event) => {
+          setCurrIndex(event.nativeEvent.contentOffset.x / WIDTH);
+        }}
+      >
+        {images.map((image, idx) => (
+          <ImageContainer source={image.uri} key={`image-silder-${idx}`} />
+        ))}
+      </ScrollView>
+
+      <FloatingButton
+        changeViewerState={changeViewerState}
+        ref={viewRef}
+        animationValue={animationValue}
+        currIndex={currIndex}
+      ></FloatingButton>
+    </>
+  ) : null;
+});
+
+const FloatingButton = forwardRef(({ currIndex, animationValue }, ref) => {
+  const changeViewerState = useChangeViewerState();
+  const images = useImages();
+
   return (
     <>
-      <View style={{ ...styles.buttonContainer, opacity: headerShown ? 0 : 1 }}>
+      <Animated.View
+        style={{
+          ...styles.buttonContainer,
+          opacity: animationValue,
+        }}
+        ref={ref}
+      >
         <TouchableOpacity onPress={changeViewerState}>
           <CustomIcon
             name="arrow-back"
@@ -125,55 +191,26 @@ const FloatingButton = ({ changeViewerState, goToNext }) => {
           ></CustomIcon>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => goToNext(1)}>
-          <CustomIcon
+        <TouchableOpacity onPress={() => saveImage(images[currIndex].uri)}>
+          <AntDesign
             name="download"
-            size={30}
-            style={{ marginHorizontal: 20 }}
+            size={25}
             color={"white"}
-          ></CustomIcon>
+            style={{
+              marginHorizontal: 20,
+            }}
+          ></AntDesign>
         </TouchableOpacity>
-      </View>
+      </Animated.View>
     </>
   );
-};
-
-const ImageSlider = forwardRef(({ images, index }, ref) => {
-  const panResponder = PanResponder.create({
-    onMoveShouldSetPanResponder: () => true,
-    onResponderTerminationRequest: () => false,
-    onStartShouldSetPanResponder: (evt, gestureState) => true,
-
-    onPanResponderMove: (event, { dx, dy }) => {
-      console.log("MOVE", dx, dy);
-    },
-    onPanResponderRelease: (event, { dx, dy }) => {
-      console.log("RELEASE", dx, dy);
-    },
-  });
-
-  return images ? (
-    <Swiper
-      showsPagination={false}
-      scrollEnabled={true}
-      ref={ref}
-      index={index}
-      onTouchEnd={() => console.log("A")}
-      style={{}}
-      loop={false}
-    >
-      {images.map((image, idx) => (
-        <ImageContainer source={image.uri} key={`image-silder-${idx}`} />
-      ))}
-    </Swiper>
-  ) : null;
 });
 
 const ImageContainer = ({ source }) => (
   <Animated.View
     style={{
       ...styles.imageContainer,
-      transform: [{ translateY: -WIDTH / 2 }],
+      transform: [{ translateY: -WIDTH }],
     }}
   >
     <Animated.Image
@@ -207,6 +244,8 @@ const styles = StyleSheet.create({
     height: HeaderHeight,
     flexDirection: "row",
     justifyContent: "space-between",
+    borderColor: "grey",
+    borderTopWidth: 1,
     alignItems: "center",
   },
   imageContainer: {
@@ -214,6 +253,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     zIndex: 2,
     top: "50%",
+    width: WIDTH,
+    height: HEIGHT,
   },
 });
 

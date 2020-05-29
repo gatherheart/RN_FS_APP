@@ -18,7 +18,7 @@ import DateTimePicker from "../../../components/common/DateTimePicker";
 import { timePickedConverter } from "../../../utils/DateFormat";
 import { CheckBox } from "react-native-elements";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import CustumIcon from "../../../components/common/CustomIcon";
+import CustomIcon from "../../../components/common/CustomIcon";
 import { MaterialCommunityIcons, FontAwesome } from "@expo/vector-icons";
 import AlertModal from "../../../components/common/AlertModal";
 
@@ -307,11 +307,11 @@ export default ({ id }) => {
                 style={{ ...styles.voteAddList }}
                 onPress={addVoteList}
               >
-                <CustumIcon
+                <CustomIcon
                   name={"add"}
                   size={30}
                   color={themeContext.lightGreyColor}
-                ></CustumIcon>
+                ></CustomIcon>
                 <AlginedText>선택지를 추가하세요</AlginedText>
               </TouchableOpacity>
             </VoteListElement>
