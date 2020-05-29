@@ -9,3 +9,8 @@ export const formatDate = (date) => {
     year: "numeric",
   });
 };
+
+export const getFileName = (url = "") => {
+  const fileName = url.slice(url.lastIndexOf("/") + 1);
+  return fileName;
+};

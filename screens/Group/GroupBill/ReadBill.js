@@ -18,6 +18,7 @@ import CustumIcon from "../../../components/common/CustomIcon";
 import UsersTable from "../../../components/User/UsersTable";
 import { useNavigation } from "@react-navigation/native";
 import BillModal from "../../../components/Group/Bill/BillModal";
+import { Ionicons } from "@expo/vector-icons";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
@@ -199,11 +200,21 @@ export default () => {
                   총 {data.memberList.length}명
                 </NanumText>
 
-                <CustumIcon
-                  name={"arrow-down"}
-                  size={26}
-                  color={themeContext.darkGreenColor}
-                ></CustumIcon>
+                {isCollapsed ? (
+                  <Ionicons
+                    name={"ios-arrow-down"}
+                    size={26}
+                    color={themeContext.darkGreenColor}
+                    style={{ paddingHorizontal: 15 }}
+                  ></Ionicons>
+                ) : (
+                  <Ionicons
+                    name={"ios-arrow-up"}
+                    size={26}
+                    color={themeContext.darkGreenColor}
+                    style={{ paddingHorizontal: 15 }}
+                  ></Ionicons>
+                )}
               </View>
             </TouchableOpacity>
           </SubContainer>

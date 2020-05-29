@@ -115,7 +115,7 @@ export default ({
     try {
       await WebBrowser.openBrowserAsync(url);
     } catch (err) {
-      console.log("ERROR");
+      console.log(err);
       setMessage("앱을 여는 데 문제가 발생하였습니다.");
       setAlertVisible(true);
     }

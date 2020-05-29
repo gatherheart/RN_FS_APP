@@ -39,6 +39,13 @@ export default function App() {
   const [isLoggedIn, setIsloggedIn] = useState(null);
   const [permissions, setPermissions] = useState(false);
 
+  async function _getiOSNotificationPermission() {
+    const { status } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+    if (status !== "granted") {
+      await Permissions.askAsync(Permissions.NOTIFICATIONS);
+    }
+  }
+
   const _getPermissions = async () => {
     let { status: CAMERA_status } = await Permissions.getAsync(
       Permissions.CAMERA
@@ -133,6 +140,7 @@ export default function App() {
 
   useMemo(() => {
     _getPermissions();
+    _getiOSNotificationPermission();
   }, []);
 
   //console.log(loaded, client?.cache?.data?.data, isLoggedIn);

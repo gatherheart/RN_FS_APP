@@ -17,6 +17,11 @@ import { simplifiedFormat } from "../../../utils/DateFormat";
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
 import SlideImageModal from "../../../components/common/SlideImageModal";
+import Collapsible from "react-native-collapsible";
+import { Ionicons, AntDesign } from "@expo/vector-icons";
+import { StyleSheet } from "react-native";
+import { getFileName } from "../../../utils/String";
+import { downloadFile } from "../../../utils/FileSystem";
 
 const SubContainer = styled.View`
   border-top-width: 1px;
@@ -41,7 +46,9 @@ const ImgContainer = styled.View`
   width: 100%;
   border-width: 1px;
 `;
-
+const EmptySpace = styled.View`
+  height: ${(HEIGHT * 10) / 100}px;
+`;
 const FileContainer = styled.View``;
 
 const NanumText = styled.Text`
@@ -180,11 +187,77 @@ export default () => {
             ))}
           </ScrollView>
         </ImgContainer>
-        <FileContainer></FileContainer>
+        <FileContainer>
+          <SubContainer>
+            <TouchableOpacity
+              onPress={() => setIsCollapsed((prev) => !prev)}
+              style={styles.collapsibleButton}
+            >
+              <View style={styles.collapsibleContainer}>
+                <NanumText style={{ color: themeContext.greenColor }}>
+                  파일
+                </NanumText>
+                {isCollapsed ? (
+                  <Ionicons
+                    name={"ios-arrow-down"}
+                    size={26}
+                    color={themeContext.darkGreenColor}
+                    style={{ paddingHorizontal: 15 }}
+                  ></Ionicons>
+                ) : (
+                  <Ionicons
+                    name={"ios-arrow-up"}
+                    size={26}
+                    color={themeContext.darkGreenColor}
+                    style={{ paddingHorizontal: 15 }}
+                  ></Ionicons>
+                )}
+              </View>
+            </TouchableOpacity>
+          </SubContainer>
+          <Collapsible collapsed={isCollapsed}>
+            {data.files
+              ? data.files.map((file, idx) => {
+                  return (
+                    <TouchableOpacity
+                      key={`downloadable-file-${idx}`}
+                      onPress={() => downloadFile(file)}
+                    >
+                      <SubContainer style={{ justifyContent: "space-between" }}>
+                        <NanumText>{getFileName(file)}</NanumText>
+                        <AntDesign
+                          name={"paperclip"}
+                          size={25}
+                          color={themeContext.lightGreyColor}
+                          style={{ paddingHorizontal: 15 }}
+                        ></AntDesign>
+                      </SubContainer>
+                    </TouchableOpacity>
+                  );
+                })
+              : null}
+          </Collapsible>
+        </FileContainer>
+        <EmptySpace></EmptySpace>
       </ScrollView>
     </>
   );
 };
+
+const styles = StyleSheet.create({
+  collapsibleButton: {
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  collapsibleContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+    alignItems: "center",
+  },
+});
 
 const noticeData = {
   noticeTitle: "중간고사로 인한 일정 변경",
