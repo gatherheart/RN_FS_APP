@@ -18,6 +18,7 @@ import {
   Animated,
   StatusBar,
   ScrollView,
+  Platform,
 } from "react-native";
 import Modal from "react-native-modal";
 import CustomIcon from "./CustomIcon";
@@ -26,6 +27,7 @@ import {
   UnderHeader,
   StatusHeight,
   HeaderHeight,
+  isIPhoneX,
 } from "../../utils/HeaderHeight";
 import FlashMessage from "react-native-flash-message";
 import { showMessage, hideMessage } from "react-native-flash-message";
@@ -92,7 +94,6 @@ const SlideImageModal = ({
 }) => {
   StatusBar.setHidden(imgViewerVisible, "fade");
 
-  const flashRef = useRef(null);
   const swiperRef = useRef(null);
   const goToNext = (dist = 1) => {
     swiperRef.current?.scrollBy(dist, true);
@@ -125,7 +126,6 @@ const SlideImageModal = ({
             ref={swiperRef}
           ></ImageSlider>
         </View>
-        <FlashMessage position="top" ref={flashRef} />
       </Modal>
     </ImageProvider>
   );
@@ -136,6 +136,7 @@ const ImageSlider = forwardRef(({ index, goToNext }, ref) => {
   const changeViewerState = useChangeViewerState();
   const images = useImages();
   const viewRef = useRef();
+
   const [currIndex, setCurrIndex] = useState(index);
 
   const changeHeaderState = () => {
@@ -197,9 +198,18 @@ const ImageSlider = forwardRef(({ index, goToNext }, ref) => {
 const FloatingButton = forwardRef(({ currIndex, animationValue }, ref) => {
   const changeViewerState = useChangeViewerState();
   const images = useImages();
+  const flashRef = useRef(null);
 
   return (
     <>
+      <FlashMessage
+        ref={flashRef}
+        position="top"
+        titleStyle={{ fontSize: 14 }}
+        textStyle={{ fontSize: 1 }}
+        style={{ bottom: isIPhoneX() ? 0 : 30 }}
+      />
+
       <Animated.View
         style={{
           ...styles.buttonContainer,
@@ -219,6 +229,10 @@ const FloatingButton = forwardRef(({ currIndex, animationValue }, ref) => {
         <TouchableOpacity
           onPress={() => {
             saveImage(images[currIndex].uri);
+            flashRef.current.showMessage({
+              message: "다운로드 되었습니다.",
+              type: "success",
+            });
           }}
         >
           <AntDesign
