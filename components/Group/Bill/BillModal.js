@@ -15,6 +15,7 @@ import CustomIcon from "../../common/CustomIcon";
 import AlertModal from "../../common/AlertModal";
 import * as WebBrowser from "expo-web-browser";
 import { _kakaoUriGenerate } from "../../../utils/Payment";
+import * as Linking from "expo-linking";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
@@ -113,7 +114,7 @@ export default ({
       return;
     }
     try {
-      await WebBrowser.openBrowserAsync(url);
+      await Linking.openURL(url);
     } catch (err) {
       console.log(err);
       setMessage("앱을 여는 데 문제가 발생하였습니다.");

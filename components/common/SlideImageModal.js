@@ -27,10 +27,11 @@ import {
   StatusHeight,
   HeaderHeight,
 } from "../../utils/HeaderHeight";
+import FlashMessage from "react-native-flash-message";
+import { showMessage, hideMessage } from "react-native-flash-message";
 const SWIPER_HEIGHT = HEIGHT / 2;
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 import { downloadAsync, saveToLibrary } from "../../utils/GetImage";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 const View = styled.View``;
 
@@ -83,9 +84,16 @@ const ImageProvider = ({
   );
 };
 
-const SlideImageModal = ({ changeViewerState, imgViewerVisible, images }) => {
-  const swiperRef = useRef(null);
+const SlideImageModal = ({
+  changeViewerState,
+  imgViewerVisible,
+  images,
+  index,
+}) => {
+  StatusBar.setHidden(imgViewerVisible, "fade");
 
+  const flashRef = useRef(null);
+  const swiperRef = useRef(null);
   const goToNext = (dist = 1) => {
     swiperRef.current?.scrollBy(dist, true);
   };
@@ -99,10 +107,13 @@ const SlideImageModal = ({ changeViewerState, imgViewerVisible, images }) => {
         isVisible={imgViewerVisible}
         transparent={true}
         backgroundColor={"black"}
-        onRequestClose={() => changeViewerState()}
+        onRequestClose={() => {
+          changeViewerState();
+        }}
+        backdropOpacity={0}
         style={styles.modal}
         backdropTransitionOutTiming={0}
-        hideModalContentWhileAnimating={false}
+        hideModalContentWhileAnimating={true}
         useNativeDriver={true}
         animationIn={{ from: { opacity: 1 }, to: { opacity: 1 } }}
         animationOut={{ from: { opacity: 0 }, to: { opacity: 0 } }}
@@ -110,10 +121,11 @@ const SlideImageModal = ({ changeViewerState, imgViewerVisible, images }) => {
         <View style={styles.modalContainer}>
           <ImageSlider
             goToNext={goToNext}
-            index={0}
+            index={index}
             ref={swiperRef}
           ></ImageSlider>
         </View>
+        <FlashMessage position="top" ref={flashRef} />
       </Modal>
     </ImageProvider>
   );
@@ -134,6 +146,19 @@ const ImageSlider = forwardRef(({ index, goToNext }, ref) => {
     }
   };
 
+  useEffect(() => {
+    console.log(index * WIDTH);
+    setTimeout(
+      () =>
+        ref.current.scrollTo({
+          x: index * WIDTH,
+          y: 0,
+          animated: false,
+        }),
+      0
+    );
+  }, []);
+
   return images ? (
     <>
       <ScrollView
@@ -145,7 +170,7 @@ const ImageSlider = forwardRef(({ index, goToNext }, ref) => {
         showsPagination={false}
         scrollEnabled={true}
         ref={ref}
-        index={index}
+        index={currIndex}
         pagingEnabled={true}
         onTouchEnd={(event) => {
           changeHeaderState();
@@ -182,7 +207,7 @@ const FloatingButton = forwardRef(({ currIndex, animationValue }, ref) => {
         }}
         ref={ref}
       >
-        <TouchableOpacity onPress={changeViewerState}>
+        <TouchableOpacity onPress={() => changeViewerState()}>
           <CustomIcon
             name="arrow-back"
             size={30}
@@ -191,7 +216,11 @@ const FloatingButton = forwardRef(({ currIndex, animationValue }, ref) => {
           ></CustomIcon>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => saveImage(images[currIndex].uri)}>
+        <TouchableOpacity
+          onPress={() => {
+            saveImage(images[currIndex].uri);
+          }}
+        >
           <AntDesign
             name="download"
             size={25}

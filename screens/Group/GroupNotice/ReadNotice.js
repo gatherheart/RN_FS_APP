@@ -14,7 +14,6 @@ import CustomHeader from "../../../components/common/CustomHeader";
 import styled from "styled-components/native";
 import SmallUserCard from "../../../components/User/SmallUserCard";
 import { simplifiedFormat } from "../../../utils/DateFormat";
-const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
 import SlideImageModal from "../../../components/common/SlideImageModal";
 import Collapsible from "react-native-collapsible";
@@ -22,6 +21,7 @@ import { Ionicons, AntDesign } from "@expo/vector-icons";
 import { StyleSheet } from "react-native";
 import { getFileName } from "../../../utils/String";
 import { downloadFile } from "../../../utils/FileSystem";
+const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
 const SubContainer = styled.View`
   border-top-width: 1px;
@@ -59,12 +59,16 @@ export default () => {
   const themeContext = useContext(ThemeContext);
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [modalVisible, setModalVisible] = useState(true);
-  const [imgViewerVisible, setImgViewerVisible] = useState(false);
-  const imageRef = useRef();
+  const [imgViewerState, setImgViewerState] = useState({
+    visible: false,
+    index: 0,
+  });
+  let imageIndex = 0;
 
-  const changeViewerState = () => {
-    setImgViewerVisible((prev) => {
-      return !prev;
+  const changeViewerState = (idx = 0) => {
+    console.log("Change", idx);
+    setImgViewerState((prev) => {
+      return { visible: !prev.visible, index: idx };
     });
   };
 
@@ -120,8 +124,6 @@ export default () => {
     getData();
   }, []);
 
-  useEffect(() => {}, [imgViewerVisible]);
-
   return data?.loading ? (
     <Loader></Loader>
   ) : (
@@ -157,14 +159,18 @@ export default () => {
         <ImgContainer>
           <SlideImageModal
             changeViewerState={changeViewerState}
-            imgViewerVisible={imgViewerVisible}
+            imgViewerVisible={imgViewerState.visible}
             images={images}
+            index={imgViewerState.index}
           ></SlideImageModal>
           <ScrollView horizontal={true}>
             {images.map((image, idx) => (
               <TouchableOpacity
                 key={`img-view-${idx}`}
-                onPress={changeViewerState}
+                onPress={() => {
+                  console.log("Touch", idx);
+                  changeViewerState(idx);
+                }}
                 style={{
                   width: undefined,
                   height: "100%",
