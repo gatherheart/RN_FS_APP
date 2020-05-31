@@ -115,7 +115,6 @@ const SlideImageModal = ({
         style={styles.modal}
         backdropTransitionOutTiming={0}
         hideModalContentWhileAnimating={true}
-        useNativeDriver={true}
         animationIn={{ from: { opacity: 1 }, to: { opacity: 1 } }}
         animationOut={{ from: { opacity: 0 }, to: { opacity: 0 } }}
       >

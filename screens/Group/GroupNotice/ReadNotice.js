@@ -168,15 +168,7 @@ export default () => {
               <TouchableOpacity
                 key={`img-view-${idx}`}
                 onPress={() => {
-                  console.log("Touch", idx);
                   changeViewerState(idx);
-                }}
-                style={{
-                  width: undefined,
-                  height: "100%",
-                  borderWidth: 1,
-                  aspectRatio: 1,
-                  zIndex: 0,
                 }}
               >
                 <Image
