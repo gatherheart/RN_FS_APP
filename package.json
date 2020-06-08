@@ -26,6 +26,7 @@
     "expo-cli": "^3.19.2",
     "expo-document-picker": "~8.1.0",
     "expo-font": "~8.1.0",
+    "expo-image-picker": "~8.1.0",
     "expo-intent-launcher": "~8.1.0",
     "expo-linking": "^1.0.1",
     "expo-media-library": "~8.1.0",

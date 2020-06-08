@@ -23,6 +23,7 @@ import { simplifiedFormat } from "../../../utils/DateFormat";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
 import { StyleSheet } from "react-native";
 import { CheckBox } from "react-native-elements";
+import { _pickImage } from "../../../utils/FileSystem";
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
 const MANDATORY_FIELD = "isMandatory";
@@ -74,11 +75,16 @@ export default () => {
   const [modalVisible, setModalVisible] = useState(true);
   const initialState = { title: "", body: "", isMandatory: false };
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [images, setImages] = useState([]);
+  const [image, setImage] = useState("");
   const [isCollapsed, setIsCollapsed] = useState(true);
+  const [uploading, setUploading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const onChangeInput = (text, _type) => {
     dispatch({ type: _type, payload: text });
   };
+
   function reducer(state, action) {
     switch (action.type) {
       case TITLE_FIELD:
@@ -86,7 +92,7 @@ export default () => {
       case BODY_FIELD:
         return { ...state, body: action.payload };
       case MANDATORY_FIELD:
-        return { ...state, isMandatory: !isMandatory };
+        return { ...state, isMandatory: !state.isMandatory };
       default:
         return { ...state };
     }
@@ -123,8 +129,10 @@ export default () => {
             checkedColor={themeContext.lightGreenColor}
             checkedIcon="check-circle"
             uncheckedIcon="check-circle"
-            checked={true}
-            onPress={() => {}}
+            checked={state.isMandatory}
+            onPress={() => {
+              onChangeInput("", MANDATORY_FIELD);
+            }}
           />
         </SubContainer>
         <OptionContainer>
@@ -135,6 +143,7 @@ export default () => {
             returnKeyType="next"
             style={{
               ...styles.keyboard,
+              paddingHorizontal: 10,
               fontFamily: themeContext.regularFont,
             }}
           ></TextInput>
@@ -148,7 +157,6 @@ export default () => {
             returnKeyType="none"
             style={{
               paddingVertical: 0,
-              paddingHorizontal: 10,
               lineHeight: 25,
             }}
             autoCorrect={false}
@@ -158,7 +166,41 @@ export default () => {
           ></TextInput>
         </BodyContainer>
         <ImgContainer>
-          <ScrollView horizontal={true}></ScrollView>
+          <ScrollView horizontal={true}>
+            {images.map((image, idx) => (
+              <TouchableOpacity key={`img-view-${idx}`} onPress={() => {}}>
+                <Image
+                  source={image}
+                  style={{
+                    width: undefined,
+                    height: "100%",
+                    borderWidth: 1,
+                    aspectRatio: 1,
+                    zIndex: 1,
+                  }}
+                ></Image>
+              </TouchableOpacity>
+            ))}
+            <TouchableOpacity
+              onPress={() => {
+                _pickImage();
+              }}
+              style={{
+                justifyContent: "center",
+                alignItems: "center",
+                width: undefined,
+                height: "100%",
+                aspectRatio: 1,
+                borderWidth: 1,
+              }}
+            >
+              <Ionicons
+                name={"ios-add"}
+                size={26}
+                color={themeContext.darkGreenColor}
+              ></Ionicons>
+            </TouchableOpacity>
+          </ScrollView>
         </ImgContainer>
         <FileContainer>
           <SubContainer>
