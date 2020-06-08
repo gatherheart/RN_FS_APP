@@ -2,6 +2,7 @@ import * as Permissions from "expo-permissions";
 import * as FileSystem from "expo-file-system";
 import * as MediaLibrary from "expo-media-library";
 import * as ImagePicker from "expo-image-picker";
+import * as DocumentPicker from "expo-document-picker";
 import * as Linking from "expo-linking";
 import { Platform } from "react-native";
 import * as Sharing from "expo-sharing";
@@ -55,7 +56,18 @@ const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
   }*/
 };
 
+export const _pickDocument = async () => {
+  let pickerResult = await DocumentPicker.getDocumentAsync({});
+  console.log(pickerResult);
+  const _format = pickerResult.uri.split(".").pop();
+  const _name = pickerResult.uri.split("/").pop();
+  pickerResult.format = _format;
+  pickerResult.name = _name;
+  _uploadDocumentAsync(pickerResult);
+};
+
 export const _pickImage = async () => {
+  ``;
   const { status: cameraRollPerm } = await Permissions.askAsync(
     Permissions.CAMERA_ROLL
   );
@@ -69,8 +81,8 @@ export const _pickImage = async () => {
       aspect: [4, 3],
       base64: true,
     });
-
-    _handleImagePicked(pickerResult);
+    return pickerResult;
+    //_handleImagePicked(pickerResult);
   }
 };
 
@@ -120,7 +132,29 @@ export const _handleImagePicked = async (pickerResult) => {
     //setUploading(false);
   }
 };
+export const _uploadDocumentAsync = async (document) => {
+  const formData = new FormData();
+  console.log(document.uri);
+  formData.append("file", {
+    name: document.name,
+    type: document.format,
+    uri: document.uri,
+  });
+  try {
+    const { data } = await axios.post(UPLOAD_SERVER, formData, {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    });
+    console.log(data);
+    return data;
+  } catch (e) {
+    console.log(e);
+    alert("Cant upload", "Try later");
+  }
+};
 
+/** FormData needs name, type, uri */
 export const _uploadImageAsync = async (photo) => {
   const formData = new FormData();
   console.log(photo.uri);

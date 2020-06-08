@@ -23,7 +23,7 @@ import { simplifiedFormat } from "../../../utils/DateFormat";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
 import { StyleSheet } from "react-native";
 import { CheckBox } from "react-native-elements";
-import { _pickImage } from "../../../utils/FileSystem";
+import { _pickImage, _pickDocument } from "../../../utils/FileSystem";
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
 const MANDATORY_FIELD = "isMandatory";
@@ -167,23 +167,34 @@ export default () => {
         </BodyContainer>
         <ImgContainer>
           <ScrollView horizontal={true}>
-            {images.map((image, idx) => (
-              <TouchableOpacity key={`img-view-${idx}`} onPress={() => {}}>
-                <Image
-                  source={image}
-                  style={{
-                    width: undefined,
-                    height: "100%",
-                    borderWidth: 1,
-                    aspectRatio: 1,
-                    zIndex: 1,
-                  }}
-                ></Image>
-              </TouchableOpacity>
-            ))}
+            {images.length != 0
+              ? images.map((image, idx) => {
+                  console.log(image.uri);
+                  return (
+                    <TouchableOpacity
+                      key={`img-view-${idx}`}
+                      onPress={() => {
+                        setImage(images.splice(idx, 1));
+                      }}
+                    >
+                      <Image
+                        source={{ uri: image.uri }}
+                        style={{
+                          width: undefined,
+                          height: "100%",
+                          borderWidth: 1,
+                          aspectRatio: 1,
+                          zIndex: 1,
+                        }}
+                      ></Image>
+                    </TouchableOpacity>
+                  );
+                })
+              : null}
             <TouchableOpacity
-              onPress={() => {
-                _pickImage();
+              onPress={async () => {
+                const pickerResult = await _pickImage();
+                setImages((prev) => [...prev, pickerResult]);
               }}
               style={{
                 justifyContent: "center",
@@ -205,7 +216,7 @@ export default () => {
         <FileContainer>
           <SubContainer>
             <TouchableOpacity
-              onPress={() => setIsCollapsed((prev) => !prev)}
+              onPress={() => _pickDocument()}
               style={styles.collapsibleButton}
             >
               <View style={styles.collapsibleContainer}>
