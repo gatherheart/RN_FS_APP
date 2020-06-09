@@ -164,6 +164,7 @@ export const _uploadImageAsync = async (photos) => {
 
   const formData = new FormData();
   console.log("READ", photos);
+  // Android needs type: image/jpeg accurate type
   for (let i = 0; i < photos.length; i++) {
     formData.append("file", {
       name: photos[i].name,
