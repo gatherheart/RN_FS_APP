@@ -24,6 +24,8 @@ import { Ionicons, AntDesign } from "@expo/vector-icons";
 import { StyleSheet } from "react-native";
 import { CheckBox } from "react-native-elements";
 import { _pickImage, _pickDocument } from "../../../utils/FileSystem";
+import Collapsible from "react-native-collapsible";
+import { getFileName } from "../../../utils/String";
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
 const MANDATORY_FIELD = "isMandatory";
@@ -99,10 +101,6 @@ export default () => {
     }
   }
 
-  useEffect(() => {
-    console.log(state.body);
-  }, [state.body]);
-
   return (
     <>
       <CustomHeader
@@ -170,12 +168,11 @@ export default () => {
           <ScrollView horizontal={true}>
             {images.length != 0
               ? images.map((image, idx) => {
-                  console.log(image.uri);
                   return (
                     <TouchableOpacity
                       key={`img-view-${idx}`}
                       onPress={() => {
-                        setImage(images.splice(idx, 1));
+                        setImages(images.filter((_, index) => index != idx));
                       }}
                     >
                       <Image
@@ -195,7 +192,6 @@ export default () => {
             <TouchableOpacity
               onPress={async () => {
                 const pickerResult = await _pickImage();
-                console.log("RET", pickerResult === null);
                 setImages((prev) => {
                   return pickerResult != null ? [...prev, pickerResult] : prev;
                 });
@@ -250,6 +246,32 @@ export default () => {
               </View>
             </TouchableOpacity>
           </SubContainer>
+          <Collapsible collapsed={false}>
+            {documents.length != 0
+              ? documents.map((file, idx) => {
+                  return (
+                    <TouchableOpacity
+                      key={`downloadable-file-${idx}`}
+                      onPress={() =>
+                        setDocuments((_documents) => {
+                          return _documents.filter((_, index) => index != idx);
+                        })
+                      }
+                    >
+                      <SubContainer style={{ justifyContent: "space-between" }}>
+                        <NanumText>{file.name}</NanumText>
+                        <AntDesign
+                          name={"paperclip"}
+                          size={25}
+                          color={themeContext.lightGreyColor}
+                          style={{ paddingHorizontal: 15 }}
+                        ></AntDesign>
+                      </SubContainer>
+                    </TouchableOpacity>
+                  );
+                })
+              : null}
+          </Collapsible>
         </FileContainer>
         <EmptySpace></EmptySpace>
       </ScrollView>

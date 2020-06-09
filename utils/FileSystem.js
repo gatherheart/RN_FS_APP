@@ -63,8 +63,6 @@ export const _pickDocument = async () => {
   const _format = pickerResult.uri.split(".").pop();
   const _name = pickerResult.uri.split("/").pop();
   pickerResult.format = _format;
-  pickerResult.name = _name;
-  await _uploadDocumentAsync([pickerResult, pickerResult]);
 
   return pickerResult;
   //_uploadDocumentAsync(pickerResult);
@@ -93,8 +91,6 @@ export const _pickImage = async () => {
     const _format = pickerResult.uri.split(".").pop();
     const _name = pickerResult.uri.split("/").pop();
     pickerResult.format = _format;
-    pickerResult.name = _name;
-    await _uploadImageAsync([pickerResult, pickerResult]);
     return pickerResult;
     //_handleImagePicked(pickerResult);
   }
