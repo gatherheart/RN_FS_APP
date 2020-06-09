@@ -8,7 +8,6 @@ import { Platform } from "react-native";
 import * as Sharing from "expo-sharing";
 import * as IntentLauncher from "expo-intent-launcher";
 import { UPLOAD_SERVER } from "../constants/Urls";
-import { useState } from "react";
 import axios from "axios";
 
 export const downloadFile = async () => {
@@ -20,20 +19,15 @@ export const downloadFile = async () => {
     const ret = await FileSystem.getInfoAsync(uri, { size: true });
 
     if (Platform.OS === "android") {
-      console.log(Platform.OS);
       await FileSystem.getContentUriAsync(uri).then((cUri) => {
-        console.log(cUri);
         IntentLauncher.startActivityAsync("android.intent.action.VIEW", {
           data: cUri,
           flags: 1,
         });
       });
     } else if (Platform.OS === "ios") {
-      console.log(Platform.OS);
-
       Sharing.shareAsync(uri);
     }
-    console.log("RET", asset);
   });
 
   //await Linking.openURL(`${FileSystem.documentDirectory}`);
@@ -57,35 +51,66 @@ const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
 };
 
 export const _pickDocument = async () => {
-  let pickerResult = await DocumentPicker.getDocumentAsync({});
-  console.log(pickerResult);
+  let pickerResult;
+  try {
+    pickerResult = await DocumentPicker.getDocumentAsync({});
+  } catch (e) {
+    console.log(e);
+    return;
+  }
+  if (pickerResult.type === "cancel") return null;
+
   const _format = pickerResult.uri.split(".").pop();
   const _name = pickerResult.uri.split("/").pop();
   pickerResult.format = _format;
   pickerResult.name = _name;
-  _uploadDocumentAsync(pickerResult);
+  await _uploadDocumentAsync([pickerResult, pickerResult]);
+
+  return pickerResult;
+  //_uploadDocumentAsync(pickerResult);
 };
 
+// Using ImagePicker instead of loading all images
 export const _pickImage = async () => {
-  ``;
   const { status: cameraRollPerm } = await Permissions.askAsync(
     Permissions.CAMERA_ROLL
   );
-
+  let pickerResult;
   // only if user allows permission to camera roll
   if (cameraRollPerm === "granted") {
-    let pickerResult = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      quality: 1,
-      allowsEditing: false,
-      aspect: [4, 3],
-      base64: true,
-    });
+    try {
+      pickerResult = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        quality: 1,
+        allowsEditing: false,
+        aspect: [4, 3],
+      });
+    } catch (e) {
+      console.log(e);
+    }
+    if (pickerResult.cancelled === true) return null;
+
+    const _format = pickerResult.uri.split(".").pop();
+    const _name = pickerResult.uri.split("/").pop();
+    pickerResult.format = _format;
+    pickerResult.name = _name;
+    await _uploadImageAsync([pickerResult, pickerResult]);
     return pickerResult;
     //_handleImagePicked(pickerResult);
   }
 };
 
+const _handleImagePicked = async (pickerResult) => {
+  try {
+    uploadResponse = await _uploadImageAsync(pickerResult);
+  } catch (e) {
+    console.log(e);
+    alert("Upload failed, sorry :(");
+  } finally {
+  }
+};
+
+// Get all photos for re-rendering ImagePicker
 export const getPhotos = async () => {
   const { status: cameraRollPerm } = await Permissions.askAsync(
     Permissions.CAMERA_ROLL
@@ -107,43 +132,22 @@ export const getPhotos = async () => {
   //_handleImagePicked(pickerResult);
 };
 
-export const _handleImagePicked = async (pickerResult) => {
-  let uploadResponse, uploadResult;
-  try {
-    //setUploading(true);
-    const _format = pickerResult.uri.split(".").pop();
-    const _name = pickerResult.uri.split("/").pop();
-    pickerResult.format = _format;
-    pickerResult.name = _name;
-    console.log(_format, _name);
-    if (!pickerResult.cancelled) {
-      let imageUri = pickerResult
-        ? `data:image/${_format};base64,${pickerResult.base64}`
-        : null;
+export const _uploadDocumentAsync = async (documents) => {
+  if (!Array.isArray(documents)) return;
 
-      uploadResponse = await _uploadImageAsync(pickerResult);
-      //setImage(uploadResponse.location);
-    }
-  } catch (e) {
-    console.log(e);
-
-    alert("Upload failed, sorry :(");
-  } finally {
-    //setUploading(false);
-  }
-};
-export const _uploadDocumentAsync = async (document) => {
   const formData = new FormData();
-  console.log(document.uri);
-  formData.append("file", {
-    name: document.name,
-    type: document.format,
-    uri: document.uri,
-  });
+  for (let i = 0; i < documents.length; i++) {
+    formData.append("file", {
+      name: documents[i].name,
+      type: "application/" + documents[i].format,
+      uri: documents[i].uri,
+    });
+  }
+
   try {
     const { data } = await axios.post(UPLOAD_SERVER, formData, {
       headers: {
-        "content-type": "multipart/form-data",
+        "Content-Type": "multipart/form-data",
       },
     });
     console.log(data);
@@ -155,21 +159,26 @@ export const _uploadDocumentAsync = async (document) => {
 };
 
 /** FormData needs name, type, uri */
-export const _uploadImageAsync = async (photo) => {
+export const _uploadImageAsync = async (photos) => {
+  if (!Array.isArray(photos)) return;
+
   const formData = new FormData();
-  console.log(photo.uri);
-  formData.append("file", {
-    name: photo.name,
-    type: photo.format,
-    uri: photo.uri,
-  });
+  console.log("READ", photos);
+  for (let i = 0; i < photos.length; i++) {
+    formData.append("file", {
+      name: photos[i].name,
+      type: photos[i].type + "/" + photos[i].format,
+      uri: photos[i].uri,
+    });
+  }
+
   try {
     const { data } = await axios.post(UPLOAD_SERVER, formData, {
       headers: {
-        "content-type": "multipart/form-data",
+        "Content-Type": "multipart/form-data",
       },
     });
-    console.log(data);
+    console.log("RETURN", data);
     return data;
   } catch (e) {
     console.log(e);

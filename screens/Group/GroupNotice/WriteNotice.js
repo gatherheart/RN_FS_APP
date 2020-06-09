@@ -77,6 +77,7 @@ export default () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [images, setImages] = useState([]);
   const [image, setImage] = useState("");
+  const [documents, setDocuments] = useState([]);
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -194,7 +195,10 @@ export default () => {
             <TouchableOpacity
               onPress={async () => {
                 const pickerResult = await _pickImage();
-                setImages((prev) => [...prev, pickerResult]);
+                console.log("RET", pickerResult === null);
+                setImages((prev) => {
+                  return pickerResult != null ? [...prev, pickerResult] : prev;
+                });
               }}
               style={{
                 justifyContent: "center",
@@ -216,7 +220,12 @@ export default () => {
         <FileContainer>
           <SubContainer>
             <TouchableOpacity
-              onPress={() => _pickDocument()}
+              onPress={async () => {
+                const pickerResult = await _pickDocument();
+                setDocuments((prev) => {
+                  return pickerResult != null ? [...prev, pickerResult] : prev;
+                });
+              }}
               style={styles.collapsibleButton}
             >
               <View style={styles.collapsibleContainer}>
