@@ -17,6 +17,7 @@ import GroupWriteNotice from "../screens/Group/GroupNotice/WriteNotice";
 import VoteMemberList from "../screens/Group/GroupVote/VoteMemberList";
 import BillMemberList from "../screens/Group/GroupBill/BillMemberList";
 import VoteResult from "../screens/Group/GroupVote/VoteResult";
+import Post from "../screens/Feed/PostContainer";
 
 DrawerNavigatorConfig = {
   drawerPosition: "right",
@@ -137,6 +138,13 @@ export default () => {
       <Stack.Screen
         name="BillMemberList"
         component={BillMemberList}
+        options={{
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      />
+      <Stack.Screen
+        name="Post"
+        component={Post}
         options={{
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         }}
