@@ -149,7 +149,8 @@ export default function App() {
       <ThemeProvider theme={styles}>
         <AuthProvider isLoggedIn={isLoggedIn}>
           <StatusBar
-            backgroundColor="#fff"
+            translucent
+            backgroundColor="transparent"
             barStyle="dark-content" // Here is where you change the font-color
           />
           <NavController></NavController>

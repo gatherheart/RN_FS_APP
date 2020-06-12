@@ -7,6 +7,45 @@ export const formatDate = (date) => {
   });
 };
 
+export const diffTime = (date) => {
+  const theDate = new Date(date);
+  const present_date = new Date();
+  const one_minute = 1000 * 60;
+  const one_hour = 1000 * 60 * 60;
+  const one_day = 1000 * 60 * 60 * 24;
+  const one_week = 1000 * 60 * 60 * 24 * 7;
+  let unit = "week";
+
+  if (present_date.getMonth() == 11 && present_date.getdate() > 25)
+    theDate.setFullYear(theDate.getFullYear() + 1);
+
+  // To Calculate the result in milliseconds and then converting into days
+  let Result =
+    Math.round(theDate.getTime() - present_date.getTime()) / one_week;
+  let finalResult = -Result.toFixed(0);
+  // Need to convert Week -> Day
+  if (finalResult == 0) {
+    Result = Math.round(theDate.getTime() - present_date.getTime()) / one_day;
+    finalResult = -Result.toFixed(0);
+    unit = "day";
+  }
+  // Need to convert Day -> Hour
+  if (finalResult == 0) {
+    Result = Math.round(theDate.getTime() - present_date.getTime()) / one_hour;
+    finalResult = -Result.toFixed(0);
+    unit = "hour";
+  }
+  // Need to convert Hour -> Minute
+  if (finalResult === 0) {
+    // To remove the decimals from the (Result) resulting days value
+    Result =
+      Math.round(theDate.getTime() - present_date.getTime()) / one_minute;
+    finalResult = -Result.toFixed(0);
+    unit = "minute";
+  }
+  return { unit: unit, time: finalResult };
+};
+
 export const timePickedConverter = (date) => {
   const theDate = new Date(date);
   const convertedDate =

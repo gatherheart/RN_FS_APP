@@ -8,6 +8,7 @@ import { useMutation } from "react-apollo-hooks";
 import { ScrollView } from "react-native-gesture-handler";
 import Menu, { MenuItem, MenuDivider } from "react-native-material-menu";
 import { Text } from "react-native";
+import { StatusHeight } from "../../utils/HeaderHeight";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
@@ -18,7 +19,6 @@ export const TOGGLE_LIKE = gql`
 `;
 
 const Container = styled.View`
-  margin-bottom: 40px;
   border-width: 1px;
   background-color: ${(props) => props.theme.backgroundColor};
 `;
@@ -113,116 +113,130 @@ const PostPresenter = ({
     } catch (e) {}
   };
   return (
-    <SafeAreaView>
-      <Container>
-        <Header>
-          <UserProfile>
-            <Touchable
-              onPress={() => {
-                //navigation.navigate("UserDetail", { username: user.username })
-              }}
-            >
+    <Container>
+      <Header>
+        <UserProfile>
+          <Touchable
+            onPress={() => {
+              //navigation.navigate("UserDetail", { username: user.username })
+            }}
+          >
+            <Image
+              style={{ height: 40, width: 40, borderRadius: 20 }}
+              source={{ uri: user.avatar }}
+            />
+          </Touchable>
+          <Touchable
+            onPress={() => {
+              //navigation.navigate("UserDetail", { username: user.username })
+            }}
+          >
+            <HeaderUserContainer>
+              <Bold>{user.username}</Bold>
+              <Location>{location}</Location>
+            </HeaderUserContainer>
+          </Touchable>
+        </UserProfile>
+        <Menu
+          ref={_menu}
+          style={{ backgroundColor: "white" }}
+          button={
+            <IconContainer>
+              <Feather
+                name={"more-vertical"}
+                size={20}
+                onPress={showMenu}
+              ></Feather>
+            </IconContainer>
+          }
+        >
+          <MenuItem
+            style={{
+              backgroundColor: "white",
+              alignItems: "center",
+            }}
+            onPress={hideMenu}
+          >
+            삭제
+          </MenuItem>
+          <MenuDivider />
+          <MenuItem
+            style={{
+              backgroundColor: "white",
+              alignItems: "center",
+            }}
+            onPress={hideMenu}
+          >
+            수정
+          </MenuItem>
+        </Menu>
+      </Header>
+      <ImageContainer style={{ width: WIDTH, height: HEIGHT / 2.5 }}>
+        <ScrollView
+          horizontal={true}
+          showsPagination={false}
+          scrollEnabled={true}
+          pagingEnabled={true}
+          showsHorizontalScrollIndicator={false}
+          style={{ height: HEIGHT / 2.5 }}
+        >
+          {files.map((file, index) => {
+            return (
               <Image
-                style={{ height: 40, width: 40, borderRadius: 20 }}
-                source={{ uri: user.avatar }}
+                style={{ width: WIDTH, height: HEIGHT / 2.5 }}
+                key={file.id}
+                source={{ uri: file.uri }}
               />
-            </Touchable>
-            <Touchable
-              onPress={() => {
-                //navigation.navigate("UserDetail", { username: user.username })
-              }}
-            >
-              <HeaderUserContainer>
-                <Bold>{user.username}</Bold>
-                <Location>{location}</Location>
-              </HeaderUserContainer>
-            </Touchable>
-          </UserProfile>
-          <Menu
-            ref={_menu}
-            button={
-              <IconContainer>
-                <Feather
-                  name={"more-vertical"}
-                  size={20}
-                  onPress={showMenu}
-                ></Feather>
-              </IconContainer>
-            }
-          >
-            <MenuItem style={{ backgroundColor: "white" }} onPress={hideMenu}>
-              Menu item 1
-            </MenuItem>
-            <MenuDivider />
-            <MenuItem style={{ backgroundColor: "white" }} onPress={hideMenu}>
-              Menu item 2
-            </MenuItem>
-          </Menu>
-        </Header>
-        <ImageContainer style={{ width: WIDTH, height: HEIGHT / 2.5 }}>
-          <ScrollView
-            horizontal={true}
-            showsPagination={false}
-            scrollEnabled={true}
-            pagingEnabled={true}
-            showsHorizontalScrollIndicator={false}
-            style={{ height: HEIGHT / 2.5 }}
-          >
-            {files.map((file, index) => {
-              return (
-                <Image
-                  style={{ width: WIDTH, height: HEIGHT / 2.5 }}
-                  key={file.id}
-                  source={{ uri: file.uri }}
-                />
-              );
-            })}
-          </ScrollView>
-        </ImageContainer>
+            );
+          })}
+        </ScrollView>
+      </ImageContainer>
 
-        <InfoContainer>
-          <IconsContainer>
-            <Touchable onPress={handleLike}>
-              <IconContainer>
-                <Ionicons
-                  size={24}
-                  color={isLiked ? "red" : "black"}
-                  name={
-                    Platform.OS === "ios"
-                      ? isLiked
-                        ? "ios-heart"
-                        : "ios-heart-empty"
-                      : isLiked
-                      ? "md-heart"
-                      : "md-heart-empty"
-                  }
-                />
-                <Bold style={{ marginLeft: 7 }}>{likeCount}</Bold>
-              </IconContainer>
-            </Touchable>
-            <Touchable>
-              <IconContainer>
-                <Ionicons
-                  color={"black"}
-                  size={24}
-                  name={Platform.OS === "ios" ? "ios-text" : "md-text"}
-                />
-                <Bold style={{ marginLeft: 7 }}>{comments.length}</Bold>
-              </IconContainer>
-            </Touchable>
-          </IconsContainer>
-          <DateContainer>
-            <Location style={{ marginRight: 10, marginBottom: 3 }}>
-              {createdAt}
-            </Location>
-          </DateContainer>
-        </InfoContainer>
-        <BodyContainer>
-          <Title>{title}</Title>
-          <Body>{body}</Body>
-        </BodyContainer>
-      </Container>
-    </SafeAreaView>
+      <InfoContainer>
+        <IconsContainer>
+          <Touchable onPress={handleLike}>
+            <IconContainer>
+              <Ionicons
+                size={24}
+                color={isLiked ? "red" : "black"}
+                name={
+                  Platform.OS === "ios"
+                    ? isLiked
+                      ? "ios-heart"
+                      : "ios-heart-empty"
+                    : isLiked
+                    ? "md-heart"
+                    : "md-heart-empty"
+                }
+              />
+              <Bold style={{ marginLeft: 7 }}>{likeCount}</Bold>
+            </IconContainer>
+          </Touchable>
+          <Touchable>
+            <IconContainer>
+              <Ionicons
+                color={"black"}
+                size={24}
+                name={Platform.OS === "ios" ? "ios-text" : "md-text"}
+              />
+              <Bold style={{ marginLeft: 7 }}>{comments.length}</Bold>
+            </IconContainer>
+          </Touchable>
+        </IconsContainer>
+        <DateContainer>
+          <Location style={{ marginRight: 10, marginBottom: 3 }}>
+            {createdAt}
+          </Location>
+        </DateContainer>
+      </InfoContainer>
+      <BodyContainer>
+        <Title>{title}</Title>
+        <Body>{body}</Body>
+        <Touchable>
+          <Body>더보기</Body>
+        </Touchable>
+      </BodyContainer>
+    </Container>
   );
 };
 

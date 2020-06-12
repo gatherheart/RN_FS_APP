@@ -17,7 +17,7 @@ export const isIPhoneX = () =>
 
 export const StatusHeight = Platform.select({
   ios: isIPhoneX() ? 44 : 20,
-  android: 0,
+  android: StatusBar.currentHeight,
   default: 0,
 });
 const CUSTOM_HEADER_HEIGHT = (HEIGHT * 6) / 100;

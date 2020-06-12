@@ -175,6 +175,7 @@ export default ({ id }) => {
   const onChangebillMemo = (text) => {
     setBillMemo(text);
   };
+
   const onChangeBillAmount = (text) => {
     //console.log(isNaN(amount));
     setBillAmount(text);
