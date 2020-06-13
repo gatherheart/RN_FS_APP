@@ -1,23 +1,18 @@
 import React, { useState, useRef, useContext } from "react";
-import { Image, Platform, Dimensions, ScrollView } from "react-native";
+import { Image, Dimensions, ScrollView, StyleSheet } from "react-native";
 import styled, { ThemeContext } from "styled-components";
-import { Ionicons, Feather } from "@expo/vector-icons";
 import PropTypes from "prop-types";
 import { gql } from "apollo-boost";
 import { useMutation } from "react-apollo-hooks";
 import { Text } from "react-native";
-import {
-  StatusHeight,
-  UnderHeader,
-  HeaderHeight,
-} from "../../utils/HeaderHeight";
+import { HeaderHeight } from "../../utils/HeaderHeight";
 import Post from "../../components/common/Post";
 import CustomHeader from "../../components/common/CustomHeader";
 import { diffTime } from "../../utils/DateFormat";
-import { TextInput } from "react-native-gesture-handler";
-
+import InputOnKeyboard from "../../components/common/InputOnKeyboard";
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 const unitConvert = { week: "주", day: "일", minute: "분", hour: "시간" };
+
 export const TOGGLE_LIKE = gql`
   mutation toggelLike($postId: String!) {
     toggleLike(postId: $postId)
@@ -66,41 +61,6 @@ const SmallRowContainer = styled.View`
   width: ${(WIDTH * 70) / 100}px;
 `;
 
-const IconsContainer = styled.View`
-  flex-direction: row;
-  margin-bottom: 5px;
-`;
-const IconContainer = styled.View`
-  margin-right: 10px;
-  flex-direction: row;
-  align-items: center;
-`;
-const InfoContainer = styled.View`
-  padding: 10px;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-`;
-const Title = styled.Text`
-  font-weight: 500;
-`;
-const Body = styled.Text`
-  margin: 10px 0px;
-`;
-const BodyContainer = styled.View`
-  margin: 10px 10px;
-`;
-
-const DateContainer = styled.View``;
-const FixedContainer = styled.View`
-  position: absolute;
-  border-width: 1px;
-  height: ${(HEIGHT * 10) / 100}px;
-  width: ${WIDTH}px;
-  bottom: 0;
-  background-color: ${(props) => props.theme.backgroundColor};
-`;
-
 const EmptySpace = styled.View`
   height: ${(HEIGHT * 10) / 100}px;
 `;
@@ -120,7 +80,6 @@ const PostPresenter = ({
   const [isLiked, setIsLiked] = useState(isLikedProp);
   const [likeCount, setLikeCount] = useState(likeCountProp);
   const [_comment, setComment] = useState("");
-
   const themeContext = useContext(ThemeContext);
   const _menu = useRef();
   /** 
@@ -131,12 +90,6 @@ const PostPresenter = ({
   });
 
 */
-  const onChangeComment = (text) => {
-    setComment(text);
-  };
-  const onSubmitComment = () => {
-    if (_comment === "") return;
-  };
 
   return (
     <>
@@ -223,7 +176,6 @@ const PostPresenter = ({
                       </RowContainer>
                       {/** Reply to a Comment */}
                       {comment.comments.map((reply, index) => {
-                        console.log(reply);
                         const replyTimeDiff = diffTime(reply.issuedDate);
 
                         return (
@@ -278,28 +230,25 @@ const PostPresenter = ({
         </Container>
         <EmptySpace></EmptySpace>
       </ScrollView>
-      <FixedContainer>
-        <TextInput
-          value={_comment}
-          placeholder={"댓글을 달아주세요"}
-          onChangeText={onChangeComment}
-          onSubmitEditing={onSubmitComment}
-          underlineColorAndroid="transparent"
-          returnKeyType="none"
-          style={{
-            paddingVertical: 0,
-            paddingHorizontal: 10,
-          }}
-          autoCorrect={false}
-          scrollEnabled={false}
-          autoFocus={false}
-          multiline={true}
-        ></TextInput>
-      </FixedContainer>
+      <InputOnKeyboard
+        comment={_comment}
+        setComment={setComment}
+        submit={() => {}}
+      ></InputOnKeyboard>
     </>
   );
 };
-
+const styles = StyleSheet.create({
+  container: {
+    justifyContent: "center",
+    backgroundColor: "#ecf0f1",
+  },
+  paragraph: {
+    textAlignVertical: "top",
+    //alignItems: "flex-start",
+    borderWidth: 1,
+  },
+});
 PostPresenter.propTypes = {
   id: PropTypes.string.isRequired,
   user: PropTypes.shape({
