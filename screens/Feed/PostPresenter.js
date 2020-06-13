@@ -69,7 +69,7 @@ const PostPresenter = ({
   id,
   user,
   location,
-  files = [],
+  images = [],
   likeCount: likeCountProp,
   title,
   body,
@@ -99,16 +99,14 @@ const PostPresenter = ({
           backgroundColor: themeContext.backgroundColor,
           marginTop: HeaderHeight,
         }}
-        contentContainerStyle={{
-          fontFamily: themeContext.regularFont,
-        }}
+        contentContainerStyle={{}}
         showsVerticalScrollIndicator={false}
       >
         <Post
           id={id}
           user={user}
           location={location}
-          files={files}
+          images={images}
           title={title}
           body={body}
           comments={comments}
@@ -256,7 +254,7 @@ PostPresenter.propTypes = {
     avatar: PropTypes.string,
     username: PropTypes.string.isRequired,
   }).isRequired,
-  files: PropTypes.arrayOf(
+  images: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
       uri: PropTypes.string.isRequired,

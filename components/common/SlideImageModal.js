@@ -147,7 +147,6 @@ const ImageSlider = forwardRef(({ index, goToNext }, ref) => {
   };
 
   useEffect(() => {
-    console.log(index * WIDTH);
     setTimeout(
       () =>
         ref.current.scrollTo({

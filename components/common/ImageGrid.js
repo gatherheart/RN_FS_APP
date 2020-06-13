@@ -2,21 +2,42 @@ import React from "react";
 import { Block, Text, theme } from "galio-framework";
 import Images from "../../constants/ArgonImages";
 import { StyleSheet, Dimensions, Image } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { useNavigation } from "@react-navigation/native";
 
 const { width: WIDHT, height: HEIGHT } = Dimensions.get("screen");
 
 const thumbMeasure = (WIDHT - 48 - 32) / 3;
+const LOAD_IMG_NUM = 3;
+const ImageGrid = ({ posts }) => {
+  const navigation = useNavigation();
 
-const ImageGrid = ({}) => {
+  const getSlicedPosts = (posts, index) => {
+    const _start = index + 1 - LOAD_IMG_NUM <= 0 ? 0 : index - LOAD_IMG_NUM;
+    const _end = index + LOAD_IMG_NUM;
+    return posts.slice(_start, _end + 1);
+  };
   return (
-    <Block row space="between" style={{ flexWrap: "wrap" }}>
-      {Images.Viewed.map((img, imgIndex) => (
-        <Image
-          source={{ uri: img }}
-          key={`viewed-${img}`}
-          resizeMode="cover"
-          style={styles.thumb}
-        />
+    <Block row style={{ flexWrap: "wrap" }}>
+      {posts.map((post, imgIndex) => (
+        <TouchableOpacity
+          key={`viewed-${imgIndex}`}
+          activeOpacity={0.9}
+          onPress={() => {
+            navigation.navigate("PostList", {
+              posts: getSlicedPosts(posts, imgIndex),
+              totalLength: posts.length,
+              currerntIdx: imgIndex,
+              LOAD_IMG_NUM: LOAD_IMG_NUM,
+            });
+          }}
+        >
+          <Image
+            source={{ uri: post.images[0].uri }}
+            resizeMode="cover"
+            style={styles.thumb}
+          />
+        </TouchableOpacity>
       ))}
     </Block>
   );
@@ -24,13 +45,10 @@ const ImageGrid = ({}) => {
 
 const styles = StyleSheet.create({
   thumb: {
-    borderColor: "black",
-    borderWidth: 1,
     borderRadius: 4,
-    marginVertical: 4,
-    alignSelf: "center",
     width: thumbMeasure,
     height: thumbMeasure,
+    margin: 2,
   },
 });
 

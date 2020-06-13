@@ -22,110 +22,7 @@ export default ({
   const getData = async () => {
     setGroup({
       loading: false,
-      id: "1",
-      groupName: "PIXEL",
-      isSchool: true, // School or Union
-      applicable: true,
-      applicableDate: "2020-06-30",
-      createdAt: "2019-02-01",
-      updatedAt: "2020-05-31",
-      school: { name: "성균관대학교", id: "22" },
-      campus: { name: "자연과학캠퍼스", id: "32" },
-      area: [], // If the type of a group is school, area field is not required
-      college: { name: "사범대학", id: "12" },
-      major: { name: "유아교육과", id: "112" },
-      fieldTag: ["미술", "친목", "문화감상"],
-      introTag: ["미술", "가족같은"],
-      memberCount: 32,
-      followerCount: 30,
-      members: [{ name: "김현우", id: "342324" }], // [User!]! exclude the owner and managers
-      owner: [{ name: "이안수", id: "12345" }],
-      managers: [{ name: "장강우", id: "6844" }],
-      description: "우리는 Pixel입니다",
-      joiningConditions: [
-        {
-          school: [{ name: "성균관대학교", id: "22" }],
-          college: [
-            { name: "자연과학캠퍼스", id: "32" },
-            { name: "인문사회캠퍼스", id: "33" },
-          ],
-          major: [],
-          class: [], // 학번 condition
-        },
-      ],
-      votes: [
-        {
-          type: "vote",
-          id: "132352",
-          title: "4월 회식 날짜",
-          date: "2020-04-21",
-        },
-        {
-          type: "vote",
-          id: "12341",
-          title: "5월 회식 날짜",
-          date: "2019-05-01",
-        },
-      ],
-      schedules: [
-        {
-          type: "schedule",
-
-          id: "115532",
-          title: "4월 회식",
-          date: "2020-04-19",
-        },
-      ],
-      mandatoryNotice: ["4월 회식"],
-      notices: [
-        {
-          type: "notice",
-          id: "112",
-          title: "4월 회식",
-          date: "2020-04-19",
-        },
-      ],
-      bills: [
-        {
-          type: "bill",
-          id: "112342",
-          title: "4월 회식",
-          date: "2020-04-20",
-          amount: 20000,
-          members: [{ name: "김현우", id: 342324 }],
-        },
-        {
-          type: "bill",
-          id: "11222",
-          title: "2월 회식",
-          date: "2020-02-20",
-          amount: 30000,
-          members: [{ name: "김현우", id: 342324 }],
-        },
-      ],
-      posts: [
-        {
-          id: "22",
-          author: {},
-          isPublic: 1, // 0 private 1 allowed by author 2 allowed by a group manager
-          title: "좋은 날",
-          body: "오늘은 좋은날",
-          images: [],
-          likeCount: 2,
-          comments: [],
-          scrapCount: 2,
-        },
-      ],
-      qna: [
-        {
-          id: "222",
-          body: "무슨 요일인가요",
-          answer: "",
-          author: {},
-        },
-      ],
-      poster: "", // uri
-      background: "", // uri
+      ..._data,
     });
   };
   useEffect(() => {
@@ -137,4 +34,185 @@ export default ({
   ) : (
     <Loader></Loader>
   );
+};
+
+const _post = {
+  id: "212",
+  location: "Seoul",
+  title: "연극 ‘사활을 걸어라’ 제작기",
+  body:
+    "안녕하세요, 픽셀입니다. 이번 2월 초부터 3월 중순까지 연극 ‘사활을 걸어라’ 공연이 진행되었습니다. 이번 코로나 사태로 잦은 휴관이 반복되어 많은 분들과 함께하지 못해 아…",
+  user: {
+    id: "213",
+    avatar: "https://miro.medium.com/max/256/1*d69DKqFDwBZn_23mizMWcQ.png",
+    username: "ABC",
+  },
+  images: [
+    {
+      id: "12321",
+      uri:
+        "https://images.unsplash.com/photo-1589784305277-065c6c27fb5b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=480&q=80",
+    },
+    {
+      id: "16221",
+      uri: "https://i.imgur.com/hU252jE.jpg",
+    },
+  ],
+  likeCount: 23,
+  isLiked: true,
+  comments: [
+    {
+      id: "123",
+      text:
+        "안녕하세요, 픽셀입니다. 이번 2월 초부터 3월 중순까지 연극 ‘사활을 걸어라’ 공연이 진행되었습니다. 이번 코로나 사태로 잦은 휴관이 반복되어 많은 분들과 함께하지 못해 아…",
+
+      user: {
+        id: "632",
+        username: "강인우",
+        avatar: "https://miro.medium.com/max/256/1*d69DKqFDwBZn_23mizMWcQ.png",
+      },
+      issuedDate: "2020-06-12T16:40:35.223Z",
+
+      comments: [
+        {
+          id: "123",
+          text: "ASD",
+          user: {
+            id: "632",
+            username: "이지우",
+            avatar:
+              "https://miro.medium.com/max/256/1*d69DKqFDwBZn_23mizMWcQ.png",
+          },
+          issuedDate: "2020-02-01",
+        },
+      ],
+    },
+    {
+      id: "123",
+      text: "ASD",
+      user: {
+        id: "632",
+        username: "강한울",
+        avatar: "https://miro.medium.com/max/256/1*d69DKqFDwBZn_23mizMWcQ.png",
+      },
+      issuedDate: "2020-02-01",
+      comments: [
+        {
+          id: "123",
+          text: "ASD",
+          user: {
+            id: "632",
+            username: "오인후",
+            avatar:
+              "https://miro.medium.com/max/256/1*d69DKqFDwBZn_23mizMWcQ.png",
+          },
+          issuedDate: "2020-02-01",
+        },
+      ],
+    },
+  ],
+  createdAt: "2020/07/21",
+};
+const _data = {
+  id: "1",
+  groupName: "PIXEL",
+  isSchool: true, // School or Union
+  applicable: true,
+  applicableDate: "2020-06-30",
+  createdAt: "2019-02-01",
+  updatedAt: "2020-05-31",
+  school: { name: "성균관대학교", id: "22" },
+  campus: { name: "자연과학캠퍼스", id: "32" },
+  area: [], // If the type of a group is school, area field is not required
+  college: { name: "사범대학", id: "12" },
+  major: { name: "유아교육과", id: "112" },
+  fieldTag: ["미술", "친목", "문화감상"],
+  introTag: ["미술", "가족같은"],
+  memberCount: 32,
+  followerCount: 30,
+  members: [{ name: "김현우", id: "342324" }], // [User!]! exclude the owner and managers
+  owner: [{ name: "이안수", id: "12345" }],
+  managers: [{ name: "장강우", id: "6844" }],
+  description: "우리는 Pixel입니다",
+  joiningConditions: [
+    {
+      school: [{ name: "성균관대학교", id: "22" }],
+      college: [
+        { name: "자연과학캠퍼스", id: "32" },
+        { name: "인문사회캠퍼스", id: "33" },
+      ],
+      major: [],
+      class: [], // 학번 condition
+    },
+  ],
+  votes: [
+    {
+      type: "vote",
+      id: "132352",
+      title: "4월 회식 날짜",
+      date: "2020-04-21",
+    },
+    {
+      type: "vote",
+      id: "12341",
+      title: "5월 회식 날짜",
+      date: "2019-05-01",
+    },
+  ],
+  schedules: [
+    {
+      type: "schedule",
+
+      id: "115532",
+      title: "4월 회식",
+      date: "2020-04-19",
+    },
+  ],
+  mandatoryNotice: ["4월 회식"],
+  notices: [
+    {
+      type: "notice",
+      id: "112",
+      title: "4월 회식",
+      date: "2020-04-19",
+    },
+  ],
+  bills: [
+    {
+      type: "bill",
+      id: "112342",
+      title: "4월 회식",
+      date: "2020-04-20",
+      amount: 20000,
+      members: [{ name: "김현우", id: 342324 }],
+    },
+    {
+      type: "bill",
+      id: "11222",
+      title: "2월 회식",
+      date: "2020-02-20",
+      amount: 30000,
+      members: [{ name: "김현우", id: 342324 }],
+    },
+  ],
+  posts: [
+    { ..._post, id: "111" },
+    { ..._post, id: "222" },
+    { ..._post, id: "333" },
+    { ..._post, id: "444" },
+    { ..._post, id: "555" },
+    { ..._post, id: "666" },
+    { ..._post, id: "777" },
+    { ..._post, id: "888" },
+  ],
+  qna: [
+    {
+      id: "222",
+      body: "무슨 요일인가요",
+      answer: "",
+      author: {},
+    },
+  ],
+  poster: "", // uri
+  background: "", // uri
 };

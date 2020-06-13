@@ -37,7 +37,7 @@ const _data = {
     avatar: "https://miro.medium.com/max/256/1*d69DKqFDwBZn_23mizMWcQ.png",
     username: "ABC",
   },
-  files: [
+  images: [
     {
       id: "12321",
       uri:

@@ -108,7 +108,6 @@ export default ({ id, group, loading, refreshFn }) => {
   const themeContext = useContext(ThemeContext);
   const [page, setPage] = useState(0);
 
-  navigation.navigate("PostWrite", { id: 1 });
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,
@@ -257,16 +256,8 @@ export default ({ id, group, loading, refreshFn }) => {
                           marginTop: 20,
                           justifyContent: "flex-end",
                         }}
-                      >
-                        <Button
-                          small
-                          color="transparent"
-                          textStyle={{ color: "#5E72E4", fontSize: 13 }}
-                        >
-                          View all
-                        </Button>
-                      </Block>
-                      <ImageGrid></ImageGrid>
+                      ></Block>
+                      <ImageGrid posts={group.posts}></ImageGrid>
                     </>
                   )}
                 </Block>

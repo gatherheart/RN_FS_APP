@@ -9,6 +9,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import Menu, { MenuItem, MenuDivider } from "react-native-material-menu";
 import { Text } from "react-native";
 import { StatusHeight } from "../../utils/HeaderHeight";
+import { POST_HEIGHT } from "../../constants/Size";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
@@ -21,6 +22,7 @@ export const TOGGLE_LIKE = gql`
 const Container = styled.View`
   border-width: 1px;
   background-color: ${(props) => props.theme.backgroundColor};
+  height: ${POST_HEIGHT}px;
 `;
 const Header = styled.View`
   padding: 15px;
@@ -70,11 +72,11 @@ const BodyContainer = styled.View`
 const DateContainer = styled.View``;
 const ImageContainer = styled.View``;
 
-const PostPresenter = ({
+const PostComponent = ({
   id,
   user,
   location,
-  files = [],
+  images = [],
   likeCount: likeCountProp,
   title,
   body,
@@ -132,6 +134,7 @@ const PostPresenter = ({
             }}
           >
             <HeaderUserContainer>
+              <Bold>{id}</Bold>
               <Bold>{user.username}</Bold>
               <Location>{location}</Location>
             </HeaderUserContainer>
@@ -180,7 +183,7 @@ const PostPresenter = ({
           showsHorizontalScrollIndicator={false}
           style={{ height: HEIGHT / 2.5 }}
         >
-          {files.map((file, index) => {
+          {images.map((file, index) => {
             return (
               <Image
                 style={{ width: WIDTH, height: HEIGHT / 2.5 }}
@@ -240,14 +243,14 @@ const PostPresenter = ({
   );
 };
 
-PostPresenter.propTypes = {
+PostComponent.propTypes = {
   id: PropTypes.string.isRequired,
   user: PropTypes.shape({
     id: PropTypes.string.isRequired,
     avatar: PropTypes.string,
     username: PropTypes.string.isRequired,
   }).isRequired,
-  files: PropTypes.arrayOf(
+  images: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
       uri: PropTypes.string.isRequired,
@@ -270,4 +273,4 @@ PostPresenter.propTypes = {
   createdAt: PropTypes.string.isRequired,
 };
 
-export default PostPresenter;
+export default PostComponent;
