@@ -9,9 +9,10 @@ const { width: WIDHT, height: HEIGHT } = Dimensions.get("screen");
 
 const thumbMeasure = (WIDHT - 48 - 32) / 3;
 const LOAD_IMG_NUM = 3;
+
 const ImageGrid = ({ posts }) => {
   const navigation = useNavigation();
-
+  const maxLength = posts.length;
   const getSlicedPosts = (posts, index) => {
     const _start = index + 1 - LOAD_IMG_NUM <= 0 ? 0 : index - LOAD_IMG_NUM;
     const _end = index + LOAD_IMG_NUM;
@@ -19,26 +20,30 @@ const ImageGrid = ({ posts }) => {
   };
   return (
     <Block row style={{ flexWrap: "wrap" }}>
-      {posts.map((post, imgIndex) => (
-        <TouchableOpacity
-          key={`viewed-${imgIndex}`}
-          activeOpacity={0.9}
-          onPress={() => {
-            navigation.navigate("PostList", {
-              posts: getSlicedPosts(posts, imgIndex),
-              totalLength: posts.length,
-              currerntIdx: imgIndex,
-              LOAD_IMG_NUM: LOAD_IMG_NUM,
-            });
-          }}
-        >
-          <Image
-            source={{ uri: post.images[0].uri }}
-            resizeMode="cover"
-            style={styles.thumb}
-          />
-        </TouchableOpacity>
-      ))}
+      {posts.map((post, imgIndex) => {
+        const slicedPosts = getSlicedPosts(posts, imgIndex);
+        return (
+          <TouchableOpacity
+            key={`viewed-${imgIndex}`}
+            activeOpacity={0.9}
+            onPress={() => {
+              navigation.navigate("PostList", {
+                posts: slicedPosts,
+                totalLength: slicedPosts.length,
+                maxLength: maxLength,
+                currerntIdx: imgIndex,
+                LOAD_IMG_NUM: LOAD_IMG_NUM,
+              });
+            }}
+          >
+            <Image
+              source={{ uri: post.images[0].uri }}
+              resizeMode="cover"
+              style={styles.thumb}
+            />
+          </TouchableOpacity>
+        );
+      })}
     </Block>
   );
 };

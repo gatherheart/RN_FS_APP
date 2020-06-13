@@ -7,13 +7,18 @@ import { POST_HEIGHT } from "../../constants/Size";
 
 export default ({ navigation }) => {
   const route = useRoute();
-  const { posts, totalLength, currerntIdx, LOAD_IMG_NUM } = route.params;
+  const {
+    posts,
+    maxLength,
+    totalLength,
+    currerntIdx,
+    LOAD_IMG_NUM,
+  } = route.params;
   const _getScrollDistance = (index) => {
     const _start = index + 1 - LOAD_IMG_NUM <= 0 ? 0 : index - LOAD_IMG_NUM;
     return _start == 0 ? currerntIdx : LOAD_IMG_NUM;
   };
   const scrollDistance = _getScrollDistance(currerntIdx) * POST_HEIGHT;
-  console.log(_getScrollDistance(currerntIdx), scrollDistance);
 
   const [data, setData] = useState({
     posts: [],
@@ -25,6 +30,17 @@ export default ({ navigation }) => {
       posts: posts,
     });
   };
+
+  const getMoreData = async () => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        console.log("GETTING");
+        resolve();
+      }, 1000);
+    });
+    return;
+  };
+
   useEffect(() => {
     getData();
   }, []);
@@ -35,6 +51,10 @@ export default ({ navigation }) => {
     <PostListPresenter
       {...data}
       scrollDistance={scrollDistance}
+      getMoreData={getMoreData}
+      maxLength={maxLength}
+      totalLength={totalLength}
+      LOAD_IMG_NUM={LOAD_IMG_NUM}
     ></PostListPresenter>
   );
 };

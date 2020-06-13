@@ -5,22 +5,43 @@ import {
   TouchableOpacity,
   ScrollView,
   Dimensions,
+  ActivityIndicator,
 } from "react-native";
 import Loader from "../../components/common/Loader";
 import { useRoute } from "@react-navigation/native";
 import PostComponent from "../../components/common/Post";
 import CustomHeader from "../../components/common/CustomHeader";
-import { HeaderHeight } from "../../utils/HeaderHeight";
+import { HeaderHeight, UnderHeader } from "../../utils/HeaderHeight";
 import styled, { ThemeContext } from "styled-components";
+import { POST_HEIGHT } from "../../constants/Size";
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
 const EmptySpace = styled.View`
-  height: ${(HEIGHT * 10) / 100}px;
+  height: ${HEIGHT - POST_HEIGHT - UnderHeader}px;
 `;
-export default ({ posts, scrollDistance }) => {
+const LOAD_THRESHOLD = 45;
+
+export default ({
+  posts,
+  scrollDistance,
+  getMoreData,
+  maxLength,
+  totalLength,
+  LOAD_IMG_NUM,
+}) => {
+  const [loading, setLoading] = useState(false);
   const themeContext = useContext(ThemeContext);
   const scrollRef = useRef();
+  let SCROLL_HEIGHT = (totalLength - 1) * POST_HEIGHT;
+  const scrollEnd = async () => {
+    if (loading) return;
+    setLoading(true);
+    await getMoreData().then(() => {
+      setLoading(false);
+    });
+  };
   useEffect(() => {
+    console.log(HEIGHT, totalLength, POST_HEIGHT, SCROLL_HEIGHT);
     setTimeout(
       () =>
         scrollRef.current.scrollTo({
@@ -42,13 +63,29 @@ export default ({ posts, scrollDistance }) => {
         contentContainerStyle={{}}
         showsVerticalScrollIndicator={false}
         ref={scrollRef}
+        onScroll={(event) => {
+          const current_scroll = event.nativeEvent.contentOffset.y;
+          const _diff = current_scroll - SCROLL_HEIGHT;
+          if (_diff >= LOAD_THRESHOLD) scrollEnd();
+        }}
+        scrollEventThrottle={1}
       >
         {posts?.length != 0
-          ? posts.map((post) => {
-              return <PostComponent {...post}></PostComponent>;
+          ? posts.map((post, index) => {
+              return (
+                <PostComponent key={`post-${index}`} {...post}></PostComponent>
+              );
             })
           : null}
-        <EmptySpace></EmptySpace>
+        <EmptySpace>
+          {console.log("LOAD", loading)}
+          {loading ? (
+            <ActivityIndicator
+              size="small"
+              style={{ marginTop: 10 }}
+            ></ActivityIndicator>
+          ) : null}
+        </EmptySpace>
       </ScrollView>
     </>
   );
