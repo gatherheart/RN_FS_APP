@@ -198,7 +198,7 @@ export default ({ id }) => {
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
-      behavior={Platform.OS == "ios" ? "height" : "height"}
+      behavior={Platform.OS == "ios" ? "padding" : "height"}
     >
       <CustomHeader
         title={"수금 작성"}

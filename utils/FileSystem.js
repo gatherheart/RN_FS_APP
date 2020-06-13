@@ -82,6 +82,7 @@ export const _pickImage = async () => {
         quality: 1,
         allowsEditing: false,
         aspect: [4, 3],
+        allowsMultipleSelection: true,
       });
     } catch (e) {
       console.log(e);

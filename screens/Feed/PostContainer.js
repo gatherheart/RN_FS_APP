@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Loader from "../../components/common/Loader";
 import PostPresenter from "./PostPresenter";
+import { useRoute } from "@react-navigation/native";
 
 export default ({}) => {
+  const route = useRoute();
+  console.log(route.params);
   const [data, setData] = useState({
     loading: true,
   });

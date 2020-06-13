@@ -108,7 +108,7 @@ export default ({ id, group, loading, refreshFn }) => {
   const themeContext = useContext(ThemeContext);
   const [page, setPage] = useState(0);
 
-  navigation.navigate("Post", {});
+  navigation.navigate("PostWrite", { id: 1 });
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,

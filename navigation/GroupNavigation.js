@@ -17,8 +17,8 @@ import GroupWriteNotice from "../screens/Group/GroupNotice/WriteNotice";
 import VoteMemberList from "../screens/Group/GroupVote/VoteMemberList";
 import BillMemberList from "../screens/Group/GroupBill/BillMemberList";
 import VoteResult from "../screens/Group/GroupVote/VoteResult";
-import Post from "../screens/Feed/PostContainer";
-
+import ReadPost from "../screens/Feed/PostContainer";
+import WritePost from "../screens/Feed/WritePost";
 DrawerNavigatorConfig = {
   drawerPosition: "right",
   drawerType: "slide",
@@ -143,8 +143,15 @@ export default () => {
         }}
       />
       <Stack.Screen
-        name="Post"
-        component={Post}
+        name="PostRead"
+        component={ReadPost}
+        options={{
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      />
+      <Stack.Screen
+        name="PostWrite"
+        component={WritePost}
         options={{
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         }}

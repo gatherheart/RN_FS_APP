@@ -13,24 +13,23 @@ import {
   Dimensions,
   Image,
   TextInput,
+  KeyboardAvoidingView,
 } from "react-native";
 import { ThemeContext } from "styled-components";
-import Loader from "../../../components/common/Loader";
-import CustomHeader from "../../../components/common/CustomHeader";
+import CustomHeader from "../../components/common/CustomHeader";
 import styled from "styled-components/native";
-import SmallUserCard from "../../../components/User/SmallUserCard";
-import { simplifiedFormat } from "../../../utils/DateFormat";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
 import { StyleSheet } from "react-native";
 import { CheckBox } from "react-native-elements";
-import { _pickImage, _pickDocument } from "../../../utils/FileSystem";
+import { _pickImage, _pickDocument } from "../../utils/FileSystem";
 import Collapsible from "react-native-collapsible";
-import { getFileName } from "../../../utils/String";
+import { UnderHeader, HeaderHeight } from "../../utils/HeaderHeight";
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
-const MANDATORY_FIELD = "isMandatory";
+const PUBLIC_FIELD = "accessPolicyState";
 const TITLE_FIELD = "title";
 const BODY_FIELD = "body";
+const TAG_FIELD = "tags";
 
 const SubContainer = styled.View`
   border-top-width: 1px;
@@ -54,12 +53,12 @@ const BodyContainer = styled.View`
   border-bottom-width: 1px;
   border-bottom-color: ${(props) => props.theme.darkGreenColor};
   padding-vertical: 45px;
-  padding-horizontal: 25px;
+  padding-horizontal: 20px;
 `;
 
 const ImgContainer = styled.View`
   flex-direction: row;
-  height: ${(HEIGHT * 10) / 100}px;
+  height: ${WIDTH}px;
   width: 100%;
   border-width: 1px;
 `;
@@ -75,7 +74,7 @@ const NanumText = styled.Text`
 export default () => {
   const themeContext = useContext(ThemeContext);
   const [modalVisible, setModalVisible] = useState(true);
-  const initialState = { title: "", body: "", isMandatory: false };
+  const initialState = { title: "", body: "", tag: "", isPublic: false };
   const [state, dispatch] = useReducer(reducer, initialState);
   const [images, setImages] = useState([]);
   const [image, setImage] = useState("");
@@ -90,21 +89,26 @@ export default () => {
 
   function reducer(state, action) {
     switch (action.type) {
+      case TAG_FIELD:
+        return { ...state, tag: action.payload };
       case TITLE_FIELD:
         return { ...state, title: action.payload };
       case BODY_FIELD:
         return { ...state, body: action.payload };
-      case MANDATORY_FIELD:
-        return { ...state, isMandatory: !state.isMandatory };
+      case PUBLIC_FIELD:
+        return { ...state, accessPolicyState: action.payload };
       default:
         return { ...state };
     }
   }
 
   return (
-    <>
+    <KeyboardAvoidingView
+      behavior={Platform.OS == "ios" ? "padding" : "height"}
+      style={{ flex: 1 }}
+    >
       <CustomHeader
-        title={"공지글 작성"}
+        title={"히스토리 작성"}
         rightButton={() => setModalVisible((prev) => !prev)}
         rightButtonText={"완료"}
       ></CustomHeader>
@@ -112,15 +116,75 @@ export default () => {
       <ScrollView
         style={{
           backgroundColor: themeContext.backgroundColor,
-          paddingTop: "13%",
+          paddingTop: HeaderHeight,
         }}
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          backgroundColor: themeContext.backgroundColor,
+        }}
       >
+        <ImgContainer>
+          <ScrollView
+            horizontal={true}
+            showsPagination={false}
+            scrollEnabled={true}
+            pagingEnabled={true}
+            showsHorizontalScrollIndicator={false}
+          >
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={async () => {
+                const pickerResult = await _pickImage();
+                setImages((prev) => {
+                  return pickerResult != null ? [...prev, pickerResult] : prev;
+                });
+              }}
+              style={{
+                justifyContent: "center",
+                alignItems: "center",
+                width: undefined,
+                height: "100%",
+                aspectRatio: 1,
+                borderWidth: 1,
+              }}
+            >
+              <Ionicons
+                name={"ios-add"}
+                size={26}
+                color={themeContext.darkGreenColor}
+              ></Ionicons>
+            </TouchableOpacity>
+            {images.length != 0
+              ? images.map((image, idx) => {
+                  return (
+                    <TouchableOpacity
+                      activeOpacity={0.8}
+                      key={`img-view-${idx}`}
+                      onPress={() => {
+                        setImages(images.filter((_, index) => index != idx));
+                      }}
+                    >
+                      <Image
+                        source={{ uri: image.uri }}
+                        style={{
+                          width: undefined,
+                          height: "100%",
+                          borderWidth: 1,
+                          aspectRatio: 1,
+                          zIndex: 1,
+                        }}
+                      ></Image>
+                    </TouchableOpacity>
+                  );
+                })
+              : null}
+          </ScrollView>
+        </ImgContainer>
         <SubContainer style={{ justifyContent: "space-between" }}>
           <NanumText
             style={{ fontFamily: themeContext.regularFont, paddingLeft: 10 }}
           >
-            필독 설정
+            공개 설정
           </NanumText>
           <CheckBox
             right={true}
@@ -128,26 +192,40 @@ export default () => {
             checkedColor={themeContext.lightGreenColor}
             checkedIcon="check-circle"
             uncheckedIcon="check-circle"
-            checked={state.isMandatory}
+            checked={state.isPublic}
             onPress={() => {
-              onChangeInput("", MANDATORY_FIELD);
+              onChangeInput("public", PUBLIC_FIELD);
             }}
           />
         </SubContainer>
         <OptionContainer>
           <TextInput
-            value={state.title}
-            placeholder={"공지 제목"}
-            onChangeText={(text) => onChangeInput(text, TITLE_FIELD)}
+            value={state.tag}
+            placeholder={"테그"}
+            onChangeText={(text) => onChangeInput(text, TAG_FIELD)}
             returnKeyType="next"
+            autoCorrect={false}
             style={{
               ...styles.keyboard,
-              paddingHorizontal: 10,
+              fontFamily: themeContext.regularFont,
+            }}
+          ></TextInput>
+        </OptionContainer>
+        <OptionContainer>
+          <TextInput
+            value={state.title}
+            placeholder={"제목"}
+            onChangeText={(text) => onChangeInput(text, TITLE_FIELD)}
+            returnKeyType="next"
+            autoCorrect={false}
+            style={{
+              ...styles.keyboard,
               fontFamily: themeContext.regularFont,
             }}
           ></TextInput>
         </OptionContainer>
         <BodyContainer>
+          {/** autoFocus={false} is for keyboradAvoidingView*/}
           <TextInput
             value={state.body}
             placeholder={"내용"}
@@ -156,7 +234,6 @@ export default () => {
             returnKeyType="none"
             style={{
               paddingVertical: 0,
-              lineHeight: 25,
             }}
             autoCorrect={false}
             scrollEnabled={false}
@@ -164,105 +241,9 @@ export default () => {
             multiline={true}
           ></TextInput>
         </BodyContainer>
-        <ImgContainer>
-          <ScrollView horizontal={true}>
-            {images.length != 0
-              ? images.map((image, idx) => {
-                  return (
-                    <TouchableOpacity
-                      key={`img-view-${idx}`}
-                      onPress={() => {
-                        setImages(images.filter((_, index) => index != idx));
-                      }}
-                    >
-                      <Image
-                        source={{ uri: image.uri }}
-                        style={styles.newImage}
-                      ></Image>
-                    </TouchableOpacity>
-                  );
-                })
-              : null}
-            <TouchableOpacity
-              onPress={async () => {
-                const pickerResult = await _pickImage();
-                setImages((prev) => {
-                  return pickerResult != null ? [...prev, pickerResult] : prev;
-                });
-              }}
-              style={styles.newImage}
-            >
-              <Ionicons
-                name={"ios-add"}
-                size={26}
-                color={themeContext.darkGreenColor}
-              ></Ionicons>
-            </TouchableOpacity>
-          </ScrollView>
-        </ImgContainer>
-        <FileContainer>
-          <SubContainer>
-            <TouchableOpacity
-              onPress={async () => {
-                const pickerResult = await _pickDocument();
-                setDocuments((prev) => {
-                  return pickerResult != null ? [...prev, pickerResult] : prev;
-                });
-              }}
-              style={styles.collapsibleButton}
-            >
-              <View style={styles.collapsibleContainer}>
-                <NanumText style={{ color: themeContext.greenColor }}>
-                  파일
-                </NanumText>
-                {isCollapsed ? (
-                  <Ionicons
-                    name={"ios-arrow-down"}
-                    size={26}
-                    color={themeContext.darkGreenColor}
-                    style={{ paddingHorizontal: 15 }}
-                  ></Ionicons>
-                ) : (
-                  <Ionicons
-                    name={"ios-arrow-up"}
-                    size={26}
-                    color={themeContext.darkGreenColor}
-                    style={{ paddingHorizontal: 15 }}
-                  ></Ionicons>
-                )}
-              </View>
-            </TouchableOpacity>
-          </SubContainer>
-          <Collapsible collapsed={false}>
-            {documents.length != 0
-              ? documents.map((file, idx) => {
-                  return (
-                    <TouchableOpacity
-                      key={`downloadable-file-${idx}`}
-                      onPress={() =>
-                        setDocuments((_documents) => {
-                          return _documents.filter((_, index) => index != idx);
-                        })
-                      }
-                    >
-                      <SubContainer style={{ justifyContent: "space-between" }}>
-                        <NanumText>{file.name}</NanumText>
-                        <AntDesign
-                          name={"paperclip"}
-                          size={25}
-                          color={themeContext.lightGreyColor}
-                          style={{ paddingHorizontal: 15 }}
-                        ></AntDesign>
-                      </SubContainer>
-                    </TouchableOpacity>
-                  );
-                })
-              : null}
-          </Collapsible>
-        </FileContainer>
         <EmptySpace></EmptySpace>
       </ScrollView>
-    </>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -282,14 +263,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     width: "100%",
     alignItems: "center",
-  },
-  newImage: {
-    justifyContent: "center",
-    alignItems: "center",
-    width: undefined,
-    height: "100%",
-    aspectRatio: 1,
-    borderWidth: 1,
   },
 });
 
