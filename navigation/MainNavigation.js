@@ -8,6 +8,7 @@ import GroupScreen from "./GroupNavigation";
 import GroupSearchNav from "./GroupSearchNavigation";
 import GroupCreateScreen from "../screens/Group/GroupCreate";
 import ChatScreen from "../screens/Chat";
+import Schedule from "../screens/Home/Schedule";
 
 const Stack = createStackNavigator();
 
@@ -44,6 +45,7 @@ export default () => {
         name="GroupCreate"
         component={GroupCreateScreen}
       ></Stack.Screen>
+      <Stack.Screen name="Schedule" component={Schedule}></Stack.Screen>
     </Stack.Navigator>
   );
 };

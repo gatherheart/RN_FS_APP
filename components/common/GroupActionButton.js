@@ -9,9 +9,15 @@ import {
 import ActionButton from "react-native-action-button";
 import CustumIcon from "./CustomIcon";
 import { useNavigation } from "@react-navigation/native";
+import { EvilIcons } from "@expo/vector-icons";
 const { width: WIDHT, height: HEIGHT } = Dimensions.get("screen");
 
-export default ({ firstClicked, secondClicked, thridClicked }) => {
+export default ({
+  firstClicked,
+  secondClicked,
+  thridClicked,
+  fourthClicked,
+}) => {
   const navigation = useNavigation();
 
   if (Platform.OS === "android")
@@ -49,6 +55,14 @@ export default ({ firstClicked, secondClicked, thridClicked }) => {
           onPress={thridClicked}
         >
           <CustumIcon name="done-all" style={styles.actionButtonIcon} />
+        </ActionButton.Item>
+        <ActionButton.Item
+          buttonColor="#1aacac"
+          title="히스토리"
+          hideLabelShadow={true}
+          onPress={fourthClicked}
+        >
+          <CustumIcon name="images" style={styles.actionButtonIcon} />
         </ActionButton.Item>
       </ActionButton>
     );
@@ -89,6 +103,14 @@ export default ({ firstClicked, secondClicked, thridClicked }) => {
             onPress={thridClicked}
           >
             <CustumIcon name="done-all" style={styles.actionButtonIcon} />
+          </ActionButton.Item>
+          <ActionButton.Item
+            buttonColor="#1aacac"
+            title="히스토리"
+            hideLabelShadow={true}
+            onPress={fourthClicked}
+          >
+            <CustumIcon name="images" style={styles.actionButtonIcon} />
           </ActionButton.Item>
         </ActionButton>
       </View>

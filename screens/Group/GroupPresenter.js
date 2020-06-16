@@ -278,6 +278,7 @@ export default ({ id, group, loading, refreshFn }) => {
         thridClicked={() =>
           navigation.navigate("GroupWriteNotice", { id: group.id })
         }
+        fourthClicked={() => navigation.navigate("PostWrite", { id: group.id })}
       ></GroupActionButton>
     </Block>
   );

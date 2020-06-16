@@ -2,6 +2,8 @@ import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import styled, { ThemeContext } from "styled-components/native";
 import { Dimensions, StyleSheet } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { useNavigation } from "@react-navigation/native";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
@@ -31,24 +33,32 @@ const RightText = styled.Text`
 const TodaySchedule = ({ schedules }) => {
   const themeContext = useContext(ThemeContext);
   const defaultHeight = schedules ? 50 + schedules.length * 25 : 50;
+  const navigation = useNavigation();
   return (
-    <Card
-      style={{
-        ...themeContext.withShadow,
-        height: defaultHeight,
-        backgroundColor: themeContext.lightGreenColor,
+    <TouchableOpacity
+      activeOpacity={0.8}
+      onPress={() => {
+        navigation.navigate("Schedule", { schedules });
       }}
     >
-      <Title>Schedule 🗓</Title>
-      {schedules
-        ? schedules.map((schedule, index) => (
-            <ScheduleConatiner key={index}>
-              <LeftText>Group Name</LeftText>
-              <RightText>{schedule}</RightText>
-            </ScheduleConatiner>
-          ))
-        : null}
-    </Card>
+      <Card
+        style={{
+          ...themeContext.withShadow,
+          height: defaultHeight,
+          backgroundColor: themeContext.lightGreenColor,
+        }}
+      >
+        <Title>Schedule 🗓</Title>
+        {schedules
+          ? schedules.map((schedule, index) => (
+              <ScheduleConatiner key={index}>
+                <LeftText>Group Name</LeftText>
+                <RightText>{schedule}</RightText>
+              </ScheduleConatiner>
+            ))
+          : null}
+      </Card>
+    </TouchableOpacity>
   );
 };
 

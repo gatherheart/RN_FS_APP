@@ -33,7 +33,14 @@ export default ({
   const themeContext = useContext(ThemeContext);
   const scrollRef = useRef();
   let SCROLL_HEIGHT = (totalLength - 1) * POST_HEIGHT;
-  const scrollEnd = async () => {
+  const scrollReachedEnd = async () => {
+    if (loading) return;
+    setLoading(true);
+    await getMoreData().then(() => {
+      setLoading(false);
+    });
+  };
+  const scrollReachedTop = async () => {
     if (loading) return;
     setLoading(true);
     await getMoreData().then(() => {
@@ -41,7 +48,6 @@ export default ({
     });
   };
   useEffect(() => {
-    console.log(HEIGHT, totalLength, POST_HEIGHT, SCROLL_HEIGHT);
     setTimeout(
       () =>
         scrollRef.current.scrollTo({
@@ -55,6 +61,7 @@ export default ({
   return (
     <>
       <CustomHeader></CustomHeader>
+
       <ScrollView
         style={{
           backgroundColor: themeContext.backgroundColor,
@@ -65,11 +72,21 @@ export default ({
         ref={scrollRef}
         onScroll={(event) => {
           const current_scroll = event.nativeEvent.contentOffset.y;
+          if (current_scroll < -LOAD_THRESHOLD) {
+            scrollReachedTop();
+            return;
+          }
           const _diff = current_scroll - SCROLL_HEIGHT;
-          if (_diff >= LOAD_THRESHOLD) scrollEnd();
+          if (_diff >= LOAD_THRESHOLD) scrollReachedEnd();
         }}
-        scrollEventThrottle={1}
+        scrollEventThrottle={16}
       >
+        {loading ? (
+          <ActivityIndicator
+            size="small"
+            style={{ marginBottom: 10 }}
+          ></ActivityIndicator>
+        ) : null}
         {posts?.length != 0
           ? posts.map((post, index) => {
               return (
@@ -78,7 +95,6 @@ export default ({
             })
           : null}
         <EmptySpace>
-          {console.log("LOAD", loading)}
           {loading ? (
             <ActivityIndicator
               size="small"
