@@ -20,6 +20,14 @@ import VoteResult from "../screens/Group/GroupVote/VoteResult";
 import ReadPost from "../screens/Feed/PostContainer";
 import WritePost from "../screens/Feed/WritePost";
 import PostListContainer from "../screens/Feed/PostListContainer";
+import GroupSchedule from "../screens/Group/GroupDrawer/GroupSchedule";
+import { userIsLoggedIn } from "../context/AuthContext";
+import Applicants from "../screens/Group/GroupDrawer/Applicants";
+import GroupAuth from "../screens/Group/GroupDrawer/GroupAuth";
+import Eviction from "../screens/Group/GroupDrawer/Eviction";
+import GroupWithdraw from "../screens/Group/GroupDrawer/GroupWithdraw";
+import GroupMember from "../screens/Group/GroupDrawer/GroupMember";
+
 DrawerNavigatorConfig = {
   drawerPosition: "right",
   drawerType: "slide",
@@ -35,6 +43,8 @@ const Stack = createStackNavigator();
  */
 const DrawerNav = () => {
   const route = useRoute();
+  const isLoggedIn = userIsLoggedIn();
+  console.log("test:", isLoggedIn);
   const themeContext = React.useContext(ThemeContext);
   return (
     <Drawer.Navigator
@@ -55,8 +65,43 @@ const DrawerNav = () => {
         name="GroupDrawerMain"
         component={GroupScreen}
         initialParams={route.params}
+        options={{ title: "모임 소개" }}
       />
-      <Drawer.Screen name="GroupDrawerSecond" component={GroupDrawer} />
+      <Drawer.Screen
+        name="GroupSchedule"
+        component={GroupSchedule}
+        options={{ title: "일정 관리" }}
+      />
+      <Drawer.Screen
+        name="MemberList"
+        component={GroupMember}
+        options={{ title: "멤버 목록" }}
+      />
+      <Drawer.Screen
+        name="Applicants"
+        component={Applicants}
+        options={{ title: "가입 신청 목록" }}
+      />
+      <Drawer.Screen
+        name="GroupAuth"
+        component={GroupAuth}
+        options={{ title: "운영진 권한 부여" }}
+      />
+      <Drawer.Screen
+        name="Eviction"
+        component={Eviction}
+        options={{ title: "내보내기" }}
+      />
+      <Drawer.Screen
+        name="GroupRemove"
+        component={Eviction}
+        options={{ title: "모임 삭제" }}
+      />
+      <Drawer.Screen
+        name="GroupWithdraw"
+        component={GroupWithdraw}
+        options={{ title: "모임 탈퇴" }}
+      />
     </Drawer.Navigator>
   );
 };

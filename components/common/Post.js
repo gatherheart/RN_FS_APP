@@ -10,6 +10,7 @@ import Menu, { MenuItem, MenuDivider } from "react-native-material-menu";
 import { Text } from "react-native";
 import { StatusHeight } from "../../utils/HeaderHeight";
 import { POST_HEIGHT } from "../../constants/Size";
+import { useNavigation } from "@react-navigation/native";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
@@ -87,6 +88,7 @@ const PostComponent = ({
   const [isLiked, setIsLiked] = useState(isLikedProp);
   const [likeCount, setLikeCount] = useState(likeCountProp);
   const _menu = useRef();
+  const navigation = useNavigation();
   /** 
   const toggleLikeMutaton = useMutation(TOGGLE_LIKE, {
     variables: {
@@ -235,7 +237,7 @@ const PostComponent = ({
       <BodyContainer>
         <Title>{title}</Title>
         <Body>{body}</Body>
-        <Touchable>
+        <Touchable onPress={() => navigation.push("PostRead", { id: id })}>
           <Body>더보기</Body>
         </Touchable>
       </BodyContainer>

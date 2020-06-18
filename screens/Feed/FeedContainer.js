@@ -19,7 +19,6 @@ export default ({ navigation }) => {
   const getData = async () => {
     setData({
       loading: false,
-      ...billData,
     });
   };
   useEffect(() => {
