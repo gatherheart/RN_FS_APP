@@ -16,7 +16,6 @@ import PropTypes from "prop-types";
 import { HeaderHeight, UnderHeader } from "../../../utils/HeaderHeight";
 import styled, { ThemeContext } from "styled-components/native";
 import CustomHeader from "../../../components/common/AnimatedCustomHeader";
-import { trimText, formatDate } from "../../../utils/String";
 import { simplifiedFormat, dDayCalculator } from "../../../utils/DateFormat";
 import ImageGrid from "../../../components/common/ImageGrid";
 import Icon from "../../../components/common/CustomIcon";
@@ -97,7 +96,9 @@ export default ({ id, group, loading, refreshFn }) => {
             rightButtonEnabled={true}
             rightButton={
               <TouchableOpacity
-                onPress={() => {}}
+                onPress={() => {
+                  navigation.navigate("IntroEdit", { group });
+                }}
                 title="goBack"
                 style={{ marginHorizontal: 20 }}
               >

@@ -284,7 +284,6 @@ export default ({ id }) => {
           </OptionContainer>
           <VoteListContainer>
             {voteList.map((vote, idx) => {
-              console.log(vote);
               return (
                 <VoteList
                   key={"voteList-" + idx}
@@ -345,7 +344,7 @@ export default ({ id }) => {
               </RowContainer>
             </TouchableOpacity>
             <DateTimePicker
-              setDeadline={setDeadline}
+              setDate={setDeadline}
               isDatePickerVisible={isDatePickerVisible}
               setDatePickerVisibility={setDatePickerVisibility}
             ></DateTimePicker>

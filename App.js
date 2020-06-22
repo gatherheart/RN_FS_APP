@@ -21,6 +21,8 @@ import NavController from "./components/common/NavController";
 import { AuthProvider } from "./context/AuthContext";
 import { defaultPoster } from "./constants/Urls";
 import { StatusBar } from "react-native";
+import { ActionSheetProvider } from "@expo/react-native-action-sheet";
+
 import { ALBUM_NAME } from "./constants/Systems";
 
 /**
@@ -153,7 +155,9 @@ export default function App() {
             backgroundColor="transparent"
             barStyle="dark-content" // Here is where you change the font-color
           />
-          <NavController></NavController>
+          <ActionSheetProvider>
+            <NavController></NavController>
+          </ActionSheetProvider>
         </AuthProvider>
       </ThemeProvider>
     </ApolloProvider>

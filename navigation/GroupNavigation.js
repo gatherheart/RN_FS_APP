@@ -31,6 +31,7 @@ import GroupIntro from "../screens/Group/GroupIntro/GroupIntroContainer";
 import UpdatePost from "../screens/Feed/UpdatePost";
 import WriteQnA from "../screens/Group/GroupQnA/WriteQnA";
 import ReadQnA from "../screens/Group/GroupQnA/ReadQnA";
+import GroupIntroEdit from "../screens/Group/GroupIntro/GroupIntroEdit";
 
 DrawerNavigatorConfig = {
   drawerPosition: "right",
@@ -236,6 +237,13 @@ export default () => {
       <Stack.Screen
         name="QnARead"
         component={ReadQnA}
+        options={{
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      />
+      <Stack.Screen
+        name="IntroEdit"
+        component={GroupIntroEdit}
         options={{
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         }}

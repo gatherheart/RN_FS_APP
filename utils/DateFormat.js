@@ -11,7 +11,7 @@ export const dDayCalculator = (date) => {
   const theDate = new Date(date);
   const present_date = new Date();
   const one_day = 1000 * 60 * 60 * 24;
-
+  console.log(theDate);
   const Result =
     Math.round(theDate.getTime() - present_date.getTime()) / one_day;
   return Result.toFixed(0);
@@ -85,6 +85,24 @@ export const getYear = (date) => {
   const theDate = new Date(date);
   return theDate.getYear();
 };
+
+export const getDate = (date) => {
+  const theDate = new Date(date);
+  return theDate.getDate();
+};
+
+export const getYearMonthDay = (date) => {
+  let d = new Date(date),
+    month = "" + (d.getMonth() + 1),
+    day = "" + d.getDate(),
+    year = d.getFullYear();
+
+  if (month.length < 2) month = "0" + month;
+  if (day.length < 2) day = "0" + day;
+
+  return [year, month, day].join("-");
+};
+
 export const sortByDate = (target) => {
   target.sort((a, b) => {
     let dateA = new Date(a.date),

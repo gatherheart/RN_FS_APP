@@ -6,7 +6,7 @@ import {
 import Tabs from "./TabNavigation";
 import GroupScreen from "./GroupNavigation";
 import GroupSearchNav from "./GroupSearchNavigation";
-import GroupCreateScreen from "../screens/Group/GroupCreate";
+import GroupCreateScreen from "../screens/Group/GroupCreate/GroupCreate";
 import ChatScreen from "../screens/Chat";
 import Schedule from "../screens/Home/Schedule";
 

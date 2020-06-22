@@ -118,7 +118,7 @@ const _data = {
   groupName: "PIXEL",
   isSchool: true, // School or Union
   applicable: true,
-  applicableDate: "2020-06-30",
+  applicableDate: { from: "2020-06-30", to: "2020-07-30" },
   createdAt: "2019-02-01",
   updatedAt: "2020-05-31",
   school: { name: "성균관대학교", id: "22" },
@@ -133,7 +133,8 @@ const _data = {
   members: [{ name: "김현우", id: "342324" }], // [User!]! exclude the owner and managers
   owner: [{ name: "이안수", id: "12345" }],
   managers: [{ name: "장강우", id: "6844" }],
-  description: "우리는 Pixel입니다",
+  description:
+    "안녕하세요, 무비씨어터입니다! \n무비씨어터는 독립영화와 감성영화, 잔잔한 분위기의 영화를 같이 보고 감상을 나누는 감성 영화동아리입니다. 평소에 감성영화를 즐겨보시거나, 다른 사람의 생각을 들어보고 싶다 하신 분들은 저희 동아리로 오셔서 재미나게 놀아보아요:)\n 매주 금요일 저녁 6시에 정기적으로 모입니다. \n한 달에 한 번씩 독립영화 시청 및 감독님과의 대화시간이 있습니다. (독립영화는 선택이며, 다수결로 결정됩니다!)",
   joiningConditions: [
     {
       school: [{ name: "성균관대학교", id: "22" }],
@@ -141,8 +142,8 @@ const _data = {
         { name: "자연과학캠퍼스", id: "32" },
         { name: "인문사회캠퍼스", id: "33" },
       ],
-      major: [],
-      class: [], // 학번 condition
+      major: [{ name: "컴퓨터공학과", id: "24" }],
+      class: { from: 15, to: 20 }, // 학번 condition
     },
   ],
   votes: [

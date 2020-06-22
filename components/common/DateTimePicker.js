@@ -3,9 +3,12 @@ import { Button, View } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 const DateTimePicker = ({
-  setDeadline,
+  setDate,
   isDatePickerVisible,
   setDatePickerVisibility,
+  mode = "datetime",
+  headerTextIOS = "",
+  handleConfirm: handleConfirmProp,
 }) => {
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -17,15 +20,16 @@ const DateTimePicker = ({
 
   const handleConfirm = (date) => {
     hideDatePicker();
-    setDeadline(date);
+    setDate(date);
   };
 
   return (
     <View>
       <DateTimePickerModal
+        headerTextIOS={headerTextIOS}
         isVisible={isDatePickerVisible}
-        mode="datetime"
-        onConfirm={handleConfirm}
+        mode={mode}
+        onConfirm={handleConfirmProp ? handleConfirmProp : handleConfirm}
         onCancel={hideDatePicker}
       />
     </View>
