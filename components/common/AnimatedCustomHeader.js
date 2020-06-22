@@ -11,6 +11,7 @@ import {
   UnderHeader,
 } from "../../utils/HeaderHeight";
 import Icon from "./CustomIcon";
+import PropTypes from "prop-types";
 import { ThemeContext } from "styled-components";
 import { useNavigation } from "@react-navigation/native";
 import styled from "styled-components/native";
@@ -32,7 +33,14 @@ const RightContainer = styled.View`
 `;
 const Title = styled.Text``;
 
-export default ({ headerPosition, headerOpacity, style, title = "" }) => {
+const CustomHeader = ({
+  headerPosition,
+  headerOpacity,
+  style,
+  rightButtonEnabled = true,
+  rightButton,
+  title = "",
+}) => {
   const themeContext = useContext(ThemeContext);
   const navigation = useNavigation();
   return (
@@ -73,25 +81,15 @@ export default ({ headerPosition, headerOpacity, style, title = "" }) => {
             {title}
           </Title>
         </MiddleContainer>
-        <RightContainer>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.openDrawer();
-            }}
-            title="goBack"
-            style={{ marginHorizontal: 20 }}
-          >
-            <Icon
-              name={"menu"}
-              color={themeContext.lightGreenColor}
-              size={30}
-            ></Icon>
-          </TouchableOpacity>
-        </RightContainer>
+        {rightButtonEnabled && rightButton ? (
+          <RightContainer>{rightButton}</RightContainer>
+        ) : null}
       </Animated.View>
     </>
   );
 };
+
+export default CustomHeader;
 
 const styles = StyleSheet.create({
   header: {
@@ -106,3 +104,12 @@ const styles = StyleSheet.create({
     zIndex: 2,
   },
 });
+
+CustomHeader.propTypes = {
+  headerPosition: PropTypes.object,
+  headerOpacity: PropTypes.object,
+  style: PropTypes.object,
+  rightButtonEnabled: PropTypes.bool,
+  rightButton: PropTypes.node,
+  title: PropTypes.string,
+};

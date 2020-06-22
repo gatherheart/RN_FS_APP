@@ -7,6 +7,17 @@ export const formatDate = (date) => {
   });
 };
 
+export const dDayCalculator = (date) => {
+  const theDate = new Date(date);
+  const present_date = new Date();
+  const one_day = 1000 * 60 * 60 * 24;
+
+  const Result =
+    Math.round(theDate.getTime() - present_date.getTime()) / one_day;
+  return Result.toFixed(0);
+};
+
+// Calcuate current - target date
 export const diffTime = (date) => {
   const theDate = new Date(date);
   const present_date = new Date();

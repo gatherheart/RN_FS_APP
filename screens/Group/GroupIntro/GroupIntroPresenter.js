@@ -12,16 +12,14 @@ import {
 } from "react-native";
 import { Block, Text, theme } from "galio-framework";
 import { useNavigation } from "@react-navigation/native";
-import Button from "../../components/Group/ArgonButton";
 import PropTypes from "prop-types";
-import { HeaderHeight, UnderHeader } from "../../utils/HeaderHeight";
+import { HeaderHeight, UnderHeader } from "../../../utils/HeaderHeight";
 import styled, { ThemeContext } from "styled-components/native";
-import CustomHeader from "../../components/common/AnimatedCustomHeader";
-import { trimText } from "../../utils/String";
-import ImageGrid from "../../components/common/ImageGrid";
-import GroupActionButton from "../../components/common/GroupActionButton";
-import NoticeList from "../../components/Group/NoticeList";
-import Icon from "../../components/common/CustomIcon";
+import CustomHeader from "../../../components/common/AnimatedCustomHeader";
+import { trimText, formatDate } from "../../../utils/String";
+import { simplifiedFormat, dDayCalculator } from "../../../utils/DateFormat";
+import ImageGrid from "../../../components/common/ImageGrid";
+import Icon from "../../../components/common/CustomIcon";
 
 const { width: WIDHT, height: HEIGHT } = Dimensions.get("screen");
 
@@ -55,34 +53,6 @@ const CountText = styled.Text`
   margin-bottom: 4px;
 `;
 
-/**
- * 공지 히스토리 버튼
- * @param {String} title
- * @param {Number} page
- * @param {Function} setPage
- * @param {Number} clickedPage
- * @param {String} color
- *
- */
-const PageButton = ({ title, page, setPage, clickedPage, color }) => {
-  const underBar =
-    clickedPage == page
-      ? { borderBottomColor: color, borderBottomWidth: 2.3 }
-      : null;
-  const changePage = () => {
-    if (page == clickedPage) return;
-    setPage(clickedPage);
-  };
-  return (
-    <TouchableOpacity
-      style={{ ...styles.pageButton, ...underBar }}
-      onPress={() => changePage()}
-    >
-      <Text>{title}</Text>
-    </TouchableOpacity>
-  );
-};
-
 const position = new Animated.ValueXY(0);
 const gradient = new Animated.ValueXY(0);
 
@@ -109,13 +79,6 @@ export default ({ id, group, loading, refreshFn }) => {
   const themeContext = useContext(ThemeContext);
   const [page, setPage] = useState(0);
 
-  navigation.navigate("GroupIntro", {});
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerShown: false,
-    });
-  }, []);
-
   return (
     <Block
       flex
@@ -130,23 +93,21 @@ export default ({ id, group, loading, refreshFn }) => {
           <CustomHeader
             headerPosition={headerPosition}
             headerOpacity={headerOpacity}
+            style={{ zIndex: 4 }}
             rightButtonEnabled={true}
             rightButton={
               <TouchableOpacity
-                onPress={() => {
-                  navigation.openDrawer();
-                }}
+                onPress={() => {}}
                 title="goBack"
                 style={{ marginHorizontal: 20 }}
               >
                 <Icon
-                  name={"menu"}
+                  name={"settings"}
                   color={themeContext.lightGreenColor}
                   size={30}
                 ></Icon>
               </TouchableOpacity>
             }
-            style={{ zIndex: 4 }}
           ></CustomHeader>
           <Animated.ScrollView
             showsVerticalScrollIndicator={false}
@@ -200,22 +161,27 @@ export default ({ id, group, loading, refreshFn }) => {
                     marginHorizontal: -30,
                   }}
                 >
-                  <PageButton
-                    title="공지"
-                    page={page}
-                    setPage={setPage}
-                    clickedPage={0}
-                    color={themeContext.lightGreenColor}
-                  ></PageButton>
-                  <PageButton
-                    title="히스토리"
-                    page={page}
-                    setPage={setPage}
-                    clickedPage={1}
-                    color={themeContext.lightGreenColor}
-                  ></PageButton>
+                  <TouchableOpacity
+                    style={{
+                      ...styles.profileButton,
+                      ...themeContext.withShadow,
+                      backgroundColor: themeContext.pastelGreyColor,
+                    }}
+                  >
+                    <Text>메세지</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={{
+                      ...styles.profileButton,
+                      ...themeContext.withShadow,
+                      backgroundColor: themeContext.pastelGreyColor,
+                    }}
+                  >
+                    <Text>Q&A</Text>
+                  </TouchableOpacity>
                 </Block>
               </Block>
+
               <Block flex>
                 <Block middle style={{ marginTop: 5, marginBottom: 16 }}>
                   <Block style={styles.divider} />
@@ -225,78 +191,156 @@ export default ({ id, group, loading, refreshFn }) => {
                   style={{
                     paddingVertical: 14,
                     borderWidth: 1,
+                    alignItems: "center",
                   }}
                 >
+                  <Text style={styles.tableTitle}>모집 기간</Text>
                   <Block
                     style={{
-                      backgroundColor: "#FF574D",
-                      padding: 5,
-                      marginHorizontal: 5,
-                    }}
-                  >
-                    <Text bold size={13} style={{ color: "white" }}>
-                      필독
-                    </Text>
-                  </Block>
-                  <Block
-                    style={{
-                      borderWidth: 1,
                       width: WIDHT / 3,
                       marginHorizontal: 30,
                       justifyContent: "center",
                       alignItems: "center",
                     }}
                   >
-                    <TouchableOpacity>
-                      <Text size={13} style={{ color: "black" }}>
-                        {trimText(group?.mandatoryNotice)}
+                    {group.applicableDate ? (
+                      <Block row space="between">
+                        <Text>
+                          {group.applicableDate.from.slice(5)} ~{" "}
+                          {group.applicableDate.to.slice(5)}
+                        </Text>
+                      </Block>
+                    ) : null}
+                  </Block>
+                  {group.applicableDate ? (
+                    <Block
+                      style={{
+                        backgroundColor: themeContext.greenColor,
+                        borderRadius: 5,
+                        width: 50,
+                        height: 30,
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Text style={{ color: "white" }}>
+                        D-{dDayCalculator(group.applicableDate.to)}
                       </Text>
-                    </TouchableOpacity>
+                    </Block>
+                  ) : null}
+                </Block>
+              </Block>
+
+              <Block flex>
+                <Block middle style={{ marginTop: 5, marginBottom: 16 }}>
+                  <Block style={styles.divider} />
+                </Block>
+                <Block
+                  style={{
+                    paddingVertical: 14,
+                    alignItems: "baseline",
+                    borderWidth: 1,
+                  }}
+                >
+                  <Text style={styles.tableTitle}>가입 조건</Text>
+                  <Block
+                    row
+                    space="between"
+                    style={{ marginTop: 10, width: "100%", flexWrap: "wrap" }}
+                  >
+                    <Text
+                      style={{
+                        fontWeight: "500",
+                        fontSize: 14,
+                        marginLeft: 10,
+                      }}
+                    >
+                      학교
+                    </Text>
+                    <Text
+                      style={{
+                        fontWeight: "500",
+                        fontSize: 14,
+                        marginLeft: 10,
+                        left: -50,
+                      }}
+                    >
+                      성균관대학교
+                    </Text>
                   </Block>
                 </Block>
+              </Block>
+              <Block flex>
+                <Block middle style={{ marginTop: 5, marginBottom: 16 }}>
+                  <Block style={styles.divider} />
+                </Block>
+                <Block
+                  style={{
+                    paddingVertical: 14,
+                    alignItems: "baseline",
+                    borderWidth: 1,
+                    flexDirection: "column",
+                  }}
+                >
+                  <Text style={styles.tableTitle}>소개</Text>
+                  <Block
+                    style={{
+                      marginTop: 20,
+                      marginHorizontal: 30,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      flexDirection: "row",
+                    }}
+                  >
+                    {group.introTag
+                      ? group.introTag.map((intro, index) => (
+                          <Text
+                            key={`intro-${index}`}
+                            style={{ color: themeContext.greenColor }}
+                          >
+                            #{intro}{" "}
+                          </Text>
+                        ))
+                      : null}
+                  </Block>
+                  <Block
+                    style={{
+                      marginTop: 20,
+                      marginHorizontal: 30,
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    {group.description ? (
+                      <Text>{group.description}</Text>
+                    ) : null}
+                  </Block>
+                </Block>
+              </Block>
+              <Block flex>
+                <Block middle style={{ marginTop: 5, marginBottom: 16 }}>
+                  <Block style={styles.divider} />
+                </Block>
+                <Text style={styles.tableTitle}>활동 사진</Text>
 
-                <Block style={{ paddingBottom: HeaderHeight, height: HEIGHT }}>
-                  {page == 0 ? (
-                    <Block>
-                      <NoticeList
-                        id={id}
-                        votes={group.votes}
-                        notices={group.notices}
-                        bills={group.bills}
-                      ></NoticeList>
-                    </Block>
-                  ) : (
-                    <>
-                      <Block
-                        row
-                        style={{
-                          marginTop: 20,
-                          justifyContent: "flex-end",
-                        }}
-                      ></Block>
-                      <ImageGrid posts={group.posts}></ImageGrid>
-                    </>
-                  )}
+                <Block style={{ paddingBottom: HeaderHeight }}>
+                  <Block
+                    row
+                    style={{
+                      marginTop: 20,
+                      justifyContent: "flex-end",
+                    }}
+                  ></Block>
+                  <ImageGrid posts={group.posts}></ImageGrid>
                 </Block>
               </Block>
             </Block>
 
             <EmptySpace></EmptySpace>
+            <EmptySpace></EmptySpace>
           </Animated.ScrollView>
         </ImageBackground>
       </Block>
-      <GroupActionButton
-        firstClicked={() =>
-          navigation.navigate("GroupWriteVote", { id: group.id })
-        }
-        secondClicked={() =>
-          navigation.navigate("GroupWriteBill", { id: group.id })
-        }
-        thridClicked={() =>
-          navigation.navigate("GroupWriteNotice", { id: group.id })
-        }
-        fourthClicked={() => navigation.navigate("PostWrite", { id: group.id })}
-      ></GroupActionButton>
     </Block>
   );
 };
@@ -336,6 +380,18 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     zIndex: 1,
   },
+  tableTitle: {
+    fontWeight: "500",
+    fontSize: 15,
+    marginLeft: 10,
+  },
+  profileButton: {
+    borderWidth: 0.5,
+    width: 100,
+    height: 40,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   info: {
     marginTop: 8,
     borderColor: "blue",
@@ -374,11 +430,3 @@ const styles = StyleSheet.create({
     borderColor: "#E9ECEF",
   },
 });
-
-PageButton.propTypes = {
-  title: PropTypes.string.isRequired,
-  page: PropTypes.number.isRequired,
-  setPage: PropTypes.func.isRequired,
-  clickedPage: PropTypes.number.isRequired,
-  color: PropTypes.string.isRequired,
-};

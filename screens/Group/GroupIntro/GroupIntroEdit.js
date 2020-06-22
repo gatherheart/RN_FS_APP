@@ -21,7 +21,6 @@ import { trimText } from "../../utils/String";
 import ImageGrid from "../../components/common/ImageGrid";
 import GroupActionButton from "../../components/common/GroupActionButton";
 import NoticeList from "../../components/Group/NoticeList";
-import Icon from "../../components/common/CustomIcon";
 
 const { width: WIDHT, height: HEIGHT } = Dimensions.get("screen");
 
@@ -109,7 +108,6 @@ export default ({ id, group, loading, refreshFn }) => {
   const themeContext = useContext(ThemeContext);
   const [page, setPage] = useState(0);
 
-  navigation.navigate("GroupIntro", {});
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,
@@ -130,22 +128,6 @@ export default ({ id, group, loading, refreshFn }) => {
           <CustomHeader
             headerPosition={headerPosition}
             headerOpacity={headerOpacity}
-            rightButtonEnabled={true}
-            rightButton={
-              <TouchableOpacity
-                onPress={() => {
-                  navigation.openDrawer();
-                }}
-                title="goBack"
-                style={{ marginHorizontal: 20 }}
-              >
-                <Icon
-                  name={"menu"}
-                  color={themeContext.lightGreenColor}
-                  size={30}
-                ></Icon>
-              </TouchableOpacity>
-            }
             style={{ zIndex: 4 }}
           ></CustomHeader>
           <Animated.ScrollView
@@ -224,6 +206,7 @@ export default ({ id, group, loading, refreshFn }) => {
                   row
                   style={{
                     paddingVertical: 14,
+                    alignItems: "baseline",
                     borderWidth: 1,
                   }}
                 >

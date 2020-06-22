@@ -4,6 +4,7 @@ import React, {
   useContext,
   useRef,
   useReducer,
+  useLayoutEffect,
 } from "react";
 import {
   View,
@@ -24,12 +25,14 @@ import { CheckBox } from "react-native-elements";
 import { _pickImage, _pickDocument } from "../../utils/FileSystem";
 import Collapsible from "react-native-collapsible";
 import { UnderHeader, HeaderHeight } from "../../utils/HeaderHeight";
+import { useRoute } from "@react-navigation/native";
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
 const PUBLIC_FIELD = "accessPolicyState";
 const TITLE_FIELD = "title";
 const BODY_FIELD = "body";
 const TAG_FIELD = "tags";
+const INITIALIZATION = "initialization";
 
 const SubContainer = styled.View`
   border-top-width: 1px;
@@ -71,17 +74,29 @@ const NanumText = styled.Text`
   font-family: ${(props) => props.theme.regularFont};
 `;
 
-export default () => {
+export default ({
+  user,
+  images: propImages,
+  title: propTitle,
+  body: propBody,
+}) => {
+  const route = useRoute();
   const themeContext = useContext(ThemeContext);
   const [modalVisible, setModalVisible] = useState(true);
-  const initialState = { title: "", body: "", tag: "", isPublic: false };
+  const initialState = {
+    ...route.params,
+  };
   const [state, dispatch] = useReducer(reducer, initialState);
-  const [images, setImages] = useState([]);
+  const [images, setImages] = useState(initialState.images);
   const [image, setImage] = useState("");
   const [documents, setDocuments] = useState([]);
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    console.log(route.params);
+  }, []);
 
   const onChangeInput = (text, _type) => {
     dispatch({ type: _type, payload: text });
@@ -108,7 +123,7 @@ export default () => {
       style={{ flex: 1 }}
     >
       <CustomHeader
-        title={"히스토리 작성"}
+        title={"히스토리 수정"}
         rightButtonEnabled={true}
         rightButton={
           <Text onPress={() => setModalVisible((prev) => !prev)}>완료</Text>
@@ -156,7 +171,7 @@ export default () => {
                 color={themeContext.darkGreenColor}
               ></Ionicons>
             </TouchableOpacity>
-            {images.length != 0
+            {images && images.length != 0
               ? images.map((image, idx) => {
                   return (
                     <TouchableOpacity

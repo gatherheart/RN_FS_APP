@@ -123,7 +123,9 @@ export default () => {
     <>
       <CustomHeader
         title={"더치페이글 보기"}
-        rightButton={() => setModalVisible((prev) => !prev)}
+        rightButton={
+          <Text onPress={() => setModalVisible((prev) => !prev)}>완료</Text>
+        }
       ></CustomHeader>
       <BillModal
         modalVisible={modalVisible}

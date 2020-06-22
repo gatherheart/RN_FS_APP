@@ -158,10 +158,16 @@ export default ({}) => {
       <CustomHeader
         title={"미입금 처리"}
         headerStyle={{}}
-        rightButton={() => {
-          navigation.navigate(route.params.from, { memberList: memberList });
-        }}
-        rightButtonText={"완료"}
+        rightButtonEnabled={true}
+        rightButton={
+          <Text
+            onPress={() =>
+              navigation.navigate(route.params.from, { memberList: memberList })
+            }
+          >
+            완료
+          </Text>
+        }
       ></CustomHeader>
 
       <ScrollView

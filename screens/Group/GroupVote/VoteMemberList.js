@@ -175,9 +175,15 @@ export default ({}) => {
       <CustomHeader
         title={"대상 선택"}
         headerStyle={{}}
-        rightButton={() => {
-          navigation.navigate(route.params.from, { memberList: memberList });
-        }}
+        rightButton={
+          <Text
+            onPress={() =>
+              navigation.navigate(route.params.from, { memberList: memberList })
+            }
+          >
+            완료
+          </Text>
+        }
       ></CustomHeader>
 
       <ScrollView

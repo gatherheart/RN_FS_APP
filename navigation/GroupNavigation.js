@@ -27,6 +27,10 @@ import GroupAuth from "../screens/Group/GroupDrawer/GroupAuth";
 import Eviction from "../screens/Group/GroupDrawer/Eviction";
 import GroupWithdraw from "../screens/Group/GroupDrawer/GroupWithdraw";
 import GroupMember from "../screens/Group/GroupDrawer/GroupMember";
+import GroupIntro from "../screens/Group/GroupIntro/GroupIntroContainer";
+import UpdatePost from "../screens/Feed/UpdatePost";
+import WriteQnA from "../screens/Group/GroupQnA/WriteQnA";
+import ReadQnA from "../screens/Group/GroupQnA/ReadQnA";
 
 DrawerNavigatorConfig = {
   drawerPosition: "right",
@@ -62,8 +66,14 @@ const DrawerNav = () => {
       drawerPosition="right"
     >
       <Drawer.Screen
-        name="GroupDrawerMain"
+        name="GroupScreen"
         component={GroupScreen}
+        initialParams={route.params}
+        options={{ title: "그룹 페이지" }}
+      />
+      <Drawer.Screen
+        name="GroupIntro"
+        component={GroupIntro}
         initialParams={route.params}
         options={{ title: "모임 소개" }}
       />
@@ -203,8 +213,29 @@ export default () => {
         }}
       />
       <Stack.Screen
+        name="PostUpdate"
+        component={UpdatePost}
+        options={{
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      />
+      <Stack.Screen
         name="PostList"
         component={PostListContainer}
+        options={{
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      />
+      <Stack.Screen
+        name="QnAWrite"
+        component={WriteQnA}
+        options={{
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      />
+      <Stack.Screen
+        name="QnARead"
+        component={ReadQnA}
         options={{
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         }}

@@ -102,6 +102,17 @@ const PostComponent = ({
     _menu.current.hide();
   };
 
+  const _updatePost = () => {
+    hideMenu();
+    navigation.navigate("PostUpdate", {
+      id: id,
+      user: user,
+      images: images,
+      title: title,
+      body: body,
+    });
+  };
+
   const showMenu = () => {
     _menu.current.show();
   };
@@ -170,7 +181,7 @@ const PostComponent = ({
               backgroundColor: "white",
               alignItems: "center",
             }}
-            onPress={hideMenu}
+            onPress={_updatePost}
           >
             수정
           </MenuItem>

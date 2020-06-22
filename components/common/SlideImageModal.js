@@ -299,7 +299,7 @@ const styles = StyleSheet.create({
   },
 });
 
-SlideImageModal.prototypes = {
+SlideImageModal.propTypes = {
   imgViewerVisible: PropTypes.bool.isRequired,
   changeViewerState: PropTypes.func.isRequired,
 };

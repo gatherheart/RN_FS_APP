@@ -206,9 +206,9 @@ export default ({ id }) => {
           borderBottomWidth: 1,
           borderBottomColor: themeContext.moreLightGreyColor,
         }}
-        rightButton={() => {
-          submitVote();
-        }}
+        rightButton={
+          <Text onPress={() => setModalVisible((prev) => !prev)}>완료</Text>
+        }
       ></CustomHeader>
       <AlertModal
         modalVisible={modalVisible}

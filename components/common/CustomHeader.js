@@ -6,6 +6,8 @@ import {
   Dimensions,
   View,
 } from "react-native";
+import PropTypes from "prop-types";
+
 import {
   HeaderHeight,
   StatusHeight,
@@ -35,12 +37,11 @@ const RightContainer = styled.View`
   align-items: flex-end;
 `;
 
-export default ({
-  headerStyle,
-  title = "",
+const CustomHeader = ({
+  style,
+  rightButtonEnabled = true,
   rightButton,
-  rightButtonIcon = "",
-  rightButtonText = "",
+  title = "",
 }) => {
   const themeContext = useContext(ThemeContext);
   const navigation = useNavigation();
@@ -57,7 +58,7 @@ export default ({
         style={{
           top: StatusHeight,
           ...styles.header,
-          ...headerStyle,
+          ...style,
           position: "absolute",
           borderWidth: 1,
         }}
@@ -82,21 +83,15 @@ export default ({
             {title}
           </Title>
         </MiddleContainer>
-        <RightContainer>
-          <TouchableOpacity
-            onPress={() => {
-              rightButton();
-            }}
-            title="goBack"
-            style={{ marginRight: 20 }}
-          >
-            <Title>{rightButtonText}</Title>
-          </TouchableOpacity>
-        </RightContainer>
+        {rightButtonEnabled && rightButton ? (
+          <RightContainer>{rightButton}</RightContainer>
+        ) : null}
       </View>
     </>
   );
 };
+
+export default CustomHeader;
 
 const styles = StyleSheet.create({
   header: {
@@ -109,3 +104,9 @@ const styles = StyleSheet.create({
     zIndex: 2,
   },
 });
+CustomHeader.propTypes = {
+  style: PropTypes.object,
+  rightButtonEnabled: PropTypes.bool,
+  rightButton: PropTypes.node,
+  title: PropTypes.string,
+};
