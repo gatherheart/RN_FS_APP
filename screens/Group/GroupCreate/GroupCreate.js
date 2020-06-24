@@ -64,87 +64,158 @@ export default () => {
           </TouchableOpacity>
         </View>
       </View>
-      <View style={{ ...styles.optionContainer }}>
-        <View style={{ ...styles.optionName }}>
-          <Text>학교</Text>
-        </View>
-        <View style={{ ...styles.optionContent }}>
-          <TouchableOpacity style={{ ...styles.optionContent }}>
-            <Text style={{ ...styles.optionText }}>
-              학교 및 캠퍼스를 선택해주세요
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-      <View style={{ ...styles.optionContainer }}>
-        <View style={{ ...styles.optionName }}>
-          <Text>분야</Text>
-        </View>
-        <View style={{ ...styles.optionContent }}>
-          <TouchableOpacity style={{ ...styles.optionContent }}>
-            <Text style={{ ...styles.optionText }}>분야를 선택해주세요</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-      <Divider></Divider>
-      <Text style={{ ...styles.category }}>가입 조건</Text>
+      {page === 0 ? (
+        <>
+          <View style={{ ...styles.optionContainer }}>
+            <View style={{ ...styles.optionName }}>
+              <Text>학교</Text>
+            </View>
+            <View style={{ ...styles.optionContent }}>
+              <TouchableOpacity style={{ ...styles.optionContent }}>
+                <Text style={{ ...styles.optionText }}>
+                  학교 및 캠퍼스를 선택해주세요
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={{ ...styles.optionContainer }}>
+            <View style={{ ...styles.optionName }}>
+              <Text>분야</Text>
+            </View>
+            <View style={{ ...styles.optionContent }}>
+              <TouchableOpacity style={{ ...styles.optionContent }}>
+                <Text style={{ ...styles.optionText }}>
+                  분야를 선택해주세요
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <Divider></Divider>
+          <Text style={{ ...styles.category }}>가입 조건</Text>
+          <View style={{ ...styles.optionContainer }}>
+            <View style={{ ...styles.optionName }}>
+              <Text>학교</Text>
+            </View>
+            <View style={{ ...styles.optionContent }}>
+              <TouchableOpacity style={{ ...styles.optionContent }}>
+                <Text style={{ ...styles.optionText }}>
+                  학교 및 캠퍼스를 선택해주세요
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={{ ...styles.optionContainer }}>
+            <View style={{ ...styles.optionName }}>
+              <Text>단과대학</Text>
+            </View>
+            <View style={{ ...styles.optionContent }}>
+              <TouchableOpacity style={{ ...styles.optionContent }}>
+                <Text style={{ ...styles.optionText }}>무관</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={{ ...styles.optionContainer }}>
+            <View style={{ ...styles.optionName }}>
+              <Text>학과</Text>
+            </View>
+            <View style={{ ...styles.optionContent }}>
+              <TouchableOpacity>
+                <Text style={{ ...styles.optionText }}>무관</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={{ ...styles.optionContainer }}>
+            <View style={{ ...styles.optionName }}>
+              <Text>학번</Text>
+            </View>
+            <View style={{ ...styles.optionContent }}>
+              <TouchableOpacity
+                style={{
+                  ...styles.pageButton,
+                }}
+                onPress={() => setPage(0)}
+              >
+                <Text style={{ ...styles.optionText }}>부터</Text>
+              </TouchableOpacity>
+              <Text> ~ </Text>
+              <TouchableOpacity
+                style={{
+                  ...styles.pageButton,
+                }}
+                onPress={() => setPage(1)}
+              >
+                <Text style={{ ...styles.optionText }}>까지</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </>
+      ) : (
+        <>
+          <View style={{ ...styles.optionContainer }}>
+            <View style={{ ...styles.optionName }}>
+              <Text>지역</Text>
+            </View>
+            <View style={{ ...styles.optionContent }}>
+              <TouchableOpacity style={{ ...styles.optionContent }}>
+                <Text style={{ ...styles.optionText }}>
+                  지역을 선택해주세요
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={{ ...styles.optionContainer }}>
+            <View style={{ ...styles.optionName }}>
+              <Text>분야</Text>
+            </View>
+            <View style={{ ...styles.optionContent }}>
+              <TouchableOpacity style={{ ...styles.optionContent }}>
+                <Text style={{ ...styles.optionText }}>
+                  분야를 선택해주세요
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <Divider></Divider>
+          <Text style={{ ...styles.category }}>가입 조건</Text>
+          <View style={{ ...styles.optionContainer }}>
+            <View style={{ ...styles.optionName }}>
+              <Text>학교</Text>
+            </View>
+            <View style={{ ...styles.optionContent }}>
+              <TouchableOpacity style={{ ...styles.optionContent }}>
+                <Text style={{ ...styles.optionText }}>
+                  학교 및 캠퍼스를 선택해주세요
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
 
-      <View style={{ ...styles.optionContainer }}>
-        <View style={{ ...styles.optionName }}>
-          <Text>학교</Text>
-        </View>
-        <View style={{ ...styles.optionContent }}>
-          <TouchableOpacity style={{ ...styles.optionContent }}>
-            <Text style={{ ...styles.optionText }}>
-              학교 및 캠퍼스를 선택해주세요
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-      <View style={{ ...styles.optionContainer }}>
-        <View style={{ ...styles.optionName }}>
-          <Text>단과대학</Text>
-        </View>
-        <View style={{ ...styles.optionContent }}>
-          <TouchableOpacity style={{ ...styles.optionContent }}>
-            <Text style={{ ...styles.optionText }}>무관</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-      <View style={{ ...styles.optionContainer }}>
-        <View style={{ ...styles.optionName }}>
-          <Text>학과</Text>
-        </View>
-        <View style={{ ...styles.optionContent }}>
-          <TouchableOpacity>
-            <Text style={{ ...styles.optionText }}>무관</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-      <View style={{ ...styles.optionContainer }}>
-        <View style={{ ...styles.optionName }}>
-          <Text>학번</Text>
-        </View>
-        <View style={{ ...styles.optionContent }}>
-          <TouchableOpacity
-            style={{
-              ...styles.pageButton,
-            }}
-            onPress={() => setPage(0)}
-          >
-            <Text style={{ ...styles.optionText }}>부터</Text>
-          </TouchableOpacity>
-          <Text> ~ </Text>
-          <TouchableOpacity
-            style={{
-              ...styles.pageButton,
-            }}
-            onPress={() => setPage(1)}
-          >
-            <Text style={{ ...styles.optionText }}>까지</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+          <View style={{ ...styles.optionContainer }}>
+            <View style={{ ...styles.optionName }}>
+              <Text>학번</Text>
+            </View>
+            <View style={{ ...styles.optionContent }}>
+              <TouchableOpacity
+                style={{
+                  ...styles.pageButton,
+                }}
+                onPress={() => setPage(0)}
+              >
+                <Text style={{ ...styles.optionText }}>부터</Text>
+              </TouchableOpacity>
+              <Text> ~ </Text>
+              <TouchableOpacity
+                style={{
+                  ...styles.pageButton,
+                }}
+                onPress={() => setPage(1)}
+              >
+                <Text style={{ ...styles.optionText }}>까지</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </>
+      )}
     </View>
   );
 };
