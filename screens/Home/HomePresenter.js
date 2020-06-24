@@ -1,11 +1,21 @@
 import React, { useContext } from "react";
 import styled, { ThemeContext } from "styled-components/native";
-import { Dimensions, TouchableOpacity, Text } from "react-native";
+import {
+  Dimensions,
+  TouchableOpacity,
+  Text,
+  ScrollView,
+  StyleSheet,
+} from "react-native";
 import ScrollContainer from "../../components/common/ScrollContainer";
 import GroupCard from "../../components/Home/GroupCard";
 import List from "../../components/common/List";
 import TodaySchedule from "../../components/Home/TodaySchedule";
 import GroupButton from "../../components/Home/HomeBottomBtn";
+import {} from "react-native-gesture-handler";
+import { BG_COLOR } from "../../constants/Color";
+import HomeHeader from "../../components/common/HomeHeader";
+import { UnderHeader, HeaderHeight } from "../../utils/HeaderHeight";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
@@ -28,45 +38,57 @@ export default ({ refreshFn, loading, navigation }) => {
   const themeContext = useContext(ThemeContext);
 
   return (
-    <ScrollContainer
-      refreshFn={refreshFn}
-      loading={loading}
-      contentContainerStyle={{ ...themeContext.backgroundColor }}
-    >
-      <ScheduleContainer>
-        <TodaySchedule schedules={schedules}></TodaySchedule>
-      </ScheduleContainer>
-      <GroupContainer>
-        <List title={""}>
-          {groups.map((group) => (
-            <GroupCard key={group.id} {...group}></GroupCard>
-          ))}
-        </List>
-        <ButtonContainer>
-          <GroupButton
-            title={"Group Create"}
-            onclickFunc={() => {
-              navigation.navigate("GroupCreate");
-            }}
-          ></GroupButton>
-          <GroupButton
-            title={"Group Search"}
-            onclickFunc={() => {
-              navigation.navigate("GroupSearchNav");
-            }}
-          ></GroupButton>
-        </ButtonContainer>
-      </GroupContainer>
-      <EmptySpace></EmptySpace>
-    </ScrollContainer>
+    <>
+      <HomeHeader></HomeHeader>
+      <ScrollView
+        style={{
+          backgroundColor: themeContext.backgroundColor,
+          top: HeaderHeight,
+        }}
+        contentContainerStyle={styles.mainContainer}
+      >
+        <ScheduleContainer>
+          <TodaySchedule schedules={schedules}></TodaySchedule>
+        </ScheduleContainer>
+        <GroupContainer>
+          <List title={""}>
+            {groups.map((group) => (
+              <GroupCard key={group.id} {...group}></GroupCard>
+            ))}
+          </List>
+          <ButtonContainer>
+            <GroupButton
+              title={"Group Create"}
+              onclickFunc={() => {
+                navigation.navigate("GroupCreate");
+              }}
+            ></GroupButton>
+            <GroupButton
+              title={"Group Search"}
+              onclickFunc={() => {
+                navigation.navigate("GroupSearchNav");
+              }}
+            ></GroupButton>
+          </ButtonContainer>
+        </GroupContainer>
+        <EmptySpace></EmptySpace>
+      </ScrollView>
+    </>
   );
 };
+
+const styles = StyleSheet.create({
+  mainContainer: {
+    backgroundColor: BG_COLOR,
+    alignItems: "center",
+  },
+});
 
 const result = {
   groups: [
     {
       groupName: "Golf Groups",
-      id: 1,
+      id: "1",
       tag: ["Game", "Play", "Sports"],
       vote: "Vote #1",
       schedule: "Schedule #1",
@@ -75,7 +97,7 @@ const result = {
     },
     {
       groupName: "Soccer Groups",
-      id: 2,
+      id: "2",
       tag: ["Game", "Play", "Sports"],
       vote: "Vote #2",
       schedule: "Schedule #1",
@@ -84,7 +106,7 @@ const result = {
     },
     {
       groupName: "Golf Groups",
-      id: 3,
+      id: "3",
       tag: ["Play", "Soccer", "Sports"],
       vote: "Vote #3",
       schedule: "Schedule #3",

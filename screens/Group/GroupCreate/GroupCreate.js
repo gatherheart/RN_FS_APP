@@ -6,7 +6,7 @@ import {
   Dimensions,
   TouchableOpacity,
 } from "react-native";
-import LeafIcon from "../../../components/common/LeafIcon";
+import LeafIcon from "../../../components/common/svg/LeafIcon";
 import CustomHeader from "../../../components/common/CustomHeader";
 import { HeaderHeight } from "../../../utils/HeaderHeight";
 import {

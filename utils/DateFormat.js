@@ -11,7 +11,6 @@ export const dDayCalculator = (date) => {
   const theDate = new Date(date);
   const present_date = new Date();
   const one_day = 1000 * 60 * 60 * 24;
-  console.log(theDate);
   const Result =
     Math.round(theDate.getTime() - present_date.getTime()) / one_day;
   return Result.toFixed(0);

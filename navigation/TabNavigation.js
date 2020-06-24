@@ -50,7 +50,7 @@ export default ({ navigation, route }) => {
     const name = getHeaderName(route);
     navigation.setOptions({
       title: name,
-      headerShown: name !== "ChatStack",
+      headerShown: false,
       //headerStyle: {
       //  backgroundColor: name === 'TV' ? 'red' : 'black',
       //},
