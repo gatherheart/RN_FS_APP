@@ -82,7 +82,13 @@ const HomeHeader = ({ style }) => {
         </LeftContainer>
         <MiddleContainer></MiddleContainer>
         <RightContainer>
-          <EvilIcons name={"search"} size={30}></EvilIcons>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("GroupSearchNav");
+            }}
+          >
+            <EvilIcons name={"search"} size={30}></EvilIcons>
+          </TouchableOpacity>
         </RightContainer>
       </View>
     </>

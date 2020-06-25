@@ -8,7 +8,7 @@ import { isFuture, isToday, formatAMPM } from "../../utils/DateFormat";
 import StarIcon from "../common/svg/StarIcon";
 import { trimText } from "../../utils/String";
 import {
-  LIGHT_GREY_CLOLR,
+  LIGHT_GREY_COLOR,
   LIGHT_GREEN_COLOR,
   GREEN_COLOR,
   BG_COLOR,
@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
     width: WIDTH,
     height: 65,
     borderBottomWidth: 1,
-    borderBottomColor: LIGHT_GREY_CLOLR,
+    borderBottomColor: LIGHT_GREY_COLOR,
   },
   boldText: {
     fontWeight: "700",

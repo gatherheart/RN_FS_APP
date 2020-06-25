@@ -21,7 +21,9 @@ import StarIcon from "../../components/common/svg/StarIcon";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
-const GroupContainer = styled.View``;
+const GroupContainer = styled.View`
+  align-items: center;
+`;
 
 const ScheduleContainer = styled.View`
   margin-top: ${(HEIGHT * 2) / 100}px;
@@ -81,27 +83,24 @@ export default ({ refreshFn, loading, navigation }) => {
           <TodaySchedule groupSched={groupSched}></TodaySchedule>
         </ScheduleContainer>
         <GroupContainer>
+          <View style={{ ...styles.groupTitle, marginTop: 30 }}>
+            <BoldText style={{ ...styles.scheduleText, marginTop: 0 }}>
+              나의 숲
+            </BoldText>
+            <TouchableOpacity
+              style={styles.goToCreate}
+              onPress={() => navigation.navigate("GroupCreate")}
+            >
+              <Text style={styles.goToCalendarText}>숲 만들기</Text>
+              <Ionicons name={"ios-add"} color={GREEN_COLOR}></Ionicons>
+            </TouchableOpacity>
+          </View>
           <List title={""}>
             {groups.map((group) => (
               <GroupCard key={group.id} {...group}></GroupCard>
             ))}
           </List>
-          <ButtonContainer>
-            <GroupButton
-              title={"Group Create"}
-              onclickFunc={() => {
-                navigation.navigate("GroupCreate");
-              }}
-            ></GroupButton>
-            <GroupButton
-              title={"Group Search"}
-              onclickFunc={() => {
-                navigation.navigate("GroupSearchNav");
-              }}
-            ></GroupButton>
-          </ButtonContainer>
         </GroupContainer>
-        <EmptySpace></EmptySpace>
       </ScrollView>
     </>
   );
@@ -115,6 +114,7 @@ const styles = StyleSheet.create({
   scheduleTitle: {
     flexDirection: "row",
     justifyContent: "space-between",
+    width: (WIDTH * 90) / 100,
     height: (HEIGHT * 3) / 100,
     alignItems: "center",
     marginHorizontal: 20,
@@ -138,6 +138,26 @@ const styles = StyleSheet.create({
   goToCalendarText: {
     color: GREEN_COLOR,
   },
+  goToCreate: {
+    borderRadius: 4,
+    backgroundColor: BG_COLOR,
+    borderColor: GREEN_COLOR,
+    borderWidth: 1,
+    width: 70,
+    height: 20,
+    justifyContent: "space-around",
+    alignItems: "center",
+    flexDirection: "row",
+  },
+  groupTitle: {
+    flexDirection: "row",
+    width: (WIDTH * 90) / 100,
+    justifyContent: "space-between",
+    height: (HEIGHT * 3) / 100,
+    alignItems: "center",
+    marginHorizontal: 20,
+    marginTop: 10,
+  },
 });
 
 const result = {
@@ -146,7 +166,6 @@ const result = {
       groupName: "배그 마스터",
       id: "1",
       tag: ["Game", "Play", "Sports"],
-      vote: "Vote #1",
       schedules: [
         {
           id: "24432",
@@ -157,14 +176,35 @@ const result = {
           issuedDate: "2020-06-24T16:30:59.554Z",
         },
       ],
-      notice: "Go to Home",
+      votes: [
+        {
+          type: "vote",
+          id: "132352",
+          title: "4월 회식 날짜",
+          date: "2020-04-21",
+        },
+        {
+          type: "vote",
+          id: "12341",
+          title: "5월 회식 날짜",
+          date: "2019-05-01",
+        },
+      ],
+      notices: [
+        {
+          type: "notice",
+          id: "112",
+          title: "4월 회식",
+          date: "2020-04-19",
+        },
+      ],
       poster: "",
+      isSchool: true, // School or Union
     },
     {
       groupName: "스위치 모임",
       id: "2",
       tag: ["Game", "Play", "Sports"],
-      vote: "Vote #2",
       schedules: [
         {
           id: "22332",
@@ -175,14 +215,36 @@ const result = {
           issuedDate: "2020-06-24T16:30:59.554Z",
         },
       ],
-      notice: "Go to School",
-      poster: "",
+      votes: [
+        {
+          type: "vote",
+          id: "132352",
+          title: "4월 회식 날짜",
+          date: "2020-04-21",
+        },
+        {
+          type: "vote",
+          id: "12341",
+          title: "5월 회식 날짜",
+          date: "2019-05-01",
+        },
+      ],
+      notices: [
+        {
+          type: "notice",
+          id: "112",
+          title: "4월 회식",
+          date: "2020-04-19",
+        },
+      ],
+      poster:
+        "https://images.unsplash.com/photo-1588785392665-f6d4a541417d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=320",
+      isSchool: true, // School or Union
     },
     {
       groupName: "플레이 그라운드",
       id: "3",
       tag: ["Play", "Soccer", "Sports"],
-      vote: "Vote #3",
       schedules: [
         {
           id: "2342",
@@ -193,8 +255,30 @@ const result = {
           issuedDate: "2020-06-24T16:30:59.554Z",
         },
       ],
-      notice: "Go to Home",
+      votes: [
+        {
+          type: "vote",
+          id: "132352",
+          title: "4월 회식 날짜",
+          date: "2020-04-21",
+        },
+        {
+          type: "vote",
+          id: "12341",
+          title: "5월 회식 날짜",
+          date: "2019-05-01",
+        },
+      ],
+      notices: [
+        {
+          type: "notice",
+          id: "112",
+          title: "4월 회식",
+          date: "2020-04-19",
+        },
+      ],
       poster: "",
+      isSchool: false, // School or Union
     },
   ],
 };
