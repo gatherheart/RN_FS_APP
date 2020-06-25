@@ -3,6 +3,7 @@ import styled, { ThemeContext } from "styled-components/native";
 import {
   Dimensions,
   TouchableOpacity,
+  View,
   Text,
   ScrollView,
   StyleSheet,
@@ -12,16 +13,20 @@ import GroupCard from "../../components/Home/GroupCard";
 import List from "../../components/common/List";
 import TodaySchedule from "../../components/Home/TodaySchedule";
 import GroupButton from "../../components/Home/HomeBottomBtn";
-import {} from "react-native-gesture-handler";
-import { BG_COLOR } from "../../constants/Color";
+import { GREEN_COLOR, BG_COLOR } from "../../constants/Color";
 import HomeHeader from "../../components/common/HomeHeader";
 import { UnderHeader, HeaderHeight } from "../../utils/HeaderHeight";
+import { Ionicons } from "@expo/vector-icons";
+import StarIcon from "../../components/common/svg/StarIcon";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
 const GroupContainer = styled.View``;
 
-const ScheduleContainer = styled.View``;
+const ScheduleContainer = styled.View`
+  margin-top: ${(HEIGHT * 2) / 100}px;
+  width: ${WIDTH}px;
+`;
 
 const ButtonContainer = styled.View`
   flex-direction: row;
@@ -32,23 +37,48 @@ const EmptySpace = styled.View`
   height: ${HEIGHT / 15}px;
 `;
 
+const BoldText = styled.Text`
+  color: black;
+  font-weight: bold;
+`;
+
+const MONTH = "month";
+const YEAR = "year";
+const WEEK = "week";
+
 export default ({ refreshFn, loading, navigation }) => {
   const { groups } = result;
-  const schedules = groups.map((group) => group.schedule);
   const themeContext = useContext(ThemeContext);
-
+  const groupSched = groups.map((group) => {
+    return {
+      schedules: group.schedules,
+      groupId: group.id,
+      groupName: group.groupName,
+    };
+  });
+  console.log(new Date());
   return (
     <>
       <HomeHeader></HomeHeader>
+
       <ScrollView
         style={{
           backgroundColor: themeContext.backgroundColor,
-          top: HeaderHeight,
         }}
         contentContainerStyle={styles.mainContainer}
       >
         <ScheduleContainer>
-          <TodaySchedule schedules={schedules}></TodaySchedule>
+          <View style={styles.scheduleTitle}>
+            <BoldText style={{ ...styles.scheduleText }}>오늘의 일정</BoldText>
+            <TouchableOpacity style={styles.goToCalendar}>
+              <Text style={styles.goToCalendarText}>캘린더</Text>
+              <Ionicons
+                name={"ios-arrow-forward"}
+                color={GREEN_COLOR}
+              ></Ionicons>
+            </TouchableOpacity>
+          </View>
+          <TodaySchedule groupSched={groupSched}></TodaySchedule>
         </ScheduleContainer>
         <GroupContainer>
           <List title={""}>
@@ -82,34 +112,87 @@ const styles = StyleSheet.create({
     backgroundColor: BG_COLOR,
     alignItems: "center",
   },
+  scheduleTitle: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    height: (HEIGHT * 3) / 100,
+    alignItems: "center",
+    marginHorizontal: 20,
+    marginTop: 10,
+  },
+  scheduleText: {
+    fontWeight: "600",
+    fontSize: 15,
+  },
+  goToCalendar: {
+    borderRadius: 4,
+    backgroundColor: BG_COLOR,
+    borderColor: GREEN_COLOR,
+    borderWidth: 1,
+    width: 55,
+    height: 20,
+    justifyContent: "space-around",
+    alignItems: "center",
+    flexDirection: "row",
+  },
+  goToCalendarText: {
+    color: GREEN_COLOR,
+  },
 });
 
 const result = {
   groups: [
     {
-      groupName: "Golf Groups",
+      groupName: "배그 마스터",
       id: "1",
       tag: ["Game", "Play", "Sports"],
       vote: "Vote #1",
-      schedule: "Schedule #1",
+      schedules: [
+        {
+          id: "24432",
+          title: "매주 회식 일정",
+          memo: "참여 부탁합니다",
+          date: "2020-06-25T13:26:04.063Z",
+          cycle: MONTH,
+          issuedDate: "2020-06-24T16:30:59.554Z",
+        },
+      ],
       notice: "Go to Home",
       poster: "",
     },
     {
-      groupName: "Soccer Groups",
+      groupName: "스위치 모임",
       id: "2",
       tag: ["Game", "Play", "Sports"],
       vote: "Vote #2",
-      schedule: "Schedule #1",
+      schedules: [
+        {
+          id: "22332",
+          title: "매주 회의 일정",
+          memo: "참여 부탁합니다",
+          date: "2020-06-25T01:26:17.734Z",
+          cycle: YEAR,
+          issuedDate: "2020-06-24T16:30:59.554Z",
+        },
+      ],
       notice: "Go to School",
       poster: "",
     },
     {
-      groupName: "Golf Groups",
+      groupName: "플레이 그라운드",
       id: "3",
       tag: ["Play", "Soccer", "Sports"],
       vote: "Vote #3",
-      schedule: "Schedule #3",
+      schedules: [
+        {
+          id: "2342",
+          title: "행사 일정",
+          memo: "참여 부탁합니다",
+          date: "2020-06-25T04:26:17.734Z",
+          cycle: WEEK,
+          issuedDate: "2020-06-24T16:30:59.554Z",
+        },
+      ],
       notice: "Go to Home",
       poster: "",
     },

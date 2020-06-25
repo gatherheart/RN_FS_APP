@@ -1,66 +1,189 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
 import styled, { ThemeContext } from "styled-components/native";
-import { Dimensions, StyleSheet } from "react-native";
+import { Dimensions, StyleSheet, View, Text } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
+import { isFuture, isToday, formatAMPM } from "../../utils/DateFormat";
+import StarIcon from "../common/svg/StarIcon";
+import { trimText } from "../../utils/String";
+import {
+  LIGHT_GREY_CLOLR,
+  LIGHT_GREEN_COLOR,
+  GREEN_COLOR,
+  BG_COLOR,
+} from "../../constants/Color";
+import Collapsible from "react-native-collapsible";
+import { Ionicons } from "@expo/vector-icons";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
 const Card = styled.View`
-  width: ${(WIDTH * 90) / 100}px;
+  width: ${(WIDTH * 100) / 100}px;
   justify-content: center;
-  margin: 20px 0px 0px 0px;
-  padding-bottom: 10px;
-  opacity: 10;
-  border-radius: 15px;
-`;
-const Title = styled.Text`
-  margin: 20px 10px 20px 20px;
-`;
-const ScheduleConatiner = styled.View`
-  padding: 0px 8px 5px 10px;
-  flex-direction: row;
-  justify-content: space-between;
-`;
-const LeftText = styled.Text`
-  margin: 0px 0px 3px 10px;
-`;
-const RightText = styled.Text`
-  margin: 0px 10px 3px 0px;
+  margin: 0px 0px 0px 0px;
+  padding-bottom: 0px;
 `;
 
-const TodaySchedule = ({ schedules }) => {
-  const themeContext = useContext(ThemeContext);
-  const defaultHeight = schedules ? 50 + schedules.length * 25 : 50;
-  const navigation = useNavigation();
+const ScheduleBox = ({ sched }) => {
   return (
-    <TouchableOpacity
-      activeOpacity={0.8}
-      onPress={() => {
-        navigation.navigate("Schedule", { schedules });
-      }}
-    >
-      <Card
-        style={{
-          ...themeContext.withShadow,
-          height: defaultHeight,
-          backgroundColor: themeContext.lightGreenColor,
-        }}
-      >
-        <Title>Schedule 🗓</Title>
-        {schedules
-          ? schedules.map((schedule, index) => (
-              <ScheduleConatiner key={index}>
-                <LeftText>Group Name</LeftText>
-                <RightText>{schedule}</RightText>
-              </ScheduleConatiner>
-            ))
-          : null}
-      </Card>
-    </TouchableOpacity>
+    <View style={{ ...styles.scheduleBoxContainer }}>
+      <View style={styles2.starIcon}>
+        <StarIcon height={`${(10 * WIDTH) / 100}%`}></StarIcon>
+      </View>
+      <View style={styles2.groupContainer}>
+        <Text style={{ ...styles.boldText, ...styles2.groupText }}>
+          {sched.groupName}
+        </Text>
+        <Text>{trimText(sched.schedule.title, 26)}</Text>
+      </View>
+      <View style={styles2.timeContainer}>
+        <Text style={styles2.timeText}>{formatAMPM(sched.schedule.date)}</Text>
+      </View>
+    </View>
   );
 };
+
+const styles2 = StyleSheet.create({
+  starIcon: {
+    width: (WIDTH * 15) / 100,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  groupContainer: {
+    justifyContent: "center",
+    paddingLeft: 10,
+    width: (WIDTH * 60) / 100,
+  },
+  groupText: {
+    fontWeight: "700",
+    marginVertical: 2,
+  },
+  timeContainer: {
+    alignSelf: "flex-end",
+    justifyContent: "flex-end",
+    width: (WIDTH * 25) / 100,
+    marginVertical: 10,
+    paddingRight: 5,
+  },
+  timeText: {
+    width: "100%",
+    paddingRight: 10,
+    textAlign: "right",
+  },
+});
+
+const TodaySchedule = ({ groupSched }) => {
+  const themeContext = useContext(ThemeContext);
+  const defaultHeight = groupSched ? 50 + groupSched.length * 25 : 50;
+  const navigation = useNavigation();
+  const [isCollapsed, setIsCollapsed] = useState(true);
+
+  const sortByDate = (target) => {
+    target.sort((a, b) => {
+      let dateA = new Date(a.schedule.date),
+        dateB = new Date(b.schedule.date);
+      return dateA - dateB;
+    });
+    return target;
+  };
+
+  const classifySchedule = (groupSched) => {
+    let todaySchedules = [];
+    for (let i = 0; i < groupSched.length; i++) {
+      let _currentGroup = groupSched[i];
+      let _sched = _currentGroup.schedules;
+      let _ret = {
+        groupId: _currentGroup.groupId,
+        groupName: _currentGroup.groupName,
+        schedule: null,
+      };
+      for (let j = 0; j < _sched.length; j++) {
+        let _currentSched = _sched[j];
+
+        if (isFuture(_currentSched.date)) break;
+        else if (isToday(_currentSched.date)) {
+          _ret.schedule = _currentSched;
+          todaySchedules.push(_ret);
+        }
+      }
+    }
+    return sortByDate(todaySchedules);
+  };
+  const todaySchedules = classifySchedule(groupSched);
+  return (
+    <View>
+      <Card style={{}}>
+        {todaySchedules.length != 0
+          ? todaySchedules.slice(0, 2).map((sched, idx) => {
+              return (
+                <ScheduleBox
+                  key={`todaySched-${idx}`}
+                  sched={sched}
+                ></ScheduleBox>
+              );
+            })
+          : null}
+
+        <Collapsible collapsed={isCollapsed}>
+          {todaySchedules.length != 0
+            ? todaySchedules.slice(2).map((sched, idx) => {
+                return (
+                  <ScheduleBox
+                    key={`todaySched-${idx}`}
+                    sched={sched}
+                  ></ScheduleBox>
+                );
+              })
+            : null}
+        </Collapsible>
+      </Card>
+      <View>
+        <View
+          style={{
+            position: "absolute",
+            left: WIDTH / 2 - 30,
+            top: -10,
+            backgroundColor: BG_COLOR,
+          }}
+        >
+          <TouchableOpacity
+            style={{
+              borderWidth: 1,
+              borderColor: GREEN_COLOR,
+              borderRadius: 5,
+              width: 60,
+              height: 20,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            onPress={() => {
+              setIsCollapsed((prev) => !prev);
+            }}
+          >
+            <Ionicons
+              name={isCollapsed ? "ios-arrow-down" : "ios-arrow-up"}
+              color={GREEN_COLOR}
+            ></Ionicons>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  scheduleBoxContainer: {
+    flexDirection: "row",
+    width: WIDTH,
+    height: 65,
+    borderBottomWidth: 1,
+    borderBottomColor: LIGHT_GREY_CLOLR,
+  },
+  boldText: {
+    fontWeight: "700",
+  },
+});
 
 TodaySchedule.prototype = {};
 

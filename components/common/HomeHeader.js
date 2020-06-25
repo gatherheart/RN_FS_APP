@@ -21,7 +21,7 @@ import styled from "styled-components/native";
 import TreeIcon from "./svg/TreeIcon";
 import { EvilIcons } from "@expo/vector-icons";
 
-const { width: WIDTH, height } = Dimensions.get("screen");
+const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
 const Title = styled.Text``;
 
@@ -57,10 +57,8 @@ const HomeHeader = ({ style }) => {
       />
       <View
         style={{
-          top: StatusHeight,
           ...styles.header,
           ...style,
-          position: "absolute",
         }}
       >
         <LeftContainer>
@@ -74,7 +72,10 @@ const HomeHeader = ({ style }) => {
                 justifyContent: "center",
               }}
             >
-              <TreeIcon height={"85%"} width={"85%"}></TreeIcon>
+              <TreeIcon
+                height={`${(20 * WIDTH) / 100}%`}
+                width={`${(20 * WIDTH) / 100}%`}
+              ></TreeIcon>
             </TouchableOpacity>
           </View>
           <Text style={styles.appTitle}>포레스틴</Text>

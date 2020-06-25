@@ -101,9 +101,6 @@ const Horizontal = ({ id, groupName, schedule, poster, tag, vote, notice }) => {
                 : null}
             </HashContainer>
             {vote ? <Vote>{trimText(vote, 130)}</Vote> : null}
-            {schedule ? (
-              <Schedule>sched: {trimText(schedule, 130)}</Schedule>
-            ) : null}
             {notice ? <Notice>{trimText(notice, 130)}</Notice> : null}
           </Data>
         </Container>

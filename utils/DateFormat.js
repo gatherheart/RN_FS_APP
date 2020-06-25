@@ -109,3 +109,39 @@ export const sortByDate = (target) => {
     return dateB - dateA;
   });
 };
+
+export const isToday = (date) => {
+  const today = new Date();
+  const theDate = new Date(date);
+  return (
+    theDate.getDate() == today.getDate() &&
+    theDate.getMonth() == today.getMonth() &&
+    theDate.getFullYear() == today.getFullYear()
+  );
+};
+
+export const isFuture = (date) => {
+  const today = new Date();
+  const theDate = new Date(date);
+
+  return (
+    (theDate.getDate() > today.getDate() &&
+      theDate.getMonth() == today.getMonth() &&
+      theDate.getFullYear() == today.getFullYear()) ||
+    (theDate.getMonth() > today.getMonth() &&
+      theDate.getFullYear() == today.getFullYear()) ||
+    theDate.getFullYear() > today.getFullYear()
+  );
+};
+
+export function formatAMPM(date) {
+  const theDate = new Date(date);
+  var hours = theDate.getHours();
+  var minutes = theDate.getMinutes();
+  var ampm = hours >= 12 ? "오후" : "오전";
+  hours = hours % 12;
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+  minutes = minutes < 10 ? "0" + minutes : minutes;
+  var strTime = ampm + " " + hours + ":" + minutes + " ";
+  return strTime;
+}
