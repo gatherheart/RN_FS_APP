@@ -6,7 +6,10 @@ import {
 import Tabs from "./TabNavigation";
 import GroupScreen from "./GroupNavigation";
 import GroupSearchNav from "./GroupSearchNavigation";
-import GroupCreateScreen from "../screens/Group/GroupCreate/GroupCreate";
+import GroupCreateScreen1 from "../screens/Group/GroupCreate/GroupCreate1";
+import GroupCreateScreen2 from "../screens/Group/GroupCreate/GroupCreate2";
+import GroupCreateScreen3 from "../screens/Group/GroupCreate/GroupCreate3";
+
 import ChatScreen from "../screens/Chat";
 import Schedule from "../screens/Home/Schedule";
 
@@ -42,8 +45,25 @@ export default () => {
         }}
       ></Stack.Screen>
       <Stack.Screen
-        name="GroupCreate"
-        component={GroupCreateScreen}
+        name="GroupCreate1"
+        component={GroupCreateScreen1}
+        options={{
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      ></Stack.Screen>
+      <Stack.Screen
+        name="GroupCreate2"
+        component={GroupCreateScreen2}
+        options={{
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      ></Stack.Screen>
+      <Stack.Screen
+        name="GroupCreate3"
+        component={GroupCreateScreen3}
+        options={{
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
       ></Stack.Screen>
       <Stack.Screen name="Schedule" component={Schedule}></Stack.Screen>
     </Stack.Navigator>

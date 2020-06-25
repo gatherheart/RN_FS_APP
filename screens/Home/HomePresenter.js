@@ -89,7 +89,7 @@ export default ({ refreshFn, loading, navigation }) => {
             </BoldText>
             <TouchableOpacity
               style={styles.goToCreate}
-              onPress={() => navigation.navigate("GroupCreate")}
+              onPress={() => navigation.navigate("GroupCreate1")}
             >
               <Text style={styles.goToCalendarText}>숲 만들기</Text>
               <Ionicons name={"ios-add"} color={GREEN_COLOR}></Ionicons>

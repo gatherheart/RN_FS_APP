@@ -165,7 +165,6 @@ Horizontal.propTypes = {
   id: PropTypes.string.isRequired,
   groupName: PropTypes.string.isRequired,
   isSchool: PropTypes.bool.isRequired,
-  schedule: PropTypes.array.isRequired,
   poster: PropTypes.string.isRequired,
   tag: PropTypes.array,
   votes: PropTypes.array,
