@@ -17,7 +17,7 @@ import {
 } from "../../../constants/Color";
 import styled from "styled-components/native";
 import RNPickerSelect from "react-native-picker-select";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 const { width: WIDHT, height: HEIGHT } = Dimensions.get("screen");
 
 const Divider = styled.View`
@@ -72,9 +72,24 @@ const nextButtonStyle = StyleSheet.create({
   },
 });
 
+const FROM_SELECT_SCHOOL = "SelectSchool";
+
 export default () => {
   const [page, setPage] = useState(0);
   const [message, setMessage] = useState("");
+  const [schoolList, setSchoolList] = useState([]);
+  const [fieldList, setFieldList] = useState([]);
+  const navigation = useNavigation();
+  const route = useRoute();
+
+  useEffect(() => {
+    const { params } = route;
+    console.log(params?.from);
+    if (params?.from === FROM_SELECT_SCHOOL) {
+      setSchoolList(params.args.schools);
+      console.log("SCHOOL LIST");
+    }
+  }, [route]);
 
   return (
     <>
@@ -118,24 +133,70 @@ export default () => {
         </View>
         {page === 0 ? (
           <>
-            <View style={{ ...styles.optionContainer }}>
-              <View style={{ ...styles.optionName }}>
-                <Text>학교</Text>
+            {schoolList.length === 0 ? (
+              <View style={{ ...styles.optionContainer }}>
+                <View style={{ ...styles.optionName }}>
+                  <Text>학교</Text>
+                </View>
+                <View style={{ ...styles.optionContent }}>
+                  <TouchableOpacity
+                    style={{ ...styles.optionContent }}
+                    onPress={() => {
+                      navigation.navigate("SelectSchool", {});
+                    }}
+                  >
+                    <Text style={{ ...styles.optionText }}>
+                      학교 및 캠퍼스를 선택해주세요
+                    </Text>
+                  </TouchableOpacity>
+                </View>
               </View>
-              <View style={{ ...styles.optionContent }}>
-                <TouchableOpacity style={{ ...styles.optionContent }}>
-                  <Text style={{ ...styles.optionText }}>
-                    학교 및 캠퍼스를 선택해주세요
-                  </Text>
-                </TouchableOpacity>
+            ) : (
+              <View
+                style={{
+                  ...styles.afterOptionContainer,
+                  height: schoolList.length * 40,
+                }}
+              >
+                <View style={{ ...styles.optionName }}>
+                  <Text>학교</Text>
+                </View>
+                <View
+                  style={{
+                    ...styles.optionContent,
+                    flexDirection: "column",
+                    justifyContent: "space-evenly",
+                  }}
+                >
+                  {schoolList.map((school, idx) => {
+                    return (
+                      <TouchableOpacity
+                        key={`school-list-${idx}`}
+                        style={{ ...styles.AfterOptionContent }}
+                        onPress={() => {
+                          navigation.navigate("SelectSchool", {});
+                        }}
+                      >
+                        <Text style={{ ...styles.AfterOptionText }}>
+                          {school}
+                        </Text>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </View>
               </View>
-            </View>
+            )}
             <View style={{ ...styles.optionContainer }}>
               <View style={{ ...styles.optionName }}>
                 <Text>분야</Text>
               </View>
               <View style={{ ...styles.optionContent }}>
-                <TouchableOpacity style={{ ...styles.optionContent }}>
+                <TouchableOpacity
+                  style={{ ...styles.optionContent }}
+                  onPress={() => {
+                    navigation.navigate("SelectField", {});
+                  }}
+                >
                   <Text style={{ ...styles.optionText }}>
                     분야를 선택해주세요
                   </Text>
@@ -218,6 +279,15 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     overflow: "hidden",
   },
+  afterOptionContainer: {
+    marginTop: 25,
+    flexDirection: "row",
+    borderWidth: 1,
+    width: "90%",
+    alignItems: "center",
+    borderRadius: 8,
+    overflow: "hidden",
+  },
   optionName: {
     height: "100%",
     justifyContent: "center",
@@ -226,10 +296,15 @@ const styles = StyleSheet.create({
     backgroundColor: LIGHT_GREEN_COLOR,
     borderRadius: 8,
   },
+  AfterOptionContent: {
+    width: "82%",
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+  },
   optionContent: {
     height: "100%",
     width: "82%",
-    justifyContent: "space-between",
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 1,
@@ -248,5 +323,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: "100%",
     borderWidth: 1,
+  },
+  AfterOptionText: {
+    opacity: 1,
+    textAlign: "center",
+    justifyContent: "center",
+    width: "100%",
   },
 });

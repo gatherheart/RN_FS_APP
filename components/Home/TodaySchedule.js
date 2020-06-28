@@ -32,13 +32,19 @@ const ScheduleBox = ({ sched }) => {
         <StarIcon height={`${(10 * WIDTH) / 100}%`}></StarIcon>
       </View>
       <View style={styles2.groupContainer}>
-        <Text style={{ ...styles.boldText, ...styles2.groupText }}>
-          {sched.groupName}
-        </Text>
+        {sched?.groupName ? (
+          <Text style={{ ...styles.boldText, ...styles2.groupText }}>
+            {sched.groupName}
+          </Text>
+        ) : null}
         <Text>{trimText(sched.schedule.title, 26)}</Text>
       </View>
       <View style={styles2.timeContainer}>
-        <Text style={styles2.timeText}>{formatAMPM(sched.schedule.date)}</Text>
+        {sched?.schedule?.date ? (
+          <Text style={styles2.timeText}>
+            {formatAMPM(sched.schedule.date)}
+          </Text>
+        ) : null}
       </View>
     </View>
   );
@@ -114,16 +120,20 @@ const TodaySchedule = ({ groupSched }) => {
   return (
     <View>
       <Card style={{}}>
-        {todaySchedules.length != 0
-          ? todaySchedules.slice(0, 2).map((sched, idx) => {
-              return (
-                <ScheduleBox
-                  key={`todaySched-${idx}`}
-                  sched={sched}
-                ></ScheduleBox>
-              );
-            })
-          : null}
+        {todaySchedules.length != 0 ? (
+          todaySchedules.slice(0, 2).map((sched, idx) => {
+            return (
+              <ScheduleBox
+                key={`todaySched-${idx}`}
+                sched={sched}
+              ></ScheduleBox>
+            );
+          })
+        ) : (
+          <ScheduleBox
+            sched={{ schedule: { title: "일정이 없습니다." } }}
+          ></ScheduleBox>
+        )}
 
         <Collapsible collapsed={isCollapsed}>
           {todaySchedules.length != 0

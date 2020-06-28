@@ -12,6 +12,9 @@ import GroupCreateScreen3 from "../screens/Group/GroupCreate/GroupCreate3";
 
 import ChatScreen from "../screens/Chat";
 import Schedule from "../screens/Home/Schedule";
+import SelectSchool from "../screens/Group/GroupCreate/SelectSchool";
+import GroupCreateContainer from "../screens/Group/GroupCreate/GroupCreateContainer";
+import SelectField from "../screens/Group/GroupCreate/SelectField";
 
 const Stack = createStackNavigator();
 
@@ -45,6 +48,13 @@ export default () => {
         }}
       ></Stack.Screen>
       <Stack.Screen
+        name="GroupCreateContainer"
+        component={GroupCreateContainer}
+        options={{
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      ></Stack.Screen>
+      <Stack.Screen
         name="GroupCreate1"
         component={GroupCreateScreen1}
         options={{
@@ -61,6 +71,20 @@ export default () => {
       <Stack.Screen
         name="GroupCreate3"
         component={GroupCreateScreen3}
+        options={{
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      ></Stack.Screen>
+      <Stack.Screen
+        name="SelectSchool"
+        component={SelectSchool}
+        options={{
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      ></Stack.Screen>
+      <Stack.Screen
+        name="SelectField"
+        component={SelectField}
         options={{
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         }}

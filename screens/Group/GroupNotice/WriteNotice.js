@@ -108,7 +108,6 @@ export default () => {
         rightButton={
           <Text onPress={() => setModalVisible((prev) => !prev)}>완료</Text>
         }
-        rightButtonText={"완료"}
       ></CustomHeader>
 
       <ScrollView

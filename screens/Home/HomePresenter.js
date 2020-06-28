@@ -13,7 +13,7 @@ import GroupCard from "../../components/Home/GroupCard";
 import List from "../../components/common/List";
 import TodaySchedule from "../../components/Home/TodaySchedule";
 import GroupButton from "../../components/Home/HomeBottomBtn";
-import { GREEN_COLOR, BG_COLOR } from "../../constants/Color";
+import { GREEN_COLOR, BG_COLOR, DARK_GREEN_COLOR } from "../../constants/Color";
 import HomeHeader from "../../components/common/HomeHeader";
 import { UnderHeader, HeaderHeight } from "../../utils/HeaderHeight";
 import { Ionicons } from "@expo/vector-icons";
@@ -88,11 +88,17 @@ export default ({ refreshFn, loading, navigation }) => {
               나의 숲
             </BoldText>
             <TouchableOpacity
-              style={styles.goToCreate}
-              onPress={() => navigation.navigate("GroupCreate1")}
+              style={{
+                ...styles.goToCreate,
+                borderWidth: 0,
+                backgroundColor: DARK_GREEN_COLOR,
+              }}
+              onPress={() => navigation.navigate("GroupCreateContainer")}
             >
-              <Text style={styles.goToCalendarText}>숲 만들기</Text>
-              <Ionicons name={"ios-add"} color={GREEN_COLOR}></Ionicons>
+              <Text style={{ ...styles.goToCalendarText, color: BG_COLOR }}>
+                숲 만들기
+              </Text>
+              <Ionicons name={"ios-add"} color={BG_COLOR}></Ionicons>
             </TouchableOpacity>
           </View>
           <List title={""}>
@@ -159,7 +165,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
 });
-
+const ads = {};
 const result = {
   groups: [
     {

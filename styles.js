@@ -5,7 +5,7 @@ export default {
   lightGreenColor: "#A6E971",
   pastelGreenColor: "#E5F4D5",
   greenColor: "#26A211",
-  darkGreenColor: "#9FDBB0",
+  darkGreenColor: "#67B560",
   darkGreyColor: "#999",
   pastelGreyColor: "#ECECEC",
   lightGreyColor: "#b2b2b2",
