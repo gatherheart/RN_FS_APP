@@ -24,29 +24,11 @@ export default () => {
     loading: true,
   });
   const [list, setList] = useState([]);
-  let institutions2 = [];
-  schoolNames.forEach((school) => {
-    const splited = school.split(" ");
-    const _school = splited[0];
-    let _campus;
-    if (splited.length <= 1) {
-      _campus = undefined;
-    } else {
-      _campus = splited[1];
-    }
-    institutions2.push({
-      range: "CAMPUS_LEVEL",
-      school: _school,
-      campus: _campus,
-      college: undefined,
-      major: undefined,
-    });
-  });
 
   const navigation = useNavigation();
   const route = useRoute();
   const { from: prevScreen } = route.params;
-  console.log(route.params);
+
   const pushNewSchool = (school) => {
     if (list.includes(school)) {
       setList((prev) => prev.filter((item) => item != school));
@@ -58,14 +40,14 @@ export default () => {
     //const [result, error] = await movieApi.nowPlaying();
     setData({
       loading: false,
-      institutions: institutions2,
+      institutions: institutions,
     });
   };
   const submit = () => {
-    console.log(prevScreen);
+    console.log(route);
     navigation.navigate(prevScreen, {
-      from: "SelectSchool",
-      args: { schools: list },
+      from: "SelectCollege",
+      args: { colleges: list },
     });
   };
   useEffect(() => {
@@ -100,7 +82,7 @@ export default () => {
               height={(HEIGHT * 5) / 100}
             ></SchoolIcon>
           </View>
-          <Text style={{ ...styles.title }}>학교를 선택해주세요!</Text>
+          <Text style={{ ...styles.title }}>단과 대학을 선택해주세요!</Text>
         </View>
         <Text style={styles.info}>다중 선택이 가능합니다</Text>
         <View style={styles.divider}></View>
@@ -108,16 +90,14 @@ export default () => {
           {data?.institutions
             ? data.institutions.map((inst, idx) => {
                 const _campus = inst.campus || "";
-                const identity = inst.school + " " + _campus;
+                const identity = inst.college;
                 return (
                   <TouchableOpacity
                     key={`institution-list-${idx}`}
                     style={styles.institutionContainer}
                     onPress={() => pushNewSchool(identity)}
                   >
-                    <Text>
-                      {inst.school} {inst.campus}
-                    </Text>
+                    <Text>{identity}</Text>
                     {list.includes(identity) ? (
                       <Ionicons name={"ios-checkmark"} size={30}></Ionicons>
                     ) : null}
@@ -176,17 +156,66 @@ const styles = StyleSheet.create({
 });
 const institutions = [
   {
-    range: "CAMPUS_LEVEL",
+    range: "COLLEGE_LEVEL",
     school: "성균관대학교",
     campus: "자연과학캠퍼스",
-    college: undefined,
+    college: "자연과학대학",
+    major: undefined,
+  },
+  {
+    range: "COLLEGE_LEVEL",
+    school: "성균관대학교",
+    campus: "자연과학캠퍼스",
+    college: "정보통신대학",
+    major: undefined,
+  },
+  {
+    range: "COLLEGE_LEVEL",
+    school: "성균관대학교",
+    campus: "자연과학캠퍼스",
+    college: "스포츠과학대학",
     major: undefined,
   },
   {
     range: "CAMPUS_LEVEL",
     school: "성균관대학교",
-    campus: "인문사회과학캠퍼스",
-    college: undefined,
+    campus: "자연과학캠퍼스",
+    college: "생명공학대학",
+    major: undefined,
+  },
+  {
+    range: "COLLEGE_LEVEL",
+    school: "성균관대학교",
+    campus: "자연과학캠퍼스",
+    college: "약학대학",
+    major: undefined,
+  },
+  {
+    range: "COLLEGE_LEVEL",
+    school: "성균관대학교",
+    campus: "자연과학캠퍼스",
+    college: "공과대학",
+    major: undefined,
+  },
+  {
+    range: "COLLEGE_LEVEL",
+    school: "성균관대학교",
+    campus: "자연과학캠퍼스",
+    college: "소프트웨어대학",
+    major: undefined,
+  },
+  {
+    range: "COLLEGE_LEVEL",
+    school: "성균관대학교",
+    campus: "자연과학캠퍼스",
+    college: "의과대학",
+    major: undefined,
+  },
+  {
+    range: "COLLEGE_LEVEL",
+    school: "성균관대학교",
+    campus: "자연과학캠퍼스",
+    college: "성균융합원",
     major: undefined,
   },
 ];

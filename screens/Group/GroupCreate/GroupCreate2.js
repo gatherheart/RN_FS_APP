@@ -118,6 +118,8 @@ const pickerSelectStyles = StyleSheet.create({
 });
 
 const FROM_SELECT_SCHOOL = "SelectSchool";
+const FROM_SELECT_COLLEGE = "SelectCollege";
+const FROM_SELECT_MAJOR = "SelectMajor";
 
 export default () => {
   const route = useRoute();
@@ -128,7 +130,8 @@ export default () => {
     areaList,
   } = route.params;
   const [schoolList, setSchoolList] = useState([]);
-
+  const [collegeList, setCollegeList] = useState([]);
+  const [majorList, setMajorList] = useState([]);
   const [message, setMessage] = useState("");
   const navigation = useNavigation();
 
@@ -137,6 +140,10 @@ export default () => {
     console.log(params?.from);
     if (params?.from === FROM_SELECT_SCHOOL) {
       setSchoolList(params.args.schools);
+    } else if (params?.from === FROM_SELECT_COLLEGE) {
+      setCollegeList(params.args.colleges);
+    } else if (params?.from === FROM_SELECT_MAJOR) {
+      setMajorList(params.args.majors);
     }
   }, [route]);
 
@@ -201,7 +208,9 @@ export default () => {
                         key={`school-list-${idx}`}
                         style={{ ...styles.AfterOptionContent }}
                         onPress={() => {
-                          navigation.navigate("SelectSchool", {});
+                          navigation.navigate("SelectSchool", {
+                            from: "GroupCreate2",
+                          });
                         }}
                       >
                         <Text style={{ ...styles.AfterOptionText }}>
@@ -213,26 +222,116 @@ export default () => {
                 </View>
               </View>
             )}
-            <View style={{ ...styles.optionContainer }}>
-              <View style={{ ...styles.optionName }}>
-                <Text>단과대학</Text>
+            {collegeList.length === 0 ? (
+              <View style={{ ...styles.optionContainer }}>
+                <View style={{ ...styles.optionName }}>
+                  <Text>단과 대학</Text>
+                </View>
+                <View style={{ ...styles.optionContent }}>
+                  <TouchableOpacity
+                    style={{ ...styles.optionContent }}
+                    onPress={() => {
+                      navigation.navigate("SelectCollege", {
+                        from: "GroupCreate2",
+                      });
+                    }}
+                  >
+                    <Text style={{ ...styles.optionText }}>무관</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
-              <View style={{ ...styles.optionContent }}>
-                <TouchableOpacity style={{ ...styles.optionContent }}>
-                  <Text style={{ ...styles.optionText }}>무관</Text>
-                </TouchableOpacity>
+            ) : (
+              <View
+                style={{
+                  ...styles.afterOptionContainer,
+                  height: schoolList.length * 40,
+                }}
+              >
+                <View style={{ ...styles.optionName }}>
+                  <Text>단과 대학</Text>
+                </View>
+                <View
+                  style={{
+                    ...styles.optionContent,
+                    flexDirection: "column",
+                    justifyContent: "space-evenly",
+                  }}
+                >
+                  {collegeList.map((college, idx) => {
+                    return (
+                      <TouchableOpacity
+                        key={`college-list-${idx}`}
+                        style={{ ...styles.AfterOptionContent }}
+                        onPress={() => {
+                          navigation.navigate("SelectCollege", {
+                            from: "GroupCreate2",
+                          });
+                        }}
+                      >
+                        <Text style={{ ...styles.AfterOptionText }}>
+                          {college}
+                        </Text>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </View>
               </View>
-            </View>
-            <View style={{ ...styles.optionContainer }}>
-              <View style={{ ...styles.optionName }}>
-                <Text>학과</Text>
+            )}
+            {majorList.length === 0 ? (
+              <View style={{ ...styles.optionContainer }}>
+                <View style={{ ...styles.optionName }}>
+                  <Text>전공</Text>
+                </View>
+                <View style={{ ...styles.optionContent }}>
+                  <TouchableOpacity
+                    style={{ ...styles.optionContent }}
+                    onPress={() => {
+                      navigation.navigate("SelectMajor", {
+                        from: "GroupCreate2",
+                      });
+                    }}
+                  >
+                    <Text style={{ ...styles.optionText }}>무관</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
-              <View style={{ ...styles.optionContent }}>
-                <TouchableOpacity style={{ ...styles.optionContent }}>
-                  <Text style={{ ...styles.optionText }}>무관</Text>
-                </TouchableOpacity>
+            ) : (
+              <View
+                style={{
+                  ...styles.afterOptionContainer,
+                  height: schoolList.length * 40,
+                }}
+              >
+                <View style={{ ...styles.optionName }}>
+                  <Text>전공</Text>
+                </View>
+                <View
+                  style={{
+                    ...styles.optionContent,
+                    flexDirection: "column",
+                    justifyContent: "space-evenly",
+                  }}
+                >
+                  {majorList.map((major, idx) => {
+                    return (
+                      <TouchableOpacity
+                        key={`major-list-${idx}`}
+                        style={{ ...styles.AfterOptionContent }}
+                        onPress={() => {
+                          navigation.navigate("SelectMajor", {
+                            from: "GroupCreate2",
+                          });
+                        }}
+                      >
+                        <Text style={{ ...styles.AfterOptionText }}>
+                          {major}
+                        </Text>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </View>
               </View>
-            </View>
+            )}
             <View style={{ ...styles.optionContainer }}>
               <View style={{ ...styles.optionName }}>
                 <Text>학번</Text>

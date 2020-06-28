@@ -14,6 +14,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import Loader from "../../../components/common/Loader";
 import { schoolNames } from "../../../constants/Names";
 import styled from "styled-components/native";
+import StudyIcon from "../../../components/common/svg/StudyIcon";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 const EmptySpace = styled.View`
@@ -24,29 +25,11 @@ export default () => {
     loading: true,
   });
   const [list, setList] = useState([]);
-  let institutions2 = [];
-  schoolNames.forEach((school) => {
-    const splited = school.split(" ");
-    const _school = splited[0];
-    let _campus;
-    if (splited.length <= 1) {
-      _campus = undefined;
-    } else {
-      _campus = splited[1];
-    }
-    institutions2.push({
-      range: "CAMPUS_LEVEL",
-      school: _school,
-      campus: _campus,
-      college: undefined,
-      major: undefined,
-    });
-  });
 
   const navigation = useNavigation();
   const route = useRoute();
   const { from: prevScreen } = route.params;
-  console.log(route.params);
+
   const pushNewSchool = (school) => {
     if (list.includes(school)) {
       setList((prev) => prev.filter((item) => item != school));
@@ -58,14 +41,13 @@ export default () => {
     //const [result, error] = await movieApi.nowPlaying();
     setData({
       loading: false,
-      institutions: institutions2,
+      institutions: institutions,
     });
   };
   const submit = () => {
-    console.log(prevScreen);
     navigation.navigate(prevScreen, {
-      from: "SelectSchool",
-      args: { schools: list },
+      from: "SelectMajor",
+      args: { majors: list },
     });
   };
   useEffect(() => {
@@ -95,29 +77,26 @@ export default () => {
       >
         <View style={{ ...styles.optionContainer }}>
           <View style={{}}>
-            <SchoolIcon
+            <StudyIcon
               width={(WIDTH * 10) / 100}
               height={(HEIGHT * 5) / 100}
-            ></SchoolIcon>
+            ></StudyIcon>
           </View>
-          <Text style={{ ...styles.title }}>학교를 선택해주세요!</Text>
+          <Text style={{ ...styles.title }}>전공을 선택해주세요!</Text>
         </View>
         <Text style={styles.info}>다중 선택이 가능합니다</Text>
         <View style={styles.divider}></View>
         <View style={styles.campusContainer}>
           {data?.institutions
             ? data.institutions.map((inst, idx) => {
-                const _campus = inst.campus || "";
-                const identity = inst.school + " " + _campus;
+                const identity = inst.major;
                 return (
                   <TouchableOpacity
                     key={`institution-list-${idx}`}
                     style={styles.institutionContainer}
                     onPress={() => pushNewSchool(identity)}
                   >
-                    <Text>
-                      {inst.school} {inst.campus}
-                    </Text>
+                    <Text>{identity}</Text>
                     {list.includes(identity) ? (
                       <Ionicons name={"ios-checkmark"} size={30}></Ionicons>
                     ) : null}
@@ -176,17 +155,52 @@ const styles = StyleSheet.create({
 });
 const institutions = [
   {
-    range: "CAMPUS_LEVEL",
+    range: "COLLEGE_LEVEL",
     school: "성균관대학교",
     campus: "자연과학캠퍼스",
-    college: undefined,
-    major: undefined,
+    college: "공과대학",
+    major: "나노공학",
   },
   {
-    range: "CAMPUS_LEVEL",
+    range: "COLLEGE_LEVEL",
     school: "성균관대학교",
-    campus: "인문사회과학캠퍼스",
-    college: undefined,
-    major: undefined,
+    campus: "자연과학캠퍼스",
+    college: "공과대학",
+    major: "건축학과",
+  },
+  {
+    range: "COLLEGE_LEVEL",
+    school: "성균관대학교",
+    campus: "자연과학캠퍼스",
+    college: "공과대학",
+    major: "시스템경영공학과",
+  },
+  {
+    range: "COLLEGE_LEVEL",
+    school: "성균관대학교",
+    campus: "자연과학캠퍼스",
+    college: "공과대학",
+    major: "건설환경공학부",
+  },
+  {
+    range: "COLLEGE_LEVEL",
+    school: "성균관대학교",
+    campus: "자연과학캠퍼스",
+    college: "공과대학",
+    major: "기계공학부",
+  },
+  {
+    range: "COLLEGE_LEVEL",
+    school: "성균관대학교",
+    campus: "자연과학캠퍼스",
+    college: "공과대학",
+    major: "신소재공학부",
+  },
+  {
+    range: "COLLEGE_LEVEL",
+    school: "성균관대학교",
+    campus: "자연과학캠퍼스",
+    college: "공과대학",
+    major: "화학공학/고분자공학부",
   },
 ];
