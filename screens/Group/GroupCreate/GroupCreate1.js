@@ -37,12 +37,17 @@ const EmptySpace = styled.View`
   height: ${(HEIGHT * 5) / 100}px;
 `;
 
-const NextButton = ({ validator }) => {
+const NextButton = ({ validator, page, schoolList, areaList, fieldList }) => {
   const navigation = useNavigation();
 
   const goToNext = () => {
     if (validator() === false) return;
-    navigation.navigate("GroupCreate2", {});
+    navigation.navigate("GroupCreate2", {
+      page,
+      schoolList,
+      areaList,
+      fieldList,
+    });
   };
 
   return (
@@ -177,7 +182,9 @@ export default () => {
                   <TouchableOpacity
                     style={{ ...styles.optionContent }}
                     onPress={() => {
-                      navigation.navigate("SelectSchool", {});
+                      navigation.navigate("SelectSchool", {
+                        from: "GroupCreateContainer",
+                      });
                     }}
                   >
                     <Text style={{ ...styles.optionText }}>
@@ -209,7 +216,9 @@ export default () => {
                         key={`school-list-${idx}`}
                         style={{ ...styles.AfterOptionContent }}
                         onPress={() => {
-                          navigation.navigate("SelectSchool", {});
+                          navigation.navigate("SelectSchool", {
+                            from: "GroupCreateContainer",
+                          });
                         }}
                       >
                         <Text style={{ ...styles.AfterOptionText }}>
@@ -316,7 +325,9 @@ export default () => {
                         key={`area-list-${idx}`}
                         style={{ ...styles.AfterOptionContent }}
                         onPress={() => {
-                          navigation.navigate("SelectArea", {});
+                          navigation.navigate("SelectArea", {
+                            from: "GroupCreateContainer",
+                          });
                         }}
                       >
                         <Text style={{ ...styles.AfterOptionText }}>
@@ -338,7 +349,9 @@ export default () => {
                   <TouchableOpacity
                     style={{ ...styles.optionContent }}
                     onPress={() => {
-                      navigation.navigate("SelectField", {});
+                      navigation.navigate("SelectField", {
+                        from: "GroupCreateContainer",
+                      });
                     }}
                   >
                     <Text style={{ ...styles.optionText }}>
@@ -395,7 +408,13 @@ export default () => {
           style={{ bottom: isIPhoneX() ? 0 : 30 }}
         />
       </ScrollView>
-      <NextButton validator={validator}></NextButton>
+      <NextButton
+        validator={validator}
+        page={page}
+        schoolList={schoolList}
+        areaList={areaList}
+        fieldList={fieldList}
+      ></NextButton>
     </>
   );
 };
