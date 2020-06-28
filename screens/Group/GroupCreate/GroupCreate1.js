@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   View,
   Text,
@@ -9,7 +9,11 @@ import {
 } from "react-native";
 import LeafIcon from "../../../components/common/svg/LeafIcon";
 import CustomHeader from "../../../components/common/CustomHeader";
-import { HeaderHeight, StatusHeight } from "../../../utils/HeaderHeight";
+import {
+  HeaderHeight,
+  StatusHeight,
+  isIPhoneX,
+} from "../../../utils/HeaderHeight";
 import {
   BG_COLOR,
   GREEN_COLOR,
@@ -18,6 +22,7 @@ import {
 import styled from "styled-components/native";
 import RNPickerSelect from "react-native-picker-select";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import FlashMessage from "react-native-flash-message";
 const { width: WIDHT, height: HEIGHT } = Dimensions.get("screen");
 
 const Divider = styled.View`
@@ -32,10 +37,11 @@ const EmptySpace = styled.View`
   height: ${(HEIGHT * 5) / 100}px;
 `;
 
-const NextButton = ({}) => {
+const NextButton = ({ validator }) => {
   const navigation = useNavigation();
 
   const goToNext = () => {
+    if (validator() === false) return;
     navigation.navigate("GroupCreate2", {});
   };
 
@@ -73,23 +79,52 @@ const nextButtonStyle = StyleSheet.create({
 });
 
 const FROM_SELECT_SCHOOL = "SelectSchool";
+const FROM_SELECT_FIELD = "SelectField";
+const FROM_SELECT_AREA = "SelectArea";
 
 export default () => {
   const [page, setPage] = useState(0);
   const [message, setMessage] = useState("");
   const [schoolList, setSchoolList] = useState([]);
   const [fieldList, setFieldList] = useState([]);
+  const [areaList, setAreaList] = useState([]);
   const navigation = useNavigation();
   const route = useRoute();
+  const flashRef = useRef(null);
 
   useEffect(() => {
     const { params } = route;
     console.log(params?.from);
     if (params?.from === FROM_SELECT_SCHOOL) {
       setSchoolList(params.args.schools);
-      console.log("SCHOOL LIST");
+    } else if (params?.from === FROM_SELECT_FIELD) {
+      setFieldList(params.args.fields);
+    } else if (params?.from === FROM_SELECT_AREA) {
+      setAreaList(params.args.areas);
     }
   }, [route]);
+
+  const validator = () => {
+    if (page === 0 && schoolList.length === 0) {
+      setMessage("학교를 선택해주세요");
+      return false;
+    } else if (page === 1 && areaList.length === 0) {
+      setMessage("지역을 선택해주세요");
+      return false;
+    } else if (fieldList.length === 0) {
+      setMessage("분야를 선택해주세요");
+      return false;
+    }
+    return true;
+  };
+
+  useEffect(() => {
+    if (message === "") return;
+    flashRef.current.showMessage({
+      message: message,
+      type: "",
+    });
+  }, [message]);
 
   return (
     <>
@@ -186,57 +221,181 @@ export default () => {
                 </View>
               </View>
             )}
-            <View style={{ ...styles.optionContainer }}>
-              <View style={{ ...styles.optionName }}>
-                <Text>분야</Text>
+            {fieldList.length === 0 ? (
+              <View style={{ ...styles.optionContainer }}>
+                <View style={{ ...styles.optionName }}>
+                  <Text>분야</Text>
+                </View>
+                <View style={{ ...styles.optionContent }}>
+                  <TouchableOpacity
+                    style={{ ...styles.optionContent }}
+                    onPress={() => {
+                      navigation.navigate("SelectField", {});
+                    }}
+                  >
+                    <Text style={{ ...styles.optionText }}>
+                      분야를 선택해주세요
+                    </Text>
+                  </TouchableOpacity>
+                </View>
               </View>
-              <View style={{ ...styles.optionContent }}>
-                <TouchableOpacity
-                  style={{ ...styles.optionContent }}
-                  onPress={() => {
-                    navigation.navigate("SelectField", {});
+            ) : (
+              <View
+                style={{
+                  ...styles.afterOptionContainer,
+                  height: fieldList.length * 40,
+                }}
+              >
+                <View style={{ ...styles.optionName }}>
+                  <Text>분야</Text>
+                </View>
+                <View
+                  style={{
+                    ...styles.optionContent,
+                    flexDirection: "column",
+                    justifyContent: "space-evenly",
                   }}
                 >
-                  <Text style={{ ...styles.optionText }}>
-                    분야를 선택해주세요
-                  </Text>
-                </TouchableOpacity>
+                  {fieldList.map((field, idx) => {
+                    return (
+                      <TouchableOpacity
+                        key={`field-list-${idx}`}
+                        style={{ ...styles.AfterOptionContent }}
+                        onPress={() => {
+                          navigation.navigate("SelectField", {});
+                        }}
+                      >
+                        <Text style={{ ...styles.AfterOptionText }}>
+                          {field}
+                        </Text>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </View>
               </View>
-            </View>
+            )}
           </>
         ) : (
           <>
-            <View style={{ ...styles.optionContainer }}>
-              <View style={{ ...styles.optionName }}>
-                <Text>지역</Text>
+            {areaList.length === 0 ? (
+              <View style={{ ...styles.optionContainer }}>
+                <View style={{ ...styles.optionName }}>
+                  <Text>지역</Text>
+                </View>
+                <View style={{ ...styles.optionContent }}>
+                  <TouchableOpacity
+                    style={{ ...styles.optionContent }}
+                    onPress={() => navigation.navigate("SelectArea", {})}
+                  >
+                    <Text style={{ ...styles.optionText }}>
+                      지역을 선택해주세요
+                    </Text>
+                  </TouchableOpacity>
+                </View>
               </View>
-              <View style={{ ...styles.optionContent }}>
-                <TouchableOpacity style={{ ...styles.optionContent }}>
-                  <Text style={{ ...styles.optionText }}>
-                    지역을 선택해주세요
-                  </Text>
-                </TouchableOpacity>
+            ) : (
+              <View
+                style={{
+                  ...styles.afterOptionContainer,
+                  height: areaList.length * 40,
+                }}
+              >
+                <View style={{ ...styles.optionName }}>
+                  <Text>지역</Text>
+                </View>
+                <View
+                  style={{
+                    ...styles.optionContent,
+                    flexDirection: "column",
+                    justifyContent: "space-evenly",
+                  }}
+                >
+                  {areaList.map((area, idx) => {
+                    return (
+                      <TouchableOpacity
+                        key={`area-list-${idx}`}
+                        style={{ ...styles.AfterOptionContent }}
+                        onPress={() => {
+                          navigation.navigate("SelectArea", {});
+                        }}
+                      >
+                        <Text style={{ ...styles.AfterOptionText }}>
+                          {area}
+                        </Text>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </View>
               </View>
-            </View>
-            <View style={{ ...styles.optionContainer }}>
-              <View style={{ ...styles.optionName }}>
-                <Text>분야</Text>
+            )}
+
+            {fieldList.length === 0 ? (
+              <View style={{ ...styles.optionContainer }}>
+                <View style={{ ...styles.optionName }}>
+                  <Text>분야</Text>
+                </View>
+                <View style={{ ...styles.optionContent }}>
+                  <TouchableOpacity
+                    style={{ ...styles.optionContent }}
+                    onPress={() => {
+                      navigation.navigate("SelectField", {});
+                    }}
+                  >
+                    <Text style={{ ...styles.optionText }}>
+                      분야를 선택해주세요
+                    </Text>
+                  </TouchableOpacity>
+                </View>
               </View>
-              <View style={{ ...styles.optionContent }}>
-                <TouchableOpacity style={{ ...styles.optionContent }}>
-                  <Text style={{ ...styles.optionText }}>
-                    분야를 선택해주세요
-                  </Text>
-                </TouchableOpacity>
+            ) : (
+              <View
+                style={{
+                  ...styles.afterOptionContainer,
+                  height: fieldList.length * 40,
+                }}
+              >
+                <View style={{ ...styles.optionName }}>
+                  <Text>분야</Text>
+                </View>
+                <View
+                  style={{
+                    ...styles.optionContent,
+                    flexDirection: "column",
+                    justifyContent: "space-evenly",
+                  }}
+                >
+                  {fieldList.map((field, idx) => {
+                    return (
+                      <TouchableOpacity
+                        key={`field-list-${idx}`}
+                        style={{ ...styles.AfterOptionContent }}
+                        onPress={() => {
+                          navigation.navigate("SelectField", {});
+                        }}
+                      >
+                        <Text style={{ ...styles.AfterOptionText }}>
+                          {field}
+                        </Text>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </View>
               </View>
-            </View>
+            )}
           </>
         )}
+
         <EmptySpace></EmptySpace>
         <EmptySpace></EmptySpace>
-        <Text>{message}</Text>
+        <FlashMessage
+          ref={flashRef}
+          position="top"
+          titleStyle={{ fontSize: 14 }}
+          textStyle={{ fontSize: 1 }}
+          style={{ bottom: isIPhoneX() ? 0 : 30 }}
+        />
       </ScrollView>
-      <NextButton setMessage={setMessage}></NextButton>
+      <NextButton validator={validator}></NextButton>
     </>
   );
 };

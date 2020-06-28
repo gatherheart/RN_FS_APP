@@ -122,7 +122,6 @@ const MemberClassify = ({
 };
 
 export default ({}) => {
-  console.log("Rendering1");
   const [data, setData] = useState({
     loading: true,
     members: [],

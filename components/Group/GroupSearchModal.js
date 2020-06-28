@@ -11,7 +11,7 @@ import {
   StyleSheet,
 } from "react-native";
 import Modal from "react-native-modal";
-import { areasName, schoolNames } from "../../constants/Names";
+import { areaNames, schoolNames } from "../../constants/Names";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
@@ -38,10 +38,10 @@ const Name = styled.Text`
 `;
 
 const SearchModal = ({ pageType, setOption, changeModal, isModalVisible }) => {
-  const [names, setNames] = useState(pageType == 0 ? areasName : schoolNames);
+  const [names, setNames] = useState(pageType == 0 ? areaNames : schoolNames);
 
   useEffect(() => {
-    setNames(pageType == 0 ? schoolNames : areasName);
+    setNames(pageType == 0 ? schoolNames : areaNames);
   }, [pageType]);
   return (
     <Modal

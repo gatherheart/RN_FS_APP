@@ -7,7 +7,7 @@ import SearchModal from "../../../components/Group/GroupSearchModal";
 import HorizontalGroup from "../../../components/Group/SmallGroupCard";
 import {
   schoolNames,
-  areasName,
+  areaNames,
   secondCategory,
   firstCategory,
 } from "../../../constants/Names";
@@ -181,7 +181,7 @@ export default ({
               </Text>
             </OptionButton>
             <OptionText>
-              {pageType == 0 ? schoolNames[option] : areasName[option]}
+              {pageType == 0 ? schoolNames[option] : areaNames[option]}
             </OptionText>
           </OptionContainer>
           <InputContainer>

@@ -5,3 +5,4 @@ import Sprout from "../../../assets/svgs/sprout.svg";
 export default ({ width = "100%", height = "100%" }) => (
   <Sprout width={width} height={height} />
 );
+// https://www.flaticon.com/free-icon/sprout_346195
