@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   View,
   Text,
@@ -9,15 +9,19 @@ import {
 } from "react-native";
 import LeafIcon from "../../../components/common/svg/LeafIcon";
 import CustomHeader from "../../../components/common/CustomHeader";
-import { HeaderHeight } from "../../../utils/HeaderHeight";
+import { HeaderHeight, isIPhoneX } from "../../../utils/HeaderHeight";
 import {
   BG_COLOR,
   GREEN_COLOR,
   LIGHT_GREEN_COLOR,
+  LIGHT_GREY_COLOR,
+  GREY_COLOR,
 } from "../../../constants/Color";
 import styled from "styled-components/native";
+import PropTypes from "prop-types";
 import RNPickerSelect from "react-native-picker-select";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import FlashMessage from "react-native-flash-message";
 const { width: WIDHT, height: HEIGHT } = Dimensions.get("screen");
 
 const Divider = styled.View`
@@ -32,11 +36,29 @@ const EmptySpace = styled.View`
   height: ${(HEIGHT * 5) / 100}px;
 `;
 
-const NextButton = ({}) => {
+const NextButton = ({
+  page,
+  condSchoolList,
+  condCollegeList,
+  condMajorList,
+  condYear,
+  infoSchoolList,
+  infoFieldList,
+  infoAreaList,
+}) => {
   const navigation = useNavigation();
 
   const goToNext = () => {
-    navigation.navigate("GroupCreate3", {});
+    navigation.navigate("GroupCreate3", {
+      page,
+      condSchoolList,
+      condCollegeList,
+      condMajorList,
+      condYear,
+      infoSchoolList,
+      infoFieldList,
+      infoAreaList,
+    });
   };
 
   return (
@@ -70,8 +92,7 @@ const nextButtonStyle = StyleSheet.create({
     textAlign: "center",
   },
 });
-const Dropdown = ({ target = "from" }) => {
-  const [state, setState] = useState(0);
+const Dropdown = ({ target = "from", state, setState }) => {
   const selectable = [...Array(100).keys()];
   const _items = selectable.map((item, idx) => {
     return { label: idx.toString(), value: idx.toString(), color: "black" };
@@ -96,6 +117,12 @@ const Dropdown = ({ target = "from" }) => {
       ref={(el) => {}}
     />
   );
+};
+
+Dropdown.propTypes = {
+  target: PropTypes.string.isRequired,
+  state: PropTypes.string,
+  setState: PropTypes.func.isRequired,
 };
 
 const pickerSelectStyles = StyleSheet.create({
@@ -133,7 +160,10 @@ export default () => {
   const [collegeList, setCollegeList] = useState([]);
   const [majorList, setMajorList] = useState([]);
   const [message, setMessage] = useState("");
+  const [startYear, setStartYear] = useState();
+  const [endYear, setEndYear] = useState();
   const navigation = useNavigation();
+  const flashRef = useRef(null);
 
   useEffect(() => {
     const { params } = route;
@@ -146,6 +176,31 @@ export default () => {
       setMajorList(params.args.majors);
     }
   }, [route]);
+
+  const validator = () => {
+    if (schoolList.length > 1) {
+      setMessage("세부 조건 설정은 학교를 하나만 선택해주세요");
+      return false;
+    } else if (collegeList.length > 1) {
+      setMessage("세부 조건 설정은 단과 대학을 하나만 선택해주세요");
+      return false;
+    }
+    return true;
+  };
+
+  const _removeItemFromState = (setter) => (list, index) => {
+    let _newList = [...list];
+    _newList.splice(index, 1);
+    setter(_newList);
+  };
+
+  useEffect(() => {
+    if (message === "") return;
+    flashRef.current.showMessage({
+      message: message,
+      type: "",
+    });
+  }, [message]);
 
   return (
     <>
@@ -161,7 +216,12 @@ export default () => {
         <View style={{ ...styles.titleContainer }}>
           <Text style={{ ...styles.title }}>우리의 숲을 만들어볼까요?</Text>
         </View>
-
+        <View>
+          <Text style={{ ...styles.info }}>
+            조건을 선택하면 {"\n"}
+            조건에 맞지 않는 유저의 가입 신청이 제한됩니다
+          </Text>
+        </View>
         {page === 0 ? (
           <>
             <Text style={{ ...styles.category }}>가입 조건</Text>
@@ -208,9 +268,7 @@ export default () => {
                         key={`school-list-${idx}`}
                         style={{ ...styles.AfterOptionContent }}
                         onPress={() => {
-                          navigation.navigate("SelectSchool", {
-                            from: "GroupCreate2",
-                          });
+                          _removeItemFromState(setSchoolList)(schoolList, idx);
                         }}
                       >
                         <Text style={{ ...styles.AfterOptionText }}>
@@ -231,6 +289,7 @@ export default () => {
                   <TouchableOpacity
                     style={{ ...styles.optionContent }}
                     onPress={() => {
+                      if (!validator()) return;
                       navigation.navigate("SelectCollege", {
                         from: "GroupCreate2",
                       });
@@ -244,7 +303,7 @@ export default () => {
               <View
                 style={{
                   ...styles.afterOptionContainer,
-                  height: schoolList.length * 40,
+                  height: collegeList.length * 40,
                 }}
               >
                 <View style={{ ...styles.optionName }}>
@@ -263,9 +322,10 @@ export default () => {
                         key={`college-list-${idx}`}
                         style={{ ...styles.AfterOptionContent }}
                         onPress={() => {
-                          navigation.navigate("SelectCollege", {
-                            from: "GroupCreate2",
-                          });
+                          _removeItemFromState(setCollegeList)(
+                            collegeList,
+                            idx
+                          );
                         }}
                       >
                         <Text style={{ ...styles.AfterOptionText }}>
@@ -286,6 +346,8 @@ export default () => {
                   <TouchableOpacity
                     style={{ ...styles.optionContent }}
                     onPress={() => {
+                      if (!validator()) return;
+
                       navigation.navigate("SelectMajor", {
                         from: "GroupCreate2",
                       });
@@ -299,7 +361,7 @@ export default () => {
               <View
                 style={{
                   ...styles.afterOptionContainer,
-                  height: schoolList.length * 40,
+                  height: majorList.length * 40,
                 }}
               >
                 <View style={{ ...styles.optionName }}>
@@ -318,9 +380,7 @@ export default () => {
                         key={`major-list-${idx}`}
                         style={{ ...styles.AfterOptionContent }}
                         onPress={() => {
-                          navigation.navigate("SelectMajor", {
-                            from: "GroupCreate2",
-                          });
+                          _removeItemFromState(setMajorList)(majorList, idx);
                         }}
                       >
                         <Text style={{ ...styles.AfterOptionText }}>
@@ -338,7 +398,11 @@ export default () => {
               </View>
               <View style={{ ...styles.optionContent }}>
                 <View style={{ ...styles.pageButton }}>
-                  <Dropdown target="from"></Dropdown>
+                  <Dropdown
+                    target="from"
+                    state={startYear}
+                    setState={setStartYear}
+                  ></Dropdown>
                 </View>
                 <Text> ~ </Text>
                 <View
@@ -346,7 +410,11 @@ export default () => {
                     ...styles.pageButton,
                   }}
                 >
-                  <Dropdown target="to"></Dropdown>
+                  <Dropdown
+                    target="to"
+                    state={endYear}
+                    setState={setEndYear}
+                  ></Dropdown>
                 </View>
               </View>
             </View>
@@ -377,33 +445,50 @@ export default () => {
                 <Text>학번</Text>
               </View>
               <View style={{ ...styles.optionContent }}>
-                <TouchableOpacity
-                  style={{
-                    ...styles.pageButton,
-                  }}
-                  onPress={() => {}}
-                >
-                  <Text style={{ ...styles.optionText }}>부터</Text>
-                </TouchableOpacity>
+                <View style={{ ...styles.pageButton }}>
+                  <Dropdown
+                    target="from"
+                    state={startYear}
+                    setState={setStartYear}
+                  ></Dropdown>
+                </View>
                 <Text> ~ </Text>
-                <TouchableOpacity
+                <View
                   style={{
                     ...styles.pageButton,
                   }}
-                  onPress={() => {}}
                 >
-                  <Text style={{ ...styles.optionText }}>까지</Text>
-                </TouchableOpacity>
+                  <Dropdown
+                    target="to"
+                    state={endYear}
+                    setState={setEndYear}
+                  ></Dropdown>
+                </View>
               </View>
             </View>
           </>
         )}
         <EmptySpace></EmptySpace>
         <EmptySpace></EmptySpace>
-        <Text>{message}</Text>
+        <FlashMessage
+          ref={flashRef}
+          position="top"
+          titleStyle={{ fontSize: 14 }}
+          textStyle={{ fontSize: 1 }}
+          style={{ bottom: isIPhoneX() ? 0 : 30 }}
+        />
       </ScrollView>
 
-      <NextButton setMessage={setMessage}></NextButton>
+      <NextButton
+        page={page}
+        condSchoolList={schoolList}
+        condCollegeList={collegeList}
+        condMajorList={majorList}
+        condYear={{ start: startYear, end: endYear }}
+        infoSchoolList={infoSchoolList}
+        infoFieldList={fieldList}
+        infoAreaList={areaList}
+      ></NextButton>
     </>
   );
 };
@@ -435,6 +520,13 @@ const styles = StyleSheet.create({
   },
   title: {
     fontWeight: "500",
+  },
+  info: {
+    color: GREY_COLOR,
+    marginTop: 20,
+    width: (WIDHT * 90) / 100,
+    textAlign: "center",
+    lineHeight: 25,
   },
   optionContainer: {
     marginTop: 25,

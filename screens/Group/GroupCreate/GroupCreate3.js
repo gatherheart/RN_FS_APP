@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useReducer } from "react";
 import {
   View,
   Text,
@@ -6,6 +6,9 @@ import {
   Dimensions,
   TouchableOpacity,
   ScrollView,
+  TextInput,
+  KeyboardAvoidingView,
+  Image,
 } from "react-native";
 import LeafIcon from "../../../components/common/svg/LeafIcon";
 import CustomHeader from "../../../components/common/CustomHeader";
@@ -22,8 +25,9 @@ import {
 } from "../../../constants/Color";
 import styled from "styled-components/native";
 import RNPickerSelect from "react-native-picker-select";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
+import { _pickImage } from "../../../utils/FileSystem";
 const { width: WIDHT, height: HEIGHT } = Dimensions.get("screen");
 
 const Divider = styled.View`
@@ -78,83 +82,145 @@ const nextButtonStyle = StyleSheet.create({
   },
 });
 
+const NAME_FIELD = "groupName";
+const BODY_FIELD = "description";
+const TAG_FIELD = "introTag";
 export default () => {
   const [message, setMessage] = useState("");
-  const page = 0;
+  const navigation = useNavigation();
+  const route = useRoute();
+
+  const initialState = { name: "", body: "" };
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const [logo, setLogo] = useState();
+
+  const onChangeInput = (text, _type) => {
+    dispatch({ type: _type, payload: text });
+  };
+
+  function reducer(state, action) {
+    switch (action.type) {
+      case NAME_FIELD:
+        return { ...state, name: action.payload };
+      case BODY_FIELD:
+        return { ...state, body: action.payload };
+      case TAG_FIELD:
+        return { ...state, tag: action.payload };
+      default:
+        return { ...state };
+    }
+  }
+  const {
+    page,
+    condSchoolList,
+    condCollegeList,
+    condMajorList,
+    condYear,
+    infoSchoolList,
+    infoFieldList,
+    infoAreaList,
+  } = route.params;
+
+  console.log(
+    page,
+    condSchoolList,
+    condCollegeList,
+    condMajorList,
+    condYear,
+    infoSchoolList,
+    infoFieldList,
+    infoAreaList
+  );
+
   return (
     <>
-      <CustomHeader></CustomHeader>
-
-      <ScrollView
-        contentContainerStyle={{ ...styles.container }}
-        style={{ backgroundColor: BG_COLOR }}
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS == "ios" ? "height" : "height"}
       >
-        <Text style={{ ...styles.category }}>모임 프로필</Text>
-
-        {page === 0 ? (
-          <>
-            <View style={{ ...styles.imageContainer }}>
-              <TouchableOpacity style={styles.imageUpload}>
+        <CustomHeader></CustomHeader>
+        <ScrollView
+          contentContainerStyle={{ ...styles.container }}
+          style={{ backgroundColor: BG_COLOR }}
+        >
+          <Text style={{ ...styles.category }}>모임 프로필</Text>
+          <TouchableOpacity
+            style={styles.imageUpload}
+            onPress={async () => {
+              const pickerResult = await _pickImage();
+              setLogo((prev) => {
+                return pickerResult != null ? pickerResult : prev;
+              });
+            }}
+          >
+            {logo === undefined ? (
+              <View style={{ ...styles.imageContainer }}>
                 <MaterialIcons name={"add-to-photos"} size={26}></MaterialIcons>
-              </TouchableOpacity>
+              </View>
+            ) : (
+              <Image source={{ uri: logo.uri }} style={styles.newImage}></Image>
+            )}
+          </TouchableOpacity>
+
+          <View style={{ ...styles.optionContainer }}>
+            <View style={{ ...styles.optionName }}>
+              <Text>모임 이름</Text>
             </View>
-            <View style={{ ...styles.optionContainer }}>
-              <View style={{ ...styles.optionName }}>
-                <Text>모임 이름</Text>
-              </View>
-              <View style={{ ...styles.optionContent }}>
-                <TouchableOpacity style={{ ...styles.optionContent }}>
-                  <Text style={{ ...styles.optionText }}>
-                    학교 및 캠퍼스를 선택해주세요
-                  </Text>
-                </TouchableOpacity>
-              </View>
+            <View style={{ ...styles.optionContent }}>
+              <TextInput
+                value={state.name}
+                placeholder={"모임명을 입력해주세요"}
+                onChangeText={(text) => onChangeInput(text, NAME_FIELD)}
+                returnKeyType="next"
+                autoCorrect={false}
+                style={{
+                  ...styles.keyboard,
+                  paddingHorizontal: 10,
+                }}
+              ></TextInput>
             </View>
-            <View style={{ ...styles.optionContainer }}>
-              <View style={{ ...styles.optionName }}>
-                <Text>소개</Text>
-              </View>
-              <View style={{ ...styles.optionContent }}>
-                <TouchableOpacity style={{ ...styles.optionContent }}>
-                  <Text style={{ ...styles.optionText }}>
-                    분야를 선택해주세요
-                  </Text>
-                </TouchableOpacity>
-              </View>
+          </View>
+          <View style={{ ...styles.optionContainer }}>
+            <View style={{ ...styles.optionName }}>
+              <Text>검색 태그</Text>
             </View>
-          </>
-        ) : (
-          <>
-            <View style={{ ...styles.optionContainer }}>
-              <View style={{ ...styles.optionName }}>
-                <Text>지역</Text>
-              </View>
-              <View style={{ ...styles.optionContent }}>
-                <TouchableOpacity style={{ ...styles.optionContent }}>
-                  <Text style={{ ...styles.optionText }}>
-                    지역을 선택해주세요
-                  </Text>
-                </TouchableOpacity>
-              </View>
+            <View style={{ ...styles.optionContent }}>
+              <TextInput
+                value={state.tag}
+                placeholder={"태그를 달아주세요(띄어쓰기 구분)"}
+                onChangeText={(text) => onChangeInput(text, TAG_FIELD)}
+                returnKeyType="next"
+                autoCorrect={false}
+                style={{
+                  ...styles.keyboard,
+                  paddingHorizontal: 10,
+                }}
+              ></TextInput>
             </View>
-            <View style={{ ...styles.optionContainer }}>
-              <View style={{ ...styles.optionName }}>
-                <Text>소개</Text>
-              </View>
-              <View style={{ ...styles.optionContent }}>
-                <TouchableOpacity style={{ ...styles.optionContent }}>
-                  <Text style={{ ...styles.optionText }}>
-                    분야를 선택해주세요
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </>
-        )}
-        <EmptySpace></EmptySpace>
-        <EmptySpace></EmptySpace>
-        <Text>{message}</Text>
-      </ScrollView>
+          </View>
+          <View style={{ ...styles.description }}>
+            <TextInput
+              value={state.body}
+              placeholder={"소개글을 입력해주세요."}
+              onChangeText={(text) => onChangeInput(text, BODY_FIELD)}
+              underlineColorAndroid="transparent"
+              returnKeyType="none"
+              style={{
+                ...styles.keyboard,
+                paddingHorizontal: 10,
+              }}
+              autoCorrect={false}
+              scrollEnabled={false}
+              autoFocus={false}
+              multiline={true}
+            ></TextInput>
+          </View>
+
+          <EmptySpace></EmptySpace>
+          <EmptySpace></EmptySpace>
+          <Text>{message}</Text>
+        </ScrollView>
+      </KeyboardAvoidingView>
       <NextButton setMessage={setMessage}></NextButton>
     </>
   );
@@ -177,10 +243,24 @@ const styles = StyleSheet.create({
     height: (WIDHT * 37) / 100,
     borderRadius: (WIDHT * 37) / 100 / 2,
     backgroundColor: LIGHT_GREY_COLOR,
-    opacity: 0.5,
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 0.23,
+    overflow: "hidden",
+  },
+  newImage: {
+    justifyContent: "center",
+    alignItems: "center",
+    width: undefined,
+    height: "100%",
+    aspectRatio: 1,
+    borderWidth: 1,
+    borderRadius: 300,
+  },
+  keyboard: {
+    height: "100%",
+    width: "75%",
+    paddingHorizontal: 0,
   },
   category: {
     alignSelf: "flex-start",
@@ -244,6 +324,13 @@ const styles = StyleSheet.create({
     textAlign: "center",
     justifyContent: "center",
     width: "100%",
+    borderWidth: 1,
+  },
+  description: {
+    marginTop: 20,
+    height: 250,
+    width: "90%",
+    borderRadius: 8,
     borderWidth: 1,
   },
 });

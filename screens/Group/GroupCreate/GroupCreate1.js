@@ -123,6 +123,12 @@ export default () => {
     return true;
   };
 
+  const _removeItemFromState = (setter) => (list, index) => {
+    let _newList = [...list];
+    _newList.splice(index, 1);
+    setter(_newList);
+  };
+
   useEffect(() => {
     if (message === "") return;
     flashRef.current.showMessage({
@@ -216,9 +222,7 @@ export default () => {
                         key={`school-list-${idx}`}
                         style={{ ...styles.AfterOptionContent }}
                         onPress={() => {
-                          navigation.navigate("SelectSchool", {
-                            from: "GroupCreateContainer",
-                          });
+                          _removeItemFromState(setSchoolList)(schoolList, idx);
                         }}
                       >
                         <Text style={{ ...styles.AfterOptionText }}>
@@ -271,7 +275,7 @@ export default () => {
                         key={`field-list-${idx}`}
                         style={{ ...styles.AfterOptionContent }}
                         onPress={() => {
-                          navigation.navigate("SelectField", {});
+                          _removeItemFromState(setFieldList)(fieldList, idx);
                         }}
                       >
                         <Text style={{ ...styles.AfterOptionText }}>
@@ -294,7 +298,11 @@ export default () => {
                 <View style={{ ...styles.optionContent }}>
                   <TouchableOpacity
                     style={{ ...styles.optionContent }}
-                    onPress={() => navigation.navigate("SelectArea", {})}
+                    onPress={() =>
+                      navigation.navigate("SelectArea", {
+                        from: "GroupCreateContainer",
+                      })
+                    }
                   >
                     <Text style={{ ...styles.optionText }}>
                       지역을 선택해주세요
@@ -325,9 +333,7 @@ export default () => {
                         key={`area-list-${idx}`}
                         style={{ ...styles.AfterOptionContent }}
                         onPress={() => {
-                          navigation.navigate("SelectArea", {
-                            from: "GroupCreateContainer",
-                          });
+                          _removeItemFromState(setAreaList)(areaList, idx);
                         }}
                       >
                         <Text style={{ ...styles.AfterOptionText }}>
@@ -383,7 +389,7 @@ export default () => {
                         key={`field-list-${idx}`}
                         style={{ ...styles.AfterOptionContent }}
                         onPress={() => {
-                          navigation.navigate("SelectField", {});
+                          _removeItemFromState(setFieldList)(fieldList, idx);
                         }}
                       >
                         <Text style={{ ...styles.AfterOptionText }}>
