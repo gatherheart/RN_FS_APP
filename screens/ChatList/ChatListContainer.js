@@ -5,7 +5,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 export default ({ navigation }) => {
   console.log(navigation);
   return (
-    <View>
+    <View style={{ marginTop: 100 }}>
       <Text>ChatList</Text>
       <TouchableOpacity onPress={() => navigation.navigate("Chat")}>
         <Text>Chat</Text>

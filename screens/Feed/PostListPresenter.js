@@ -90,7 +90,11 @@ export default ({
         {posts?.length != 0
           ? posts.map((post, index) => {
               return (
-                <PostComponent key={`post-${index}`} {...post}></PostComponent>
+                <PostComponent
+                  key={`post-${index}`}
+                  {...post}
+                  moreEnabled={true}
+                ></PostComponent>
               );
             })
           : null}

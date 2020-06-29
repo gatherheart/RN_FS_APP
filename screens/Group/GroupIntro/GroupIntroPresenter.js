@@ -97,7 +97,7 @@ export default ({ id, group, loading, refreshFn }) => {
             rightButton={
               <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate("IntroEdit", { group });
+                  navigation.navigate("GroupIntroEdit", { group });
                 }}
                 title="goBack"
                 style={{ marginHorizontal: 20 }}

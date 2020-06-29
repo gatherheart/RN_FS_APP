@@ -4,6 +4,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Dimensions,
+  View,
 } from "react-native";
 import {
   HeaderHeight,
@@ -81,9 +82,11 @@ const CustomHeader = ({
             {title}
           </Title>
         </MiddleContainer>
-        {rightButtonEnabled && rightButton ? (
-          <RightContainer>{rightButton}</RightContainer>
-        ) : null}
+        <RightContainer>
+          {rightButtonEnabled && rightButton ? (
+            <View>{rightButton}</View>
+          ) : null}
+        </RightContainer>
       </Animated.View>
     </>
   );

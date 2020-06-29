@@ -5,6 +5,24 @@ import ChatScreen from "../screens/Chat";
 import ChatListScreen from "../screens/ChatList";
 
 const Stack = createStackNavigator();
+const ChatStack = createStackNavigator();
+
+const ChatNav = () => {
+  <ChatStack.Navigator
+    screenOptions={{
+      headerStyle: {
+        backgroundColor: Color.BG_COLOR,
+        borderBottomColor: Color.BG_COLOR,
+        shadowColor: Color.BG_COLOR,
+      },
+      headerTintColor: Color.TINT_COLOR,
+      headerBackTitleVisible: false,
+      headerShown: false,
+    }}
+  >
+    <ChatStack.Screen name="Chat" component={ChatScreen}></ChatStack.Screen>
+  </ChatStack.Navigator>;
+};
 
 export default () => (
   <Stack.Navigator
@@ -20,6 +38,6 @@ export default () => (
     }}
   >
     <Stack.Screen name="ChatList" component={ChatListScreen}></Stack.Screen>
-    <Stack.Screen name="Chat" component={ChatScreen}></Stack.Screen>
+    <Stack.Screen name="ChatStack" component={ChatNav}></Stack.Screen>
   </Stack.Navigator>
 );

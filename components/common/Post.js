@@ -84,6 +84,7 @@ const PostComponent = ({
   comments = [],
   isLiked: isLikedProp,
   createdAt,
+  moreEnabled = false,
 }) => {
   const [isLiked, setIsLiked] = useState(isLikedProp);
   const [likeCount, setLikeCount] = useState(likeCountProp);
@@ -248,9 +249,11 @@ const PostComponent = ({
       <BodyContainer>
         <Title>{title}</Title>
         <Body>{body}</Body>
-        <Touchable onPress={() => navigation.push("PostRead", { id: id })}>
-          <Body>더보기</Body>
-        </Touchable>
+        {moreEnabled ? (
+          <Touchable onPress={() => navigation.push("PostRead", { id: id })}>
+            <Body>더보기</Body>
+          </Touchable>
+        ) : null}
       </BodyContainer>
     </Container>
   );
