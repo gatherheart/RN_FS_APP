@@ -13,6 +13,7 @@ import { useNavigation } from "@react-navigation/native";
 import { trimText } from "../../utils/String";
 import { LIGHT_GREY_COLOR, GREY_COLOR } from "../../constants/Color";
 import { Ionicons } from "@expo/vector-icons";
+import { moderateScale } from "react-native-size-matters";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
@@ -51,6 +52,7 @@ const Data = styled.View`
 const Title = styled.Text`
   color: black;
   font-weight: bold;
+  font-size: ${moderateScale(14)}px;
 `;
 
 const Vote = styled.Text`

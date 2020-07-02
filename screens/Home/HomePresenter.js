@@ -18,6 +18,7 @@ import HomeHeader from "../../components/common/HomeHeader";
 import { UnderHeader, HeaderHeight } from "../../utils/HeaderHeight";
 import { Ionicons } from "@expo/vector-icons";
 import StarIcon from "../../components/common/svg/StarIcon";
+import { moderateScale } from "react-native-size-matters";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
@@ -121,45 +122,47 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     width: (WIDTH * 90) / 100,
-    height: (HEIGHT * 3) / 100,
+    height: (HEIGHT * 6) / 100,
     alignItems: "center",
     marginHorizontal: 20,
     marginTop: 10,
   },
   scheduleText: {
-    fontWeight: "600",
-    fontSize: 15,
+    fontWeight: "bold",
+    fontSize: moderateScale(15),
   },
   goToCalendar: {
     borderRadius: 4,
     backgroundColor: BG_COLOR,
     borderColor: GREEN_COLOR,
     borderWidth: 1,
-    width: 55,
-    height: 20,
+
     justifyContent: "space-around",
     alignItems: "center",
     flexDirection: "row",
+    paddingVertical: 5,
+    width: "20%",
   },
   goToCalendarText: {
     color: GREEN_COLOR,
+    fontSize: moderateScale(14),
   },
   goToCreate: {
     borderRadius: 4,
     backgroundColor: BG_COLOR,
     borderColor: GREEN_COLOR,
     borderWidth: 1,
-    width: 70,
-    height: 20,
+    width: "24%",
     justifyContent: "space-around",
     alignItems: "center",
     flexDirection: "row",
+    paddingVertical: 5,
   },
   groupTitle: {
     flexDirection: "row",
     width: (WIDTH * 90) / 100,
     justifyContent: "space-between",
-    height: (HEIGHT * 3) / 100,
+    height: (HEIGHT * 6) / 100,
     alignItems: "center",
     marginHorizontal: 20,
     marginTop: 10,

@@ -17,25 +17,12 @@ import Svg, { Path } from "react-native-svg";
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 const EmptySpace = styled.View``;
 
-const BubbleChat = () => {
+const BubbleChat = ({ content }) => {
   return (
     <>
       <View style={[styles.item, styles.itemOut]}>
         <View style={[styles.balloon, { backgroundColor: "#EFEFEF" }]}>
-          <Text style={{ paddingTop: 5, color: "black" }}>
-            Hey! I am good. How are you?s adasdasdasdsad asdasdasd asd asd asd
-            sa sadasdas dsad as das dasdasdasdasdasdsadasdasdasdsad s Hey! I am
-            good. How are you?s adasdasdasdsad asdasdasd asd asd asd sa sadasdas
-            dsad as das dasdasdasdasdasdsadasdasdasdsad s Hey! I am good. How
-            are you?s adasdasdasdsad asdasdasd asd asd asd sa sadasdas dsad as
-            das dasdasdasdasdasdsadasdasdasdsad s Hey! I am good. How are you?s
-            adasdasdasdsad asdasdasd asd asd asd sa sadasdas dsad as das
-            dasdasdasdasdasdsadasdasdasdsad s Hey! I am good. How are you?s
-            adasdasdasdsad asdasdasd asd asd asd sa sadasdas dsad as das
-            dasdasdasdasdasdsadasdasdasdsad s Hey! I am good. How are you?s
-            adasdasdasdsad asdasdasd asd asd asd sa sadasdas dsad as das
-            dasdasdasdasdasdsadasdasdasdsad s
-          </Text>
+          <Text style={{ paddingTop: 5, color: "black" }}>{content}</Text>
           <View style={[styles.arrowContainer]}>
             <Svg
               style={styles.arrowLeft}
@@ -69,6 +56,7 @@ const styles = StyleSheet.create({
     marginRight: 20,
   },
   balloon: {
+    width: (WIDTH * 80) / 100,
     maxWidth: moderateScale(250, 2),
     paddingHorizontal: moderateScale(5, 2),
     paddingTop: moderateScale(5, 2),

@@ -20,6 +20,7 @@ import { useNavigation } from "@react-navigation/native";
 import styled from "styled-components/native";
 import TreeIcon from "./svg/TreeIcon";
 import { EvilIcons } from "@expo/vector-icons";
+import { moderateScale } from "react-native-size-matters";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
@@ -27,19 +28,23 @@ const Title = styled.Text``;
 
 const LeftContainer = styled.View`
   width: ${(WIDTH * 33) / 100}px;
-  left: 20px;
+  left: 10px;
   justify-content: flex-start;
-  align-items: center;
+  align-items: flex-end;
   flex-direction: row;
 `;
 const MiddleContainer = styled.View`
   width: ${(WIDTH * 33) / 100}px;
   justify-content: center;
   align-items: center;
+  align-items: flex-end;
 `;
 const RightContainer = styled.View`
   width: ${(WIDTH * 33) / 100}px;
   right: 20px;
+  justify-content: flex-end;
+  align-items: flex-end;
+
   align-items: flex-end;
 `;
 
@@ -69,7 +74,7 @@ const HomeHeader = ({ style }) => {
               activeOpacity={1}
               style={{
                 alignItems: "center",
-                justifyContent: "center",
+                justifyContent: "flex-end",
               }}
             >
               <TreeIcon
@@ -104,12 +109,12 @@ const styles = StyleSheet.create({
     height: HeaderHeight,
     backgroundColor: "white",
     justifyContent: "space-between",
-    alignItems: "center",
+    alignItems: "flex-end",
     zIndex: 2,
   },
   appTitle: {
-    fontWeight: "600",
-    fontSize: 18,
+    fontWeight: "bold",
+    fontSize: moderateScale(18),
   },
 });
 HomeHeader.propTypes = {

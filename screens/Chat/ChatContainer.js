@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { GiftedChat, Bubble, Send } from "react-native-gifted-chat";
 import { Ionicons } from "@expo/vector-icons";
 import { StyleSheet, View, Text } from "react-native";
+import emojiUtils from "emoji-utils";
+import SlackMessage from "./SlackMessage";
 
 export default function RoomScreen() {
   const [messages, setMessages] = useState([
@@ -17,8 +19,8 @@ export default function RoomScreen() {
     },
     // example of chat message
     {
-      _id: 1,
-      text: "Henlo!",
+      _id: 2,
+      text: "안녕!",
       createdAt: new Date().getTime(),
       user: {
         _id: 2,
@@ -41,6 +43,26 @@ export default function RoomScreen() {
       </Send>
     );
   }
+
+  function renderMessage(props) {
+    const {
+      currentMessage: { text: currText },
+    } = props;
+
+    let messageTextStyle;
+
+    // Make "pure emoji" messages much bigger than plain text.
+    if (currText && emojiUtils.isPureEmojiString(currText)) {
+      messageTextStyle = {
+        fontSize: 28,
+        // Emoji get clipped if lineHeight isn't increased; make it consistent across platforms.
+        lineHeight: Platform.OS === "android" ? 34 : 30,
+      };
+    }
+
+    return <SlackMessage {...props} messageTextStyle={messageTextStyle} />;
+  }
+
   function renderBubble(props) {
     return (
       // Step 3: return the component
@@ -74,6 +96,7 @@ export default function RoomScreen() {
       textInputProps={{
         autoCorrect: false,
       }}
+      renderUsernameOnMessage
     />
   );
 }
@@ -82,5 +105,9 @@ const styles = StyleSheet.create({
   sendingContainer: {
     justifyContent: "center",
     alignItems: "center",
+    width: 20,
+    height: "100%",
+    marginRight: 10,
+    borderWidth: 1,
   },
 });
