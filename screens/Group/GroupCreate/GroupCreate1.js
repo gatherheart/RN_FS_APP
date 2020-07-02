@@ -412,14 +412,8 @@ export default () => {
 
         <EmptySpace></EmptySpace>
         <EmptySpace></EmptySpace>
-        <FlashMessage
-          ref={flashRef}
-          position="top"
-          titleStyle={{ fontSize: 14 }}
-          textStyle={{ fontSize: 1 }}
-          style={{ bottom: isIPhoneX() ? 0 : 30 }}
-        />
       </ScrollView>
+
       <NextButton
         validator={validator}
         page={page}
@@ -427,6 +421,12 @@ export default () => {
         areaList={areaList}
         fieldList={fieldList}
       ></NextButton>
+      <FlashMessage
+        ref={flashRef}
+        position="bottom"
+        titleStyle={{ fontSize: 14 }}
+        textStyle={{ fontSize: 1 }}
+      />
     </>
   );
 };

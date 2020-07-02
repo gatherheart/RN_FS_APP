@@ -209,6 +209,12 @@ export default () => {
       <ScrollView
         contentContainerStyle={{ ...styles.container }}
         style={{ backgroundColor: BG_COLOR }}
+        contentInset={{
+          top: HeaderHeight,
+        }}
+        contentOffset={{
+          y: -HeaderHeight,
+        }}
       >
         <View style={{ ...styles.logo }}>
           <LeafIcon></LeafIcon>
@@ -470,13 +476,6 @@ export default () => {
         )}
         <EmptySpace></EmptySpace>
         <EmptySpace></EmptySpace>
-        <FlashMessage
-          ref={flashRef}
-          position="top"
-          titleStyle={{ fontSize: 14 }}
-          textStyle={{ fontSize: 1 }}
-          style={{ bottom: isIPhoneX() ? 0 : 30 }}
-        />
       </ScrollView>
 
       <NextButton
@@ -489,6 +488,12 @@ export default () => {
         infoFieldList={fieldList}
         infoAreaList={areaList}
       ></NextButton>
+      <FlashMessage
+        ref={flashRef}
+        position="bottom"
+        titleStyle={{ fontSize: 14 }}
+        textStyle={{ fontSize: 1 }}
+      />
     </>
   );
 };
