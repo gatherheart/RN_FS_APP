@@ -29,9 +29,10 @@ import GroupWithdraw from "../screens/Group/GroupDrawer/GroupWithdraw";
 import GroupMember from "../screens/Group/GroupDrawer/GroupMember";
 import GroupIntro from "../screens/Group/GroupIntro/GroupIntroContainer";
 import UpdatePost from "../screens/Feed/UpdatePost";
-import WriteQnA from "../screens/Group/GroupQnA/WriteQnA";
+import WriteQuestion from "../screens/Group/GroupQnA/WriteQuestion";
 import ReadQnA from "../screens/Group/GroupQnA/ReadQnAContainer";
 import GroupIntroEdit from "../screens/Group/GroupIntro/GroupIntroEdit";
+import WriteAnswer from "../screens/Group/GroupQnA/WriteAnswer";
 
 DrawerNavigatorConfig = {
   drawerPosition: "right",
@@ -231,11 +232,19 @@ export default () => {
         }}
       />
       <Stack.Screen
-        name="GroupQnAWrite"
-        component={WriteQnA}
+        name="GroupQuestionWrite"
+        component={WriteQuestion}
         options={{
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         }}
+      />
+      <Stack.Screen
+        name="GroupAnswerWrite"
+        component={WriteAnswer}
+        options={{
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+        initialParams={{ id: "0", question: "" }}
       />
       <Stack.Screen
         name="GroupQnARead"

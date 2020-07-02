@@ -14,7 +14,7 @@ import {
   LIGHT_GREY_COLOR,
   DARK_GREEN_COLOR,
 } from "../../../constants/Color";
-import { StatusHeight } from "../../../utils/HeaderHeight";
+import { StatusHeight, HeaderHeight } from "../../../utils/HeaderHeight";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import SproutIcon from "../../../components/common/svg/SproutIcon";
@@ -54,7 +54,7 @@ export default () => {
   let _initialState = {};
 
   fieldIds.forEach((id) => {
-    _initialState[id] = false;
+    _initialState[id] = true;
   });
 
   const [collapsibleState, collapsibleDispatch] = useReducer(
@@ -91,6 +91,12 @@ export default () => {
       <ScrollView
         contentContainerStyle={{ ...styles.container }}
         style={{ backgroundColor: BG_COLOR }}
+        contentInset={{
+          top: HeaderHeight,
+        }}
+        contentOffset={{
+          y: -HeaderHeight,
+        }}
       >
         <View style={{ ...styles.optionContainer }}>
           <View style={{}}>
@@ -172,7 +178,6 @@ export default () => {
 
 const styles = StyleSheet.create({
   container: {
-    top: StatusHeight,
     backgroundColor: BG_COLOR,
     alignItems: "center",
   },

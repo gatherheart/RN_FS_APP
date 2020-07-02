@@ -6,6 +6,7 @@ import {
   View,
   Dimensions,
 } from "react-native";
+import PropTypes from "prop-types";
 import Modal from "react-native-modal";
 import styled from "styled-components/native";
 
@@ -32,11 +33,13 @@ const OkButtonText = styled.Text`
   font-family: ${(props) => props.theme.regularFont};
 `;
 
-export default ({
+const AlertModal = ({
   modalVisible = false,
   setModalVisible,
   title = "",
   body = "",
+  cancleEnabled = false,
+  callback = () => {},
 }) => {
   const changeState = () => {
     setModalVisible((prev) => !prev);
@@ -60,22 +63,45 @@ export default ({
         <View style={styles.innerContainer}>
           <Title>{title}</Title>
           <Body>{body}</Body>
-          <TouchableOpacity
-            style={{
-              marginVertical: 20,
-              paddingHorizontal: 30,
-              alignItems: "flex-end",
-              justifyContent: "flex-end",
-            }}
-            onPress={changeState}
-          >
-            <OkButtonText>확인</OkButtonText>
-          </TouchableOpacity>
+          <View style={styles.button}>
+            {cancleEnabled ? (
+              <TouchableOpacity
+                style={{
+                  marginVertical: 20,
+                  alignItems: "flex-end",
+                  justifyContent: "flex-end",
+                }}
+                onPress={changeState}
+              >
+                <OkButtonText>취소</OkButtonText>
+              </TouchableOpacity>
+            ) : null}
+            <TouchableOpacity
+              style={{
+                marginVertical: 20,
+                paddingHorizontal: 30,
+              }}
+              onPress={changeState}
+            >
+              <OkButtonText>확인</OkButtonText>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </Modal>
   );
 };
+
+AlertModal.propTypes = {
+  modalVisible: PropTypes.bool.isRequired,
+  setModalVisible: PropTypes.func.isRequired,
+  title: PropTypes.string,
+  body: PropTypes.string,
+  cancleEnabled: PropTypes.bool,
+  callback: PropTypes.func,
+};
+
+export default AlertModal;
 
 const styles = StyleSheet.create({
   container: {
@@ -91,5 +117,11 @@ const styles = StyleSheet.create({
   },
   innerContainer: {
     backgroundColor: "white",
+  },
+  button: {
+    flexDirection: "row",
+
+    alignItems: "flex-end",
+    justifyContent: "flex-end",
   },
 });

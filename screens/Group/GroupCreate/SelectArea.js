@@ -6,7 +6,7 @@ import {
   GREY_COLOR,
   LIGHT_GREY_COLOR,
 } from "../../../constants/Color";
-import { StatusHeight } from "../../../utils/HeaderHeight";
+import { StatusHeight, HeaderHeight } from "../../../utils/HeaderHeight";
 import EarthGlobeIcon from "../../../components/common/svg/EarthGlobeIcon";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
@@ -51,6 +51,12 @@ export default () => {
       <ScrollView
         contentContainerStyle={{ ...styles.container }}
         style={{ backgroundColor: BG_COLOR }}
+        contentInset={{
+          top: HeaderHeight,
+        }}
+        contentOffset={{
+          y: -HeaderHeight,
+        }}
       >
         <View style={{ ...styles.optionContainer }}>
           <View style={{}}>
@@ -87,7 +93,6 @@ export default () => {
 
 const styles = StyleSheet.create({
   container: {
-    top: StatusHeight,
     backgroundColor: BG_COLOR,
     alignItems: "center",
   },

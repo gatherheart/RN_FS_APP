@@ -26,6 +26,7 @@ import { CheckBox } from "react-native-elements";
 import { _pickImage, _pickDocument } from "../../../utils/FileSystem";
 import Collapsible from "react-native-collapsible";
 import { getFileName } from "../../../utils/String";
+import { HeaderHeight } from "../../../utils/HeaderHeight";
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
 const MANDATORY_FIELD = "isMandatory";
@@ -113,9 +114,14 @@ export default () => {
       <ScrollView
         style={{
           backgroundColor: themeContext.backgroundColor,
-          paddingTop: "13%",
         }}
         showsVerticalScrollIndicator={false}
+        contentInset={{
+          top: HeaderHeight,
+        }}
+        contentOffset={{
+          y: -HeaderHeight,
+        }}
       >
         <SubContainer style={{ justifyContent: "space-between" }}>
           <NanumText

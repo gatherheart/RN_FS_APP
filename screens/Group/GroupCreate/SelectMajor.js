@@ -6,7 +6,7 @@ import {
   GREY_COLOR,
   LIGHT_GREY_COLOR,
 } from "../../../constants/Color";
-import { StatusHeight } from "../../../utils/HeaderHeight";
+import { StatusHeight, HeaderHeight } from "../../../utils/HeaderHeight";
 import SchoolIcon from "../../../components/common/svg/SchoolIcon";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
@@ -74,6 +74,12 @@ export default () => {
         contentContainerStyle={{ ...styles.container, borderWidth: 1 }}
         style={{ backgroundColor: BG_COLOR }}
         showsVerticalScrollIndicator={false}
+        contentInset={{
+          top: HeaderHeight,
+        }}
+        contentOffset={{
+          y: -HeaderHeight,
+        }}
       >
         <View style={{ ...styles.optionContainer }}>
           <View style={{}}>
@@ -114,7 +120,6 @@ export default () => {
 
 const styles = StyleSheet.create({
   container: {
-    top: StatusHeight,
     backgroundColor: BG_COLOR,
     alignItems: "center",
   },
