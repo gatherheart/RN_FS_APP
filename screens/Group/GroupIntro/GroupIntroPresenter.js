@@ -177,6 +177,9 @@ export default ({ id, group, loading, refreshFn }) => {
                       ...themeContext.withShadow,
                       backgroundColor: themeContext.pastelGreyColor,
                     }}
+                    onPress={() => {
+                      navigation.navigate("GroupQnARead", { group });
+                    }}
                   >
                     <Text>Q&A</Text>
                   </TouchableOpacity>

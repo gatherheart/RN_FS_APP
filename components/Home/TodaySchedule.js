@@ -81,7 +81,6 @@ const styles2 = StyleSheet.create({
 
 const TodaySchedule = ({ groupSched }) => {
   const themeContext = useContext(ThemeContext);
-  const defaultHeight = groupSched ? 50 + groupSched.length * 25 : 50;
   const navigation = useNavigation();
   const [isCollapsed, setIsCollapsed] = useState(true);
 

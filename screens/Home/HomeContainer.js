@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { View, Text } from "react-native";
 import HomePresenter from "./HomePresenter";
+import Loader from "../../components/common/Loader";
+import { useRoute } from "@react-navigation/native";
 
 export default ({ navigation }) => {
   const [results, setResults] = useState({
@@ -21,8 +23,10 @@ export default ({ navigation }) => {
   useEffect(() => {
     getData();
   }, []);
-  return (
+  return !results.loading ? (
     <HomePresenter {...results} refreshFn={getData} navigation={navigation} />
+  ) : (
+    <Loader></Loader>
   );
 };
 /*

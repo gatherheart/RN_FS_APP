@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import GroupPrenster from "./GroupPresenter";
 import Loader from "../../components/common/Loader";
+import { useRoute } from "@react-navigation/native";
 
 const View = styled.View`
   flex: 1;
@@ -9,15 +10,14 @@ const View = styled.View`
   align-items: center;
 `;
 
-export default ({
-  navigation,
-  route: {
-    params: { id, groupName },
-  },
-}) => {
+export default ({}) => {
   const [group, setGroup] = useState({
     loading: true,
   });
+
+  const route = useRoute();
+  const { id, groupName } = route.params;
+  console.log(id, groupName);
 
   const getData = async () => {
     setGroup({

@@ -18,13 +18,14 @@ import SelectField from "../screens/Group/GroupCreate/SelectField";
 import SelectArea from "../screens/Group/GroupCreate/SelectArea";
 import SelectCollege from "../screens/Group/GroupCreate/SelectCollege";
 import SelectMajor from "../screens/Group/GroupCreate/SelectMajor";
+import { useRoute } from "@react-navigation/native";
 
 const Stack = createStackNavigator();
 
 export default () => {
   return (
     <Stack.Navigator
-      initialRouteName="Home"
+      initialRouteName="Tabs"
       screenOptions={({ route, navigation }) => {
         return {
           gestureEnabled: true,
@@ -40,6 +41,14 @@ export default () => {
         options={{
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         }}
+      ></Stack.Screen>
+      <Stack.Screen
+        name="HomeSchedule"
+        component={Schedule}
+        options={{
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+        initialParams={{ groupSched: [] }}
       ></Stack.Screen>
       <Stack.Screen name="Chat" component={ChatScreen}></Stack.Screen>
       <Stack.Screen
@@ -113,7 +122,6 @@ export default () => {
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         }}
       ></Stack.Screen>
-      <Stack.Screen name="Schedule" component={Schedule}></Stack.Screen>
     </Stack.Navigator>
   );
 };

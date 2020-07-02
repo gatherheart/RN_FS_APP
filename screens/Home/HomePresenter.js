@@ -52,14 +52,17 @@ const WEEK = "week";
 export default ({ refreshFn, loading, navigation }) => {
   const { groups } = result;
   const themeContext = useContext(ThemeContext);
-  const groupSched = groups.map((group) => {
+  let groupSched = [];
+
+  groupSched = groups.map((group) => {
     return {
       schedules: group.schedules,
       groupId: group.id,
       groupName: group.groupName,
     };
   });
-  console.log(new Date());
+  console.log(groupSched);
+  const _test = [{ test: 1 }, { test: 1 }];
   return (
     <>
       <HomeHeader></HomeHeader>
@@ -69,11 +72,17 @@ export default ({ refreshFn, loading, navigation }) => {
           backgroundColor: themeContext.backgroundColor,
         }}
         contentContainerStyle={styles.mainContainer}
+        showsVerticalScrollIndicator={false}
       >
         <ScheduleContainer>
           <View style={styles.scheduleTitle}>
             <BoldText style={{ ...styles.scheduleText }}>오늘의 일정</BoldText>
-            <TouchableOpacity style={styles.goToCalendar}>
+            <TouchableOpacity
+              style={styles.goToCalendar}
+              onPress={() => {
+                navigation.navigate("HomeSchedule", { groupSched });
+              }}
+            >
               <Text style={styles.goToCalendarText}>캘린더</Text>
               <Ionicons
                 name={"ios-arrow-forward"}
@@ -180,7 +189,7 @@ const result = {
           id: "24432",
           title: "매주 회식 일정",
           memo: "참여 부탁합니다",
-          date: "2020-06-25T13:26:04.063Z",
+          date: new Date(),
           cycle: MONTH,
           issuedDate: "2020-06-24T16:30:59.554Z",
         },
@@ -219,7 +228,7 @@ const result = {
           id: "22332",
           title: "매주 회의 일정",
           memo: "참여 부탁합니다",
-          date: "2020-06-25T01:26:17.734Z",
+          date: new Date(),
           cycle: YEAR,
           issuedDate: "2020-06-24T16:30:59.554Z",
         },
@@ -259,7 +268,7 @@ const result = {
           id: "2342",
           title: "행사 일정",
           memo: "참여 부탁합니다",
-          date: "2020-06-25T04:26:17.734Z",
+          date: new Date(),
           cycle: WEEK,
           issuedDate: "2020-06-24T16:30:59.554Z",
         },

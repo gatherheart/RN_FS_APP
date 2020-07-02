@@ -1,13 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { ScrollView, View, Text, TouchableOpacity } from "react-native";
 import { Calendar, CalendarList } from "react-native-calendars";
 import { StatusHeight } from "../../utils/HeaderHeight";
+import { useRoute } from "@react-navigation/native";
 
-export default ({ navigation }) => {
+export default ({}) => {
+  const calendarRef = useRef(null);
+  const route = useRoute();
+  const { result, _test: test } = route.params;
+  console.log(result, test);
+  useEffect(() => {}, []);
   return (
     <CalendarList
       //testID={testIDs.calendarList.CONTAINER}
       //current={'2020-06-10'}
+      ref={calendarRef}
       style={{ top: StatusHeight, backgroundColor: "white" }}
       pastScrollRange={12}
       futureScrollRange={12}
