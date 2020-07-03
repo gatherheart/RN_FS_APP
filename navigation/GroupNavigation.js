@@ -33,6 +33,7 @@ import WriteQuestion from "../screens/Group/GroupQnA/WriteQuestion";
 import ReadQnA from "../screens/Group/GroupQnA/ReadQnAContainer";
 import GroupIntroEdit from "../screens/Group/GroupIntro/GroupIntroEdit";
 import WriteAnswer from "../screens/Group/GroupQnA/WriteAnswer";
+import GroupTestPage from "../screens/Auth/GroupTestPage";
 
 DrawerNavigatorConfig = {
   drawerPosition: "right",
@@ -260,6 +261,13 @@ export default () => {
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         }}
       />
+      <Stack.Screen
+        name="GroupTestPage"
+        component={GroupTestPage}
+        options={{
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      ></Stack.Screen>
     </Stack.Navigator>
   );
 };

@@ -108,7 +108,6 @@ export default ({ id, group, loading, refreshFn }) => {
   const navigation = useNavigation();
   const themeContext = useContext(ThemeContext);
   const [page, setPage] = useState(0);
-
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,

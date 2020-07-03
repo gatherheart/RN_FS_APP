@@ -150,8 +150,8 @@ export default ({
       backdropTransitionOutTiming={0}
       hideModalContentWhileAnimating={false}
       useNativeDriver={true}
-      animationIn={{ from: { opacity: 1 }, to: { opacity: 1 } }}
-      animationOut={{ from: { opacity: 0 }, to: { opacity: 0 } }}
+      animationIn={"fadeIn"}
+      animationOut={"fadeOut"}
       style={{
         justifyContent: "center",
         alignItems: "center",

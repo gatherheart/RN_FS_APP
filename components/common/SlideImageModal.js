@@ -17,8 +17,8 @@ import {
   Text,
   Animated,
   StatusBar,
-  ScrollView,
   Platform,
+  BackHandler,
 } from "react-native";
 import Modal from "react-native-modal";
 import CustomIcon from "./CustomIcon";
@@ -31,10 +31,17 @@ import {
 } from "../../utils/HeaderHeight";
 import FlashMessage from "react-native-flash-message";
 import { showMessage, hideMessage } from "react-native-flash-message";
+import { downloadAsync, saveToLibrary } from "../../utils/GetImage";
+import {
+  State,
+  PinchGestureHandler,
+  ScrollView,
+} from "react-native-gesture-handler";
+import { cond, eq } from "react-native-reanimated";
+import { useNavigation, useRoute } from "@react-navigation/native";
+
 const SWIPER_HEIGHT = HEIGHT / 2;
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
-import { downloadAsync, saveToLibrary } from "../../utils/GetImage";
-
 const View = styled.View``;
 
 const Container = styled.View`
@@ -86,13 +93,21 @@ const ImageProvider = ({
   );
 };
 
-const SlideImageModal = ({
-  changeViewerState,
-  imgViewerVisible,
-  images,
-  index,
-}) => {
-  StatusBar.setHidden(imgViewerVisible, "fade");
+const SlideImageModal = ({}) => {
+  const navigation = useNavigation();
+  const route = useRoute();
+  const { images, idx: index, from: _from } = route.params;
+  const [imgViewerVisible, setImgViewerVisible] = useState(true);
+  StatusBar.setHidden(true, "fade");
+
+  const changeViewerState = () => {
+    StatusBar.setHidden(!imgViewerVisible, "fade");
+    navigation.goBack(_from, {});
+  };
+  const _handleBackButtonClick = () => {
+    StatusBar.setHidden(!imgViewerVisible, "fade");
+  };
+  BackHandler.addEventListener("hardwareBackPress", _handleBackButtonClick);
 
   const swiperRef = useRef(null);
   const goToNext = (dist = 1) => {
@@ -104,52 +119,119 @@ const SlideImageModal = ({
       imgViewerVisible={imgViewerVisible}
       changeViewerState={changeViewerState}
     >
-      <Modal
-        isVisible={imgViewerVisible}
-        transparent={true}
-        backgroundColor={"black"}
-        onRequestClose={() => {
-          changeViewerState();
-        }}
-        backdropOpacity={0}
-        style={styles.modal}
-        backdropTransitionOutTiming={0}
-        hideModalContentWhileAnimating={true}
-        animationIn={{ from: { opacity: 1 }, to: { opacity: 1 } }}
-        animationOut={{ from: { opacity: 0 }, to: { opacity: 0 } }}
-      >
-        <View style={styles.modalContainer}>
-          <ImageSlider
-            goToNext={goToNext}
-            index={index}
-            ref={swiperRef}
-          ></ImageSlider>
-        </View>
-      </Modal>
+      <Animated.View style={styles.modalContainer}>
+        <ImageSlider
+          goToNext={goToNext}
+          index={index}
+          ref={swiperRef}
+        ></ImageSlider>
+      </Animated.View>
     </ImageProvider>
   );
 };
 const animationValue = new Animated.Value(0);
+const changeHeaderState = () => {
+  if (animationValue._value === 1) {
+    animationValue.setValue(0);
+  } else {
+    animationValue.setValue(1);
+  }
+};
+let INITIAL_DISTANCE = 150;
+let _lastZoomValue = 0;
+const pinchToZoomInSensitivity = 3;
+const pinchToZoomOutSensitivity = 1;
+const maxZoom = 2;
+const minZoom = 0.5;
 
-const ImageSlider = forwardRef(({ index, goToNext }, ref) => {
+const ImageSlider = forwardRef(({ index, goToNext }, scrollViewRef) => {
   const changeViewerState = useChangeViewerState();
   const images = useImages();
   const viewRef = useRef();
 
+  State.BEGAN = 1;
+  const items = images.map((image) => ({
+    image,
+    state: new Animated.Value(State.UNDETERMINED),
+    scale: new Animated.Value(State.BEGAN),
+    lastZoomLevel: new Animated.Value(State.BEGAN),
+    pinchZoomPosition: null,
+    pinchRef: useRef(null),
+  }));
+  const pinchRefs = items.map(({ pinchRef }) => pinchRef);
+
+  const panResponder = PanResponder.create({
+    onMoveShouldSetPanResponder: () => {
+      console.log("onMoveShouldSetPanResponder", new Date());
+    },
+    onMoveShouldSetPanResponderCapture: (event, gestureState) => {
+      const touches = event.nativeEvent.touches;
+      let baseComponentResult =
+        true &&
+        (Math.abs(gestureState.dx) > 2 ||
+          Math.abs(gestureState.dy) > 2 ||
+          gestureState.numberActiveTouches === 2);
+
+      // PINCH Gesture Capture
+      if (gestureState.numberActiveTouches === 2) {
+        let dx = Math.abs(touches[0].pageX - touches[1].pageX);
+        let dy = Math.abs(touches[0].pageY - touches[1].pageY);
+        // Set Inital Distance
+        INITIAL_DISTANCE = Math.sqrt(dx * dx + dy * dy);
+        setZooming(true);
+      }
+
+      return baseComponentResult;
+    },
+    onPanResponderGrant: (event, gestureState) => {},
+    onPanResponderStart: (event, gestureState) => {},
+    onPanResponderMove: (event, { dx, dy }) => {
+      const touches = event.nativeEvent.touches;
+      if (touches.length >= 2) {
+        let dx = Math.abs(touches[0].pageX - touches[1].pageX);
+        let dy = Math.abs(touches[0].pageY - touches[1].pageY);
+
+        const _distance = Math.sqrt(dx * dx + dy * dy);
+        const zoomChangeFromStartOfPinch = _distance / INITIAL_DISTANCE;
+        const pinchToZoomSensitivity =
+          zoomChangeFromStartOfPinch < 1
+            ? pinchToZoomOutSensitivity
+            : pinchToZoomInSensitivity;
+        let zoomLevel =
+          zoomChangeFromStartOfPinch * items[currIndex].lastZoomLevel._value;
+        console.log(items[currIndex].lastZoomLevel._value, zoomLevel);
+        // We have a pinch-to-zoom movement
+        // Track locationX/locationY to know by how much the user moved their fingers
+        // make sure max and min zoom levels are respected
+        if (maxZoom !== null && zoomLevel > maxZoom) {
+          zoomLevel = maxZoom;
+        }
+
+        if (zoomLevel < minZoom) {
+          zoomLevel = minZoom;
+        }
+
+        items[currIndex].scale.setValue(zoomLevel);
+        _lastZoomValue = zoomLevel;
+      } else {
+        // We have a regular scroll movement
+      }
+    },
+
+    onPanResponderRelease: (event, {}) => {
+      console.log("Released");
+
+      changeHeaderState();
+      items[currIndex].lastZoomLevel.setValue(_lastZoomValue);
+      setZooming(false);
+    },
+  });
   const [currIndex, setCurrIndex] = useState(index);
-
-  const changeHeaderState = () => {
-    if (animationValue._value === 1) {
-      animationValue.setValue(0);
-    } else {
-      animationValue.setValue(1);
-    }
-  };
-
+  const [zooming, setZooming] = useState(false);
   useEffect(() => {
     setTimeout(
       () =>
-        ref.current.scrollTo({
+        scrollViewRef.current.getNode().scrollTo({
           x: index * WIDTH,
           y: 0,
           animated: false,
@@ -160,28 +242,30 @@ const ImageSlider = forwardRef(({ index, goToNext }, ref) => {
 
   return images ? (
     <>
-      <ScrollView
-        contentContainerStyle={{
-          borderWidth: 1,
-          borderColor: "white",
-        }}
-        horizontal={true}
+      <Animated.ScrollView
+        canCancelContentTouches={false}
+        contentContainerStyle={{}}
+        horizontal
         showsPagination={false}
-        scrollEnabled={true}
-        ref={ref}
-        index={currIndex}
+        scrollEnabled={!zooming}
+        ref={scrollViewRef}
+        scrollEventThrottle={16}
         pagingEnabled={true}
-        onTouchEnd={(event) => {
-          changeHeaderState();
-        }}
+        onTouchEnd={(event) => {}}
         onMomentumScrollEnd={(event) => {
+          console.log("ScrollView Event", new Date());
           setCurrIndex(event.nativeEvent.contentOffset.x / WIDTH);
         }}
+        {...panResponder.panHandlers}
       >
-        {images.map((image, idx) => (
-          <ImageContainer source={image.uri} key={`image-silder-${idx}`} />
+        {items.map(({ image, state, pinchRef, scale }, idx) => (
+          <ImageContainer
+            source={image.uri}
+            {...{ state, scrollViewRef, pinchRef, pinchRefs, scale }}
+            key={`image-silder-${idx}`}
+          />
         ))}
-      </ScrollView>
+      </Animated.ScrollView>
 
       <FloatingButton
         changeViewerState={changeViewerState}
@@ -246,26 +330,38 @@ const FloatingButton = forwardRef(({ currIndex, animationValue }, ref) => {
     </>
   );
 });
+const USE_NATIVE_DRIVER = true;
+const SIZE = WIDTH;
 
-const ImageContainer = ({ source }) => (
-  <Animated.View
-    style={{
-      ...styles.imageContainer,
-      transform: [{ translateY: -WIDTH }],
-    }}
-  >
-    <Animated.Image
-      source={{
-        uri: source,
-      }}
+const ImageContainer = ({
+  source,
+  scale,
+
+  state,
+  pinchRef,
+  pinchRefs,
+  scrollViewRef,
+}) => {
+  return (
+    <Animated.View
       style={{
-        height: undefined,
-        width: "100%",
-        aspectRatio: 1,
+        ...styles.imageContainer,
       }}
-    />
-  </Animated.View>
-);
+    >
+      <Animated.Image
+        source={{
+          uri: source,
+        }}
+        style={[
+          styles.zoomableImage,
+          {
+            transform: [{ perspective: 200 }, { scale: scale }],
+          },
+        ]}
+      />
+    </Animated.View>
+  );
+};
 
 const styles = StyleSheet.create({
   modal: {
@@ -276,6 +372,8 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     zIndex: 2,
+    flex: 1,
+    backgroundColor: "black",
   },
   buttonContainer: {
     bottom: StatusHeight,
@@ -293,16 +391,17 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     zIndex: 2,
-    top: "50%",
     width: WIDTH,
     height: HEIGHT,
   },
+  zoomableImage: {
+    height: undefined,
+    width: "100%",
+    aspectRatio: 1,
+  },
 });
 
-SlideImageModal.propTypes = {
-  imgViewerVisible: PropTypes.bool.isRequired,
-  changeViewerState: PropTypes.func.isRequired,
-};
+SlideImageModal.propTypes = {};
 ImageSlider.propTypes = {
   images: PropTypes.array,
 };

@@ -19,6 +19,7 @@ import SelectArea from "../screens/Group/GroupCreate/SelectArea";
 import SelectCollege from "../screens/Group/GroupCreate/SelectCollege";
 import SelectMajor from "../screens/Group/GroupCreate/SelectMajor";
 import { useRoute } from "@react-navigation/native";
+import SlideImageModal from "../components/common/SlideImageModal";
 
 const Stack = createStackNavigator();
 
@@ -120,6 +121,14 @@ export default () => {
         component={SelectMajor}
         options={{
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      ></Stack.Screen>
+      <Stack.Screen
+        name="SlideImageModal"
+        component={SlideImageModal}
+        options={{
+          cardStyleInterpolator:
+            CardStyleInterpolators.forFadeFromBottomAndroid,
         }}
       ></Stack.Screen>
     </Stack.Navigator>

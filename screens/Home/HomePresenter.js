@@ -61,7 +61,6 @@ export default ({ refreshFn, loading, navigation }) => {
       groupName: group.groupName,
     };
   });
-  console.log(groupSched);
   const _test = [{ test: 1 }, { test: 1 }];
   return (
     <>

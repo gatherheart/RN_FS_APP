@@ -21,6 +21,7 @@ import { Ionicons, AntDesign } from "@expo/vector-icons";
 import { StyleSheet } from "react-native";
 import { getFileName } from "../../../utils/String";
 import { downloadFile } from "../../../utils/FileSystem";
+import { useNavigation } from "@react-navigation/native";
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
 const SubContainer = styled.View`
@@ -56,7 +57,10 @@ const NanumText = styled.Text`
 `;
 
 export default () => {
+  StatusBar.setHidden(false, "fade");
+
   const themeContext = useContext(ThemeContext);
+  const navigation = useNavigation();
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [modalVisible, setModalVisible] = useState(true);
   const [imgViewerState, setImgViewerState] = useState({
@@ -159,18 +163,16 @@ export default () => {
           <NanumText style={{ lineHeight: 25 }}>{data.noticeMemo}</NanumText>
         </BodyContainer>
         <ImgContainer>
-          <SlideImageModal
-            changeViewerState={changeViewerState}
-            imgViewerVisible={imgViewerState.visible}
-            images={images}
-            index={imgViewerState.index}
-          ></SlideImageModal>
           <ScrollView horizontal={true}>
             {images.map((image, idx) => (
               <TouchableOpacity
                 key={`img-view-${idx}`}
                 onPress={() => {
-                  changeViewerState(idx);
+                  navigation.navigate("SlideImageModal", {
+                    idx,
+                    images,
+                    from: "ReadNotice",
+                  });
                 }}
               >
                 <Image

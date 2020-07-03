@@ -428,23 +428,61 @@ export default () => {
         ) : (
           <>
             <Text style={{ ...styles.category }}>가입 조건</Text>
-            <View style={{ ...styles.optionContainer }}>
-              <View style={{ ...styles.optionName }}>
-                <Text>학교</Text>
+            {schoolList.length === 0 ? (
+              <View style={{ ...styles.optionContainer }}>
+                <View style={{ ...styles.optionName }}>
+                  <Text>학교</Text>
+                </View>
+                <View style={{ ...styles.optionContent }}>
+                  <TouchableOpacity
+                    style={{ ...styles.optionContent }}
+                    onPress={() => {
+                      navigation.navigate("SelectSchool", {
+                        from: "GroupCreate2",
+                      });
+                    }}
+                  >
+                    <Text style={{ ...styles.optionText }}>
+                      학교 및 캠퍼스를 선택해주세요
+                    </Text>
+                  </TouchableOpacity>
+                </View>
               </View>
-              <View style={{ ...styles.optionContent }}>
-                <TouchableOpacity
-                  style={{ ...styles.optionContent }}
-                  onPress={() => {
-                    naviagtion.navigate("SelectSchool", {});
+            ) : (
+              <View
+                style={{
+                  ...styles.afterOptionContainer,
+                  height: schoolList.length * 40,
+                }}
+              >
+                <View style={{ ...styles.optionName }}>
+                  <Text>학교</Text>
+                </View>
+                <View
+                  style={{
+                    ...styles.optionContent,
+                    flexDirection: "column",
+                    justifyContent: "space-evenly",
                   }}
                 >
-                  <Text style={{ ...styles.optionText }}>
-                    학교 및 캠퍼스를 선택해주세요
-                  </Text>
-                </TouchableOpacity>
+                  {schoolList.map((school, idx) => {
+                    return (
+                      <TouchableOpacity
+                        key={`school-list-${idx}`}
+                        style={{ ...styles.AfterOptionContent }}
+                        onPress={() => {
+                          _removeItemFromState(setSchoolList)(schoolList, idx);
+                        }}
+                      >
+                        <Text style={{ ...styles.AfterOptionText }}>
+                          {school}
+                        </Text>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </View>
               </View>
-            </View>
+            )}
 
             <View style={{ ...styles.optionContainer }}>
               <View style={{ ...styles.optionName }}>
