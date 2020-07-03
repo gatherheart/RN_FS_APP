@@ -42,6 +42,12 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 
 const SWIPER_HEIGHT = HEIGHT / 2;
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
+const Gesture = Object.freeze({
+  PINCH: "pinch",
+  SHIFT: "shift",
+  DEFAULT: "default",
+});
+
 const View = styled.View``;
 
 const Container = styled.View`
@@ -138,11 +144,13 @@ const changeHeaderState = () => {
   }
 };
 let INITIAL_DISTANCE = 150;
-let _lastZoomValue = 0;
+const lastZoomLevel = new Animated.Value(State.BEGAN);
+
 const pinchToZoomInSensitivity = 3;
 const pinchToZoomOutSensitivity = 1;
 const maxZoom = 2;
 const minZoom = 0.5;
+let currentGesture = Gesture.DEFAULT;
 
 const ImageSlider = forwardRef(({ index, goToNext }, scrollViewRef) => {
   const changeViewerState = useChangeViewerState();
@@ -150,11 +158,11 @@ const ImageSlider = forwardRef(({ index, goToNext }, scrollViewRef) => {
   const viewRef = useRef();
 
   State.BEGAN = 1;
+  console.log("items");
   const items = images.map((image) => ({
     image,
     state: new Animated.Value(State.UNDETERMINED),
     scale: new Animated.Value(State.BEGAN),
-    lastZoomLevel: new Animated.Value(State.BEGAN),
     pinchZoomPosition: null,
     pinchRef: useRef(null),
   }));
@@ -178,13 +186,22 @@ const ImageSlider = forwardRef(({ index, goToNext }, scrollViewRef) => {
         let dy = Math.abs(touches[0].pageY - touches[1].pageY);
         // Set Inital Distance
         INITIAL_DISTANCE = Math.sqrt(dx * dx + dy * dy);
-        setZooming(true);
+        currentGesture = Gesture.PINCH;
+      } else if (gestureState.numberActiveTouches < 2) {
+        currentGesture = Gesture.DEFAULT;
       }
-
+      console.log(
+        "onMoveShouldSetPanResponderCapture",
+        new Date(),
+        baseComponentResult
+      );
+      setZooming(gestureState.numberActiveTouches === 2);
+      setShifting(
+        lastZoomLevel._value != 1 &&
+          (Math.abs(gestureState.dx) > 2 || Math.abs(gestureState.dy)) > 2
+      );
       return baseComponentResult;
     },
-    onPanResponderGrant: (event, gestureState) => {},
-    onPanResponderStart: (event, gestureState) => {},
     onPanResponderMove: (event, { dx, dy }) => {
       const touches = event.nativeEvent.touches;
       if (touches.length >= 2) {
@@ -197,9 +214,10 @@ const ImageSlider = forwardRef(({ index, goToNext }, scrollViewRef) => {
           zoomChangeFromStartOfPinch < 1
             ? pinchToZoomOutSensitivity
             : pinchToZoomInSensitivity;
-        let zoomLevel =
-          zoomChangeFromStartOfPinch * items[currIndex].lastZoomLevel._value;
-        console.log(items[currIndex].lastZoomLevel._value, zoomLevel);
+        let zoomLevel = zoomChangeFromStartOfPinch * lastZoomLevel._value;
+        console.log(lastZoomLevel._value, zoomLevel);
+        console.log("Zooming:", zooming);
+
         // We have a pinch-to-zoom movement
         // Track locationX/locationY to know by how much the user moved their fingers
         // make sure max and min zoom levels are respected
@@ -212,22 +230,23 @@ const ImageSlider = forwardRef(({ index, goToNext }, scrollViewRef) => {
         }
 
         items[currIndex].scale.setValue(zoomLevel);
-        _lastZoomValue = zoomLevel;
       } else {
         // We have a regular scroll movement
       }
     },
 
     onPanResponderRelease: (event, {}) => {
-      console.log("Released");
+      console.log("Released", currentGesture);
+      if (currentGesture === Gesture.DEFAULT) changeHeaderState();
+      lastZoomLevel.setValue(items[currIndex].scale._value);
 
-      changeHeaderState();
-      items[currIndex].lastZoomLevel.setValue(_lastZoomValue);
+      currentGesture = Gesture.DEFAULT;
       setZooming(false);
     },
   });
   const [currIndex, setCurrIndex] = useState(index);
   const [zooming, setZooming] = useState(false);
+  const [shifting, setShifting] = useState(false);
   useEffect(() => {
     setTimeout(
       () =>
@@ -247,14 +266,20 @@ const ImageSlider = forwardRef(({ index, goToNext }, scrollViewRef) => {
         contentContainerStyle={{}}
         horizontal
         showsPagination={false}
-        scrollEnabled={!zooming}
+        scrollEnabled={!zooming && !shifting}
         ref={scrollViewRef}
         scrollEventThrottle={16}
         pagingEnabled={true}
+        onScroll={(event) => {
+          console.log("onScroll zooming;:", zooming);
+        }}
         onTouchEnd={(event) => {}}
         onMomentumScrollEnd={(event) => {
+          console.log("onScroll zooming;:", zooming);
+
           console.log("ScrollView Event", new Date());
           setCurrIndex(event.nativeEvent.contentOffset.x / WIDTH);
+          lastZoomLevel.setValue(1);
         }}
         {...panResponder.panHandlers}
       >
