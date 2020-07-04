@@ -46,6 +46,7 @@ const scheduleData = [
     date: new Date(),
     cycle: CycleType.WEEK,
     issuedDate: new Date(),
+    groupName: "PIXEL",
   },
   {
     id: "1234",
@@ -54,6 +55,7 @@ const scheduleData = [
     date: new Date(new Date().setDate(new Date().getDate() - 1)),
     cycle: CycleType.MONTH,
     issuedDate: new Date(),
+    groupName: "PIXEL",
   },
   {
     id: "1234",
@@ -62,6 +64,7 @@ const scheduleData = [
     date: new Date(new Date().setDate(new Date().getDate() - 2)),
     cycle: CycleType.DEFAULT,
     issuedDate: new Date(),
+    groupName: "PIXEL",
   },
   {
     id: "1234",
@@ -70,5 +73,6 @@ const scheduleData = [
     date: new Date(new Date().setDate(new Date().getDate() - 5)),
     cycle: CycleType.WEEK,
     issuedDate: new Date(),
+    groupName: "PIXEL",
   },
 ];

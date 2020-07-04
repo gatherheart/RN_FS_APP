@@ -101,6 +101,15 @@ export const getYearMonthDay = (date) => {
 
   return [year, month, day].join("-");
 };
+export const dateCompare = (a, b) => {
+  const _a = new Date(a);
+  const _b = new Date(b);
+  if (_a === _b) return 0;
+  // If a is after b
+  else if (_a > _b) return 1;
+  // if a is before b
+  else if (_a < _b) return -1;
+};
 
 export const sortByDate = (target) => {
   target.sort((a, b) => {

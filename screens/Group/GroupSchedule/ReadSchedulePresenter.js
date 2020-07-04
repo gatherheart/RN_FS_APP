@@ -1,20 +1,81 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useMemo } from "react";
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import CustomHeader from "../../../components/common/CustomHeader";
 import { CalendarList } from "react-native-calendars";
 import { StatusHeight, HeaderHeight } from "../../../utils/HeaderHeight";
 import { useRoute } from "@react-navigation/native";
 import { moderateScale } from "react-native-size-matters";
-import { getYearMonthDay, getMonth } from "../../../utils/DateFormat";
+import { getYearMonthDay, getMonth, getDate } from "../../../utils/DateFormat";
 import { GREEN_COLOR, BG_COLOR } from "../../../constants/Color";
 export default ({ schedule, CycleType }) => {
   const calendarRef = useRef(null);
+  const _today = new Date();
+
   const _selectedDate = getYearMonthDay(
     new Date(new Date().setDate(new Date().getDate() - 1))
   );
-  const _currentMonth = getMonth(new Date());
+  const _gottenCurrentMonth = getMonth(new Date());
+  const _lastDayOfMonth = new Date(
+    _today.getFullYear(),
+    _today.getMonth() + 1,
+    0
+  ).getDate();
+  const DAY = Object.freeze({
+    MONDAY: 0,
+    TUESDAY: 1,
+    WEDNESDAY: 2,
+    THURSDAY: 3,
+    FRIDAY: 4,
+    SATURDAY: 5,
+    SUNDAY: 6,
+  });
+  const getEveryDayInMonth = (day = DAY.MONDAY) => {
+    let d = new Date(currentMonth.dateString),
+      month = d.getMonth(),
+      mondays = [];
+
+    d.setDate(1);
+
+    // Get the first Monday in the month
+    while (d.getDay() !== day) {
+      d.setDate(d.getDate() + 1);
+    }
+
+    // Get all the other Mondays in the month
+    while (d.getMonth() === month) {
+      mondays.push(new Date(d.getTime()));
+      d.setDate(d.getDate() + 7);
+    }
+
+    return mondays;
+  };
+
   const [selectedDate, setSelectedDate] = useState(_selectedDate);
-  const [currentMonth, setCurrentMonth] = useState(_currentMonth + 1);
+  const [currentMonth, setCurrentMonth] = useState(_gottenCurrentMonth + 1);
+  let _processedSched = [];
+  const _calculateMarkedDates = () => {
+    console.log("_calculateMarkedDates", schedule.length);
+    const _oneWeek = 7;
+    for (let i = 0; i < schedule.length; i++) {
+      const _sched = schedule[i];
+
+      const _theDate = _sched.date;
+      if (_sched.cycle === CycleType.default) {
+        _processedSched.push(_sched);
+      } else if (_sched.cycle === CycleType.WEEK) {
+        const _cycleDay = _theDate.getDay();
+        const _cycleWeek = getEveryDayInMonth(_cycleDay);
+        console.log("_cycleDay", _cycleDay);
+        console.log(_cycleWeek);
+      }
+    }
+  };
+
+  useMemo(() => {
+    console.log("currentMonth", currentMonth);
+    _calculateMarkedDates();
+  }, [currentMonth]);
+
   return (
     <>
       <CustomHeader
@@ -50,12 +111,13 @@ export default ({ schedule, CycleType }) => {
           console.log(
             "onVisibleMonthsChange",
             currentMonth,
-            date[0].month,
+            date[0],
             new Date()
           );
-        }}
-        onMonthChange={(date) => {
-          console.log("onMonthChange", date);
+          if (date[0].month === currentMonth.month) return;
+          setTimeout(() => {
+            setCurrentMonth(date[0]);
+          }, 100);
         }}
         style={{ top: StatusHeight, backgroundColor: "white" }}
         pastScrollRange={12}
