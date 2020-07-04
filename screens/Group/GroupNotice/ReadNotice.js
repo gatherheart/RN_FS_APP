@@ -21,7 +21,7 @@ import { Ionicons, AntDesign } from "@expo/vector-icons";
 import { StyleSheet } from "react-native";
 import { getFileName } from "../../../utils/String";
 import { downloadFile } from "../../../utils/FileSystem";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
 const SubContainer = styled.View`
@@ -57,10 +57,10 @@ const NanumText = styled.Text`
 `;
 
 export default () => {
-  StatusBar.setHidden(false, "fade");
-
   const themeContext = useContext(ThemeContext);
   const navigation = useNavigation();
+  const route = useRoute();
+
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [modalVisible, setModalVisible] = useState(true);
   const [imgViewerState, setImgViewerState] = useState({
@@ -76,34 +76,10 @@ export default () => {
     });
   };
 
-  const images = [
-    {
-      uri: "https://reactnative.dev/img/tiny_logo.png",
-
-      // Simplest usage.
-
-      // width: number
-      // height: number
-      // Optional, if you know the image size, you can set the optimization performance
-
-      // You can pass props to <Image />.
-      props: {
-        // headers: ...
-      },
-    },
-    {
-      // Simplest usage.
-      uri: "https://avatars2.githubusercontent.com/u/7970947?v=3&s=460",
-
-      // width: number
-      // height: number
-      // Optional, if you know the image size, you can set the optimization performance
-
-      // You can pass props to <Image />.
-      props: {
-        // headers: ...
-      },
-    },
+  let images = [
+    "https://avatars2.githubusercontent.com/u/7970947?v=3&s=460",
+    "https://images.unsplash.com/photo-1593301007837-585fa364a32a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=640&q=80",
+    "https://avatars2.githubusercontent.com/u/7970947?v=3&s=460",
   ];
 
   const [data, setData] = useState({
@@ -127,6 +103,10 @@ export default () => {
   useEffect(() => {
     getData();
   }, []);
+
+  useEffect(() => {
+    StatusBar.setHidden(false, "fade");
+  }, [route]);
 
   return data?.loading ? (
     <Loader></Loader>
@@ -171,12 +151,12 @@ export default () => {
                   navigation.navigate("SlideImageModal", {
                     idx,
                     images,
-                    from: "ReadNotice",
+                    from: "GroupReadNotice",
                   });
                 }}
               >
                 <Image
-                  source={image}
+                  source={{ uri: image }}
                   style={{
                     width: undefined,
                     height: "100%",

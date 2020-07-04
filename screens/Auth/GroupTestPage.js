@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { PinchGestureHandler, State } from "react-native-gesture-handler";
-import { StyleSheet, Dimensions, Animated } from "react-native";
+import { StyleSheet, Dimensions, Animated, Modal } from "react-native";
+import ImageViewer from "react-native-image-zoom-viewer";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
 
@@ -18,7 +19,27 @@ export default () => (
     <ImageContainer></ImageContainer>
   </Animated.View>
 );
+const images = [
+  {
+    // Simplest usage.
+    url: "https://avatars2.githubusercontent.com/u/7970947?v=3&s=460",
 
+    // width: number
+    // height: number
+    // Optional, if you know the image size, you can set the optimization performance
+
+    // You can pass props to <Image />.
+    props: {
+      // headers: ...
+    },
+  },
+  {
+    url: "https://avatars2.githubusercontent.com/u/7970947?v=3&s=460",
+    props: {
+      // Or you can set source directory.
+    },
+  },
+];
 const ImageContainer = ({
   source = {
     uri:
@@ -57,59 +78,11 @@ const ImageContainer = ({
     }
   };
   return (
-    <Animated.ScrollView horizontal pagingEnabled>
-      <PinchGestureHandler
-        onGestureEvent={_onPinchGestureEvent}
-        onHandlerStateChange={_onPinchHandlerStateChange}
-        simultaneousHandlers={[]}
-      >
-        <Animated.View
-          style={{
-            ...styles.imageContainer,
-            transform: [{ translateY: -WIDTH }],
-            borderColor: "white",
-            borderWidth: 1,
-          }}
-          onMomentumScrollEnd={(event) => {
-            setCurrIndex(event.nativeEvent.contentOffset.x / WIDTH);
-          }}
-        >
-          <Animated.Image
-            source={source}
-            style={[
-              styles.zoomableImage,
-              {
-                transform: [{ perspective: 200 }, { scale: _scale }],
-              },
-            ]}
-          />
-        </Animated.View>
-      </PinchGestureHandler>
-      <PinchGestureHandler
-        onGestureEvent={_onPinchGestureEvent}
-        onHandlerStateChange={_onPinchHandlerStateChange}
-        simultaneousHandlers={[]}
-      >
-        <Animated.View
-          style={{
-            ...styles.imageContainer,
-            transform: [{ translateY: -WIDTH }],
-            borderColor: "white",
-            borderWidth: 1,
-          }}
-        >
-          <Animated.Image
-            source={source}
-            style={[
-              styles.zoomableImage,
-              {
-                transform: [{ perspective: 200 }, { scale: _scale }],
-              },
-            ]}
-          />
-        </Animated.View>
-      </PinchGestureHandler>
-    </Animated.ScrollView>
+    <View>
+      <Modal visible={true} transparent={true}>
+        <ImageViewer imageUrls={images} />
+      </Modal>
+    </View>
   );
 };
 

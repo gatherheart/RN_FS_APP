@@ -22,7 +22,7 @@ import {
 } from "react-native";
 import Modal from "react-native-modal";
 import CustomIcon from "./CustomIcon";
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, Ionicons } from "@expo/vector-icons";
 import {
   UnderHeader,
   StatusHeight,
@@ -39,6 +39,7 @@ import {
 } from "react-native-gesture-handler";
 import { cond, eq } from "react-native-reanimated";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import ImageViewer from "react-native-image-zoom-viewer";
 
 const SWIPER_HEIGHT = HEIGHT / 2;
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
@@ -84,16 +85,9 @@ const useChangeViewerState = () => {
 };
 
 // Make a Component that provide context regarding to images
-const ImageProvider = ({
-  images,
-  imgViewerVisible,
-  changeViewerState,
-  children,
-}) => {
+const ImageProvider = ({ images, changeViewerState, children }) => {
   return (
-    <ImageContext.Provider
-      value={{ images, imgViewerVisible, changeViewerState }}
-    >
+    <ImageContext.Provider value={{ images, changeViewerState }}>
       {children}
     </ImageContext.Provider>
   );
@@ -102,206 +96,75 @@ const ImageProvider = ({
 const SlideImageModal = ({}) => {
   const navigation = useNavigation();
   const route = useRoute();
+  navigation.setOptions({
+    gestureEnabled: false,
+  });
   const { images, idx: index, from: _from } = route.params;
-  const [imgViewerVisible, setImgViewerVisible] = useState(true);
   StatusBar.setHidden(true, "fade");
-
-  const changeViewerState = () => {
-    StatusBar.setHidden(!imgViewerVisible, "fade");
-    navigation.goBack(_from, {});
-  };
   const _handleBackButtonClick = () => {
-    StatusBar.setHidden(!imgViewerVisible, "fade");
+    StatusBar.setHidden(false, "fade");
+    navigation.goBack(_from, {});
+
+    return true;
   };
   BackHandler.addEventListener("hardwareBackPress", _handleBackButtonClick);
 
-  const swiperRef = useRef(null);
-  const goToNext = (dist = 1) => {
-    swiperRef.current?.scrollBy(dist, true);
+  const changeViewerState = () => {
+    console.log("changeViewerState");
+    StatusBar.setHidden(false, "fade");
+    navigation.goBack(_from, {});
   };
+
+  const swiperRef = useRef(null);
+  const _images = images.map((image) => {
+    return {
+      url: image,
+      props: {},
+    };
+  });
+
   return (
-    <ImageProvider
-      images={images}
-      imgViewerVisible={imgViewerVisible}
-      changeViewerState={changeViewerState}
-    >
-      <Animated.View style={styles.modalContainer}>
-        <ImageSlider
-          goToNext={goToNext}
+    <ImageProvider images={images} changeViewerState={changeViewerState}>
+      <Animated.View
+        style={{
+          ...styles.modalContainer,
+        }}
+      >
+        <ImageViewer
+          imageUrls={_images}
           index={index}
-          ref={swiperRef}
-        ></ImageSlider>
+          useNativeDriver={true}
+          enablePreload={true}
+          pageAnimateTime={240}
+          menus={() => <View></View>}
+          renderIndicator={(currentIndex, allSize) => {
+            return (
+              <View style={SlideStyles.renderIndicator}>
+                <Text style={SlideStyles.renderIndicatorText}>
+                  {currentIndex} / {allSize}
+                </Text>
+              </View>
+            );
+          }}
+        />
       </Animated.View>
+      <FloatingButton></FloatingButton>
     </ImageProvider>
   );
 };
-const animationValue = new Animated.Value(0);
-const changeHeaderState = () => {
-  if (animationValue._value === 1) {
-    animationValue.setValue(0);
-  } else {
-    animationValue.setValue(1);
-  }
-};
-let INITIAL_DISTANCE = 150;
-const lastZoomLevel = new Animated.Value(State.BEGAN);
 
-const pinchToZoomInSensitivity = 3;
-const pinchToZoomOutSensitivity = 1;
-const maxZoom = 2;
-const minZoom = 0.5;
-let currentGesture = Gesture.DEFAULT;
-
-const ImageSlider = forwardRef(({ index, goToNext }, scrollViewRef) => {
-  const changeViewerState = useChangeViewerState();
-  const images = useImages();
-  const viewRef = useRef();
-
-  State.BEGAN = 1;
-  console.log("items");
-  const items = images.map((image) => ({
-    image,
-    state: new Animated.Value(State.UNDETERMINED),
-    scale: new Animated.Value(State.BEGAN),
-    pinchZoomPosition: null,
-    pinchRef: useRef(null),
-  }));
-  const pinchRefs = items.map(({ pinchRef }) => pinchRef);
-
-  const panResponder = PanResponder.create({
-    onMoveShouldSetPanResponder: () => {
-      console.log("onMoveShouldSetPanResponder", new Date());
-    },
-    onMoveShouldSetPanResponderCapture: (event, gestureState) => {
-      const touches = event.nativeEvent.touches;
-      let baseComponentResult =
-        true &&
-        (Math.abs(gestureState.dx) > 2 ||
-          Math.abs(gestureState.dy) > 2 ||
-          gestureState.numberActiveTouches === 2);
-
-      // PINCH Gesture Capture
-      if (gestureState.numberActiveTouches === 2) {
-        let dx = Math.abs(touches[0].pageX - touches[1].pageX);
-        let dy = Math.abs(touches[0].pageY - touches[1].pageY);
-        // Set Inital Distance
-        INITIAL_DISTANCE = Math.sqrt(dx * dx + dy * dy);
-        currentGesture = Gesture.PINCH;
-      } else if (gestureState.numberActiveTouches < 2) {
-        currentGesture = Gesture.DEFAULT;
-      }
-      console.log(
-        "onMoveShouldSetPanResponderCapture",
-        new Date(),
-        baseComponentResult
-      );
-      setZooming(gestureState.numberActiveTouches === 2);
-      setShifting(
-        lastZoomLevel._value != 1 &&
-          (Math.abs(gestureState.dx) > 2 || Math.abs(gestureState.dy)) > 2
-      );
-      return baseComponentResult;
-    },
-    onPanResponderMove: (event, { dx, dy }) => {
-      const touches = event.nativeEvent.touches;
-      if (touches.length >= 2) {
-        let dx = Math.abs(touches[0].pageX - touches[1].pageX);
-        let dy = Math.abs(touches[0].pageY - touches[1].pageY);
-
-        const _distance = Math.sqrt(dx * dx + dy * dy);
-        const zoomChangeFromStartOfPinch = _distance / INITIAL_DISTANCE;
-        const pinchToZoomSensitivity =
-          zoomChangeFromStartOfPinch < 1
-            ? pinchToZoomOutSensitivity
-            : pinchToZoomInSensitivity;
-        let zoomLevel = zoomChangeFromStartOfPinch * lastZoomLevel._value;
-        console.log(lastZoomLevel._value, zoomLevel);
-        console.log("Zooming:", zooming);
-
-        // We have a pinch-to-zoom movement
-        // Track locationX/locationY to know by how much the user moved their fingers
-        // make sure max and min zoom levels are respected
-        if (maxZoom !== null && zoomLevel > maxZoom) {
-          zoomLevel = maxZoom;
-        }
-
-        if (zoomLevel < minZoom) {
-          zoomLevel = minZoom;
-        }
-
-        items[currIndex].scale.setValue(zoomLevel);
-      } else {
-        // We have a regular scroll movement
-      }
-    },
-
-    onPanResponderRelease: (event, {}) => {
-      console.log("Released", currentGesture);
-      if (currentGesture === Gesture.DEFAULT) changeHeaderState();
-      lastZoomLevel.setValue(items[currIndex].scale._value);
-
-      currentGesture = Gesture.DEFAULT;
-      setZooming(false);
-    },
-  });
-  const [currIndex, setCurrIndex] = useState(index);
-  const [zooming, setZooming] = useState(false);
-  const [shifting, setShifting] = useState(false);
-  useEffect(() => {
-    setTimeout(
-      () =>
-        scrollViewRef.current.getNode().scrollTo({
-          x: index * WIDTH,
-          y: 0,
-          animated: false,
-        }),
-      0
-    );
-  }, []);
-
-  return images ? (
-    <>
-      <Animated.ScrollView
-        canCancelContentTouches={false}
-        contentContainerStyle={{}}
-        horizontal
-        showsPagination={false}
-        scrollEnabled={!zooming && !shifting}
-        ref={scrollViewRef}
-        scrollEventThrottle={16}
-        pagingEnabled={true}
-        onScroll={(event) => {
-          console.log("onScroll zooming;:", zooming);
-        }}
-        onTouchEnd={(event) => {}}
-        onMomentumScrollEnd={(event) => {
-          console.log("onScroll zooming;:", zooming);
-
-          console.log("ScrollView Event", new Date());
-          setCurrIndex(event.nativeEvent.contentOffset.x / WIDTH);
-          lastZoomLevel.setValue(1);
-        }}
-        {...panResponder.panHandlers}
-      >
-        {items.map(({ image, state, pinchRef, scale }, idx) => (
-          <ImageContainer
-            source={image.uri}
-            {...{ state, scrollViewRef, pinchRef, pinchRefs, scale }}
-            key={`image-silder-${idx}`}
-          />
-        ))}
-      </Animated.ScrollView>
-
-      <FloatingButton
-        changeViewerState={changeViewerState}
-        ref={viewRef}
-        animationValue={animationValue}
-        currIndex={currIndex}
-      ></FloatingButton>
-    </>
-  ) : null;
+const SlideStyles = StyleSheet.create({
+  renderIndicator: {
+    position: "absolute",
+    top: StatusHeight,
+    width: WIDTH,
+    alignItems: "center",
+  },
+  renderIndicatorText: {
+    fontSize: 15,
+    color: "#fff",
+  },
 });
-
 const FloatingButton = forwardRef(({ currIndex, animationValue }, ref) => {
   const changeViewerState = useChangeViewerState();
   const images = useImages();
@@ -324,13 +187,18 @@ const FloatingButton = forwardRef(({ currIndex, animationValue }, ref) => {
         }}
         ref={ref}
       >
-        <TouchableOpacity onPress={() => changeViewerState()}>
-          <CustomIcon
-            name="arrow-back"
+        <TouchableOpacity
+          onPress={() => {
+            console.log("Left Button");
+            changeViewerState();
+          }}
+        >
+          <Ionicons
+            name="ios-arrow-back"
             size={30}
             style={{ marginHorizontal: 20 }}
             color={"white"}
-          ></CustomIcon>
+          ></Ionicons>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -355,39 +223,6 @@ const FloatingButton = forwardRef(({ currIndex, animationValue }, ref) => {
     </>
   );
 });
-const USE_NATIVE_DRIVER = true;
-const SIZE = WIDTH;
-
-const ImageContainer = ({
-  source,
-  scale,
-
-  state,
-  pinchRef,
-  pinchRefs,
-  scrollViewRef,
-}) => {
-  return (
-    <Animated.View
-      style={{
-        ...styles.imageContainer,
-      }}
-    >
-      <Animated.Image
-        source={{
-          uri: source,
-        }}
-        style={[
-          styles.zoomableImage,
-          {
-            transform: [{ perspective: 200 }, { scale: scale }],
-          },
-        ]}
-      />
-    </Animated.View>
-  );
-};
-
 const styles = StyleSheet.create({
   modal: {
     marginHorizontal: 0,
@@ -427,8 +262,5 @@ const styles = StyleSheet.create({
 });
 
 SlideImageModal.propTypes = {};
-ImageSlider.propTypes = {
-  images: PropTypes.array,
-};
 
 export default SlideImageModal;
