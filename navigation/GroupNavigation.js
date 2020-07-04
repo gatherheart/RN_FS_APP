@@ -34,6 +34,8 @@ import ReadQnA from "../screens/Group/GroupQnA/ReadQnAContainer";
 import GroupIntroEdit from "../screens/Group/GroupIntro/GroupIntroEdit";
 import WriteAnswer from "../screens/Group/GroupQnA/WriteAnswer";
 import GroupTestPage from "../screens/Auth/GroupTestPage";
+import ReadScheduleContainer from "../screens/Group/GroupSchedule/ReadScheduleContainer";
+import WriteSchedule from "../screens/Group/GroupSchedule/WriteSchedule";
 
 DrawerNavigatorConfig = {
   drawerPosition: "right",
@@ -257,6 +259,20 @@ export default () => {
       <Stack.Screen
         name="GroupIntroEdit"
         component={GroupIntroEdit}
+        options={{
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      />
+      <Stack.Screen
+        name="GroupScheduleRead"
+        component={ReadScheduleContainer}
+        options={{
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      />
+      <Stack.Screen
+        name="GroupScheduleWrite"
+        component={WriteSchedule}
         options={{
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         }}

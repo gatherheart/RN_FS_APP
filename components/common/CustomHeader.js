@@ -24,7 +24,7 @@ const Title = styled.Text``;
 
 const LeftContainer = styled.View`
   width: ${(WIDTH * 33) / 100}px;
-  left: 10px;
+  margin-left: 15px;
 `;
 const MiddleContainer = styled.View`
   width: ${(WIDTH * 33) / 100}px;
@@ -38,29 +38,30 @@ const RightContainer = styled.View`
 `;
 
 const CustomHeader = ({
-  style,
+  styles,
+  statusStyle,
+  iconColor,
   rightButtonEnabled = true,
   rightButton,
   title = "",
 }) => {
   const themeContext = useContext(ThemeContext);
   const navigation = useNavigation();
-
   return (
     <>
       <View
         style={{
           height: StatusHeight,
           backgroundColor: "white",
+          ...statusStyle,
         }}
       />
       <View
         style={{
           top: StatusHeight,
-          ...styles.header,
-          ...style,
+          ...fixedStyles.header,
+          ...styles,
           position: "absolute",
-          borderWidth: 1,
         }}
       >
         <LeftContainer>
@@ -73,7 +74,7 @@ const CustomHeader = ({
           >
             <Icon
               name={"arrow-back"}
-              color={themeContext.lightGreenColor}
+              color={iconColor || themeContext.lightGreenColor}
               size={30}
             ></Icon>
           </TouchableOpacity>
@@ -95,7 +96,7 @@ const CustomHeader = ({
 
 export default CustomHeader;
 
-const styles = StyleSheet.create({
+const fixedStyles = StyleSheet.create({
   header: {
     flexDirection: "row",
     width: WIDTH,
@@ -108,6 +109,8 @@ const styles = StyleSheet.create({
 });
 CustomHeader.propTypes = {
   style: PropTypes.object,
+  statusStyle: PropTypes.object,
+  iconColor: PropTypes.string,
   rightButtonEnabled: PropTypes.bool,
   rightButton: PropTypes.node,
   title: PropTypes.string,

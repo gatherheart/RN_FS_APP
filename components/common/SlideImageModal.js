@@ -136,6 +136,7 @@ const SlideImageModal = ({}) => {
           useNativeDriver={true}
           enablePreload={true}
           pageAnimateTime={240}
+          interval={20}
           menus={() => <View></View>}
           renderIndicator={(currentIndex, allSize) => {
             return (

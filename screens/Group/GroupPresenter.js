@@ -16,7 +16,7 @@ import Button from "../../components/Group/ArgonButton";
 import PropTypes from "prop-types";
 import { HeaderHeight, UnderHeader } from "../../utils/HeaderHeight";
 import styled, { ThemeContext } from "styled-components/native";
-import CustomHeader from "../../components/common/AnimatedCustomHeader";
+import CustomHeader from "../../components/common/CustomHeader";
 import { trimText } from "../../utils/String";
 import ImageGrid from "../../components/common/ImageGrid";
 import GroupActionButton from "../../components/common/GroupActionButton";
@@ -108,6 +108,8 @@ export default ({ id, group, loading, refreshFn }) => {
   const navigation = useNavigation();
   const themeContext = useContext(ThemeContext);
   const [page, setPage] = useState(0);
+  navigation.navigate("GroupScheduleRead", {});
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,
@@ -129,6 +131,9 @@ export default ({ id, group, loading, refreshFn }) => {
             headerPosition={headerPosition}
             headerOpacity={headerOpacity}
             rightButtonEnabled={true}
+            iconColor={themeContext.backgroundColor}
+            styles={{ ...styles.customHeader, zIndex: 4 }}
+            statusStyle={styles.customStatus}
             rightButton={
               <TouchableOpacity
                 onPress={() => {
@@ -139,12 +144,11 @@ export default ({ id, group, loading, refreshFn }) => {
               >
                 <Icon
                   name={"menu"}
-                  color={themeContext.lightGreenColor}
+                  color={themeContext.backgroundColor}
                   size={30}
                 ></Icon>
               </TouchableOpacity>
             }
-            style={{ zIndex: 4 }}
           ></CustomHeader>
           <Animated.ScrollView
             showsVerticalScrollIndicator={false}
@@ -300,15 +304,15 @@ export default ({ id, group, loading, refreshFn }) => {
 };
 
 const styles = StyleSheet.create({
+  customHeader: { backgroundColor: "rgba(0, 0, 0, 0)" },
+  customStatus: { backgroundColor: "rgba(0, 0, 0, 0)" },
   profile: {
     borderColor: "black",
-    borderWidth: 1,
     // marginBottom: -HeaderHeight * 2,
     flex: 1,
   },
   profileContainer: {
     borderColor: "black",
-    borderWidth: 1,
     width: WIDHT,
     height: HEIGHT + HeaderHeight,
     padding: 0,

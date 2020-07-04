@@ -15,7 +15,7 @@ import { useNavigation } from "@react-navigation/native";
 import PropTypes from "prop-types";
 import { HeaderHeight, UnderHeader } from "../../../utils/HeaderHeight";
 import styled, { ThemeContext } from "styled-components/native";
-import CustomHeader from "../../../components/common/AnimatedCustomHeader";
+import CustomHeader from "../../../components/common/CustomHeader";
 import { simplifiedFormat, dDayCalculator } from "../../../utils/DateFormat";
 import ImageGrid from "../../../components/common/ImageGrid";
 import Icon from "../../../components/common/CustomIcon";
@@ -77,7 +77,6 @@ export default ({ id, group, loading, refreshFn }) => {
   const navigation = useNavigation();
   const themeContext = useContext(ThemeContext);
   const [page, setPage] = useState(0);
-
   return (
     <Block
       flex
@@ -92,8 +91,10 @@ export default ({ id, group, loading, refreshFn }) => {
           <CustomHeader
             headerPosition={headerPosition}
             headerOpacity={headerOpacity}
-            style={{ zIndex: 4 }}
             rightButtonEnabled={true}
+            iconColor={themeContext.backgroundColor}
+            styles={{ ...styles.customHeader, zIndex: 4 }}
+            statusStyle={styles.customStatus}
             rightButton={
               <TouchableOpacity
                 onPress={() => {
@@ -104,12 +105,13 @@ export default ({ id, group, loading, refreshFn }) => {
               >
                 <Icon
                   name={"settings"}
-                  color={themeContext.lightGreenColor}
+                  color={themeContext.backgroundColor}
                   size={30}
                 ></Icon>
               </TouchableOpacity>
             }
           ></CustomHeader>
+
           <Animated.ScrollView
             showsVerticalScrollIndicator={false}
             style={{
@@ -350,6 +352,8 @@ export default ({ id, group, loading, refreshFn }) => {
 };
 
 const styles = StyleSheet.create({
+  customHeader: { backgroundColor: "rgba(0, 0, 0, 0)" },
+  customStatus: { backgroundColor: "rgba(0, 0, 0, 0)" },
   profile: {
     borderColor: "black",
     borderWidth: 1,
