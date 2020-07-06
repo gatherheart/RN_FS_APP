@@ -1,15 +1,15 @@
 import React from "react";
 import Title from "./Title";
 import styled from "styled-components/native";
+import { View } from "react-native";
 
 const Container = styled.View``;
 
-const List = ({ title, children }) => {
+const List = ({ children }) => {
   return (
-    <>
-      <Title title={title}></Title>
+    <View style={{ borderWidth: 1 }}>
       <Container>{children}</Container>
-    </>
+    </View>
   );
 };
 

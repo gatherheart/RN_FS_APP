@@ -18,7 +18,7 @@ import HomeHeader from "../../components/common/HomeHeader";
 import { UnderHeader, HeaderHeight } from "../../utils/HeaderHeight";
 import { Ionicons } from "@expo/vector-icons";
 import StarIcon from "../../components/common/svg/StarIcon";
-import { moderateScale } from "react-native-size-matters";
+import { moderateScale, scale } from "react-native-size-matters";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
@@ -86,13 +86,14 @@ export default ({ refreshFn, loading, navigation }) => {
               <Ionicons
                 name={"ios-arrow-forward"}
                 color={GREEN_COLOR}
+                size={scale(15)}
               ></Ionicons>
             </TouchableOpacity>
           </View>
           <TodaySchedule groupSched={groupSched}></TodaySchedule>
         </ScheduleContainer>
         <GroupContainer>
-          <View style={{ ...styles.groupTitle, marginTop: 30 }}>
+          <View style={{ ...styles.groupTitle, borderWidth: 1 }}>
             <BoldText style={{ ...styles.scheduleText, marginTop: 0 }}>
               나의 숲
             </BoldText>
@@ -107,7 +108,11 @@ export default ({ refreshFn, loading, navigation }) => {
               <Text style={{ ...styles.goToCalendarText, color: BG_COLOR }}>
                 숲 만들기
               </Text>
-              <Ionicons name={"ios-add"} color={BG_COLOR}></Ionicons>
+              <Ionicons
+                name={"ios-add"}
+                color={BG_COLOR}
+                size={scale(15)}
+              ></Ionicons>
             </TouchableOpacity>
           </View>
           <List title={""}>
@@ -130,14 +135,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     width: (WIDTH * 90) / 100,
-    height: (HEIGHT * 6) / 100,
+    borderWidth: 1,
     alignItems: "center",
     marginHorizontal: 20,
     marginTop: 10,
   },
   scheduleText: {
     fontWeight: "bold",
-    fontSize: moderateScale(15),
+    fontSize: scale(15),
   },
   goToCalendar: {
     borderRadius: 4,
@@ -148,12 +153,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     alignItems: "center",
     flexDirection: "row",
-    paddingVertical: 5,
+    paddingVertical: scale(5),
     width: "20%",
   },
   goToCalendarText: {
     color: GREEN_COLOR,
-    fontSize: moderateScale(14),
+    fontSize: scale(14),
   },
   goToCreate: {
     borderRadius: 4,
@@ -164,16 +169,15 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     alignItems: "center",
     flexDirection: "row",
-    paddingVertical: 5,
+    paddingVertical: scale(5),
   },
   groupTitle: {
     flexDirection: "row",
     width: (WIDTH * 90) / 100,
     justifyContent: "space-between",
-    height: (HEIGHT * 6) / 100,
     alignItems: "center",
-    marginHorizontal: 20,
-    marginTop: 10,
+    marginHorizontal: scale(20),
+    marginTop: scale(30),
   },
 });
 const ads = {};

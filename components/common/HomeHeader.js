@@ -32,6 +32,7 @@ const LeftContainer = styled.View`
   justify-content: flex-start;
   align-items: flex-end;
   flex-direction: row;
+  height: 100%;
 `;
 const MiddleContainer = styled.View`
   width: ${(WIDTH * 33) / 100}px;
@@ -64,6 +65,7 @@ const HomeHeader = ({ style }) => {
         style={{
           ...styles.header,
           ...style,
+          borderWidth: 1,
         }}
       >
         <LeftContainer>
@@ -75,6 +77,7 @@ const HomeHeader = ({ style }) => {
               style={{
                 alignItems: "center",
                 justifyContent: "flex-end",
+                borderWidth: 1,
               }}
             >
               <TreeIcon
@@ -83,11 +86,14 @@ const HomeHeader = ({ style }) => {
               ></TreeIcon>
             </TouchableOpacity>
           </View>
-          <Text style={styles.appTitle}>포레스틴</Text>
+          <View style={styles.logoText}>
+            <Text style={styles.appTitle}>포레스틴</Text>
+          </View>
         </LeftContainer>
         <MiddleContainer></MiddleContainer>
         <RightContainer>
           <TouchableOpacity
+            style={styles.rightButton}
             onPress={() => {
               navigation.navigate("GroupSearchNav");
             }}
@@ -112,9 +118,19 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
     zIndex: 2,
   },
+  logoText: {
+    height: `${(20 * WIDTH) / 100}%`,
+    justifyContent: "center",
+    borderWidth: 1,
+  },
   appTitle: {
     fontWeight: "bold",
     fontSize: moderateScale(18),
+  },
+  rightButton: {
+    height: `${(20 * WIDTH) / 100}%`,
+    borderWidth: 1,
+    justifyContent: "center",
   },
 });
 HomeHeader.propTypes = {

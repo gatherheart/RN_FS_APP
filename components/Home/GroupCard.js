@@ -13,7 +13,7 @@ import { useNavigation } from "@react-navigation/native";
 import { trimText } from "../../utils/String";
 import { LIGHT_GREY_COLOR, GREY_COLOR } from "../../constants/Color";
 import { Ionicons } from "@expo/vector-icons";
-import { moderateScale } from "react-native-size-matters";
+import { moderateScale, scale } from "react-native-size-matters";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
@@ -29,59 +29,27 @@ const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 const CardContainer = styled.View`
   width: ${(WIDTH * 90) / 100}px;
   height: ${(HEIGHT * 14) / 100}px;
-  align-items: center;
-  justify-content: center;
   border-radius: 10px;
   border-color: grey;
-  margin: 0px 0px 15px 0px;
-  padding: 5px 10px 0px 0px;
+  border-width: 1px;
 `;
 
 const Container = styled.View`
-  padding: 0px 0px 0px 30px;
-  margin-bottom: 15px;
   flex-direction: row;
   align-items: center;
+  height: 100%;
 `;
 
 const Data = styled.View`
   width: 60%;
-  margin: 10px 25px;
+  border-width: 1px;
+  margin-left: ${scale(12)}px;
 `;
 
 const Title = styled.Text`
   color: black;
   font-weight: bold;
-  font-size: ${moderateScale(14)}px;
-`;
-
-const Vote = styled.Text`
-  color: black;
-  font-weight: 500;
-  margin-bottom: 5px;
-`;
-
-const Schedule = styled.Text`
-  color: black;
-  font-weight: 500;
-  margin-bottom: 5px;
-`;
-
-const Notice = styled.Text`
-  color: black;
-  font-weight: 500;
-  margin-bottom: 5px;
-`;
-
-const HashContainer = styled.View`
-  flex-direction: row;
-  margin-bottom: 10px;
-`;
-
-const Hash = styled.View`
-  background-color: #0f3;
-  border-radius: 15px;
-  margin-right: 2px;
+  font-size: ${scale(14)}px;
 `;
 
 const Horizontal = ({
@@ -101,9 +69,11 @@ const Horizontal = ({
   };
   return (
     <CardContainer style={styles.cardContainer}>
-      <TouchableOpacity onPress={goToGroup}>
+      <TouchableOpacity onPress={goToGroup} style={styles.button}>
         <Container>
-          <Poster url={poster} />
+          <View style={styles.posterContainer}>
+            <Poster url={poster} />
+          </View>
           <Data>
             {isSchool ? (
               <Text style={styles.isSchool}>교내</Text>
@@ -136,6 +106,13 @@ const styles = StyleSheet.create({
   cardContainer: {
     borderWidth: 1,
     borderColor: LIGHT_GREY_COLOR,
+  },
+  button: {
+    width: "100%",
+    height: "100%",
+  },
+  posterContainer: {
+    marginLeft: scale(12),
   },
   isSchool: {
     color: GREY_COLOR,
