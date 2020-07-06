@@ -22,6 +22,7 @@ import { StyleSheet } from "react-native";
 import { getFileName } from "../../../utils/String";
 import { downloadFile } from "../../../utils/FileSystem";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import { HeaderHeight } from "../../../utils/HeaderHeight";
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
 const SubContainer = styled.View`
@@ -122,7 +123,12 @@ export default () => {
       <ScrollView
         style={{
           backgroundColor: themeContext.backgroundColor,
-          paddingTop: "13%",
+        }}
+        contentInset={{
+          top: HeaderHeight,
+        }}
+        contentOffset={{
+          y: -HeaderHeight,
         }}
         showsVerticalScrollIndicator={false}
       >

@@ -91,7 +91,6 @@ const VoteList = ({
   style,
 }) => {
   const themeContext = useContext(ThemeContext);
-  console.log("Vote Render ", value);
   return (
     <VoteListElement style={styles.withShadow}>
       <TextInput

@@ -24,7 +24,7 @@ const Title = styled.Text``;
 
 const LeftContainer = styled.View`
   width: ${(WIDTH * 33) / 100}px;
-  margin-left: 15px;
+  padding-left: 15px;
 `;
 const MiddleContainer = styled.View`
   width: ${(WIDTH * 33) / 100}px;
@@ -33,7 +33,7 @@ const MiddleContainer = styled.View`
 `;
 const RightContainer = styled.View`
   width: ${(WIDTH * 33) / 100}px;
-  right: 10px;
+  padding-right: 10px;
   align-items: flex-end;
 `;
 

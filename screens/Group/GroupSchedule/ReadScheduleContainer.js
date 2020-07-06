@@ -4,13 +4,8 @@ import { ThemeContext } from "styled-components";
 import Loader from "../../../components/common/Loader";
 import CustomHeader from "../../../components/common/CustomHeader";
 import ReadSchedulePresenter from "./ReadSchedulePresenter";
+import { CycleType } from "../../../constants/Enum";
 
-const CycleType = Object.freeze({
-  WEEK: "week",
-  MONTH: "month",
-  YEAR: "year",
-  DEFAULT: undefined,
-});
 export default () => {
   const [data, setData] = useState({
     loading: true,
@@ -30,10 +25,7 @@ export default () => {
     <Loader></Loader>
   ) : (
     <>
-      <ReadSchedulePresenter
-        schedule={data.schedule}
-        CycleType={CycleType}
-      ></ReadSchedulePresenter>
+      <ReadSchedulePresenter schedule={data.schedule}></ReadSchedulePresenter>
     </>
   );
 };
@@ -49,7 +41,16 @@ const scheduleData = [
     groupName: "PIXEL",
   },
   {
-    id: "1234",
+    id: "123434",
+    title: "연습 일정",
+    memo: "연습하자 예정",
+    date: new Date(),
+    cycle: CycleType.WEEK,
+    issuedDate: new Date(),
+    groupName: "PIXEL",
+  },
+  {
+    id: "1223634",
     title: "회식 일정",
     memo: "집에서 회식할 예정",
     date: new Date(new Date().setDate(new Date().getDate() - 1)),
@@ -58,7 +59,7 @@ const scheduleData = [
     groupName: "PIXEL",
   },
   {
-    id: "1234",
+    id: "1238654",
     title: "회식 일정",
     memo: "집에서 회식할 예정",
     date: new Date(new Date().setDate(new Date().getDate() - 2)),
@@ -67,7 +68,7 @@ const scheduleData = [
     groupName: "PIXEL",
   },
   {
-    id: "1234",
+    id: "1457234",
     title: "회식 일정",
     memo: "집에서 회식할 예정",
     date: new Date(new Date().setDate(new Date().getDate() - 5)),

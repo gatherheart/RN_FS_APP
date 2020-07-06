@@ -56,7 +56,7 @@ export const diffTime = (date) => {
   return { unit: unit, time: finalResult };
 };
 
-export const timePickedConverter = (date) => {
+export const getYearMonthDayKr = (date) => {
   const theDate = new Date(date);
   const convertedDate =
     Number(theDate.getYear() + 1900) +
@@ -65,6 +65,13 @@ export const timePickedConverter = (date) => {
     "월 " +
     theDate.getDate() +
     "일";
+  return convertedDate;
+};
+
+export const timePickedConverter = (date) => {
+  const theDate = new Date(date);
+
+  const convertedDate = getYearMonthDayKr(date);
   const convertedTime =
     theDate.getHours() + "시 " + theDate.getMinutes() + "분";
 

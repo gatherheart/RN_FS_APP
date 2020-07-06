@@ -8,17 +8,14 @@ import {
   ScrollView,
   StyleSheet,
 } from "react-native";
-import ScrollContainer from "../../components/common/ScrollContainer";
 import GroupCard from "../../components/Home/GroupCard";
 import List from "../../components/common/List";
 import TodaySchedule from "../../components/Home/TodaySchedule";
-import GroupButton from "../../components/Home/HomeBottomBtn";
 import { GREEN_COLOR, BG_COLOR, DARK_GREEN_COLOR } from "../../constants/Color";
 import HomeHeader from "../../components/common/HomeHeader";
-import { UnderHeader, HeaderHeight } from "../../utils/HeaderHeight";
 import { Ionicons } from "@expo/vector-icons";
-import StarIcon from "../../components/common/svg/StarIcon";
 import { moderateScale, scale } from "react-native-size-matters";
+import { isToday } from "../../utils/DateFormat";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
@@ -49,18 +46,46 @@ const MONTH = "month";
 const YEAR = "year";
 const WEEK = "week";
 
+const sortByDate = (target) => {
+  target.sort((a, b) => {
+    let dateA = new Date(a.date),
+      dateB = new Date(b.date);
+    return dateA - dateB;
+  });
+  return target;
+};
+
 export default ({ refreshFn, loading, navigation }) => {
   const { groups } = result;
   const themeContext = useContext(ThemeContext);
-  let groupSched = [];
 
-  groupSched = groups.map((group) => {
+  const groupSched = groups.map((group) => {
     return {
       schedules: group.schedules,
       groupId: group.id,
       groupName: group.groupName,
     };
   });
+
+  const classifySchedule = (groupSched) => {
+    let schedules = [];
+    for (let i = 0; i < groupSched.length; i++) {
+      let _currentGroup = groupSched[i];
+      let _sched = _currentGroup.schedules;
+      let _ret = {
+        groupId: _currentGroup.groupId,
+        groupName: _currentGroup.groupName,
+      };
+
+      for (let j = 0; j < _sched.length; j++) {
+        schedules.push({ ..._ret, ..._sched[j] });
+      }
+    }
+
+    return sortByDate(schedules);
+  };
+  const schedules = classifySchedule(groupSched);
+
   const _test = [{ test: 1 }, { test: 1 }];
   return (
     <>
@@ -79,7 +104,7 @@ export default ({ refreshFn, loading, navigation }) => {
             <TouchableOpacity
               style={styles.goToCalendar}
               onPress={() => {
-                navigation.navigate("HomeSchedule", { groupSched });
+                navigation.navigate("HomeSchedule", { schedules: schedules });
               }}
             >
               <Text style={styles.goToCalendarText}>캘린더</Text>
@@ -90,7 +115,9 @@ export default ({ refreshFn, loading, navigation }) => {
               ></Ionicons>
             </TouchableOpacity>
           </View>
-          <TodaySchedule groupSched={groupSched}></TodaySchedule>
+          <TodaySchedule
+            schedules={schedules.filter((sched) => isToday(sched.date))}
+          ></TodaySchedule>
         </ScheduleContainer>
         <GroupContainer>
           <View style={{ ...styles.groupTitle, borderWidth: 1 }}>
@@ -193,7 +220,7 @@ const result = {
           title: "매주 회식 일정",
           memo: "참여 부탁합니다",
           date: new Date(),
-          cycle: MONTH,
+          cycle: undefined,
           issuedDate: "2020-06-24T16:30:59.554Z",
         },
       ],
@@ -232,7 +259,7 @@ const result = {
           title: "매주 회의 일정",
           memo: "참여 부탁합니다",
           date: new Date(),
-          cycle: YEAR,
+          cycle: WEEK,
           issuedDate: "2020-06-24T16:30:59.554Z",
         },
       ],

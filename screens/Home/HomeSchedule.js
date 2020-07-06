@@ -13,9 +13,9 @@ import {
   StyleSheet,
   Dimensions,
 } from "react-native";
-import CustomHeader from "../../../components/common/CustomHeader";
+import CustomHeader from "../../components/common/CustomHeader";
 import { CalendarList } from "react-native-calendars";
-import { StatusHeight, HeaderHeight } from "../../../utils/HeaderHeight";
+import { StatusHeight, HeaderHeight } from "../../utils/HeaderHeight";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import { moderateScale, scale } from "react-native-size-matters";
 import {
@@ -26,18 +26,17 @@ import {
   simplifiedFormat,
   formatDate,
   getYearMonthDayKr,
-} from "../../../utils/DateFormat";
-import { CycleType } from "../../../constants/Enum";
-
+} from "../../utils/DateFormat";
 import {
   GREEN_COLOR,
   BG_COLOR,
   GREY_COLOR,
   LIGHT_GREY_COLOR,
   LIGHT_GREEN_COLOR,
-} from "../../../constants/Color";
-import Schedule from "../../../components/common/Schedule";
-import Loader from "../../../components/common/Loader";
+} from "../../constants/Color";
+import Schedule from "../../components/common/Schedule";
+import PropTypes from "prop-types";
+import { CycleType } from "../../constants/Enum";
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
 const DAY = Object.freeze({
@@ -79,9 +78,12 @@ const getEveryDayInMonth = (day = DAY.MONDAY, currentMonth) => {
   return mondays;
 };
 
-export default ({ schedule }) => {
+const HomeSchedule = ({}) => {
   const calendarRef = useRef(null);
   const navigation = useNavigation();
+  const route = useRoute();
+  const { schedules } = route.params;
+  console.log(schedules);
   const [selectedDate, setSelectedDate] = useState(_selectedDate);
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
@@ -89,8 +91,8 @@ export default ({ schedule }) => {
     const _oneWeek = 7;
     let _processedSched = [];
 
-    for (let i = 0; i < schedule.length; i++) {
-      const _sched = schedule[i];
+    for (let i = 0; i < schedules.length; i++) {
+      const _sched = schedules[i];
 
       const _theDate = _sched.date;
       if (_sched.cycle === CycleType.default) {
@@ -116,7 +118,7 @@ export default ({ schedule }) => {
   return (
     <>
       <CustomHeader
-        rightButtonEnabled={true}
+        rightButtonEnabled={false}
         rightButton={
           <TouchableOpacity
             onPress={() => {
@@ -187,6 +189,7 @@ const schedCardStyle = StyleSheet.create({
     justifyContent: "center",
     paddingLeft: 20,
     paddingRight: 20,
+    width: "30%",
     backgroundColor: LIGHT_GREEN_COLOR,
   },
   bodyContainer: {
@@ -215,3 +218,9 @@ const styles = StyleSheet.create({
   contentContainerStyle: { alignItems: "center" },
   scrollView: { borderWidth: 0, top: HeaderHeight, backgroundColor: BG_COLOR },
 });
+
+HomeSchedule.propTypes = {
+  schedule: PropTypes.array.isRequired,
+};
+
+export default HomeSchedule;

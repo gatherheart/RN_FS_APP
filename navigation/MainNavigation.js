@@ -11,7 +11,7 @@ import GroupCreateScreen2 from "../screens/Group/GroupCreate/GroupCreate2";
 import GroupCreateScreen3 from "../screens/Group/GroupCreate/GroupCreate3";
 
 import ChatScreen from "../screens/Chat";
-import Schedule from "../screens/Home/Schedule";
+import HomeSchedule from "../screens/Home/HomeSchedule";
 import SelectSchool from "../screens/Group/GroupCreate/SelectSchool";
 import GroupCreateContainer from "../screens/Group/GroupCreate/GroupCreateContainer";
 import SelectField from "../screens/Group/GroupCreate/SelectField";
@@ -45,11 +45,11 @@ export default () => {
       ></Stack.Screen>
       <Stack.Screen
         name="HomeSchedule"
-        component={Schedule}
+        component={HomeSchedule}
         options={{
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         }}
-        initialParams={{ groupSched: [] }}
+        initialParams={{ schedule: [] }}
       ></Stack.Screen>
       <Stack.Screen name="Chat" component={ChatScreen}></Stack.Screen>
       <Stack.Screen

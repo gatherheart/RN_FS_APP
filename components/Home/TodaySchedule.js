@@ -37,13 +37,11 @@ const ScheduleBox = ({ sched }) => {
             {sched.groupName}
           </Text>
         ) : null}
-        <Text>{trimText(sched.schedule.title, 26)}</Text>
+        <Text>{trimText(sched.title, 26)}</Text>
       </View>
       <View style={styles2.timeContainer}>
-        {sched?.schedule?.date ? (
-          <Text style={styles2.timeText}>
-            {formatAMPM(sched.schedule.date)}
-          </Text>
+        {sched?.date ? (
+          <Text style={styles2.timeText}>{formatAMPM(sched.date)}</Text>
         ) : null}
       </View>
     </View>
@@ -79,43 +77,11 @@ const styles2 = StyleSheet.create({
   },
 });
 
-const TodaySchedule = ({ groupSched }) => {
+const TodaySchedule = ({ schedules: todaySchedules }) => {
   const themeContext = useContext(ThemeContext);
   const navigation = useNavigation();
   const [isCollapsed, setIsCollapsed] = useState(true);
-
-  const sortByDate = (target) => {
-    target.sort((a, b) => {
-      let dateA = new Date(a.schedule.date),
-        dateB = new Date(b.schedule.date);
-      return dateA - dateB;
-    });
-    return target;
-  };
-
-  const classifySchedule = (groupSched) => {
-    let todaySchedules = [];
-    for (let i = 0; i < groupSched.length; i++) {
-      let _currentGroup = groupSched[i];
-      let _sched = _currentGroup.schedules;
-      let _ret = {
-        groupId: _currentGroup.groupId,
-        groupName: _currentGroup.groupName,
-        schedule: null,
-      };
-      for (let j = 0; j < _sched.length; j++) {
-        let _currentSched = _sched[j];
-
-        if (isFuture(_currentSched.date)) break;
-        else if (isToday(_currentSched.date)) {
-          _ret.schedule = _currentSched;
-          todaySchedules.push(_ret);
-        }
-      }
-    }
-    return sortByDate(todaySchedules);
-  };
-  const todaySchedules = classifySchedule(groupSched);
+  console.log(todaySchedules);
   return (
     <View>
       <Card style={{}}>

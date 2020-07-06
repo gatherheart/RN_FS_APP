@@ -1,21 +1,19 @@
 import React, { useEffect } from "react";
-import { View, Text, TouchableOpacity, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  Dimensions,
+} from "react-native";
 import { CalendarList } from "react-native-calendars";
-import { StatusHeight, HeaderHeight } from "../../../utils/HeaderHeight";
-import { moderateScale } from "react-native-size-matters";
-import { getYearMonthDay, getMonth, getDate } from "../../../utils/DateFormat";
-import { GREEN_COLOR, BG_COLOR } from "../../../constants/Color";
-const _today = new Date();
+import { StatusHeight, HeaderHeight } from "../../utils/HeaderHeight";
+import { moderateScale, scale } from "react-native-size-matters";
+import { getYearMonthDay, getMonth, getDate } from "../../utils/DateFormat";
+import { GREEN_COLOR, BG_COLOR } from "../../constants/Color";
+const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
-const _selectedDate = getYearMonthDay(
-  new Date(new Date().setDate(new Date().getDate() - 1))
-);
-const _gottenCurrentMonth = getMonth(new Date());
-const _lastDayOfMonth = new Date(
-  _today.getFullYear(),
-  _today.getMonth() + 1,
-  0
-).getDate();
+const _today = new Date();
 
 export default ({
   currentMonth,
@@ -26,10 +24,9 @@ export default ({
 }) => {
   let settingCurrentMonth = false;
   const _markedDates = schedule.reduce(
-    (c, v) => Object.assign(c, { [v.date]: { marked: true } }),
+    (c, v) => Object.assign(c, { [v._date]: { marked: true } }),
     {}
   );
-
   return (
     <CalendarList
       //testID={testIDs.calendarList.CONTAINER}
@@ -44,9 +41,6 @@ export default ({
           settingCurrentMonth
         )
           return;
-        console.log("--------------------------------------");
-
-        console.log("onVisibleMonthsChange", date, currentMonth.getMonth());
 
         settingCurrentMonth = true;
         setCurrentMonth(new Date(date[0].dateString));
@@ -55,7 +49,7 @@ export default ({
           settingCurrentMonth = false;
         }, 1000);
       }}
-      style={{ top: StatusHeight, backgroundColor: "white" }}
+      style={{ top: HeaderHeight, backgroundColor: "white", borderWidth: 0 }}
       pastScrollRange={12}
       futureScrollRange={12}
       horizontal={true}
@@ -81,7 +75,6 @@ export default ({
               flexDirection: "row",
               width: "100%",
               justifyContent: "space-between",
-              marginTop: 10,
               marginBottom: 10,
             }}
           >
