@@ -17,7 +17,6 @@ export default ({}) => {
 
   const route = useRoute();
   const { id, groupName } = route.params;
-  console.log(id, groupName);
 
   const getData = async () => {
     setGroup({

@@ -22,6 +22,8 @@ import ImageGrid from "../../components/common/ImageGrid";
 import GroupActionButton from "../../components/common/GroupActionButton";
 import NoticeList from "../../components/Group/NoticeList";
 import Icon from "../../components/common/CustomIcon";
+import Menu from "../../components/Group/GroupDrawer";
+import SideMenu from "react-native-side-menu";
 
 const { width: WIDHT, height: HEIGHT } = Dimensions.get("screen");
 
@@ -107,9 +109,10 @@ const headerOpacity = position.y.interpolate({
 export default ({ id, group, loading, refreshFn }) => {
   const navigation = useNavigation();
   const themeContext = useContext(ThemeContext);
+  const menu = <Menu />;
+  const [isOpen, setIsOpen] = useState(false);
   const [page, setPage] = useState(0);
-  navigation.navigate("GroupScheduleRead", {});
-
+  navigation.navigate("GroupTestPage", {});
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,
@@ -117,189 +120,194 @@ export default ({ id, group, loading, refreshFn }) => {
   }, []);
 
   return (
-    <Block
-      flex
-      style={{ ...styles.profile, fontFamily: themeContext.regularFont }}
-    >
-      <Block flex>
-        <ImageBackground
-          source={{ uri: backgroundImg }}
-          style={styles.profileContainer}
-          imageStyle={styles.profileBackground}
-        >
-          <CustomHeader
-            headerPosition={headerPosition}
-            headerOpacity={headerOpacity}
-            rightButtonEnabled={true}
-            iconColor={themeContext.backgroundColor}
-            styles={{ ...styles.customHeader, zIndex: 4 }}
-            statusStyle={styles.customStatus}
-            rightButton={
-              <TouchableOpacity
-                onPress={() => {
-                  navigation.openDrawer();
-                }}
-                title="goBack"
-                style={{ marginHorizontal: 20 }}
-              >
-                <Icon
-                  name={"menu"}
-                  color={themeContext.backgroundColor}
-                  size={30}
-                ></Icon>
-              </TouchableOpacity>
-            }
-          ></CustomHeader>
-          <Animated.ScrollView
-            showsVerticalScrollIndicator={false}
-            style={{
-              width: WIDHT,
-              paddingTop: "25%",
-              borderRadius: 8,
-              zIndex: 3,
-            }}
-            onScroll={Animated.event(
-              [{ nativeEvent: { contentOffset: { y: position.y } } }],
-              { useNativeDriver: true }
-            )}
-            scrollEventThrottle={1}
-            contentContainerStyle={{ zIndex: 3 }}
+    <SideMenu menu={menu} isOpen={isOpen}>
+      <Block
+        flex
+        style={{ ...styles.profile, fontFamily: themeContext.regularFont }}
+      >
+        <Block flex>
+          <ImageBackground
+            source={{ uri: backgroundImg }}
+            style={styles.profileContainer}
+            imageStyle={styles.profileBackground}
           >
-            <Block flex style={styles.profileCard}>
-              <Animated.View style={{ opacity: profileOpacity }}>
-                <View style={styles.avatarContainer}>
-                  <Image source={{ uri: profileImg }} style={styles.avatar} />
-                </View>
-              </Animated.View>
-              <Block
-                middle
-                height={60}
-                style={{ borderColor: "black", borderWidth: 1 }}
-              >
-                <GroupName>{group?.groupName}</GroupName>
-                <SchoolName>
-                  {group?.school?.name + " " + group?.campus?.name}
-                </SchoolName>
-              </Block>
-              <Block style={styles.info}>
-                <Block row space="around">
-                  <Block middle>
-                    <CountText>{group?.memberCount}</CountText>
-                    <Text size={12}>Members</Text>
-                  </Block>
-                  <Block middle>
-                    <CountText>{group?.followerCount}</CountText>
-                    <Text size={12}>Followers</Text>
-                  </Block>
-                </Block>
+            <CustomHeader
+              headerPosition={headerPosition}
+              headerOpacity={headerOpacity}
+              rightButtonEnabled={true}
+              iconColor={themeContext.backgroundColor}
+              styles={{ ...styles.customHeader, zIndex: 4 }}
+              statusStyle={styles.customStatus}
+              rightButton={
+                <TouchableOpacity
+                  onPress={() => {
+                    setIsOpen(true);
+                  }}
+                  style={{ marginHorizontal: 20 }}
+                >
+                  <Icon
+                    name={"menu"}
+                    color={themeContext.backgroundColor}
+                    size={30}
+                  ></Icon>
+                </TouchableOpacity>
+              }
+            ></CustomHeader>
+            <Animated.ScrollView
+              showsVerticalScrollIndicator={false}
+              style={{
+                width: WIDHT,
+                paddingTop: "25%",
+                borderRadius: 8,
+                zIndex: 3,
+              }}
+              onScroll={Animated.event(
+                [{ nativeEvent: { contentOffset: { y: position.y } } }],
+                { useNativeDriver: true }
+              )}
+              scrollEventThrottle={1}
+              contentContainerStyle={{ zIndex: 3 }}
+            >
+              <Block flex style={styles.profileCard}>
+                <Animated.View style={{ opacity: profileOpacity }}>
+                  <View style={styles.avatarContainer}>
+                    <Image source={{ uri: profileImg }} style={styles.avatar} />
+                  </View>
+                </Animated.View>
                 <Block
                   middle
-                  row
-                  space="around"
-                  style={{
-                    marginTop: 40,
-                    paddingBottom: 24,
-                    marginHorizontal: -30,
-                  }}
+                  height={60}
+                  style={{ borderColor: "black", borderWidth: 1 }}
                 >
-                  <PageButton
-                    title="공지"
-                    page={page}
-                    setPage={setPage}
-                    clickedPage={0}
-                    color={themeContext.lightGreenColor}
-                  ></PageButton>
-                  <PageButton
-                    title="히스토리"
-                    page={page}
-                    setPage={setPage}
-                    clickedPage={1}
-                    color={themeContext.lightGreenColor}
-                  ></PageButton>
+                  <GroupName>{group?.groupName}</GroupName>
+                  <SchoolName>
+                    {group?.school?.name + " " + group?.campus?.name}
+                  </SchoolName>
                 </Block>
-              </Block>
-              <Block flex>
-                <Block middle style={{ marginTop: 5, marginBottom: 16 }}>
-                  <Block style={styles.divider} />
-                </Block>
-                <Block
-                  row
-                  style={{
-                    paddingVertical: 14,
-                    borderWidth: 1,
-                  }}
-                >
-                  <Block
-                    style={{
-                      backgroundColor: "#FF574D",
-                      padding: 5,
-                      marginHorizontal: 5,
-                    }}
-                  >
-                    <Text bold size={13} style={{ color: "white" }}>
-                      필독
-                    </Text>
-                  </Block>
-                  <Block
-                    style={{
-                      borderWidth: 1,
-                      width: WIDHT / 3,
-                      marginHorizontal: 30,
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <TouchableOpacity>
-                      <Text size={13} style={{ color: "black" }}>
-                        {trimText(group?.mandatoryNotice)}
-                      </Text>
-                    </TouchableOpacity>
-                  </Block>
-                </Block>
-
-                <Block style={{ paddingBottom: HeaderHeight, height: HEIGHT }}>
-                  {page == 0 ? (
-                    <Block>
-                      <NoticeList
-                        id={id}
-                        votes={group.votes}
-                        notices={group.notices}
-                        bills={group.bills}
-                      ></NoticeList>
+                <Block style={styles.info}>
+                  <Block row space="around">
+                    <Block middle>
+                      <CountText>{group?.memberCount}</CountText>
+                      <Text size={12}>Members</Text>
                     </Block>
-                  ) : (
-                    <>
-                      <Block
-                        row
-                        style={{
-                          marginTop: 20,
-                          justifyContent: "flex-end",
-                        }}
-                      ></Block>
-                      <ImageGrid posts={group.posts}></ImageGrid>
-                    </>
-                  )}
+                    <Block middle>
+                      <CountText>{group?.followerCount}</CountText>
+                      <Text size={12}>Followers</Text>
+                    </Block>
+                  </Block>
+                  <Block
+                    middle
+                    row
+                    space="around"
+                    style={{
+                      marginTop: 40,
+                      paddingBottom: 24,
+                      marginHorizontal: -30,
+                    }}
+                  >
+                    <PageButton
+                      title="공지"
+                      page={page}
+                      setPage={setPage}
+                      clickedPage={0}
+                      color={themeContext.lightGreenColor}
+                    ></PageButton>
+                    <PageButton
+                      title="히스토리"
+                      page={page}
+                      setPage={setPage}
+                      clickedPage={1}
+                      color={themeContext.lightGreenColor}
+                    ></PageButton>
+                  </Block>
+                </Block>
+                <Block flex>
+                  <Block middle style={{ marginTop: 5, marginBottom: 16 }}>
+                    <Block style={styles.divider} />
+                  </Block>
+                  <Block
+                    row
+                    style={{
+                      paddingVertical: 14,
+                      borderWidth: 1,
+                    }}
+                  >
+                    <Block
+                      style={{
+                        backgroundColor: "#FF574D",
+                        padding: 5,
+                        marginHorizontal: 5,
+                      }}
+                    >
+                      <Text bold size={13} style={{ color: "white" }}>
+                        필독
+                      </Text>
+                    </Block>
+                    <Block
+                      style={{
+                        borderWidth: 1,
+                        width: WIDHT / 3,
+                        marginHorizontal: 30,
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <TouchableOpacity>
+                        <Text size={13} style={{ color: "black" }}>
+                          {trimText(group?.mandatoryNotice)}
+                        </Text>
+                      </TouchableOpacity>
+                    </Block>
+                  </Block>
+
+                  <Block
+                    style={{ paddingBottom: HeaderHeight, height: HEIGHT }}
+                  >
+                    {page == 0 ? (
+                      <Block>
+                        <NoticeList
+                          id={id}
+                          votes={group.votes}
+                          notices={group.notices}
+                          bills={group.bills}
+                        ></NoticeList>
+                      </Block>
+                    ) : (
+                      <>
+                        <Block
+                          row
+                          style={{
+                            marginTop: 20,
+                            justifyContent: "flex-end",
+                          }}
+                        ></Block>
+                        <ImageGrid posts={group.posts}></ImageGrid>
+                      </>
+                    )}
+                  </Block>
                 </Block>
               </Block>
-            </Block>
 
-            <EmptySpace></EmptySpace>
-          </Animated.ScrollView>
-        </ImageBackground>
+              <EmptySpace></EmptySpace>
+            </Animated.ScrollView>
+          </ImageBackground>
+        </Block>
+        <GroupActionButton
+          firstClicked={() =>
+            navigation.navigate("GroupWriteVote", { id: group.id })
+          }
+          secondClicked={() =>
+            navigation.navigate("GroupWriteBill", { id: group.id })
+          }
+          thridClicked={() =>
+            navigation.navigate("GroupWriteNotice", { id: group.id })
+          }
+          fourthClicked={() =>
+            navigation.navigate("PostWrite", { id: group.id })
+          }
+        ></GroupActionButton>
       </Block>
-      <GroupActionButton
-        firstClicked={() =>
-          navigation.navigate("GroupWriteVote", { id: group.id })
-        }
-        secondClicked={() =>
-          navigation.navigate("GroupWriteBill", { id: group.id })
-        }
-        thridClicked={() =>
-          navigation.navigate("GroupWriteNotice", { id: group.id })
-        }
-        fourthClicked={() => navigation.navigate("PostWrite", { id: group.id })}
-      ></GroupActionButton>
-    </Block>
+    </SideMenu>
   );
 };
 

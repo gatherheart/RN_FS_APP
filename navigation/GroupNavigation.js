@@ -50,11 +50,16 @@ const Stack = createStackNavigator();
  *  Drawer Navigation in Group in page
  *
  */
+let _mounted = false;
 const DrawerNav = () => {
   const route = useRoute();
   const isLoggedIn = userIsLoggedIn();
   console.log("test:", isLoggedIn);
+  console.log("route:", route);
   const themeContext = React.useContext(ThemeContext);
+
+  _mounted = true;
+
   return (
     <Drawer.Navigator
       initialRouteName="GroupDrawerMain"
@@ -68,59 +73,9 @@ const DrawerNav = () => {
           headerShown: false,
         };
       }}
-      drawerStyle={
-        route.state != undefined ? { width: "60%" } : { width: "0%" }
-      }
+      drawerStyle={_mounted ? { width: "60%" } : { width: "0%" }}
       drawerPosition="right"
-    >
-      <Drawer.Screen
-        name="GroupScreen"
-        component={GroupScreen}
-        initialParams={route.params}
-        options={{ title: "그룹 페이지" }}
-      />
-      <Drawer.Screen
-        name="GroupIntro"
-        component={GroupIntro}
-        initialParams={route.params}
-        options={{ title: "모임 소개" }}
-      />
-      <Drawer.Screen
-        name="GroupSchedule"
-        component={GroupSchedule}
-        options={{ title: "일정 관리" }}
-      />
-      <Drawer.Screen
-        name="MemberList"
-        component={GroupMember}
-        options={{ title: "멤버 목록" }}
-      />
-      <Drawer.Screen
-        name="Applicants"
-        component={Applicants}
-        options={{ title: "가입 신청 목록" }}
-      />
-      <Drawer.Screen
-        name="GroupAuth"
-        component={GroupAuth}
-        options={{ title: "운영진 권한 부여" }}
-      />
-      <Drawer.Screen
-        name="Eviction"
-        component={Eviction}
-        options={{ title: "내보내기" }}
-      />
-      <Drawer.Screen
-        name="GroupRemove"
-        component={Eviction}
-        options={{ title: "모임 삭제" }}
-      />
-      <Drawer.Screen
-        name="GroupWithdraw"
-        component={GroupWithdraw}
-        options={{ title: "모임 탈퇴" }}
-      />
-    </Drawer.Navigator>
+    ></Drawer.Navigator>
   );
 };
 
@@ -129,7 +84,7 @@ export default () => {
 
   return (
     <Stack.Navigator
-      initialRouteName="GroupDrawer"
+      initialRouteName="GroupScreen"
       screenOptions={({ route, navigation }) => {
         return {
           gestureEnabled: true,
@@ -138,9 +93,51 @@ export default () => {
       }}
     >
       <Stack.Screen
-        name="GroupDrawer"
-        component={DrawerNav}
+        name="GroupScreen"
+        component={GroupScreen}
         initialParams={route.params}
+        options={{ title: "그룹 페이지" }}
+      />
+      <Stack.Screen
+        name="GroupIntro"
+        component={GroupIntro}
+        initialParams={route.params}
+        options={{ title: "모임 소개" }}
+      />
+      <Stack.Screen
+        name="GroupSchedule"
+        component={GroupSchedule}
+        options={{ title: "일정 관리" }}
+      />
+      <Stack.Screen
+        name="MemberList"
+        component={GroupMember}
+        options={{ title: "멤버 목록" }}
+      />
+      <Stack.Screen
+        name="Applicants"
+        component={Applicants}
+        options={{ title: "가입 신청 목록" }}
+      />
+      <Stack.Screen
+        name="GroupAuth"
+        component={GroupAuth}
+        options={{ title: "운영진 권한 부여" }}
+      />
+      <Stack.Screen
+        name="Eviction"
+        component={Eviction}
+        options={{ title: "내보내기" }}
+      />
+      <Stack.Screen
+        name="GroupRemove"
+        component={Eviction}
+        options={{ title: "모임 삭제" }}
+      />
+      <Stack.Screen
+        name="GroupWithdraw"
+        component={GroupWithdraw}
+        options={{ title: "모임 탈퇴" }}
       />
       <Stack.Screen
         name="GroupWriteVote"
