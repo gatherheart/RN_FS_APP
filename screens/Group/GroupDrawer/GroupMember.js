@@ -64,7 +64,7 @@ const MemberClassify = ({ title, members, type, keyword }) => {
 
   return (
     <View>
-      <RowContainer style={{ marginVertical: 10 }}>
+      <RowContainer style={{}}>
         <MemberType>{title}</MemberType>
       </RowContainer>
       {members
@@ -75,8 +75,10 @@ const MemberClassify = ({ title, members, type, keyword }) => {
             <RowContainer key={"member-" + type + member.id}>
               <SmallUserCard
                 name={member.name}
-                major={member.major}
+                major={member.institution.major}
+                institution={member.institution}
                 avatar={member.avatar}
+                admissionYear={member.admissionYear}
               ></SmallUserCard>
             </RowContainer>
           );
@@ -236,8 +238,8 @@ const membersData = [
       range: "MAJOR_LEVEL",
       school: "연세대학교",
       campus: "원주캠퍼스",
-      college: undefined,
-      major: undefined,
+      college: "소프트웨어대학",
+      major: "심리학과",
     },
     admissionYear: "2019",
   },
@@ -251,8 +253,8 @@ const membersData = [
       range: "MAJOR_LEVEL",
       school: "연세대학교",
       campus: "원주캠퍼스",
-      college: undefined,
-      major: undefined,
+      college: "소프트웨어대학",
+      major: "심리학과",
     },
     admissionYear: "2019",
   },
@@ -266,8 +268,8 @@ const membersData = [
       range: "MAJOR_LEVEL",
       school: "연세대학교",
       campus: "원주캠퍼스",
-      college: undefined,
-      major: undefined,
+      college: "소프트웨어대학",
+      major: "심리학과",
     },
     admissionYear: "2019",
   },
@@ -276,35 +278,27 @@ const membersData = [
     id: "4",
     avatar: avatarUrl,
     type: 2,
-    major: "소프트웨어학과",
     institution: {
       range: "MAJOR_LEVEL",
       school: "연세대학교",
       campus: "원주캠퍼스",
-      college: undefined,
-      major: undefined,
+      college: "소프트웨어대학",
+      major: "심리학과",
     },
     admissionYear: "2019",
   },
-  {
-    name: "장안구",
-    id: "5",
-    avatar: avatarUrl,
-    type: 2,
-    major: "소프트웨어학과",
-  },
+
   {
     name: "이지훈",
     id: "6",
     avatar: avatarUrl,
     type: 2,
-    major: "심리학과",
     institution: {
       range: "MAJOR_LEVEL",
       school: "연세대학교",
       campus: "원주캠퍼스",
-      college: undefined,
-      major: undefined,
+      college: "문과대",
+      major: "심리학과",
     },
     admissionYear: "2019",
   },
@@ -314,13 +308,12 @@ const membersData = [
     avatar:
       "https://images.unsplash.com/photo-1589411454940-67a017535ecf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=320&q=80",
     type: 2,
-    major: "소프트웨어학과",
     institution: {
       range: "MAJOR_LEVEL",
       school: "연세대학교",
       campus: "원주캠퍼스",
-      college: undefined,
-      major: undefined,
+      college: "원주캠퍼스",
+      major: "소프트웨어학과",
     },
     admissionYear: "2019",
   },
@@ -334,8 +327,8 @@ const membersData = [
       range: "MAJOR_LEVEL",
       school: "연세대학교",
       campus: "원주캠퍼스",
-      college: undefined,
-      major: undefined,
+      college: "인문대학",
+      major: "소프트웨어학괴",
     },
     admissionYear: "2019",
   },
@@ -349,8 +342,8 @@ const membersData = [
       range: "MAJOR_LEVEL",
       school: "연세대학교",
       campus: "원주캠퍼스",
-      college: undefined,
-      major: undefined,
+      college: "인문대학",
+      major: "심리학과",
     },
     admissionYear: "2019",
   },
@@ -365,8 +358,8 @@ const membersData = [
       range: "MAJOR_LEVEL",
       school: "연세대학교",
       campus: "원주캠퍼스",
-      college: undefined,
-      major: undefined,
+      college: "인문대학",
+      major: "심리학과",
     },
     admissionYear: "2019",
   },
@@ -380,8 +373,8 @@ const membersData = [
       range: "MAJOR_LEVEL",
       school: "연세대학교",
       campus: "원주캠퍼스",
-      college: undefined,
-      major: undefined,
+      college: "인문대학",
+      major: "심리학과",
     },
     admissionYear: "2019",
   },
@@ -395,8 +388,8 @@ const membersData = [
       range: "MAJOR_LEVEL",
       school: "연세대학교",
       campus: "원주캠퍼스",
-      college: undefined,
-      major: undefined,
+      college: "인문대학",
+      major: "심리학과",
     },
     admissionYear: "2019",
   },
@@ -411,8 +404,8 @@ const membersData = [
       range: "MAJOR_LEVEL",
       school: "연세대학교",
       campus: "원주캠퍼스",
-      college: undefined,
-      major: undefined,
+      college: "인문대학",
+      major: "심리학과",
     },
     admissionYear: "2019",
   },
@@ -426,8 +419,8 @@ const membersData = [
       range: "MAJOR_LEVEL",
       school: "연세대학교",
       campus: "원주캠퍼스",
-      college: undefined,
-      major: undefined,
+      college: "인문대학",
+      major: "심리학과",
     },
     admissionYear: "2019",
   },

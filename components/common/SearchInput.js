@@ -2,7 +2,9 @@ import React from "react";
 import Proptypes from "prop-types";
 import styled from "styled-components/native";
 import { Dimensions, StyleSheet, View, TextInput } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, EvilIcons } from "@expo/vector-icons";
+import { scale } from "react-native-size-matters";
+import { GREY_COLOR } from "../../constants/Color";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
@@ -24,7 +26,11 @@ const SearchInput = ({
         returnKeyType={returnKeyType}
         style={styles.keyboard}
       ></TextInput>
-      <Ionicons name={"arrow-down-outline"}></Ionicons>
+      <EvilIcons
+        name={"search"}
+        size={scale(25)}
+        color={GREY_COLOR}
+      ></EvilIcons>
     </View>
   );
 };
@@ -32,20 +38,20 @@ const SearchInput = ({
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    borderWidth: 2,
+    height: (HEIGHT * 5) / 100,
+    borderWidth: 0.1,
     alignItems: "center",
     flexDirection: "row",
+    justifyContent: "space-around",
     backgroundColor: "#f2f2f2",
     borderRadius: 10,
   },
   keyboard: {
-    borderRadius: 10,
     paddingLeft: 10,
-    borderWidth: 1,
     margin: 0,
     width: "85%",
     backgroundColor: "#f2f2f2",
-    height: HEIGHT / 20,
+    height: "90%",
   },
 });
 

@@ -16,10 +16,10 @@ const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 */
 
 const CardContainer = styled.View`
-  width: ${(WIDTH * 50) / 100}px;
-  height: ${(HEIGHT * 8.5) / 100}px;
+  height: 100%;
   margin: 0px 0px 0px 0px;
   padding: 5px 10px 5px 0px;
+  justify-content: center;
 `;
 
 const AvatarContainer = styled.View`
@@ -51,8 +51,20 @@ const Major = styled.Text`
   font-size: 12px;
   font-family: ${(props) => props.theme.regularFont};
 `;
+const RowContainer = styled.View`
+  flex-direction: row;
+`;
 
-const SmallUserCard = ({ id, name, major, avatar, style }) => {
+const SmallUserCard = ({
+  id,
+  name,
+  institution,
+  major,
+  admissionYear,
+  phoneNumber,
+  avatar,
+  style,
+}) => {
   const themeContext = useContext(ThemeContext);
   const navigation = useNavigation();
   const goToUser = () => {
@@ -67,7 +79,20 @@ const SmallUserCard = ({ id, name, major, avatar, style }) => {
           </AvatarContainer>
           <Data>
             {name ? <Name>{name}</Name> : null}
-            {major ? <Major>{major}</Major> : null}
+            {institution ? (
+              <RowContainer>
+                {institution.major ? (
+                  <Major>{institution.major}, </Major>
+                ) : null}
+                {institution.college ? (
+                  <Major>{institution.college}, </Major>
+                ) : null}
+                {admissionYear ? (
+                  <Major>{admissionYear.slice(2)}학번</Major>
+                ) : null}
+              </RowContainer>
+            ) : null}
+            <RowContainer></RowContainer>
           </Data>
         </Container>
       </TouchableOpacity>
@@ -94,6 +119,14 @@ SmallUserCard.propTypes = {
   name: PropTypes.string.isRequired,
   major: PropTypes.string,
   avatar: PropTypes.string.isRequired,
+  institution: PropTypes.shape({
+    range: PropTypes.string,
+    school: PropTypes.string,
+    campus: PropTypes.string,
+    college: PropTypes.string,
+    major: PropTypes.string,
+  }),
+  admissionYear: PropTypes.string,
 };
 
 export default SmallUserCard;
