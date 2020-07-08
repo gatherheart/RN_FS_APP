@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext, useMemo, useRef } from "react";
-import { View, Text, Dimensions, ScrollView } from "react-native";
+import { View, Text, Dimensions, ScrollView, StyleSheet } from "react-native";
 import CustomHeader from "../../../components/common/CustomHeader";
 import Loader from "../../../components/common/Loader";
 import styled, { ThemeContext } from "styled-components";
@@ -12,7 +12,6 @@ import {
   HeaderHeight,
   StatusHeight,
 } from "../../../utils/HeaderHeight";
-import UsersTable from "../../../components/User/HorizontalUsersTable";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
@@ -60,32 +59,9 @@ const EmptySpace = styled.View`
   height: ${(HEIGHT * 3) / 100}px;
 `;
 
-const MemberClassify = ({
-  title,
-  members,
-  type,
-  checkState,
-  setCheckState,
-  keyword,
-  setMemberList,
-  changeChecked,
-}) => {
+const MemberClassify = ({ title, members, type, keyword }) => {
   const themeContext = useContext(ThemeContext);
 
-  const changeAllChecked = () => {
-    let newChecked = { ...checkState };
-    const newMembers = members.map((member) => {
-      if (member.type === type) {
-        newChecked[member.id] = !newChecked[member.id];
-        return newChecked[member.id] ? member.id : null;
-      } else {
-        return newChecked[member.id] ? member.id : null;
-      }
-    });
-
-    setCheckState(newChecked);
-    setMemberList(newMembers);
-  };
   return (
     <View>
       <RowContainer style={{ marginVertical: 10 }}>
@@ -188,6 +164,7 @@ export default ({}) => {
           onChange={onChange}
           onSubmit={onSubmit}
           returnKeyType="search"
+          style={styles.keyboard}
         ></SearchInput>
         {Object.keys(checkState).length !== 0 ? (
           <>
@@ -234,6 +211,10 @@ export default ({}) => {
   );
 };
 
+const styles = StyleSheet.create({
+  keyboard: { marginTop: 20 },
+});
+
 MemberClassify.propTypes = {
   title: PropTypes.string.isRequired,
   members: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -251,6 +232,14 @@ const membersData = [
       "https://images.unsplash.com/photo-1589411454940-67a017535ecf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=320&q=80",
     type: 0,
     major: "소프트웨어학과",
+    institution: {
+      range: "MAJOR_LEVEL",
+      school: "연세대학교",
+      campus: "원주캠퍼스",
+      college: undefined,
+      major: undefined,
+    },
+    admissionYear: "2019",
   },
   {
     name: "이진우",
@@ -258,6 +247,14 @@ const membersData = [
     avatar: avatarUrl,
     type: 1,
     major: "소프트웨어학과",
+    institution: {
+      range: "MAJOR_LEVEL",
+      school: "연세대학교",
+      campus: "원주캠퍼스",
+      college: undefined,
+      major: undefined,
+    },
+    admissionYear: "2019",
   },
   {
     name: "상미이",
@@ -265,6 +262,14 @@ const membersData = [
     avatar: avatarUrl,
     type: 1,
     major: "소프트웨어학과",
+    institution: {
+      range: "MAJOR_LEVEL",
+      school: "연세대학교",
+      campus: "원주캠퍼스",
+      college: undefined,
+      major: undefined,
+    },
+    admissionYear: "2019",
   },
   {
     name: "김자운",
@@ -272,6 +277,14 @@ const membersData = [
     avatar: avatarUrl,
     type: 2,
     major: "소프트웨어학과",
+    institution: {
+      range: "MAJOR_LEVEL",
+      school: "연세대학교",
+      campus: "원주캠퍼스",
+      college: undefined,
+      major: undefined,
+    },
+    admissionYear: "2019",
   },
   {
     name: "장안구",
@@ -280,7 +293,21 @@ const membersData = [
     type: 2,
     major: "소프트웨어학과",
   },
-  { name: "이지훈", id: "6", avatar: avatarUrl, type: 2, major: "장어학과" },
+  {
+    name: "이지훈",
+    id: "6",
+    avatar: avatarUrl,
+    type: 2,
+    major: "심리학과",
+    institution: {
+      range: "MAJOR_LEVEL",
+      school: "연세대학교",
+      campus: "원주캠퍼스",
+      college: undefined,
+      major: undefined,
+    },
+    admissionYear: "2019",
+  },
   {
     name: "장안구",
     id: "7",
@@ -288,6 +315,14 @@ const membersData = [
       "https://images.unsplash.com/photo-1589411454940-67a017535ecf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=320&q=80",
     type: 2,
     major: "소프트웨어학과",
+    institution: {
+      range: "MAJOR_LEVEL",
+      school: "연세대학교",
+      campus: "원주캠퍼스",
+      college: undefined,
+      major: undefined,
+    },
+    admissionYear: "2019",
   },
   {
     name: "장안구",
@@ -295,6 +330,14 @@ const membersData = [
     avatar: avatarUrl,
     type: 2,
     major: "소프트웨어학과",
+    institution: {
+      range: "MAJOR_LEVEL",
+      school: "연세대학교",
+      campus: "원주캠퍼스",
+      college: undefined,
+      major: undefined,
+    },
+    admissionYear: "2019",
   },
   {
     name: "장안구",
@@ -302,6 +345,14 @@ const membersData = [
     avatar: avatarUrl,
     type: 2,
     major: "소프트웨어학과",
+    institution: {
+      range: "MAJOR_LEVEL",
+      school: "연세대학교",
+      campus: "원주캠퍼스",
+      college: undefined,
+      major: undefined,
+    },
+    admissionYear: "2019",
   },
   {
     name: "장안구",
@@ -310,6 +361,14 @@ const membersData = [
       "https://images.unsplash.com/photo-1589411454940-67a017535ecf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=320&q=80",
     type: 2,
     major: "소프트웨어학과",
+    institution: {
+      range: "MAJOR_LEVEL",
+      school: "연세대학교",
+      campus: "원주캠퍼스",
+      college: undefined,
+      major: undefined,
+    },
+    admissionYear: "2019",
   },
   {
     name: "장안구",
@@ -317,8 +376,30 @@ const membersData = [
     avatar: avatarUrl,
     type: 2,
     major: "소프트웨어학과",
+    institution: {
+      range: "MAJOR_LEVEL",
+      school: "연세대학교",
+      campus: "원주캠퍼스",
+      college: undefined,
+      major: undefined,
+    },
+    admissionYear: "2019",
   },
-  { name: "장안구", id: "12", avatar: "", type: 2, major: "소프트웨어학과" },
+  {
+    name: "장안구",
+    id: "12",
+    avatar: "",
+    type: 2,
+    major: "소프트웨어학과",
+    institution: {
+      range: "MAJOR_LEVEL",
+      school: "연세대학교",
+      campus: "원주캠퍼스",
+      college: undefined,
+      major: undefined,
+    },
+    admissionYear: "2019",
+  },
   {
     name: "장안구",
     id: "13",
@@ -326,6 +407,14 @@ const membersData = [
       "https://images.unsplash.com/photo-1589411454940-67a017535ecf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=320&q=80",
     type: 2,
     major: "소프트웨어학과",
+    institution: {
+      range: "MAJOR_LEVEL",
+      school: "연세대학교",
+      campus: "원주캠퍼스",
+      college: undefined,
+      major: undefined,
+    },
+    admissionYear: "2019",
   },
   {
     name: "장안구",
@@ -333,5 +422,13 @@ const membersData = [
     avatar: avatarUrl,
     type: 2,
     major: "소프트웨어학과",
+    institution: {
+      range: "MAJOR_LEVEL",
+      school: "연세대학교",
+      campus: "원주캠퍼스",
+      college: undefined,
+      major: undefined,
+    },
+    admissionYear: "2019",
   },
 ];

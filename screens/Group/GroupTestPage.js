@@ -74,11 +74,14 @@ Menu.propTypes = {
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
 
 export default () => {
-  const menu = <Menu />;
   const [state, setState] = useState(false);
 
   const _animatedValue = new Animated.Value(0);
   const [_value, set_value] = useState(_value);
+  const onItemSelected = (item) => {
+    setState(false);
+  };
+  const menu = <Menu onItemSelected={onItemSelected} />;
 
   useEffect(() => {
     const _animatedValueListener = _animatedValue.addListener(({ value }) =>
@@ -94,11 +97,20 @@ export default () => {
   }, []);
 
   useEffect(() => {
-    console.log(_value);
-  }, [_value]);
+    console.log("state", state);
+  }, [state]);
 
   return (
-    <SideMenu menu={menu} isOpen={state}>
+    <SideMenu
+      menu={menu}
+      isOpen={state}
+      onChange={(isOpen) => {
+        console.log("onChange", isOpen);
+        setState(isOpen);
+      }}
+      useNativeDriver={true}
+      menuPosition={"right"}
+    >
       <View style={{ flex: 1, top: 0, backgroundColor: "white" }}>
         <Text
           style={{ top: 120 }}

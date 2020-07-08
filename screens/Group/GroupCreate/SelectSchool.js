@@ -90,20 +90,14 @@ export default () => {
 
       <ScrollView
         contentContainerStyle={{ ...styles.container, borderWidth: 1 }}
-        style={{ backgroundColor: BG_COLOR }}
+        style={{ backgroundColor: BG_COLOR, top: HeaderHeight }}
         showsVerticalScrollIndicator={false}
-        contentInset={{
-          top: HeaderHeight,
-        }}
-        contentOffset={{
-          y: -HeaderHeight,
-        }}
       >
         <View style={{ ...styles.optionContainer }}>
           <View style={{}}>
             <SchoolIcon
               width={(WIDTH * 10) / 100}
-              height={(HEIGHT * 5) / 100}
+              height={(WIDTH * 10) / 100}
             ></SchoolIcon>
           </View>
           <Text style={{ ...styles.title }}>학교를 선택해주세요!</Text>

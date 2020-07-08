@@ -121,17 +121,6 @@ export default () => {
     infoAreaList,
   } = route.params;
 
-  console.log(
-    page,
-    condSchoolList,
-    condCollegeList,
-    condMajorList,
-    condYear,
-    infoSchoolList,
-    infoFieldList,
-    infoAreaList
-  );
-
   return (
     <>
       <KeyboardAvoidingView
@@ -141,7 +130,7 @@ export default () => {
         <CustomHeader></CustomHeader>
         <ScrollView
           contentContainerStyle={{ ...styles.container }}
-          style={{ backgroundColor: BG_COLOR }}
+          style={{ backgroundColor: BG_COLOR, top: HeaderHeight }}
         >
           <Text style={{ ...styles.category }}>모임 프로필</Text>
           <TouchableOpacity

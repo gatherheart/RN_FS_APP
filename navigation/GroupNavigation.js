@@ -33,51 +33,11 @@ import WriteQuestion from "../screens/Group/GroupQnA/WriteQuestion";
 import ReadQnA from "../screens/Group/GroupQnA/ReadQnAContainer";
 import GroupIntroEdit from "../screens/Group/GroupIntro/GroupIntroEdit";
 import WriteAnswer from "../screens/Group/GroupQnA/WriteAnswer";
-import GroupTestPage from "../screens/Auth/GroupTestPage";
+import GroupTestPage from "../screens/Group/GroupTestPage";
 import ReadScheduleContainer from "../screens/Group/GroupSchedule/ReadScheduleContainer";
 import WriteSchedule from "../screens/Group/GroupSchedule/WriteSchedule";
 
-DrawerNavigatorConfig = {
-  drawerPosition: "right",
-  drawerType: "slide",
-  drawerWidth: 100,
-};
-
-const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
-
-/**
- *  Drawer Navigation in Group in page
- *
- */
-let _mounted = false;
-const DrawerNav = () => {
-  const route = useRoute();
-  const isLoggedIn = userIsLoggedIn();
-  console.log("test:", isLoggedIn);
-  console.log("route:", route);
-  const themeContext = React.useContext(ThemeContext);
-
-  _mounted = true;
-
-  return (
-    <Drawer.Navigator
-      initialRouteName="GroupDrawerMain"
-      drawerContentOptions={{
-        activeTintColor: themeContext.lightGreenColor,
-        itemStyle: { marginVertical: 10 },
-      }}
-      screenOptions={({ route, navigation }) => {
-        return {
-          gestureEnabled: true,
-          headerShown: false,
-        };
-      }}
-      drawerStyle={_mounted ? { width: "60%" } : { width: "0%" }}
-      drawerPosition="right"
-    ></Drawer.Navigator>
-  );
-};
 
 export default () => {
   const route = useRoute();
@@ -96,48 +56,75 @@ export default () => {
         name="GroupScreen"
         component={GroupScreen}
         initialParams={route.params}
-        options={{ title: "그룹 페이지" }}
+        options={{
+          title: "그룹 페이지",
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
       />
       <Stack.Screen
         name="GroupIntro"
         component={GroupIntro}
         initialParams={route.params}
-        options={{ title: "모임 소개" }}
+        options={{
+          title: "모임 소개",
+          cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+        }}
       />
       <Stack.Screen
         name="GroupSchedule"
-        component={GroupSchedule}
-        options={{ title: "일정 관리" }}
+        component={ReadScheduleContainer}
+        options={{
+          title: "일정 관리",
+          cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+        }}
       />
       <Stack.Screen
         name="MemberList"
         component={GroupMember}
-        options={{ title: "멤버 목록" }}
+        options={{
+          title: "멤버 목록",
+          cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+        }}
       />
       <Stack.Screen
         name="Applicants"
         component={Applicants}
-        options={{ title: "가입 신청 목록" }}
+        options={{
+          title: "가입 신청 목록",
+          cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+        }}
       />
       <Stack.Screen
         name="GroupAuth"
         component={GroupAuth}
-        options={{ title: "운영진 권한 부여" }}
+        options={{
+          title: "운영진 권한 부여",
+          cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+        }}
       />
       <Stack.Screen
         name="Eviction"
         component={Eviction}
-        options={{ title: "내보내기" }}
+        options={{
+          title: "내보내기",
+          cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+        }}
       />
       <Stack.Screen
         name="GroupRemove"
         component={Eviction}
-        options={{ title: "모임 삭제" }}
+        options={{
+          title: "모임 삭제",
+          cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+        }}
       />
       <Stack.Screen
         name="GroupWithdraw"
         component={GroupWithdraw}
-        options={{ title: "모임 탈퇴" }}
+        options={{
+          title: "모임 탈퇴",
+          cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+        }}
       />
       <Stack.Screen
         name="GroupWriteVote"
@@ -256,13 +243,6 @@ export default () => {
       <Stack.Screen
         name="GroupIntroEdit"
         component={GroupIntroEdit}
-        options={{
-          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-        }}
-      />
-      <Stack.Screen
-        name="GroupScheduleRead"
-        component={ReadScheduleContainer}
         options={{
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         }}

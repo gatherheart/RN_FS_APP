@@ -37,6 +37,7 @@ import {
 import Schedule from "../../components/common/Schedule";
 import PropTypes from "prop-types";
 import { CycleType } from "../../constants/Enum";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
 const DAY = Object.freeze({
@@ -148,7 +149,7 @@ const HomeSchedule = ({}) => {
           .filter((sched) => sched._date === selectedDate)
           .map((sched, index) => {
             return (
-              <TouchableOpacity
+              <View
                 key={`sched-card-${index}`}
                 style={schedCardStyle.container}
               >
@@ -166,7 +167,7 @@ const HomeSchedule = ({}) => {
                   </Text>
                   <Text>{timePickedConverter(sched.date)}</Text>
                 </View>
-              </TouchableOpacity>
+              </View>
             );
           })}
       </ScrollView>
@@ -216,7 +217,11 @@ const styles = StyleSheet.create({
     marginRight: 20,
   },
   contentContainerStyle: { alignItems: "center" },
-  scrollView: { borderWidth: 0, top: HeaderHeight, backgroundColor: BG_COLOR },
+  scrollView: {
+    borderWidth: 0,
+
+    backgroundColor: BG_COLOR,
+  },
 });
 
 HomeSchedule.propTypes = {

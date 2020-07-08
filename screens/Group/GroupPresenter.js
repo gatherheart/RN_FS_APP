@@ -9,6 +9,7 @@ import {
   View,
   TouchableOpacity,
   PanResponder,
+  Easing,
 } from "react-native";
 import { Block, Text, theme } from "galio-framework";
 import { useNavigation } from "@react-navigation/native";
@@ -22,8 +23,9 @@ import ImageGrid from "../../components/common/ImageGrid";
 import GroupActionButton from "../../components/common/GroupActionButton";
 import NoticeList from "../../components/Group/NoticeList";
 import Icon from "../../components/common/CustomIcon";
-import Menu from "../../components/Group/GroupDrawer";
+import Drawer from "../../components/Group/GroupDrawer";
 import SideMenu from "react-native-side-menu";
+import { BG_COLOR } from "../../constants/Color";
 
 const { width: WIDHT, height: HEIGHT } = Dimensions.get("screen");
 
@@ -109,22 +111,32 @@ const headerOpacity = position.y.interpolate({
 export default ({ id, group, loading, refreshFn }) => {
   const navigation = useNavigation();
   const themeContext = useContext(ThemeContext);
-  const menu = <Menu />;
+  const onItemSelected = (item) => {
+    setIsOpen(false);
+  };
   const [isOpen, setIsOpen] = useState(false);
   const [page, setPage] = useState(0);
-  navigation.navigate("GroupTestPage", {});
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerShown: false,
-    });
-  }, []);
 
   return (
-    <SideMenu menu={menu} isOpen={isOpen}>
-      <Block
-        flex
-        style={{ ...styles.profile, fontFamily: themeContext.regularFont }}
-      >
+    <SideMenu
+      menu={<Drawer onItemSelected={onItemSelected} />}
+      isOpen={isOpen}
+      onChange={(isOpen) => {
+        console.log("onChange", isOpen);
+        setIsOpen(isOpen);
+      }}
+      useNativeDriver={true}
+      menuPosition={"right"}
+      animationFunction={(prop, value) =>
+        Animated.timing(prop, {
+          toValue: value,
+          duration: 270,
+          easing: Easing.inOut(Easing.quad),
+          useNativeDriver: true,
+        })
+      }
+    >
+      <Block flex style={{ ...styles.profile }}>
         <Block flex>
           <ImageBackground
             source={{ uri: backgroundImg }}
@@ -143,7 +155,7 @@ export default ({ id, group, loading, refreshFn }) => {
                   onPress={() => {
                     setIsOpen(true);
                   }}
-                  style={{ marginHorizontal: 20 }}
+                  style={{ marginHorizontal: 10 }}
                 >
                   <Icon
                     name={"menu"}
@@ -316,6 +328,7 @@ const styles = StyleSheet.create({
   customStatus: { backgroundColor: "rgba(0, 0, 0, 0)" },
   profile: {
     borderColor: "black",
+    backgroundColor: BG_COLOR,
     // marginBottom: -HeaderHeight * 2,
     flex: 1,
   },

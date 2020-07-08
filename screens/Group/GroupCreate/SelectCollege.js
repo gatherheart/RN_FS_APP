@@ -72,14 +72,8 @@ export default () => {
 
       <ScrollView
         contentContainerStyle={{ ...styles.container, borderWidth: 1 }}
-        style={{ backgroundColor: BG_COLOR }}
+        style={{ backgroundColor: BG_COLOR, top: HeaderHeight }}
         showsVerticalScrollIndicator={false}
-        contentInset={{
-          top: HeaderHeight,
-        }}
-        contentOffset={{
-          y: -HeaderHeight,
-        }}
       >
         <View style={{ ...styles.optionContainer }}>
           <View style={{}}>

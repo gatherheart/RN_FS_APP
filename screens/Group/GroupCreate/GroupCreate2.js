@@ -208,13 +208,7 @@ export default () => {
 
       <ScrollView
         contentContainerStyle={{ ...styles.container }}
-        style={{ backgroundColor: BG_COLOR }}
-        contentInset={{
-          top: HeaderHeight,
-        }}
-        contentOffset={{
-          y: -HeaderHeight,
-        }}
+        style={{ backgroundColor: BG_COLOR, top: HeaderHeight }}
       >
         <View style={{ ...styles.logo }}>
           <LeafIcon></LeafIcon>
