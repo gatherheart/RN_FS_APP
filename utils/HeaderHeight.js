@@ -1,5 +1,5 @@
 import { Platform, StatusBar, Dimensions } from "react-native";
-import { theme } from "galio-framework";
+import { getBottomSpace } from "react-native-iphone-x-helper";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
@@ -26,5 +26,5 @@ export const HeaderHeight = Platform.select({
   android: 56,
   default: 0,
 });
-
+export const BottomSafeAreaHeight = getBottomSpace();
 export const UnderHeader = StatusHeight + HeaderHeight;

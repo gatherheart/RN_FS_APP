@@ -51,8 +51,8 @@ const AlertModal = ({
       onBackdropPress={changeState}
       backdropColor={"black"}
       backdropOpacity={0.7}
-      animationIn={{ from: { opacity: 1 }, to: { opacity: 1 } }}
-      animationOut={{ from: { opacity: 0 }, to: { opacity: 0 } }}
+      animationIn={"fadeIn"}
+      animationOut={"fadeOut"}
       useNativeDriver={true}
       style={{
         justifyContent: "center",
@@ -81,7 +81,11 @@ const AlertModal = ({
                 marginVertical: 20,
                 paddingHorizontal: 30,
               }}
-              onPress={changeState}
+              onPress={() => {
+                callback();
+
+                changeState();
+              }}
             >
               <OkButtonText>확인</OkButtonText>
             </TouchableOpacity>

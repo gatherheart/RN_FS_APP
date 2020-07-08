@@ -20,6 +20,7 @@ const CardContainer = styled.View`
   margin: 0px 0px 0px 0px;
   padding: 5px 10px 5px 0px;
   justify-content: center;
+  height: ${(HEIGHT * 8.5) / 100}px;
 `;
 
 const AvatarContainer = styled.View`

@@ -29,7 +29,6 @@ const RowContainer = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  height: ${(HEIGHT * 8.5) / 100}px;
   padding: 0px 0px 0px 20px;
   border-style: solid;
   border-bottom-color: ${(props) => props.theme.moreLightGreyColor};
