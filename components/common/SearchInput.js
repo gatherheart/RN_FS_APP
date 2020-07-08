@@ -37,12 +37,13 @@ const SearchInput = ({
 
 const styles = StyleSheet.create({
   container: {
-    width: "100%",
+    width: "92%",
     height: (HEIGHT * 5) / 100,
     borderWidth: 0.1,
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "space-around",
+    alignSelf: "center",
     backgroundColor: "#f2f2f2",
     borderRadius: 10,
   },

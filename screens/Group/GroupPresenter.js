@@ -114,6 +114,7 @@ export default ({ id, group, loading, refreshFn }) => {
   const onItemSelected = (item) => {
     setIsOpen(false);
   };
+  navigation.navigate("Applicants", {});
   const [isOpen, setIsOpen] = useState(false);
   const [page, setPage] = useState(0);
 
