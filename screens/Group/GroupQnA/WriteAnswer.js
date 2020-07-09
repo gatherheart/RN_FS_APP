@@ -18,9 +18,11 @@ const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 export default () => {
   const navigation = useNavigation();
   const route = useRoute();
+  const { id, question, answer: answerProps } = route.params;
+
   const [modalVisible, setModalVisible] = useState(false);
   const [message, setMessage] = useState("");
-  const [answer, setAnswer] = useState("");
+  const [answer, setAnswer] = useState(answerProps);
   const onChangeText = (text) => {
     setAnswer(text);
   };
@@ -31,7 +33,6 @@ export default () => {
     } else {
     }
   };
-  const { id, question } = route.params;
 
   return (
     <>

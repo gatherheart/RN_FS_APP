@@ -42,8 +42,14 @@ const AlertModal = ({
   callback = () => {},
   onModalHide = () => {},
 }) => {
-  const changeState = () => {
-    setModalVisible((prev) => !prev);
+  const changeState = (_success) => {
+    console.log("pressed", _success);
+    setModalVisible((prev) => {
+      if (typeof prev === "boolean") return !prev;
+      else if (typeof prev === "object")
+        return { ...prev, visible: !prev.visible, success: _success };
+      else return prev;
+    });
   };
   return (
     <Modal
@@ -54,7 +60,9 @@ const AlertModal = ({
       backdropOpacity={0.7}
       animationIn={"fadeIn"}
       animationOut={"fadeOut"}
-      useNativeDriver={true}
+      animationInTiming={100}
+      animationOutTiming={100}
+      useNativeDriver={false}
       style={{
         justifyContent: "center",
         alignItems: "center",
@@ -73,7 +81,7 @@ const AlertModal = ({
                   alignItems: "flex-end",
                   justifyContent: "flex-end",
                 }}
-                onPress={changeState}
+                onPress={() => changeState(false)}
               >
                 <OkButtonText>취소</OkButtonText>
               </TouchableOpacity>
@@ -85,8 +93,7 @@ const AlertModal = ({
               }}
               onPress={() => {
                 callback();
-
-                changeState();
+                changeState(true);
               }}
             >
               <OkButtonText>확인</OkButtonText>

@@ -34,6 +34,7 @@ const FirstRoute = ({ users }) => {
     message: "",
     callback: () => {},
     idx: undefined,
+    success: false,
   });
   const [completed, setCompleted] = useState(false);
   const admitApplicant = (idx, callback) => {
@@ -73,9 +74,8 @@ const FirstRoute = ({ users }) => {
           });
         }}
         onModalHide={() => {
-          console.log("onModalHide");
-
-          setCompleted(true);
+          console.log("onModalHide", modalVisible.success);
+          if (modalVisible.success === true) setCompleted(true);
         }}
       ></AlertModal>
       <AlertModal

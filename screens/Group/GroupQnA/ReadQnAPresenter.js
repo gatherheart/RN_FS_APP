@@ -23,9 +23,15 @@ import {
   getYearMonthDay,
 } from "../../../utils/DateFormat";
 import { useNavigation } from "@react-navigation/native";
+import AlertModal from "../../../components/common/AlertModal";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 const EmptySpace = styled.View``;
+
+const DELETE_TYPE = Object.freeze({
+  QUESTION: "question",
+  ANSWER: "answer",
+});
 
 const QnAComponent = ({
   id,
@@ -36,66 +42,138 @@ const QnAComponent = ({
   answeredDate,
 }) => {
   const navigation = useNavigation();
-  const goToWrite = (id, question) => {
-    navigation.navigate("GroupAnswerWrite", { id, question });
+  const [modalVisible, setModalVisible] = useState({
+    visible: false,
+    message: "삭제하시겠습니까?",
+    type: undefined,
+  });
+  const [completed, setCompleted] = useState(false);
+  const goToWrite = (id, question, answer) => {
+    navigation.navigate("GroupAnswerWrite", { id, question, answer });
   };
 
   return (
-    <View style={QnAStyles.container}>
-      <View style={QnAStyles.question}>
-        <View>
-          <Text style={QnAStyles.questionText}>{question}</Text>
-          <View style={QnAStyles.info}>
-            <Text
-              style={{ ...QnAStyles.questionInfo, ...QnAStyles.greenColor }}
-            >
-              {answeredDate ? "답변 완료" : "답변 대기"}
-            </Text>
-            <Text style={{ ...QnAStyles.questionInfo }}> | {author.name}</Text>
-            <Text style={{ ...QnAStyles.questionInfo }}>
-              {" "}
-              | {getYearMonthDay(questionedDate)}
-            </Text>
-          </View>
-        </View>
-        <View>
-          <Text style={{ ...QnAStyles.greenColor }}>삭제</Text>
-        </View>
-      </View>
-      <View style={QnAStyles.answer}>
-        {answeredDate ? (
-          <BubbleChat>
-            <View style={{ ...QnAStyles.bubbleContainer }}>
-              <Text style={QnAStyles.answerText}>{answer}</Text>
-              <View style={QnAStyles.answerInfo}>
-                <Text
-                  style={{
-                    ...QnAStyles.questionInfo,
-                    marginTop: 10,
-                  }}
-                >
-                  {getYearMonthDay(answeredDate)}
-                </Text>
-                <Text
-                  style={{ ...QnAStyles.textMargin, ...QnAStyles.greenColor }}
-                >
-                  삭제
-                </Text>
-              </View>
+    <>
+      <AlertModal
+        modalVisible={!!modalVisible.visible}
+        setModalVisible={setModalVisible}
+        title={""}
+        body={modalVisible.message}
+        cancleEnabled
+        callback={() => {}}
+        onModalHide={() => {
+          console.log("onModalHide");
+          setCompleted(true);
+        }}
+      ></AlertModal>
+      <AlertModal
+        modalVisible={completed}
+        setModalVisible={setCompleted}
+        body={"완료되었습니다."}
+        callback={() => {
+          console.log(completed);
+        }}
+      ></AlertModal>
+      <View style={QnAStyles.container}>
+        <View style={QnAStyles.question}>
+          <View>
+            <Text style={QnAStyles.questionText}>{question}</Text>
+            <View style={QnAStyles.info}>
+              <Text
+                style={{ ...QnAStyles.questionInfo, ...QnAStyles.greenColor }}
+              >
+                {answeredDate ? "답변 완료" : "답변 대기"}
+              </Text>
+              <Text style={{ ...QnAStyles.questionInfo }}>
+                {" "}
+                | {author.name}
+              </Text>
+              <Text style={{ ...QnAStyles.questionInfo }}>
+                {" "}
+                | {getYearMonthDay(questionedDate)}
+              </Text>
             </View>
-          </BubbleChat>
-        ) : (
-          <BubbleChat>
-            <TouchableOpacity
-              style={{ ...QnAStyles.bubbleContainer }}
-              onPress={() => goToWrite(id, question)}
-            >
-              <Text style={QnAStyles.unanswerText}>답변을 입력해주세요</Text>
-            </TouchableOpacity>
-          </BubbleChat>
-        )}
+          </View>
+          <TouchableOpacity
+            onPress={() => {
+              setModalVisible((prev) => {
+                return {
+                  visible: true,
+                  message: "삭제하시겠습니까?",
+                  type: DELETE_TYPE.QUESTION,
+                };
+              });
+            }}
+          >
+            <View>
+              <Text style={{ ...QnAStyles.greenColor }}>삭제</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+        <View style={QnAStyles.answer}>
+          {answeredDate ? (
+            <BubbleChat>
+              <View style={{ ...QnAStyles.bubbleContainer }}>
+                <Text style={QnAStyles.answerText}>{answer}</Text>
+                <View style={QnAStyles.answerInfo}>
+                  <Text
+                    style={{
+                      ...QnAStyles.questionInfo,
+                      marginTop: 10,
+                    }}
+                  >
+                    {getYearMonthDay(answeredDate)}
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      goToWrite(id, question, answer);
+                    }}
+                  >
+                    <Text
+                      style={{
+                        ...QnAStyles.textMargin,
+                        ...QnAStyles.greenColor,
+                      }}
+                    >
+                      수정
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setModalVisible((prev) => {
+                        return {
+                          visible: true,
+                          message: prev.message,
+                          type: DELETE_TYPE.ANSWER,
+                        };
+                      });
+                    }}
+                  >
+                    <Text
+                      style={{
+                        ...QnAStyles.textMargin,
+                        ...QnAStyles.greenColor,
+                      }}
+                    >
+                      삭제
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </BubbleChat>
+          ) : (
+            <BubbleChat>
+              <TouchableOpacity
+                style={{ ...QnAStyles.bubbleContainer }}
+                onPress={() => goToWrite(id, question)}
+              >
+                <Text style={QnAStyles.unanswerText}>답변을 입력해주세요</Text>
+              </TouchableOpacity>
+            </BubbleChat>
+          )}
+        </View>
       </View>
-    </View>
+    </>
   );
 };
 
