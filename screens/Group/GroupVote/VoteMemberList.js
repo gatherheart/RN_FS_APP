@@ -130,6 +130,7 @@ export default ({}) => {
   // keyword for search textInput
   const [keyword, setKeyword] = useState("");
   const [checkState, setCheckState] = useState({});
+  // Selected Member List
   const [memberList, setMemberList] = useState([]);
   const navigation = useNavigation();
   const route = useRoute();

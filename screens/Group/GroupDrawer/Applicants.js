@@ -35,9 +35,10 @@ const FirstRoute = ({ users }) => {
     callback: () => {},
     idx: undefined,
   });
-  const [message, setMessage] = useState("");
-  const admitApplicant = (idx) => {
+  const [completed, setCompleted] = useState(false);
+  const admitApplicant = (idx, callback) => {
     console.log(idx, "admitted");
+    callback();
   };
   const showAlertModal = ({ message, idx }) => {
     let callback = () => {};
@@ -62,12 +63,27 @@ const FirstRoute = ({ users }) => {
       contentContainerStyle={styles.sceneContent}
     >
       <AlertModal
-        modalVisible={modalVisible.visible}
+        modalVisible={!!modalVisible.visible}
         setModalVisible={setModalVisible}
         body={modalVisible.message}
         cancleEnabled
         callback={() => {
-          admitApplicant(modalVisible.idx);
+          admitApplicant(modalVisible.idx, () => {
+            console.log("callback");
+          });
+        }}
+        onModalHide={() => {
+          console.log("onModalHide");
+
+          setCompleted(true);
+        }}
+      ></AlertModal>
+      <AlertModal
+        modalVisible={completed}
+        setModalVisible={setCompleted}
+        body={"완료되었습니다."}
+        callback={() => {
+          console.log(completed);
         }}
       ></AlertModal>
       {users.map((user, idx) => {
@@ -85,14 +101,18 @@ const FirstRoute = ({ users }) => {
                 <Text style={styles.buttonText}>승인</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => showAlertModal("거절 하시겠습니까?")}
+                onPress={() =>
+                  showAlertModal({ message: "거절 하시겠습니까?", idx })
+                }
                 style={[styles.button, { backgroundColor: "#C0504D" }]}
               >
                 <Text style={styles.buttonText}>거절</Text>
               </TouchableOpacity>
 
               <TouchableOpacity
-                onPress={() => showAlertModal("심사로 넘기시겠습니까?")}
+                onPress={() =>
+                  showAlertModal({ message: "심사로 넘기시겠습니까?", idx })
+                }
                 style={[styles.button, { backgroundColor: "#7CD6E2" }]}
               >
                 <Text style={styles.buttonText}>심사</Text>

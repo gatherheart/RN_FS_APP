@@ -13,6 +13,7 @@ import {
   HeaderHeight,
   StatusHeight,
   isIPhoneX,
+  BottomSafeAreaHeight,
 } from "../../../utils/HeaderHeight";
 import {
   BG_COLOR,
@@ -68,7 +69,7 @@ const nextButtonStyle = StyleSheet.create({
     backgroundColor: LIGHT_GREEN_COLOR,
     height: (HEIGHT * 8) / 100,
     width: WIDHT,
-    bottom: 0,
+    bottom: BottomSafeAreaHeight,
   },
   button: {
     width: "100%",

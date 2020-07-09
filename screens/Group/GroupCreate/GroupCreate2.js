@@ -9,7 +9,11 @@ import {
 } from "react-native";
 import LeafIcon from "../../../components/common/svg/LeafIcon";
 import CustomHeader from "../../../components/common/CustomHeader";
-import { HeaderHeight, isIPhoneX } from "../../../utils/HeaderHeight";
+import {
+  HeaderHeight,
+  isIPhoneX,
+  BottomSafeAreaHeight,
+} from "../../../utils/HeaderHeight";
 import {
   BG_COLOR,
   GREEN_COLOR,
@@ -78,7 +82,7 @@ const nextButtonStyle = StyleSheet.create({
     backgroundColor: LIGHT_GREEN_COLOR,
     height: (HEIGHT * 8) / 100,
     width: WIDHT,
-    bottom: 0,
+    bottom: BottomSafeAreaHeight,
   },
   button: {
     width: "100%",

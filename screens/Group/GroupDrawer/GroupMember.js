@@ -14,6 +14,13 @@ import {
 } from "../../../utils/HeaderHeight";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
+/**
+ *
+ * This code is wrapped and bootstrapped from VoteMemberList
+ * Therefore it needs to be refactored.
+ * /Users/a/ExpoProjects/forest-in/forest-app/screens/Group/GroupVote/VoteMemberList.js
+ */
+
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
 const avatarUrl =

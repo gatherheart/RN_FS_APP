@@ -36,6 +36,7 @@ import WriteAnswer from "../screens/Group/GroupQnA/WriteAnswer";
 import GroupTestPage from "../screens/Group/GroupTestPage";
 import ReadScheduleContainer from "../screens/Group/GroupSchedule/ReadScheduleContainer";
 import WriteSchedule from "../screens/Group/GroupSchedule/WriteSchedule";
+import GroupRemove from "../screens/Group/GroupDrawer/GroupRemove";
 
 const Stack = createStackNavigator();
 
@@ -112,7 +113,7 @@ export default () => {
       />
       <Stack.Screen
         name="GroupRemove"
-        component={Eviction}
+        component={GroupRemove}
         options={{
           title: "모임 삭제",
           cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,

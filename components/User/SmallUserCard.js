@@ -65,15 +65,13 @@ const SmallUserCard = ({
   phoneNumber,
   avatar,
   style,
+  onPress,
 }) => {
   const themeContext = useContext(ThemeContext);
   const navigation = useNavigation();
-  const goToUser = () => {
-    //navigation.navigate("GroupNav", { id, groupName });
-  };
   return (
     <CardContainer style={style}>
-      <TouchableOpacity onPress={goToUser}>
+      <TouchableOpacity onPress={onPress}>
         <Container>
           <AvatarContainer>
             <Avatar url={avatar} />
@@ -128,6 +126,7 @@ SmallUserCard.propTypes = {
     major: PropTypes.string,
   }),
   admissionYear: PropTypes.string,
+  onPress: PropTypes.func,
 };
 
 export default SmallUserCard;

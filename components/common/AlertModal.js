@@ -40,6 +40,7 @@ const AlertModal = ({
   body = "",
   cancleEnabled = false,
   callback = () => {},
+  onModalHide = () => {},
 }) => {
   const changeState = () => {
     setModalVisible((prev) => !prev);
@@ -58,6 +59,7 @@ const AlertModal = ({
         justifyContent: "center",
         alignItems: "center",
       }}
+      onModalHide={onModalHide}
     >
       <View style={styles.modalContainer}>
         <View style={styles.innerContainer}>
@@ -103,6 +105,7 @@ AlertModal.propTypes = {
   body: PropTypes.string,
   cancleEnabled: PropTypes.bool,
   callback: PropTypes.func,
+  onModalHide: PropTypes.func,
 };
 
 export default AlertModal;
