@@ -62,11 +62,11 @@ const AlertModal = ({
       animationOut={"fadeOut"}
       animationInTiming={100}
       animationOutTiming={100}
-      useNativeDriver={false}
       style={{
         justifyContent: "center",
         alignItems: "center",
       }}
+      useNativeDriver
       onModalHide={onModalHide}
     >
       <View style={styles.modalContainer}>

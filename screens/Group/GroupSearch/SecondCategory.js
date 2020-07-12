@@ -41,7 +41,7 @@ export default ({}) => {
 
   const route = useRoute();
   const firstSelected = route?.params.selected;
-
+  console.log(firstSelected, secondCategory);
   const rowLength = parseInt((secondCategory[firstSelected].length + 2) / 3);
   const categories = secondCategory[firstSelected];
 

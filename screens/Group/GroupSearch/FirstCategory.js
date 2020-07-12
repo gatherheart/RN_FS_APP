@@ -45,8 +45,8 @@ const SearchButtonText = styled.Text`
   font-family: ${(props) => props.theme.regularFont};
 `;
 
-const goToSecond = (navigation, selected = 0) => {
-  navigation.navigate("SecondCategory", { selected: selected });
+const goToSecond = (navigation, selected = 1) => {
+  navigation.navigate("SecondCategory", { selected: selected + 1 });
 };
 
 export default () => {
@@ -70,6 +70,7 @@ export default () => {
       }),
     []
   );
+  console.log(categories);
 
   return (
     <Container style={styles.container}>

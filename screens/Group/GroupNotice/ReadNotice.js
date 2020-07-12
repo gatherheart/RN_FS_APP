@@ -123,12 +123,7 @@ export default () => {
       <ScrollView
         style={{
           backgroundColor: themeContext.backgroundColor,
-        }}
-        contentInset={{
-          top: HeaderHeight,
-        }}
-        contentOffset={{
-          y: -HeaderHeight,
+          paddingTop: HeaderHeight,
         }}
         showsVerticalScrollIndicator={false}
       >

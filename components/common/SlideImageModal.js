@@ -114,6 +114,7 @@ const SlideImageModal = ({}) => {
     StatusBar.setHidden(false, "fade");
     navigation.goBack(_from, {});
   };
+  const [currentIndex, setCurrentIndex] = useState(index);
 
   const swiperRef = useRef(null);
   const _images = images.map((image) => {
@@ -139,6 +140,7 @@ const SlideImageModal = ({}) => {
           interval={20}
           menus={() => <View></View>}
           renderIndicator={(currentIndex, allSize) => {
+            setCurrentIndex(currentIndex);
             return (
               <View style={SlideStyles.renderIndicator}>
                 <Text style={SlideStyles.renderIndicatorText}>

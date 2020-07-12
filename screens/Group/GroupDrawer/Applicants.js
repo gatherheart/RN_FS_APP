@@ -73,10 +73,6 @@ const FirstRoute = ({ users }) => {
             console.log("callback");
           });
         }}
-        onModalHide={() => {
-          console.log("onModalHide", modalVisible.success);
-          if (modalVisible.success === true) setCompleted(true);
-        }}
       ></AlertModal>
       <AlertModal
         modalVisible={completed}
