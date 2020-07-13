@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import styled from "styled-components";
 import { PinchGestureHandler, State } from "react-native-gesture-handler";
-import ImageViewer from "react-native-image-zoom-viewer";
 import PropTypes from "prop-types";
 import {
   Dimensions,
@@ -184,9 +183,7 @@ const ImageContainer = ({
   };
   return (
     <View>
-      <Modal visible={true} transparent={true}>
-        <ImageViewer imageUrls={images} />
-      </Modal>
+      <Modal visible={true} transparent={true}></Modal>
     </View>
   );
 };

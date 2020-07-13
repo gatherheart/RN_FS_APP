@@ -77,10 +77,16 @@ export default () => {
     });
   };
 
-  let images = [
-    "https://avatars2.githubusercontent.com/u/7970947?v=3&s=460",
-    "https://images.unsplash.com/photo-1593301007837-585fa364a32a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=640&q=80",
-    "https://avatars2.githubusercontent.com/u/7970947?v=3&s=460",
+  const images = [
+    {
+      uri: "https://images.unsplash.com/photo-1571501679680-de32f1e7aad4",
+    },
+    {
+      uri: "https://images.unsplash.com/photo-1573273787173-0eb81a833b34",
+    },
+    {
+      uri: "https://images.unsplash.com/photo-1569569970363-df7b6160d111",
+    },
   ];
 
   const [data, setData] = useState({
@@ -157,7 +163,7 @@ export default () => {
                 }}
               >
                 <Image
-                  source={{ uri: image }}
+                  source={{ uri: image.uri }}
                   style={{
                     width: undefined,
                     height: "100%",

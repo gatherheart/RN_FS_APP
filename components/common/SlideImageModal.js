@@ -39,7 +39,7 @@ import {
 } from "react-native-gesture-handler";
 import { cond, eq } from "react-native-reanimated";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import ImageViewer from "react-native-image-zoom-viewer";
+import ImageView from "react-native-image-viewing";
 
 const SWIPER_HEIGHT = HEIGHT / 2;
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
@@ -102,28 +102,33 @@ const SlideImageModal = ({}) => {
   const { images, idx: index, from: _from } = route.params;
   StatusBar.setHidden(true, "fade");
   const _handleBackButtonClick = () => {
+    console.log("_handleBackButtonClick");
     StatusBar.setHidden(false, "fade");
+
     navigation.goBack(_from, {});
 
     return true;
   };
-  BackHandler.addEventListener("hardwareBackPress", _handleBackButtonClick);
 
   const changeViewerState = () => {
     console.log("changeViewerState");
-    StatusBar.setHidden(false, "fade");
+    setVisible(false);
+    console.log("END");
     navigation.goBack(_from, {});
   };
   const [currentIndex, setCurrentIndex] = useState(index);
-
+  const [visible, setVisible] = useState(true);
   const swiperRef = useRef(null);
-  const _images = images.map((image) => {
-    return {
-      url: image,
-      props: {},
-    };
-  });
+  StatusBar.setHidden(visible, "fade");
 
+  useEffect(() => {
+    BackHandler.addEventListener("hardwareBackPress", _handleBackButtonClick);
+    return () =>
+      BackHandler.removeEventListener(
+        "hardwareBackPress",
+        _handleBackButtonClick
+      );
+  }, []);
   return (
     <ImageProvider images={images} changeViewerState={changeViewerState}>
       <Animated.View
@@ -131,24 +136,14 @@ const SlideImageModal = ({}) => {
           ...styles.modalContainer,
         }}
       >
-        <ImageViewer
-          imageUrls={_images}
-          index={index}
-          useNativeDriver={true}
-          enablePreload={true}
-          pageAnimateTime={240}
-          interval={20}
-          menus={() => <View></View>}
-          renderIndicator={(currentIndex, allSize) => {
-            setCurrentIndex(currentIndex);
-            return (
-              <View style={SlideStyles.renderIndicator}>
-                <Text style={SlideStyles.renderIndicatorText}>
-                  {currentIndex} / {allSize}
-                </Text>
-              </View>
-            );
+        <ImageView
+          images={images}
+          imageIndex={index}
+          visible={visible}
+          onRequestClose={() => {
+            changeViewerState();
           }}
+          swipeToCloseEnabled={false}
         />
       </Animated.View>
       <FloatingButton></FloatingButton>
