@@ -3,8 +3,10 @@ import { View, Text } from "react-native";
 import HomePresenter from "./HomePresenter";
 import Loader from "../../components/common/Loader";
 import { useRoute } from "@react-navigation/native";
+import { useLogOut } from "../../context/AuthContext";
 
 export default ({ navigation }) => {
+  const logOut = useLogOut();
   const [results, setResults] = useState({
     loading: true,
     nowPlaying: [],

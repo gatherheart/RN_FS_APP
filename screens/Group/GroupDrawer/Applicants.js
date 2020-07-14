@@ -25,6 +25,7 @@ import Loader from "../../../components/common/Loader";
 import SmallUserCard from "../../../components/User/SmallUserCard";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import AlertModal from "../../../components/common/AlertModal";
+import { scale } from "react-native-size-matters";
 const avatarUrl =
   "https://images.unsplash.com/photo-1589411454940-67a017535ecf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=320&q=80";
 
@@ -37,22 +38,17 @@ const FirstRoute = ({ users }) => {
     success: false,
   });
   const [completed, setCompleted] = useState(false);
-  const admitApplicant = (idx, callback) => {
-    console.log(idx, "admitted");
-    callback();
-  };
+  const admitApplicant = (idx, callback) => {};
   const showAlertModal = ({ message, idx }) => {
     let callback = () => {};
     if (message === "승인 하시겠습니까?") {
-      console.log("승인");
-      callback = admitApplicant;
     }
 
     setModalVisible((prev) => {
       return {
         visible: !prev.visible,
         message,
-        callback: admitApplicant,
+        callback: callback,
         idx,
       };
     });
@@ -68,19 +64,16 @@ const FirstRoute = ({ users }) => {
         setModalVisible={setModalVisible}
         body={modalVisible.message}
         cancleEnabled
-        callback={() => {
-          admitApplicant(modalVisible.idx, () => {
-            console.log("callback");
-          });
+        callback={modalVisible.callback}
+        onModalHide={() => {
+          setCompleted(true);
         }}
       ></AlertModal>
       <AlertModal
         modalVisible={completed}
         setModalVisible={setCompleted}
         body={"완료되었습니다."}
-        callback={() => {
-          console.log(completed);
-        }}
+        callback={() => {}}
       ></AlertModal>
       {users.map((user, idx) => {
         return (
@@ -132,7 +125,6 @@ const SecondRoute = () => (
 const initialLayout = { width: Dimensions.get("window").width };
 
 export default () => {
-  console.log(BottomSafeAreaHeight);
   const [data, setData] = useState({
     loading: true,
   });
@@ -226,11 +218,11 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "flex-end",
-    right: 18,
+    right: scale(13),
   },
   button: {
-    width: 88,
-    height: 30,
+    width: scale(80),
+    height: scale(30),
     marginLeft: 6,
     borderRadius: 14,
     alignItems: "center",

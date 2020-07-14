@@ -43,7 +43,6 @@ const AlertModal = ({
   onModalHide = () => {},
 }) => {
   const changeState = (_success) => {
-    console.log("pressed", _success);
     setModalVisible((prev) => {
       if (typeof prev === "boolean") return !prev;
       else if (typeof prev === "object")
@@ -58,6 +57,7 @@ const AlertModal = ({
       onBackdropPress={changeState}
       backdropColor={"black"}
       backdropOpacity={0.7}
+      hasBackdrop={true}
       animationIn={"fadeIn"}
       animationOut={"fadeOut"}
       animationInTiming={100}

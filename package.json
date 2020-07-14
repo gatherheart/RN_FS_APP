@@ -58,7 +58,6 @@
     "react-native-safe-area-context": "^0.7.3",
     "react-native-screens": "~2.2.0",
     "react-native-side-menu": "git://github.com/gatherheart/react-native-side-menu.git",
-    "react-native-side-menu-updated": "^1.2.1",
     "react-native-size-matters": "^0.3.0",
     "react-native-svg": "11.0.1",
     "react-native-svg-transformer": "^0.14.3",

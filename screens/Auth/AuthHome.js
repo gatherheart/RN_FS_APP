@@ -1,7 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import {
+  TouchableOpacity,
+  StyleSheet,
+  Button,
+  ScrollView,
+  Dimensions,
+} from "react-native";
+import Modal from "react-native-modal";
+import { BottomSafeAreaHeight } from "../../utils/HeaderHeight";
+import { BG_COLOR, BLACK_COLOR } from "../../constants/Color";
 
+const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
 const View = styled.View`
   justify-content: center;
   align-items: center;
@@ -10,14 +20,117 @@ const View = styled.View`
 
 const Text = styled.Text``;
 
-export default ({ navigation }) => (
-  <View>
-    <Text>Auth Home</Text>
-    <TouchableOpacity onPress={() => navigation.navigate("LogIn")}>
-      <Text>Go to Login</Text>
-    </TouchableOpacity>
-    <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
-      <Text>Go to Signup</Text>
-    </TouchableOpacity>
-  </View>
-);
+export default ({ navigation }) => {
+  const [isVisible, setVisible] = useState(true);
+  return (
+    <View>
+      <Text
+        onPress={() => {
+          setVisible((prev) => !prev);
+        }}
+      >
+        Auth Home
+      </Text>
+      <TouchableOpacity onPress={() => navigation.navigate("LogIn")}>
+        <Text>Go to Login</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
+        <Text>Go to Signup</Text>
+      </TouchableOpacity>
+      <Modal
+        isVisible={isVisible}
+        style={styles.modal}
+        onBackdropPress={() => setVisible(false)}
+      >
+        <ScrollView>
+          {/* place your buttons here */}
+          <View style={styles.modalContainer}>
+            <Text style={styles.info}>필수 접근권한</Text>
+            <View style={styles.contents}>
+              <Text style={styles.permission}>위치권한</Text>
+              <Text style={styles.brief}>예약 서비스 이용시 필요합니다.</Text>
+              <Text style={styles.permission}>
+                사진, 카메라, 미디어 파일 권한
+              </Text>
+              <Text style={styles.brief}>
+                파일 업로드 및 프로필 수정 시 필요합니다.
+              </Text>
+              <Text style={styles.permission}>전화 권한</Text>
+              <Text style={styles.brief}>멤버간 전화 이용시 필요합니다.</Text>
+            </View>
+          </View>
+        </ScrollView>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            setVisible(false);
+            setTimeout(() => {
+              navigation.navigate("LogIn");
+            }, 300);
+          }}
+        >
+          <Text style={styles.buttonText}>동의</Text>
+        </TouchableOpacity>
+      </Modal>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {},
+  modal: {
+    margin: 0,
+    backgroundColor: "white",
+    flex: 0,
+    height: HEIGHT / 2,
+    bottom: 0,
+    paddingBottom: BottomSafeAreaHeight,
+    position: "absolute",
+    width: "100%",
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
+  },
+  info: {
+    fontSize: 18,
+    color: "#0A9BBB",
+    fontWeight: "bold",
+  },
+  contents: {
+    marginTop: 10,
+    width: "100%",
+    alignItems: "flex-start",
+  },
+  modalContainer: {
+    width: "100%",
+    alignItems: "flex-start",
+    paddingTop: 20,
+    paddingLeft: 20,
+  },
+  permission: {
+    fontWeight: "bold",
+    fontSize: 18,
+    marginTop: 30,
+  },
+  textContainer: {
+    alignItems: "flex-start",
+  },
+  brief: {
+    fontSize: 17,
+    marginTop: 5,
+  },
+  button: {
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+    position: "absolute",
+    bottom: BottomSafeAreaHeight,
+    height: HEIGHT / 15,
+    borderWidth: 1,
+    backgroundColor: BLACK_COLOR,
+  },
+  buttonText: {
+    color: BG_COLOR,
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+});
