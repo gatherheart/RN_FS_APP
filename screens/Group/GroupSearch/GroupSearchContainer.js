@@ -4,59 +4,7 @@ import GroupSearchPrenster from "./GroupSearchPresenter";
 import Proptypes from "prop-types";
 import styled, { ThemeContext } from "styled-components/native";
 import { firstCategory } from "../../../constants/Names";
-
-const HeaderRightBtn = styled.View`
-  border: ${(props) => props.theme.lightGreyColor};
-  border-radius: 7px;
-  flex-direction: row;
-  margin: 4px 12.2px 0px 0px;
-`;
-
-const ButtonText = styled.Text`
-  margin: 0px 3px 0px 3px;
-  font-size: 14px;
-`;
-
-const LeftButton = styled.TouchableOpacity`
-  border-radius: 7px;
-`;
-
-const RightButton = styled.TouchableOpacity`
-  border-radius: 7px;
-`;
-
-/**
- * @param {Function} leftClick left button object
- * @param {Function} rightClick left button object
- * @return {node} View Component contains two row-direction button
- */
-const RightHeaderButton = ({ leftClick, rightClick, pageType = 0 }) => {
-  const themeContext = useContext(ThemeContext);
-  const leftStyle =
-    pageType == 0
-      ? {
-          border: themeContext.darkGreyColor,
-          backgroundColor: themeContext.lightGreyColor,
-        }
-      : null;
-  const rightStyle =
-    pageType == 1
-      ? {
-          border: themeContext.darkGreyColor,
-          backgroundColor: themeContext.lightGreyColor,
-        }
-      : null;
-  return (
-    <HeaderRightBtn>
-      <LeftButton onPress={leftClick} style={leftStyle}>
-        <ButtonText>대학</ButtonText>
-      </LeftButton>
-      <RightButton onPress={rightClick} style={rightStyle}>
-        <ButtonText>연합</ButtonText>
-      </RightButton>
-    </HeaderRightBtn>
-  );
-};
+import Loader from "../../../components/common/Loader";
 
 export default ({}) => {
   const [results, setResults] = useState({
@@ -88,49 +36,23 @@ export default ({}) => {
   const navigation = useNavigation();
 
   const { firstSelected, secondSelected } = route.params;
-
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      title: firstCategory[firstSelected],
-    });
-  }, []);
-
   useEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <RightHeaderButton
-          leftClick={() => {
-            setPageType(0);
-            setOption(0);
-          }}
-          rightClick={() => {
-            setPageType(1);
-            setOption(0);
-          }}
-          pageType={pageType}
-        ></RightHeaderButton>
-      ),
-    });
     getData();
-  }, [pageType, option]);
-
-  return (
+  }, []);
+  return results.loading ? (
+    <Loader></Loader>
+  ) : (
     <GroupSearchPrenster
       refreshFn={getData}
-      loading={results.loading}
       results={results}
       firstSelected={firstSelected}
       secondSelected={secondSelected}
       pageType={pageType}
+      setPageType={setPageType}
       option={option}
       setOption={setOption}
     ></GroupSearchPrenster>
   );
-};
-
-RightHeaderButton.proptypes = {
-  leftClick: Proptypes.func.isRequired,
-  rightClick: Proptypes.func.isRequired,
 };
 
 const result = {

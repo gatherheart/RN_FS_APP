@@ -12,6 +12,8 @@ import GroupSearchBtn from "../../../components/Group/GroupCategoryButton";
 import { BG_COLOR } from "../../../constants/Color";
 import { secondCategory, firstCategory } from "../../../constants/Names";
 import Icon from "../../../components/common/CustomIcon";
+import { HeaderHeight } from "../../../utils/HeaderHeight";
+import CustomHeader from "../../../components/common/CustomHeader";
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
 const Container = styled.View``;
@@ -45,57 +47,33 @@ export default ({}) => {
   const rowLength = parseInt((secondCategory[firstSelected].length + 2) / 3);
   const categories = secondCategory[firstSelected];
 
-  let rows = [],
-    row = [];
-
-  useLayoutEffect(
-    () =>
-      navigation.setOptions({
-        title: firstCategory[firstSelected],
-        headerLeft: () => (
-          <TouchableOpacity
-            onPress={() => {
-              navigation.goBack();
-            }}
-            title="Refresh"
-            color="#fff"
-            style={{ marginRight: 20 }}
-          >
-            {false ? (
-              <Loader size={"small"}></Loader>
-            ) : (
-              <Icon name={"refresh"} size={24}></Icon>
-            )}
-          </TouchableOpacity>
-        ),
-      }),
-    []
-  );
-
   return (
-    <Container style={styles.container}>
-      <TextContainer>
-        <MainText>어떤 숲을 검색해볼까요?</MainText>
-      </TextContainer>
-      <View style={{ marginLeft: "7%" }}>
-        <View
-          style={{
-            flexWrap: "wrap",
-            flexDirection: "row",
-          }}
-        >
-          {categories.map((category, idx) => (
-            <GroupSearchBtn
-              size={"small"}
-              key={idx}
-              onPress={() => goToSecond(navigation, firstSelected, idx)}
-              title={category}
-              animation={idx === 0 ? true : false}
-            ></GroupSearchBtn>
-          ))}
+    <>
+      <CustomHeader title={"숲 검색"}></CustomHeader>
+      <Container style={styles.container}>
+        <TextContainer>
+          <MainText>어떤 숲을 검색해볼까요?</MainText>
+        </TextContainer>
+        <View style={{ marginLeft: "7%" }}>
+          <View
+            style={{
+              flexWrap: "wrap",
+              flexDirection: "row",
+            }}
+          >
+            {categories.map((category, idx) => (
+              <GroupSearchBtn
+                size={"small"}
+                key={idx}
+                onPress={() => goToSecond(navigation, firstSelected, idx)}
+                title={category}
+                animation={idx === 0 ? false : false}
+              ></GroupSearchBtn>
+            ))}
+          </View>
         </View>
-      </View>
-    </Container>
+      </Container>
+    </>
   );
 };
 
@@ -103,5 +81,6 @@ const styles = StyleSheet.create({
   container: {
     height: "100%",
     backgroundColor: BG_COLOR,
+    paddingTop: HeaderHeight,
   },
 });

@@ -30,29 +30,7 @@ export default ({ navigation, route }) => {
         gestureEnabled: true,
         gestureDirection: "horizontal",
         headerBackTitleVisible: false,
-        mode: "modal",
-        headerMode: "slide",
-        headerShown: () => {
-          return route.state?.index ? true : false;
-        },
-
-        headerRight: () =>
-          route.name === "GroupSearchNav" ? (
-            <TouchableOpacity
-              onPress={() => {
-                navigation.goBack();
-              }}
-              title="Refresh"
-              color="#fff"
-              style={{ marginRight: 20 }}
-            >
-              {false ? (
-                <Loader size={"small"}></Loader>
-              ) : (
-                <Icon name={"refresh"} size={24}></Icon>
-              )}
-            </TouchableOpacity>
-          ) : null,
+        headerShown: false,
       }}
     >
       <Stack.Screen

@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { Animated, RefreshControl } from "react-native";
 import Loader from "./Loader";
 import { BG_COLOR, RED_COLOR, GREEN_COLOR } from "../../constants/Color";
+import { HeaderHeight } from "../../utils/HeaderHeight";
 
 const ScrollContainer = ({
   loading,
@@ -34,7 +35,7 @@ const ScrollContainer = ({
           progressViewOffset={HEADER_MAX_HEIGHT}
         ></RefreshControl>
       }
-      style={{ backgroundColor: BG_COLOR }}
+      style={{ backgroundColor: BG_COLOR, paddingTop: HeaderHeight }}
       contentContainerStyle={{
         flex: loading ? 1 : 0,
         alignItems: "center",

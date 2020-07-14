@@ -12,6 +12,8 @@ import GroupSearchBtn from "../../../components/Group/GroupCategoryButton";
 import { BG_COLOR } from "../../../constants/Color";
 import { firstCategory } from "../../../constants/Names";
 import Icon from "../../../components/common/CustomIcon";
+import CustomHeader from "../../../components/common/CustomHeader";
+import { UnderHeader, HeaderHeight } from "../../../utils/HeaderHeight";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
@@ -52,56 +54,42 @@ const goToSecond = (navigation, selected = 1) => {
 export default () => {
   const navigation = useNavigation();
 
-  useLayoutEffect(
-    () =>
-      navigation.setOptions({
-        title: "숲 검색",
-        headerLeft: () => (
-          <TouchableOpacity
-            onPress={() => {
-              navigation.goBack();
-            }}
-            title="goBack"
-            style={{ marginHorizontal: 10 }}
-          >
-            <Icon name={"arrow-back"} size={32}></Icon>
-          </TouchableOpacity>
-        ),
-      }),
-    []
-  );
   console.log(categories);
 
   return (
-    <Container style={styles.container}>
-      <MainText>어떤 숲을 검색해볼까요?</MainText>
-      <View
-        style={{
-          flexWrap: "wrap",
-          flexDirection: "row",
-          justifyContent: "center",
-        }}
-      >
-        {categories.map((category, idx) => (
-          <GroupSearchBtn
-            size={"small"}
-            key={idx}
-            onPress={() => goToSecond(navigation, idx)}
-            title={category}
-            animation={idx === 0 ? true : false}
-          ></GroupSearchBtn>
-        ))}
-      </View>
-      <SearchButton>
-        <SearchButtonText>모임 명으로 검색하기</SearchButtonText>
-      </SearchButton>
-    </Container>
+    <>
+      <CustomHeader title={"숲 검색"}></CustomHeader>
+      <Container style={styles.container}>
+        <MainText>어떤 숲을 검색해볼까요?</MainText>
+        <View
+          style={{
+            flexWrap: "wrap",
+            flexDirection: "row",
+            justifyContent: "center",
+          }}
+        >
+          {categories.map((category, idx) => (
+            <GroupSearchBtn
+              size={"small"}
+              key={idx}
+              onPress={() => goToSecond(navigation, idx)}
+              title={category}
+              animation={idx === 0 ? false : false}
+            ></GroupSearchBtn>
+          ))}
+        </View>
+        <SearchButton>
+          <SearchButtonText>모임 명으로 검색하기</SearchButtonText>
+        </SearchButton>
+      </Container>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     height: "100%",
+    paddingTop: HeaderHeight,
     backgroundColor: BG_COLOR,
     alignItems: "center",
   },

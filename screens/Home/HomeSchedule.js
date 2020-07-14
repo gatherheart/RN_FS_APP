@@ -84,7 +84,6 @@ const HomeSchedule = ({}) => {
   const navigation = useNavigation();
   const route = useRoute();
   const { schedules } = route.params;
-  console.log(schedules);
   const [selectedDate, setSelectedDate] = useState(_selectedDate);
   const [currentMonth, setCurrentMonth] = useState(new Date());
 

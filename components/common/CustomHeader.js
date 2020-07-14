@@ -53,6 +53,7 @@ const CustomHeader = ({
         style={{
           height: StatusHeight,
           backgroundColor: "white",
+          zIndex: 1,
           ...statusStyle,
         }}
       />

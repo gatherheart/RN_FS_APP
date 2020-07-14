@@ -1,5 +1,12 @@
 import React, { useEffect, useState, useLayoutEffect, useContext } from "react";
-import { Text, Dimensions, Animated, Platform, View } from "react-native";
+import {
+  Text,
+  Dimensions,
+  Animated,
+  Platform,
+  View,
+  StyleSheet,
+} from "react-native";
 import ScrollContainer from "../../../components/common/AnimatedScrollContainer";
 import styled from "styled-components/native";
 import Input from "../../../components/common/SearchInput";
@@ -12,7 +19,9 @@ import {
   firstCategory,
 } from "../../../constants/Names";
 import { ThemeContext } from "styled-components";
-
+import CustomHeader from "../../../components/common/CustomHeader";
+import { UnderHeader, HeaderHeight } from "../../../utils/HeaderHeight";
+import PropTypes from "prop-types";
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 const HEADER_MAX_HEIGHT = (HEIGHT * 17) / 100; // set the initial height
 const HEADER_MIN_HEIGHT = HEIGHT / 9; // set the height on scroll
@@ -71,11 +80,69 @@ const FilterButton = styled.TouchableOpacity`
   align-items: center;
 `;
 
-const InputContainer = styled.View``;
+const InputContainer = styled.View`
+  align-self: center;
+`;
 
 const EmptySpace = styled.View`
   height: ${HEIGHT / 10}px;
 `;
+const HeaderRightBtn = styled.View`
+  border: ${(props) => props.theme.lightGreyColor};
+  border-radius: 7px;
+  flex-direction: row;
+  margin: 4px 12.2px 0px 0px;
+`;
+
+const ButtonText = styled.Text`
+  margin: 0px 3px 0px 3px;
+  font-size: 14px;
+`;
+
+const LeftButton = styled.TouchableOpacity`
+  border-radius: 7px;
+`;
+
+const RightButton = styled.TouchableOpacity`
+  border-radius: 7px;
+`;
+
+/**
+ * @param {Function} leftClick left button object
+ * @param {Function} rightClick left button object
+ * @return {node} View Component contains two row-direction button
+ */
+const RightHeaderButton = ({ leftClick, rightClick, pageType = 0 }) => {
+  const themeContext = useContext(ThemeContext);
+  const leftStyle =
+    pageType == 0
+      ? {
+          border: themeContext.darkGreyColor,
+          backgroundColor: themeContext.lightGreyColor,
+        }
+      : null;
+  const rightStyle =
+    pageType == 1
+      ? {
+          border: themeContext.darkGreyColor,
+          backgroundColor: themeContext.lightGreyColor,
+        }
+      : null;
+  return (
+    <HeaderRightBtn>
+      <LeftButton onPress={leftClick} style={leftStyle}>
+        <ButtonText>대학</ButtonText>
+      </LeftButton>
+      <RightButton onPress={rightClick} style={rightStyle}>
+        <ButtonText>연합</ButtonText>
+      </RightButton>
+    </HeaderRightBtn>
+  );
+};
+RightHeaderButton.propTypes = {
+  leftClick: PropTypes.func.isRequired,
+  rightClick: PropTypes.func.isRequired,
+};
 
 export default ({
   refreshFn,
@@ -84,6 +151,7 @@ export default ({
   secondSelected,
   results,
   pageType,
+  setPageType,
   setOption,
   option,
 }) => {
@@ -113,88 +181,117 @@ export default ({
   };
 
   return (
-    <View style={{ flex: 1 }}>
-      <ScrollContainer
-        style={{ flex: 1 }}
-        refreshFn={refreshFn}
-        loading={loading}
-        scrollEventThrottle={1}
-        onScroll={Animated.event(
-          [{ nativeEvent: { contentOffset: { y: position.y } } }],
-          { useNativeDriver: true }
-        )}
-        contentContainerStyle={{}}
-        HEADER_MAX_HEIGHT={HEADER_MAX_HEIGHT}
-      >
-        <View
-          style={{ paddingTop: Platform.OS !== "ios" ? HEADER_MAX_HEIGHT : 0 }}
+    <>
+      <CustomHeader
+        title={firstCategory[firstSelected - 1]}
+        rightButtonEnabled
+        rightButton={
+          <RightHeaderButton
+            leftClick={() => {
+              setPageType(0);
+              setOption(0);
+            }}
+            rightClick={() => {
+              setPageType(1);
+              setOption(0);
+            }}
+            pageType={pageType}
+          ></RightHeaderButton>
+        }
+      ></CustomHeader>
+
+      <View style={styles.container}>
+        <ScrollContainer
+          style={{ flex: 1 }}
+          refreshFn={refreshFn}
+          loading={loading}
+          scrollEventThrottle={1}
+          onScroll={Animated.event(
+            [{ nativeEvent: { contentOffset: { y: position.y } } }],
+            { useNativeDriver: true }
+          )}
+          contentContainerStyle={{}}
+          HEADER_MAX_HEIGHT={HEADER_MAX_HEIGHT}
         >
-          {results?.groups
-            ? results.groups.map((group, idx) => {
-                if (applicableFilter && !group.applicable) return null;
-                if (keyword != "" && !group.groupName.includes(keyword))
-                  return null;
-                return <HorizontalGroup {...group} key={idx}></HorizontalGroup>;
-              })
-            : null}
-        </View>
-        <EmptySpace></EmptySpace>
-        <SearchModal
-          pageType={pageType}
-          setOption={setOption}
-          changeModal={changeModal}
-          isModalVisible={isModalVisible}
-        ></SearchModal>
-      </ScrollContainer>
-      <Animated.View
-        style={[
-          {
-            backgroundColor: "white",
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            overflow: "hidden",
-            height: HEADER_MAX_HEIGHT,
-          },
-          {
-            transform: [{ translateY: headerHeight }],
-          },
-        ]}
-      >
-        <TitleContainer>
-          <Title>{secondCategory[firstSelected][secondSelected]}</Title>
-          <FilterButton
-            theme={themeContext}
-            onPress={() => setApplicableFilter((prev) => !prev)}
+          <View
+            style={{
+              paddingTop: Platform.OS !== "ios" ? HEADER_MAX_HEIGHT : 0,
+            }}
           >
-            <Text style={{ fontSize: 12 }}>
-              {applicableFilter ? "전체" : "지원가능"}
-            </Text>
-          </FilterButton>
-        </TitleContainer>
-        <SearchContainer>
-          <OptionContainer>
-            <OptionButton onPress={changeModal} theme={themeContext}>
-              <Text style={{ textAlign: "center" }}>
-                {pageType == 0 ? "학교" : "지역"}
+            {results?.groups
+              ? results.groups.map((group, idx) => {
+                  if (applicableFilter && !group.applicable) return null;
+                  if (keyword != "" && !group.groupName.includes(keyword))
+                    return null;
+                  return (
+                    <HorizontalGroup {...group} key={idx}></HorizontalGroup>
+                  );
+                })
+              : null}
+          </View>
+          <EmptySpace></EmptySpace>
+          <SearchModal
+            pageType={pageType}
+            setOption={setOption}
+            changeModal={changeModal}
+            isModalVisible={isModalVisible}
+          ></SearchModal>
+        </ScrollContainer>
+        <Animated.View
+          style={[
+            {
+              backgroundColor: "white",
+              position: "absolute",
+              top: HeaderHeight,
+              left: 0,
+              right: 0,
+              overflow: "hidden",
+              height: HEADER_MAX_HEIGHT,
+              zIndex: 0,
+            },
+            {
+              transform: [{ translateY: headerHeight }],
+            },
+          ]}
+        >
+          <TitleContainer>
+            <Title>{secondCategory[firstSelected][secondSelected]}</Title>
+            <FilterButton
+              theme={themeContext}
+              onPress={() => setApplicableFilter((prev) => !prev)}
+            >
+              <Text style={{ fontSize: 12 }}>
+                {applicableFilter ? "전체" : "지원가능"}
               </Text>
-            </OptionButton>
-            <OptionText>
-              {pageType == 0 ? schoolNames[option] : areaNames[option]}
-            </OptionText>
-          </OptionContainer>
-          <InputContainer>
-            <Input
-              placeholder={"Write a keyword"}
-              value={keyword}
-              onChange={onChange}
-              onSubmit={onSubmit}
-              returnKeyType="search"
-            ></Input>
-          </InputContainer>
-        </SearchContainer>
-      </Animated.View>
-    </View>
+            </FilterButton>
+          </TitleContainer>
+          <SearchContainer>
+            <OptionContainer>
+              <OptionButton onPress={changeModal} theme={themeContext}>
+                <Text style={{ textAlign: "center" }}>
+                  {pageType == 0 ? "학교" : "지역"}
+                </Text>
+              </OptionButton>
+              <OptionText>
+                {pageType == 0 ? schoolNames[option] : areaNames[option]}
+              </OptionText>
+            </OptionContainer>
+            <InputContainer>
+              <Input
+                placeholder={"Write a keyword"}
+                value={keyword}
+                onChange={onChange}
+                onSubmit={onSubmit}
+                returnKeyType="search"
+              ></Input>
+            </InputContainer>
+          </SearchContainer>
+        </Animated.View>
+      </View>
+    </>
   );
 };
+
+const styles = StyleSheet.create({
+  container: { flex: 1 },
+});

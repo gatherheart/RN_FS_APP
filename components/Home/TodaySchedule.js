@@ -81,7 +81,6 @@ const TodaySchedule = ({ schedules: todaySchedules }) => {
   const themeContext = useContext(ThemeContext);
   const navigation = useNavigation();
   const [isCollapsed, setIsCollapsed] = useState(true);
-  console.log(todaySchedules);
   return (
     <View>
       <Card style={{}}>
