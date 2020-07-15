@@ -229,8 +229,8 @@ const PostPresenter = ({
         <EmptySpace></EmptySpace>
       </ScrollView>
       <InputOnKeyboard
-        comment={_comment}
-        setComment={setComment}
+        text={_comment}
+        setText={setComment}
         submit={() => {}}
       ></InputOnKeyboard>
     </>

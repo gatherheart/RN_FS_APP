@@ -54,8 +54,6 @@ const goToSecond = (navigation, selected = 1) => {
 export default () => {
   const navigation = useNavigation();
 
-  console.log(categories);
-
   return (
     <>
       <CustomHeader title={"숲 검색"}></CustomHeader>

@@ -162,7 +162,7 @@ export default ({ schedule }) => {
                     <Text style={schedCardStyle.bodyText}>내용:</Text>{" "}
                     {sched.memo}
                   </Text>
-                  <Text>{timePickedConverter(sched.date)}</Text>
+                  <Text>{timePickedConverter(sched._date)}</Text>
                 </View>
               </TouchableOpacity>
             );

@@ -23,6 +23,7 @@ import { getFileName } from "../../../utils/String";
 import { downloadFile } from "../../../utils/FileSystem";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { HeaderHeight } from "../../../utils/HeaderHeight";
+import { PixelRatio } from "react-native";
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
 const SubContainer = styled.View`
@@ -39,7 +40,7 @@ const BodyContainer = styled.View`
   border-bottom-width: 1px;
   border-bottom-color: ${(props) => props.theme.darkGreenColor};
   padding-vertical: 45px;
-  padding-horizontal: 25px;
+  padding-horizontal: 15px;
 `;
 
 const ImgContainer = styled.View`
@@ -54,7 +55,7 @@ const EmptySpace = styled.View`
 const FileContainer = styled.View``;
 
 const NanumText = styled.Text`
-  font-family: ${(props) => props.theme.regularFont};
+  font-size: 14px;
 `;
 
 export default () => {
@@ -137,9 +138,9 @@ export default () => {
         showsVerticalScrollIndicator={false}
       >
         <SubContainer>
-          <NanumText style={{ fontFamily: themeContext.boldFont }}>
+          <Text style={{ fontSize: 15, fontWeight: "bold" }}>
             {data.noticeTitle}
-          </NanumText>
+          </Text>
         </SubContainer>
         <SubContainer style={{ justifyContent: "space-between" }}>
           <SmallUserCard
@@ -150,7 +151,14 @@ export default () => {
           <NanumText>{simplifiedFormat(data.createdAt)}</NanumText>
         </SubContainer>
         <BodyContainer>
-          <NanumText style={{ lineHeight: 25 }}>{data.noticeMemo}</NanumText>
+          <Text
+            style={{
+              lineHeight: 23,
+              fontSize: 14,
+            }}
+          >
+            {data.noticeMemo}
+          </Text>
         </BodyContainer>
         <ImgContainer>
           <ScrollView horizontal={true}>

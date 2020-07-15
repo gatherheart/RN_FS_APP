@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Dimensions,
   View,
+  Text,
 } from "react-native";
 import PropTypes from "prop-types";
 
@@ -81,9 +82,7 @@ const CustomHeader = ({
           </TouchableOpacity>
         </LeftContainer>
         <MiddleContainer>
-          <Title style={{ fontSize: 15, fontFamily: themeContext.regularFont }}>
-            {title}
-          </Title>
+          <Text style={{ fontSize: 16 }}>{title}</Text>
         </MiddleContainer>
         <RightContainer>
           {rightButtonEnabled && rightButton ? (

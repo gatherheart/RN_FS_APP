@@ -42,15 +42,13 @@ const Data = styled.View`
 `;
 const Name = styled.Text`
   font-weight: 400;
-  font-size: 15px;
+  font-size: 14px;
   margin-bottom: 3px;
-  font-family: ${(props) => props.theme.regularFont};
 `;
 
 const Major = styled.Text`
   font-weight: 300;
   font-size: 12px;
-  font-family: ${(props) => props.theme.regularFont};
 `;
 const RowContainer = styled.View`
   flex-direction: row;

@@ -8,19 +8,19 @@ import {
   Composer,
   Send,
 } from "react-native-gifted-chat";
+import { Ionicons } from "@expo/vector-icons";
 
 export const renderInputToolbar = (props) => (
   <InputToolbar
     {...props}
     containerStyle={{
-      backgroundColor: "#222B45",
-      paddingTop: 6,
+      backgroundColor: "#fff",
     }}
     primaryStyle={{ alignItems: "center" }}
   />
 );
 
-export const renderActions = (props) => (
+export const renderActions = (change) => (props) => (
   <Actions
     {...props}
     containerStyle={{
@@ -32,17 +32,11 @@ export const renderActions = (props) => (
       marginRight: 4,
       marginBottom: 0,
     }}
-    icon={() => (
-      <Image
-        style={{ width: 32, height: 32 }}
-        source={{
-          uri: "https://placeimg.com/32/32/any",
-        }}
-      />
-    )}
+    icon={() => <Ionicons name={"ios-add"} size={20}></Ionicons>}
     options={{
       "Choose From Library": () => {
         console.log("Choose From Library");
+        change("image");
       },
       Cancel: () => {
         console.log("Cancel");
