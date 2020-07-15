@@ -63,10 +63,11 @@ const SliderContainer = styled.View`
   margin-bottom: 40px;
 `;
 
-const saveImage = async (url) => {
+const saveImage = async (url, callback) => {
   console.log(url);
   const uri = await downloadAsync(url);
-  saveToLibrary(uri);
+  await saveToLibrary(uri);
+  callback(uri);
 };
 
 const ImageContext = createContext();
@@ -144,9 +145,13 @@ const SlideImageModal = ({}) => {
             changeViewerState();
           }}
           swipeToCloseEnabled={false}
+          onImageIndexChange={(imageIndex) => {
+            console.log(imageIndex);
+            setCurrentIndex(imageIndex);
+          }}
         />
+        <FloatingButton currIndex={currentIndex}></FloatingButton>
       </Animated.View>
-      <FloatingButton></FloatingButton>
     </ImageProvider>
   );
 };
@@ -164,6 +169,7 @@ const SlideStyles = StyleSheet.create({
   },
 });
 const FloatingButton = forwardRef(({ currIndex, animationValue }, ref) => {
+  console.log(currIndex, isIPhoneX());
   const changeViewerState = useChangeViewerState();
   const images = useImages();
   const flashRef = useRef(null);
@@ -172,10 +178,12 @@ const FloatingButton = forwardRef(({ currIndex, animationValue }, ref) => {
     <>
       <FlashMessage
         ref={flashRef}
-        position="top"
         titleStyle={{ fontSize: 14 }}
         textStyle={{ fontSize: 1 }}
-        style={{ bottom: isIPhoneX() ? 0 : 30 }}
+        style={{
+          bottom: isIPhoneX() ? 0 : 30,
+          width: WIDTH,
+        }}
       />
 
       <Animated.View
@@ -201,10 +209,11 @@ const FloatingButton = forwardRef(({ currIndex, animationValue }, ref) => {
 
         <TouchableOpacity
           onPress={() => {
-            saveImage(images[currIndex].uri);
-            flashRef.current.showMessage({
-              message: "다운로드 되었습니다.",
-              type: "success",
+            saveImage(images[currIndex].uri, (uri) => {
+              flashRef.current.showMessage({
+                message: "다운로드 되었습니다.",
+                type: "success",
+              });
             });
           }}
         >

@@ -79,13 +79,16 @@ export default () => {
 
   const images = [
     {
-      uri: "https://images.unsplash.com/photo-1571501679680-de32f1e7aad4",
+      uri:
+        "https://images.unsplash.com/photo-1593642634524-b40b5baae6bb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=512&q=80",
     },
     {
-      uri: "https://images.unsplash.com/photo-1573273787173-0eb81a833b34",
+      uri:
+        "https://images.unsplash.com/photo-1594638963668-52eb9798e8ca?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=512&q=80",
     },
     {
-      uri: "https://images.unsplash.com/photo-1569569970363-df7b6160d111",
+      uri:
+        "https://images.unsplash.com/photo-1564502718394-1407871ff48a?ixlib=rb-1.2.1&auto=format&fit=crop&w=512&q=80",
     },
   ];
 
