@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Dimensions,
+  ScrollView,
 } from "react-native";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import styled from "styled-components/native";
@@ -16,7 +17,7 @@ import { HeaderHeight } from "../../../utils/HeaderHeight";
 import CustomHeader from "../../../components/common/CustomHeader";
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
-const Container = styled.View``;
+const Container = styled.ScrollView``;
 
 const MainText = styled.Text`
   justify-content: center;
@@ -43,13 +44,12 @@ export default ({}) => {
 
   const route = useRoute();
   const firstSelected = route?.params.selected;
-  const rowLength = parseInt((secondCategory[firstSelected].length + 2) / 3);
   const categories = secondCategory[firstSelected];
 
   return (
     <>
       <CustomHeader title={"숲 검색"}></CustomHeader>
-      <Container style={styles.container}>
+      <ScrollView style={styles.container} alwaysBounceVertical={false}>
         <TextContainer>
           <MainText>어떤 숲을 검색해볼까요?</MainText>
         </TextContainer>
@@ -71,15 +71,18 @@ export default ({}) => {
             ))}
           </View>
         </View>
-      </Container>
+        <View style={styles.empty}></View>
+      </ScrollView>
     </>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    height: "100%",
     backgroundColor: BG_COLOR,
     paddingTop: HeaderHeight,
+  },
+  empty: {
+    height: HeaderHeight,
   },
 });

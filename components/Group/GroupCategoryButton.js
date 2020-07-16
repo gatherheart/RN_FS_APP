@@ -36,7 +36,7 @@ const Button = styled.TouchableOpacity`
 
 const ButtonText = styled.Text`
   font-weight: 400;
-  font-family: ${(props) => props.theme.regularFont};
+  text-align: center;
 `;
 
 /**
@@ -144,6 +144,7 @@ const styles = StyleSheet.create({
     height: (HEIGHT * 9) / 100,
     borderRadius: 15,
     justifyContent: "center",
+    alignItems: "center",
     marginRight: 7,
     marginLeft: 7,
     marginBottom: 15,
@@ -153,6 +154,8 @@ const styles = StyleSheet.create({
     height: (HEIGHT * 7) / 100,
     borderRadius: 15,
     justifyContent: "center",
+    alignItems: "center",
+
     marginRight: 7,
     marginLeft: 7,
     marginBottom: 15,

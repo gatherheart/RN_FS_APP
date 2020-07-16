@@ -10,7 +10,11 @@ import {
   renderInputToolbar,
   renderActions,
   renderComposer,
+  renderSystemMessage,
+  renderScrollToBottom,
 } from "./InputToolBar";
+import { isIphoneX, getBottomSpace } from "react-native-iphone-x-helper";
+import { BottomSafeAreaHeight } from "../../utils/HeaderHeight";
 
 const styles = StyleSheet.create({
   mapView: {
@@ -34,6 +38,13 @@ const styles = StyleSheet.create({
     margin: 3,
     resizeMode: "cover",
   },
+  listViewStyle: {},
+  loader: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  contentContainerStyle: {},
 });
 
 export default class App extends Component {
@@ -228,7 +239,12 @@ export default class App extends Component {
       messages: GiftedChat.append(previousState.messages, messages),
     }));
   }
-
+  get _listViewProps() {
+    return {
+      style: styles.listViewStyle,
+      contentContainerStyle: styles.contentContainerStyle,
+    };
+  }
   //  https://stackoverflow.com/a/54550286/1458375
   render() {
     return (
@@ -254,26 +270,46 @@ export default class App extends Component {
             />
           </View>
         )}
-        <GiftedChat
-          messages={this.state.messages}
-          onSend={(messages) => this.onSend(messages)}
-          renderCustomView={this.renderCustomView}
-          renderMessageImage={this.renderMessageImage}
-          user={{
-            _id: 1,
+        <View
+          style={{
+            flex: 1,
+            paddingBottom: getBottomSpace(),
+            backgroundColor: "white",
           }}
-          renderComposer={renderComposer}
-          renderSend={this.renderSend}
-          renderInputToolbar={renderInputToolbar}
-          renderActions={renderActions(this.changeImage)}
-          parsePatterns={(linkStyle) => [
-            {
-              pattern: /#(\w+)/,
-              style: { ...linkStyle, color: "lightgreen" },
-              onPress: (props) => alert(`press on ${props}`),
-            },
-          ]}
-        />
+        >
+          <GiftedChat
+            messages={this.state.messages}
+            onSend={(messages) => this.onSend(messages)}
+            wrapInSafeArea={false}
+            bottomOffset={getBottomSpace()}
+            scrollToBottom
+            scrollToBottomComponent={renderScrollToBottom}
+            renderSystemMessage={renderSystemMessage}
+            onPressAvatar={console.log}
+            renderCustomView={this.renderCustomView}
+            renderMessageImage={this.renderMessageImage}
+            messagesContainerStyle={{ backgroundColor: "white" }}
+            user={{
+              _id: 1,
+              name: "Aaron",
+              avatar: "https://placeimg.com/150/150/any",
+            }}
+            renderComposer={renderComposer}
+            renderSend={this.renderSend}
+            renderInputToolbar={renderInputToolbar}
+            renderActions={renderActions(this.changeImage)}
+            listViewProps={this._listViewProps}
+            parsePatterns={(linkStyle) => {
+              return [
+                {
+                  pattern: /#(\w+)/,
+                  style: { ...linkStyle[0], color: "lightgreen" },
+                  onPress: (props) => alert(`press on ${props}`),
+                },
+              ];
+            }}
+          />
+        </View>
       </>
     );
   }

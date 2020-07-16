@@ -91,7 +91,9 @@ const HeaderRightBtn = styled.View`
   border: ${(props) => props.theme.lightGreyColor};
   border-radius: 7px;
   flex-direction: row;
-  margin: 4px 12.2px 0px 0px;
+  height: 25px;
+  align-items: center;
+  overflow: hidden;
 `;
 
 const ButtonText = styled.Text`
@@ -100,11 +102,16 @@ const ButtonText = styled.Text`
 `;
 
 const LeftButton = styled.TouchableOpacity`
-  border-radius: 7px;
+  height: 100%;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
 `;
 
 const RightButton = styled.TouchableOpacity`
-  border-radius: 7px;
+  height: 100%;
+
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
 `;
 
 /**
@@ -118,14 +125,14 @@ const RightHeaderButton = ({ leftClick, rightClick, pageType = 0 }) => {
     pageType == 0
       ? {
           border: themeContext.darkGreyColor,
-          backgroundColor: themeContext.lightGreyColor,
+          backgroundColor: themeContext.lightGreenColor,
         }
       : null;
   const rightStyle =
     pageType == 1
       ? {
           border: themeContext.darkGreyColor,
-          backgroundColor: themeContext.lightGreyColor,
+          backgroundColor: themeContext.lightGreenColor,
         }
       : null;
   return (

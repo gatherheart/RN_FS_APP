@@ -131,7 +131,7 @@ export default () => {
         <CustomHeader></CustomHeader>
         <ScrollView
           contentContainerStyle={{ ...styles.container }}
-          style={{ backgroundColor: BG_COLOR, top: HeaderHeight }}
+          style={{ backgroundColor: BG_COLOR, paddingTop: HeaderHeight }}
         >
           <Text style={{ ...styles.category }}>모임 프로필</Text>
           <TouchableOpacity
@@ -218,7 +218,6 @@ export default () => {
 
 const styles = StyleSheet.create({
   container: {
-    top: StatusHeight,
     backgroundColor: BG_COLOR,
     alignItems: "center",
   },
@@ -255,7 +254,6 @@ const styles = StyleSheet.create({
   category: {
     alignSelf: "flex-start",
     marginLeft: 30,
-    marginTop: 30,
     fontWeight: "500",
   },
   logo: {

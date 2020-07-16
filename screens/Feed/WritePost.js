@@ -182,24 +182,6 @@ export default () => {
               : null}
           </ScrollView>
         </ImgContainer>
-        <SubContainer style={{ justifyContent: "space-between" }}>
-          <NanumText
-            style={{ fontFamily: themeContext.regularFont, paddingLeft: 10 }}
-          >
-            공개 설정
-          </NanumText>
-          <CheckBox
-            right={true}
-            iconRight={true}
-            checkedColor={themeContext.lightGreenColor}
-            checkedIcon="check-circle"
-            uncheckedIcon="check-circle"
-            checked={state.isPublic}
-            onPress={() => {
-              onChangeInput("public", PUBLIC_FIELD);
-            }}
-          />
-        </SubContainer>
         <OptionContainer>
           <TextInput
             value={state.tag}

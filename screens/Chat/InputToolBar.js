@@ -7,6 +7,7 @@ import {
   Actions,
   Composer,
   Send,
+  SystemMessage,
 } from "react-native-gifted-chat";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -41,16 +42,26 @@ export const renderKeyboard = (props) => {
   );
 };
 
+export const renderSystemMessage = (props) => (
+  <SystemMessage
+    {...props}
+    containerStyle={{ backgroundColor: "white" }}
+    wrapperStyle={{ borderWidth: 10, borderColor: "white" }}
+    textStyle={{ color: "blue", fontWeight: "900" }}
+  />
+);
+
+export const renderScrollToBottom = (props) => (
+  <Ionicons name={"ios-arrow-down"} size={20}></Ionicons>
+);
+
 export const renderActions = (change) => (props) => (
   <Actions
     {...props}
     containerStyle={{
-      width: 44,
       height: 44,
       alignItems: "center",
       justifyContent: "center",
-      marginLeft: 4,
-      marginRight: 4,
       marginBottom: 0,
     }}
     icon={() => <Ionicons name={"ios-add"} size={20}></Ionicons>}
@@ -70,15 +81,16 @@ export const renderActions = (change) => (props) => (
 export const renderComposer = (props) => (
   <Composer
     {...props}
+    textInputProps={{ autoCorrect: false }}
     placeholder={""}
-    autoCorrect={false}
+    composerHeight={35}
     textInputStyle={{
       color: "#222B45",
       backgroundColor: "#EDF1F7",
       borderWidth: 1,
       borderRadius: 5,
       borderColor: "#E4E9F2",
-      left: -10,
+      paddingLeft: 5,
     }}
   />
 );
