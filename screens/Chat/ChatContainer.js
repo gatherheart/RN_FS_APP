@@ -1,12 +1,16 @@
 import React, { Component } from "react";
-import { View, StyleSheet, Text, Image } from "react-native";
+import { View, StyleSheet, Text, Image, TouchableOpacity } from "react-native";
 
 import { GiftedChat, Send } from "react-native-gifted-chat";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 
-import "prop-types";
+import PropTypes from "prop-types";
 import { Ionicons } from "@expo/vector-icons";
-import { renderInputToolbar, renderActions } from "./InputToolBar";
+import {
+  renderInputToolbar,
+  renderActions,
+  renderComposer,
+} from "./InputToolBar";
 
 const styles = StyleSheet.create({
   mapView: {
@@ -23,6 +27,13 @@ const styles = StyleSheet.create({
     marginRight: 10,
     borderWidth: 1,
   },
+  image: {
+    width: 150,
+    height: 100,
+    borderRadius: 13,
+    margin: 3,
+    resizeMode: "cover",
+  },
 });
 
 export default class App extends Component {
@@ -34,6 +45,39 @@ export default class App extends Component {
       console.log("Hello World");
     });
   };
+
+  renderMessageImage(props) {
+    console.log(props.currentMessage.image);
+    const images = [
+      {
+        // Simplest usage.
+        url: props.currentMessage.image,
+        // You can pass props to <Image />.
+        props: {
+          // headers: ...
+        },
+      },
+      {
+        props: {
+          // Or you can set source directory.
+          source: require("../../assets/imgs/android.png"),
+        },
+      },
+    ];
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          console.log(props.currentMessage.image);
+        }}
+      >
+        <Image
+          source={{ uri: props.currentMessage.image }}
+          style={styles.image}
+        />
+      </TouchableOpacity>
+    );
+  }
+
   renderSend = (props) => {
     return (
       <Send {...props}>
@@ -94,7 +138,7 @@ export default class App extends Component {
         {
           _id: Math.round(Math.random() * 1000000),
           text: "#awesome",
-          createdAt: new Date(),
+          createdAt: new Date(new Date().setDate(new Date().getDate() - 1)),
           user: {
             _id: 1,
             name: "Developer",
@@ -103,7 +147,7 @@ export default class App extends Component {
         {
           _id: Math.round(Math.random() * 1000000),
           text: "",
-          createdAt: new Date(),
+          createdAt: new Date(new Date().setDate(new Date().getDate() - 1)),
           user: {
             _id: 2,
             name: "React Native",
@@ -116,7 +160,7 @@ export default class App extends Component {
         {
           _id: Math.round(Math.random() * 1000000),
           text: "Send me a picture!",
-          createdAt: new Date(),
+          createdAt: new Date(new Date().setDate(new Date().getDate() - 1)),
           user: {
             _id: 1,
             name: "Developer",
@@ -125,7 +169,7 @@ export default class App extends Component {
         {
           _id: Math.round(Math.random() * 1000000),
           text: "",
-          createdAt: new Date(),
+          createdAt: new Date(new Date().setDate(new Date().getDate() - 1)),
           user: {
             _id: 2,
             name: "React Native",
@@ -140,7 +184,7 @@ export default class App extends Component {
         {
           _id: Math.round(Math.random() * 1000000),
           text: "Where are you?",
-          createdAt: new Date(),
+          createdAt: new Date(new Date().setDate(new Date().getDate() - 1)),
           user: {
             _id: 1,
             name: "Developer",
@@ -149,7 +193,7 @@ export default class App extends Component {
         {
           _id: Math.round(Math.random() * 1000000),
           text: "Yes, and I use Gifted Chat!",
-          createdAt: new Date(),
+          createdAt: new Date(new Date().setDate(new Date().getDate() - 1)),
           user: {
             _id: 2,
             name: "React Native",
@@ -160,7 +204,7 @@ export default class App extends Component {
         {
           _id: Math.round(Math.random() * 1000000),
           text: "Are you building a chat app?",
-          createdAt: new Date(),
+          createdAt: new Date(new Date().setDate(new Date().getDate() - 1)),
           user: {
             _id: 1,
             name: "Developer",
@@ -169,7 +213,7 @@ export default class App extends Component {
         {
           _id: Math.round(Math.random() * 1000000),
           text: "You are officially rocking GiftedChat.",
-          createdAt: new Date(),
+          createdAt: new Date(new Date().setDate(new Date().getDate() - 1)),
           system: true,
         },
       ],
@@ -177,6 +221,9 @@ export default class App extends Component {
   }
 
   onSend(messages = []) {
+    console.log(messages);
+    messages[0].sent = true;
+    messages[0].received = false;
     this.setState((previousState) => ({
       messages: GiftedChat.append(previousState.messages, messages),
     }));
@@ -211,9 +258,11 @@ export default class App extends Component {
           messages={this.state.messages}
           onSend={(messages) => this.onSend(messages)}
           renderCustomView={this.renderCustomView}
+          renderMessageImage={this.renderMessageImage}
           user={{
             _id: 1,
           }}
+          renderComposer={renderComposer}
           renderSend={this.renderSend}
           renderInputToolbar={renderInputToolbar}
           renderActions={renderActions(this.changeImage)}

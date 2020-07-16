@@ -1,7 +1,7 @@
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/jsx-props-no-spreading */
 import React from "react";
-import { Image } from "react-native";
+import { Image, TextInput } from "react-native";
 import {
   InputToolbar,
   Actions,
@@ -19,6 +19,27 @@ export const renderInputToolbar = (props) => (
     primaryStyle={{ alignItems: "center" }}
   />
 );
+
+export const renderKeyboard = (props) => {
+  const {
+    commentForm: { text },
+  } = props;
+  return (
+    <TextInput
+      autoGrow={true}
+      style={{ flex: 1 }}
+      onChangeText={this.handleOnChangeText}
+      value={text}
+      multiline={true}
+      placeholder="Write a message..."
+      autoCorrect={false}
+      underlineColorAndroid="transparent"
+      blurOnSubmit={false}
+      onFocus={() => this.setState({ focusOnInput: true })}
+      onBlur={() => this.setState({ focusOnInput: false })}
+    />
+  );
+};
 
 export const renderActions = (change) => (props) => (
   <Actions
@@ -49,15 +70,15 @@ export const renderActions = (change) => (props) => (
 export const renderComposer = (props) => (
   <Composer
     {...props}
+    placeholder={""}
+    autoCorrect={false}
     textInputStyle={{
       color: "#222B45",
       backgroundColor: "#EDF1F7",
       borderWidth: 1,
       borderRadius: 5,
       borderColor: "#E4E9F2",
-      paddingTop: 8.5,
-      paddingHorizontal: 12,
-      marginLeft: 0,
+      left: -10,
     }}
   />
 );
