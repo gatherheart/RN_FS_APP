@@ -13,9 +13,17 @@ import {
   renderSystemMessage,
   renderScrollToBottom,
 } from "./InputToolBar";
+import renderDay from "./RenderDay";
 import { isIphoneX, getBottomSpace } from "react-native-iphone-x-helper";
 import { BottomSafeAreaHeight } from "../../utils/HeaderHeight";
-
+import {
+  renderMessage,
+  renderCustomView,
+  renderBubble,
+  renderAvatar,
+  renderUsername,
+  renderTime,
+} from "./MessageContainer";
 const styles = StyleSheet.create({
   mapView: {
     width: 150,
@@ -45,6 +53,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   contentContainerStyle: {},
+  container: {
+    flex: 1,
+    paddingBottom: getBottomSpace(),
+    backgroundColor: "white",
+  },
 });
 
 export default class App extends Component {
@@ -149,22 +162,37 @@ export default class App extends Component {
         {
           _id: Math.round(Math.random() * 1000000),
           text: "#awesome",
-          createdAt: new Date(new Date().setDate(new Date().getDate() - 1)),
+          createdAt: new Date(
+            new Date().setMinutes(new Date().getMinutes() - 1)
+          ),
           user: {
             _id: 1,
             name: "Developer",
           },
         },
+
         {
           _id: Math.round(Math.random() * 1000000),
           text: "",
           createdAt: new Date(new Date().setDate(new Date().getDate() - 1)),
           user: {
             _id: 2,
-            name: "React Native",
+            name: "김현우",
           },
           image:
             "https://images.unsplash.com/photo-1588785392665-f6d4a541417d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=975&q=80",
+          sent: true,
+          received: true,
+        },
+        {
+          _id: Math.round(Math.random() * 1000000),
+          text: "안뇽",
+          createdAt: new Date(new Date().setDate(new Date().getDate() - 1)),
+          user: {
+            _id: 2,
+            name: "김현우",
+          },
+          image: undefined,
           sent: true,
           received: true,
         },
@@ -177,21 +205,7 @@ export default class App extends Component {
             name: "Developer",
           },
         },
-        {
-          _id: Math.round(Math.random() * 1000000),
-          text: "",
-          createdAt: new Date(new Date().setDate(new Date().getDate() - 1)),
-          user: {
-            _id: 2,
-            name: "React Native",
-          },
-          sent: true,
-          received: true,
-          location: {
-            latitude: 48.864601,
-            longitude: 2.398704,
-          },
-        },
+
         {
           _id: Math.round(Math.random() * 1000000),
           text: "Where are you?",
@@ -207,7 +221,7 @@ export default class App extends Component {
           createdAt: new Date(new Date().setDate(new Date().getDate() - 1)),
           user: {
             _id: 2,
-            name: "React Native",
+            name: "김현우",
           },
           sent: true,
           received: true,
@@ -233,8 +247,6 @@ export default class App extends Component {
 
   onSend(messages = []) {
     console.log(messages);
-    messages[0].sent = true;
-    messages[0].received = false;
     this.setState((previousState) => ({
       messages: GiftedChat.append(previousState.messages, messages),
     }));
@@ -270,13 +282,7 @@ export default class App extends Component {
             />
           </View>
         )}
-        <View
-          style={{
-            flex: 1,
-            paddingBottom: getBottomSpace(),
-            backgroundColor: "white",
-          }}
-        >
+        <View style={styles.container}>
           <GiftedChat
             messages={this.state.messages}
             onSend={(messages) => this.onSend(messages)}
@@ -285,20 +291,28 @@ export default class App extends Component {
             scrollToBottom
             scrollToBottomComponent={renderScrollToBottom}
             renderSystemMessage={renderSystemMessage}
+            renderMessage={renderMessage}
             onPressAvatar={console.log}
             renderCustomView={this.renderCustomView}
             renderMessageImage={this.renderMessageImage}
+            renderBubble={renderBubble}
             messagesContainerStyle={{ backgroundColor: "white" }}
             user={{
               _id: 1,
-              name: "Aaron",
+              name: "Developers",
               avatar: "https://placeimg.com/150/150/any",
             }}
+            renderUsername={renderUsername}
             renderComposer={renderComposer}
             renderSend={this.renderSend}
             renderInputToolbar={renderInputToolbar}
             renderActions={renderActions(this.changeImage)}
             listViewProps={this._listViewProps}
+            renderTime={renderTime}
+            renderDay={renderDay}
+            renderCustomView={renderCustomView}
+            renderAvatar={renderAvatar}
+            renderAvatarOnTop={true}
             parsePatterns={(linkStyle) => {
               return [
                 {

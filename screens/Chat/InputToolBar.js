@@ -1,7 +1,7 @@
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/jsx-props-no-spreading */
 import React from "react";
-import { Image, TextInput } from "react-native";
+import { Image, TextInput, View, Text } from "react-native";
 import {
   InputToolbar,
   Actions,
@@ -10,14 +10,18 @@ import {
   SystemMessage,
 } from "react-native-gifted-chat";
 import { Ionicons } from "@expo/vector-icons";
+import { formatAMPM, getYearMonthDayKr } from "../../utils/DateFormat";
 
 export const renderInputToolbar = (props) => (
   <InputToolbar
     {...props}
     containerStyle={{
       backgroundColor: "#fff",
+      borderWidth: 1,
+      alignItems: "center",
+      justifyContent: "center",
     }}
-    primaryStyle={{ alignItems: "center" }}
+    primaryStyle={{}}
   />
 );
 
@@ -81,17 +85,12 @@ export const renderActions = (change) => (props) => (
 export const renderComposer = (props) => (
   <Composer
     {...props}
-    textInputProps={{ autoCorrect: false }}
-    placeholder={""}
-    composerHeight={35}
-    textInputStyle={{
-      color: "#222B45",
-      backgroundColor: "#EDF1F7",
-      borderWidth: 1,
-      borderRadius: 5,
-      borderColor: "#E4E9F2",
-      paddingLeft: 5,
+    textInputProps={{
+      autoCorrect: false,
+      autoCapitalize: "none",
+      autoGrow: true,
     }}
+    placeholder={""}
   />
 );
 
