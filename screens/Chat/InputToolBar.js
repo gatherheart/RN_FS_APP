@@ -9,8 +9,9 @@ import {
   Send,
   SystemMessage,
 } from "react-native-gifted-chat";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import { formatAMPM, getYearMonthDayKr } from "../../utils/DateFormat";
+import { GREEN_COLOR } from "../../constants/Color";
 
 export const renderInputToolbar = (props) => (
   <InputToolbar
@@ -94,23 +95,35 @@ export const renderComposer = (props) => (
   />
 );
 
-export const renderSend = (props) => (
-  <Send
-    {...props}
-    disabled={!props.text}
-    containerStyle={{
-      width: 44,
-      height: 44,
-      alignItems: "center",
-      justifyContent: "center",
-      marginHorizontal: 4,
-    }}
-  >
-    <Image
-      style={{ width: 32, height: 32 }}
-      source={{
-        uri: "https://placeimg.com/32/32/any",
+export const renderSend = (props) => {
+  const _enabled = !props.text;
+  return _enabled ? (
+    <Send
+      {...props}
+      disabled={!_enabled}
+      containerStyle={{
+        width: 44,
+        height: 44,
+        alignItems: "center",
+        justifyContent: "center",
+        marginHorizontal: 4,
       }}
-    />
-  </Send>
-);
+    >
+      <FontAwesome name="lemon-o" size={24} color={GREEN_COLOR} />
+    </Send>
+  ) : (
+    <Send
+      {...props}
+      disabled={_enabled}
+      containerStyle={{
+        width: 44,
+        height: 44,
+        alignItems: "center",
+        justifyContent: "center",
+        marginHorizontal: 4,
+      }}
+    >
+      <FontAwesome name="send-o" size={24} color={GREEN_COLOR} />
+    </Send>
+  );
+};

@@ -1,6 +1,14 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import React, { useRef, forwardRef, useEffect } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  Dimensions,
+  TouchableWithoutFeedback,
+} from "react-native";
 import {
   Avatar,
   Bubble,
@@ -13,7 +21,10 @@ import { formatAMPM, getYearMonthDayKr } from "../../utils/DateFormat";
 import { isSameTime } from "./customUtils";
 import { getBottomSpace } from "react-native-iphone-x-helper";
 import { UnderHeader } from "../../utils/HeaderHeight";
+import LottiView from "lottie-react-native";
+import AutoHeightImage from "react-native-auto-height-image";
 
+const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
 const { isSameUser, isSameDay } = utils;
 
 export const renderAvatar = (props) => {
@@ -215,8 +226,9 @@ export const renderMessageImage = (props) => {
         console.log(props.currentMessage.image);
       }}
     >
-      <Image
+      <AutoHeightImage
         source={{ uri: props.currentMessage.image }}
+        width={(WIDTH * 70) / 100}
         style={styles.image}
       />
     </TouchableOpacity>
@@ -234,6 +246,11 @@ export const renderSend = (props) => {
 };
 
 export const renderCustomView = (props) => {
+  let animation = null;
+  const rePlay = () => {
+    console.log("clicked");
+    animation.play();
+  };
   if (props.currentMessage.location) {
     return (
       <View style={props.containerStyle}>
@@ -258,7 +275,27 @@ export const renderCustomView = (props) => {
         </MapView>
       </View>
     );
+  } else if (props.currentMessage.emoji) {
+    console.log(props.currentMessage.emoji);
+
+    return (
+      <TouchableWithoutFeedback onPress={() => rePlay()}>
+        <View style={{ height: 200, width: 200 }}>
+          <LottiView
+            autoPlay
+            loop={false}
+            ref={(_ref) => (animation = _ref)}
+            source={require("../../assets/lottieFiles/dino-dance.json")}
+            style={{
+              position: "absolute",
+              zIndex: 1,
+            }}
+          ></LottiView>
+        </View>
+      </TouchableWithoutFeedback>
+    );
   }
+
   return null;
 };
 const styles = StyleSheet.create({
@@ -277,11 +314,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   image: {
-    width: 150,
-    height: 100,
     borderRadius: 13,
     margin: 3,
-    resizeMode: "cover",
+    resizeMode: "contain",
   },
   listViewStyle: {},
   loader: {

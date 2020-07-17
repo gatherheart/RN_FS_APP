@@ -1,4 +1,4 @@
-import React, { Component, useEffect } from "react";
+import React, { Component, useEffect, useRef } from "react";
 import { View, StyleSheet, Text, Image, TouchableOpacity } from "react-native";
 
 import { GiftedChat, Send } from "react-native-gifted-chat";
@@ -38,7 +38,7 @@ const Chat = () => {
     loading: true,
     messages: [],
   });
-
+  const animation = useRef(null);
   const changeImage = (test) => {
     setState(
       (prev) => ({ ...prev, image: test }),
@@ -144,7 +144,25 @@ const Chat = () => {
         },
         {
           _id: Math.round(Math.random() * 1000000),
-          text: "You are officially rocking GiftedChat.",
+          text: "뭐지?",
+          createdAt: new Date(new Date().setDate(new Date().getDate() - 1)),
+          user: {
+            _id: 3,
+            name: "감나무",
+          },
+        },
+        {
+          _id: Math.round(Math.random() * 1000000),
+          emoji: "../../assets/lottieFiles/like-fountain.json",
+          createdAt: new Date(new Date().setDate(new Date().getDate() - 1)),
+          user: {
+            _id: 3,
+            name: "감나무",
+          },
+        },
+        {
+          _id: Math.round(Math.random() * 1000000),
+          text: "대화가 시작되었습니다",
           createdAt: new Date(new Date().setDate(new Date().getDate() - 1)),
           system: true,
         },
@@ -153,7 +171,6 @@ const Chat = () => {
   }, []);
 
   const onSend = (messages = []) => {
-    console.log(messages);
     setState((previousState) => ({
       messages: GiftedChat.append(previousState.messages, messages),
     }));
@@ -200,7 +217,7 @@ const Chat = () => {
           renderSystemMessage={renderSystemMessage}
           renderMessage={renderMessage}
           onPressAvatar={console.log}
-          renderCustomView={renderCustomView}
+          renderCustomView={(props) => renderCustomView(props, animation)}
           renderMessageImage={renderMessageImage}
           renderBubble={renderBubble}
           messagesContainerStyle={{ backgroundColor: "white" }}
@@ -220,6 +237,7 @@ const Chat = () => {
           renderCustomView={renderCustomView}
           renderAvatar={renderAvatar}
           renderAvatarOnTop={true}
+          alwaysShowSend
           parsePatterns={(linkStyle) => {
             return [
               {
