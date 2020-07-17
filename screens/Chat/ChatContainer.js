@@ -1,8 +1,18 @@
 import React, { Component, useEffect, useRef } from "react";
-import { View, StyleSheet, Text, Image, TouchableOpacity } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Text,
+  Image,
+  TouchableOpacity,
+  Keyboard,
+  Dimensions,
+  KeyboardAvoidingView,
+} from "react-native";
 
 import { GiftedChat, Send } from "react-native-gifted-chat";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
+import KeyboardSpacer from "react-native-keyboard-spacer";
 
 import PropTypes from "prop-types";
 import { Ionicons } from "@expo/vector-icons";
@@ -32,20 +42,35 @@ import {
 } from "./MessageContainer";
 import { useState } from "react";
 import Loader from "../../components/common/Loader";
-
+import messagesData from "./Messages";
+import { useKeyboard } from "react-native-keyboard-height";
+const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
 const Chat = () => {
   const [state, setState] = useState({
     loading: true,
     messages: [],
   });
   const animation = useRef(null);
+  const [emojiEnabled, setemojiEnabled] = useState(false);
+  const onClick = (emoji) => {
+    console.log(emoji);
+  };
+  const didShow = (height) => {
+    console.log("Keyboard show. Height is " + height);
+    setemojiEnabled(false);
+    setViewHeight(height);
+  };
+
+  const didHide = () => {
+    console.log("Keyboard hide");
+  };
+  const [keyboardHeight] = useKeyboard(didShow, didHide);
+  const [viewHeight, setViewHeight] = useState(
+    0
+  ); /* for example with didShow and didHide */
+
   const changeImage = (test) => {
-    setState(
-      (prev) => ({ ...prev, image: test }),
-      () => {
-        console.log("Hello World");
-      }
-    );
+    setState((prev) => ({ ...prev, image: test }));
   };
 
   useEffect(() => {
@@ -65,108 +90,7 @@ const Chat = () => {
     }
     setState({
       loading: false,
-      messages: [
-        {
-          _id: Math.round(Math.random() * 1000000),
-          text: "#awesome",
-          createdAt: new Date(
-            new Date().setMinutes(new Date().getMinutes() - 1)
-          ),
-          user: {
-            _id: 1,
-            name: "Developer",
-          },
-        },
-
-        {
-          _id: Math.round(Math.random() * 1000000),
-          text: "",
-          createdAt: new Date(new Date().setDate(new Date().getDate() - 1)),
-          user: {
-            _id: 2,
-            name: "김현우",
-          },
-          image:
-            "https://images.unsplash.com/photo-1588785392665-f6d4a541417d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=975&q=80",
-          sent: true,
-          received: true,
-        },
-        {
-          _id: Math.round(Math.random() * 1000000),
-          text: "안뇽",
-          createdAt: new Date(new Date().setDate(new Date().getDate() - 1)),
-          user: {
-            _id: 2,
-            name: "김현우",
-          },
-          image: undefined,
-          sent: true,
-          received: true,
-        },
-        {
-          _id: Math.round(Math.random() * 1000000),
-          text: "Send me a picture!",
-          createdAt: new Date(new Date().setDate(new Date().getDate() - 1)),
-          user: {
-            _id: 1,
-            name: "Developer",
-          },
-        },
-
-        {
-          _id: Math.round(Math.random() * 1000000),
-          text: "Where are you?",
-          createdAt: new Date(new Date().setDate(new Date().getDate() - 1)),
-          user: {
-            _id: 1,
-            name: "Developer",
-          },
-        },
-        {
-          _id: Math.round(Math.random() * 1000000),
-          text: "Yes, and I use Gifted Chat!",
-          createdAt: new Date(new Date().setDate(new Date().getDate() - 1)),
-          user: {
-            _id: 2,
-            name: "김현우",
-          },
-          sent: true,
-          received: true,
-        },
-        {
-          _id: Math.round(Math.random() * 1000000),
-          text: "Are you building a chat app?",
-          createdAt: new Date(new Date().setDate(new Date().getDate() - 1)),
-          user: {
-            _id: 1,
-            name: "Developer",
-          },
-        },
-        {
-          _id: Math.round(Math.random() * 1000000),
-          text: "뭐지?",
-          createdAt: new Date(new Date().setDate(new Date().getDate() - 1)),
-          user: {
-            _id: 3,
-            name: "감나무",
-          },
-        },
-        {
-          _id: Math.round(Math.random() * 1000000),
-          emoji: "../../assets/lottieFiles/like-fountain.json",
-          createdAt: new Date(new Date().setDate(new Date().getDate() - 1)),
-          user: {
-            _id: 3,
-            name: "감나무",
-          },
-        },
-        {
-          _id: Math.round(Math.random() * 1000000),
-          text: "대화가 시작되었습니다",
-          createdAt: new Date(new Date().setDate(new Date().getDate() - 1)),
-          system: true,
-        },
-      ],
+      messages: messagesData,
     });
   }, []);
 
@@ -175,10 +99,19 @@ const Chat = () => {
       messages: GiftedChat.append(previousState.messages, messages),
     }));
   };
+  const emojiButtonFunc = () => {
+    console.log("Hello World");
+    setemojiEnabled((prev) => !prev);
+    console.log(keyboardHeight);
+    Keyboard.dismiss();
+  };
   const _listViewProps = {
     style: styles.listViewStyle,
     contentContainerStyle: styles.contentContainerStyle,
   };
+  useEffect(() => {
+    console.log(viewHeight);
+  }, [viewHeight]);
 
   //  https://stackoverflow.com/a/54550286/1458375
   return state.loading ? (
@@ -211,7 +144,10 @@ const Chat = () => {
           messages={state.messages}
           onSend={(messages) => onSend(messages)}
           wrapInSafeArea={false}
-          bottomOffset={getBottomSpace()}
+          bottomOffset={
+            getBottomSpace() +
+            (emojiEnabled ? viewHeight - getBottomSpace() : 0)
+          }
           scrollToBottom
           scrollToBottomComponent={renderScrollToBottom}
           renderSystemMessage={renderSystemMessage}
@@ -228,7 +164,7 @@ const Chat = () => {
           }}
           renderUsername={renderUsername}
           renderComposer={renderComposer}
-          renderSend={renderSend}
+          renderSend={renderSend(keyboardHeight, emojiButtonFunc)}
           renderInputToolbar={renderInputToolbar}
           renderActions={renderActions(changeImage)}
           listViewProps={_listViewProps}
@@ -237,6 +173,15 @@ const Chat = () => {
           renderCustomView={renderCustomView}
           renderAvatar={renderAvatar}
           renderAvatarOnTop={true}
+          renderAccessory={
+            emojiEnabled ? () => <View style={{ borderWidth: 1 }}></View> : null
+          }
+          accessoryStyle={{
+            height: viewHeight - getBottomSpace(),
+          }}
+          messagesContainerStyle={{
+            paddingBottom: emojiEnabled ? viewHeight - getBottomSpace() : 0,
+          }}
           alwaysShowSend
           parsePatterns={(linkStyle) => {
             return [

@@ -1,7 +1,14 @@
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/jsx-props-no-spreading */
 import React from "react";
-import { Image, TextInput, View, Text } from "react-native";
+import {
+  Image,
+  TextInput,
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
 import {
   InputToolbar,
   Actions,
@@ -95,22 +102,12 @@ export const renderComposer = (props) => (
   />
 );
 
-export const renderSend = (props) => {
-  const _enabled = !props.text;
+export const renderSend = (keyboardHeight, emojiButtonFunc) => (props) => {
+  const _enabled = !props.text && !props.emoji && !keyboardHeight;
   return _enabled ? (
-    <Send
-      {...props}
-      disabled={!_enabled}
-      containerStyle={{
-        width: 44,
-        height: 44,
-        alignItems: "center",
-        justifyContent: "center",
-        marginHorizontal: 4,
-      }}
-    >
+    <TouchableOpacity style={styles.emojiButton} onPress={emojiButtonFunc}>
       <FontAwesome name="lemon-o" size={24} color={GREEN_COLOR} />
-    </Send>
+    </TouchableOpacity>
   ) : (
     <Send
       {...props}
@@ -127,3 +124,7 @@ export const renderSend = (props) => {
     </Send>
   );
 };
+
+const styles = StyleSheet.create({
+  emojiButton: { borderWidth: 0, alignSelf: "center", marginRight: 10 },
+});

@@ -65,7 +65,7 @@ const InputOnKeyboard = ({ text, setText, submit }) => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS == "ios" ? "padding" : "height"}
-      style={{ backgroundColor: BG_COLOR }}
+      style={{ backgroundColor: BG_COLOR, borderWidth: 1 }}
     >
       <Animated.View
         style={{
@@ -93,7 +93,6 @@ const InputOnKeyboard = ({ text, setText, submit }) => {
             );
             setTextInputHeight(textInputHeight);
           }}
-          onSubmitEditing={onSubmitText}
           underlineColorAndroid="transparent"
           returnKeyType="none"
           style={{
@@ -122,7 +121,6 @@ const InputOnKeyboard = ({ text, setText, submit }) => {
 };
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#ecf0f1",
     width: WIDTH,
     flexDirection: "row",
     bottom: BottomSafeAreaHeight,

@@ -1,108 +1,101 @@
 const messages = [
   {
-    _id: 1,
-    text: "This is a system message",
-    createdAt: new Date(Date.UTC(2016, 5, 11, 17, 20, 0)),
+    _id: Math.round(Math.random() * 1000000),
+    text: "#awesome",
+    createdAt: new Date(new Date().setMinutes(new Date().getMinutes() - 1)),
+    user: {
+      _id: 1,
+      name: "Developer",
+    },
+  },
+
+  {
+    _id: Math.round(Math.random() * 1000000),
+    text: "",
+    createdAt: new Date(new Date().setDate(new Date().getDate() - 1)),
+    user: {
+      _id: 2,
+      name: "김현우",
+    },
+    image:
+      "https://images.unsplash.com/photo-1588785392665-f6d4a541417d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=975&q=80",
+    sent: true,
+    received: true,
+  },
+  {
+    _id: Math.round(Math.random() * 1000000),
+    text: "안뇽",
+    createdAt: new Date(new Date().setDate(new Date().getDate() - 1)),
+    user: {
+      _id: 2,
+      name: "김현우",
+    },
+    image: undefined,
+    sent: true,
+    received: true,
+  },
+  {
+    _id: Math.round(Math.random() * 1000000),
+    text: "Send me a picture!",
+    createdAt: new Date(new Date().setDate(new Date().getDate() - 1)),
+    user: {
+      _id: 1,
+      name: "Developer",
+    },
+  },
+
+  {
+    _id: Math.round(Math.random() * 1000000),
+    text: "Where are you?",
+    createdAt: new Date(new Date().setDate(new Date().getDate() - 1)),
+    user: {
+      _id: 1,
+      name: "Developer",
+    },
+  },
+  {
+    _id: Math.round(Math.random() * 1000000),
+    text: "Yes, and I use Gifted Chat!",
+    createdAt: new Date(new Date().setDate(new Date().getDate() - 1)),
+    user: {
+      _id: 2,
+      name: "김현우",
+    },
+    sent: true,
+    received: true,
+  },
+  {
+    _id: Math.round(Math.random() * 1000000),
+    text: "Are you building a chat app?",
+    createdAt: new Date(new Date().setDate(new Date().getDate() - 1)),
+    user: {
+      _id: 1,
+      name: "Developer",
+    },
+  },
+  {
+    _id: Math.round(Math.random() * 1000000),
+    text: "뭐지?",
+    createdAt: new Date(new Date().setDate(new Date().getDate() - 1)),
+    user: {
+      _id: 3,
+      name: "감나무",
+    },
+  },
+  {
+    _id: Math.round(Math.random() * 1000000),
+    emoji: "../../assets/lottieFiles/like-fountain.json",
+    createdAt: new Date(new Date().setDate(new Date().getDate() - 1)),
+    user: {
+      _id: 3,
+      name: "감나무",
+    },
+  },
+  {
+    _id: Math.round(Math.random() * 1000000),
+    text: "대화가 시작되었습니다",
+    createdAt: new Date(new Date().setDate(new Date().getDate() - 1)),
     system: true,
-  },
-  {
-    _id: 2,
-    text: "Hello developer",
-    createdAt: new Date(Date.UTC(2016, 5, 12, 17, 20, 0)),
-    user: {
-      _id: 2,
-      name: "React Native",
-      avatar: "https://placeimg.com/140/140/any",
-    },
-  },
-  {
-    _id: 3,
-    text: "Hi! I work from home today!",
-    createdAt: new Date(Date.UTC(2016, 5, 13, 17, 20, 0)),
-    user: {
-      _id: 1,
-      name: "React Native",
-      avatar: "https://placeimg.com/140/140/any",
-    },
-    image: "https://placeimg.com/960/540/any",
-  },
-  {
-    _id: 4,
-    text: "This is a quick reply. Do you love Gifted Chat? (radio) KEEP IT",
-    createdAt: new Date(Date.UTC(2016, 5, 14, 17, 20, 0)),
-    user: {
-      _id: 2,
-      name: "React Native",
-      avatar: "https://placeimg.com/140/140/any",
-    },
-    quickReplies: {
-      type: "radio", // or 'checkbox',
-      keepIt: true,
-      values: [
-        {
-          title: "😋 Yes",
-          value: "yes",
-        },
-        {
-          title: "📷 Yes, let me show you with a picture!",
-          value: "yes_picture",
-        },
-        {
-          title: "😞 Nope. What?",
-          value: "no",
-        },
-      ],
-    },
-  },
-  {
-    _id: 5,
-    text: "This is a quick reply. Do you love Gifted Chat? (checkbox)",
-    createdAt: new Date(Date.UTC(2016, 5, 15, 17, 20, 0)),
-    user: {
-      _id: 2,
-      name: "React Native",
-      avatar: "https://placeimg.com/140/140/any",
-    },
-    quickReplies: {
-      type: "checkbox", // or 'radio',
-      values: [
-        {
-          title: "Yes",
-          value: "yes",
-        },
-        {
-          title: "Yes, let me show you with a picture!",
-          value: "yes_picture",
-        },
-        {
-          title: "Nope. What?",
-          value: "no",
-        },
-      ],
-    },
-  },
-  {
-    _id: 6,
-    text: "Come on!",
-    createdAt: new Date(Date.UTC(2016, 5, 15, 18, 20, 0)),
-    user: {
-      _id: 2,
-      name: "React Native",
-      avatar: "https://placeimg.com/140/140/any",
-    },
-  },
-  {
-    _id: 7,
-    text: `Hello this is an example of the ParsedText, links like http://www.google.com or http://www.facebook.com are clickable and phone number 444-555-6666 can call too.
-          But you can also do more with this package, for example Bob will change style and David too. foo@gmail.com
-          And the magic number is 42!
-          #react #react-native`,
-    createdAt: new Date(Date.UTC(2016, 5, 13, 17, 20, 0)),
-    user: {
-      _id: 1,
-      name: "React Native",
-      avatar: "https://placeimg.com/140/140/any",
-    },
   },
 ];
 
