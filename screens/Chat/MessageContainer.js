@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import {
   Avatar,
   Bubble,
@@ -11,6 +11,8 @@ import {
 } from "react-native-gifted-chat";
 import { formatAMPM, getYearMonthDayKr } from "../../utils/DateFormat";
 import { isSameTime } from "./customUtils";
+import { getBottomSpace } from "react-native-iphone-x-helper";
+import { UnderHeader } from "../../utils/HeaderHeight";
 
 const { isSameUser, isSameDay } = utils;
 
@@ -189,10 +191,112 @@ export const renderMessageText = (props) => (
   />
 );
 
-export const renderCustomView = ({ user }) => (
-  <View style={{ minHeight: 0, alignItems: "center" }}></View>
-);
+export const renderMessageImage = (props) => {
+  console.log(props.currentMessage.image);
+  const images = [
+    {
+      // Simplest usage.
+      url: props.currentMessage.image,
+      // You can pass props to <Image />.
+      props: {
+        // headers: ...
+      },
+    },
+    {
+      props: {
+        // Or you can set source directory.
+        source: require("../../assets/imgs/android.png"),
+      },
+    },
+  ];
+  return (
+    <TouchableOpacity
+      onPress={() => {
+        console.log(props.currentMessage.image);
+      }}
+    >
+      <Image
+        source={{ uri: props.currentMessage.image }}
+        style={styles.image}
+      />
+    </TouchableOpacity>
+  );
+};
 
+export const renderSend = (props) => {
+  return (
+    <Send {...props}>
+      <View style={styles.sendingContainer}>
+        <Ionicons name={"ios-arrow-forward"} size={25}></Ionicons>
+      </View>
+    </Send>
+  );
+};
+
+export const renderCustomView = (props) => {
+  if (props.currentMessage.location) {
+    return (
+      <View style={props.containerStyle}>
+        <MapView
+          provider={PROVIDER_GOOGLE}
+          style={[styles.mapView]}
+          region={{
+            latitude: props.currentMessage.location.latitude,
+            longitude: props.currentMessage.location.longitude,
+            latitudeDelta: 0.1,
+            longitudeDelta: 0.1,
+          }}
+          scrollEnabled={false}
+          zoomEnabled={false}
+        >
+          <MapView.Marker
+            coordinate={{
+              latitude: props.currentMessage.location.latitude,
+              longitude: props.currentMessage.location.longitude,
+            }}
+          />
+        </MapView>
+      </View>
+    );
+  }
+  return null;
+};
+const styles = StyleSheet.create({
+  mapView: {
+    width: 150,
+    height: 100,
+    borderRadius: 13,
+    margin: 3,
+  },
+  sendingContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    width: 20,
+    height: "100%",
+    marginRight: 10,
+    borderWidth: 1,
+  },
+  image: {
+    width: 150,
+    height: 100,
+    borderRadius: 13,
+    margin: 3,
+    resizeMode: "cover",
+  },
+  listViewStyle: {},
+  loader: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  contentContainerStyle: {},
+  container: {
+    flex: 1,
+    paddingBottom: getBottomSpace(),
+    backgroundColor: "white",
+    paddingTop: UnderHeader,
+  },
+});
 const slackStyles = StyleSheet.create({
   standardFont: {
     fontSize: 14,

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useEffect } from "react";
 import { View, StyleSheet, Text, Image, TouchableOpacity } from "react-native";
 
 import { GiftedChat, Send } from "react-native-gifted-chat";
@@ -12,10 +12,15 @@ import {
   renderComposer,
   renderSystemMessage,
   renderScrollToBottom,
+  renderSend,
 } from "./InputToolBar";
 import renderDay from "./RenderDay";
 import { isIphoneX, getBottomSpace } from "react-native-iphone-x-helper";
-import { BottomSafeAreaHeight } from "../../utils/HeaderHeight";
+import {
+  BottomSafeAreaHeight,
+  HeaderHeight,
+  UnderHeader,
+} from "../../utils/HeaderHeight";
 import {
   renderMessage,
   renderCustomView,
@@ -23,130 +28,31 @@ import {
   renderAvatar,
   renderUsername,
   renderTime,
+  renderMessageImage,
 } from "./MessageContainer";
-const styles = StyleSheet.create({
-  mapView: {
-    width: 150,
-    height: 100,
-    borderRadius: 13,
-    margin: 3,
-  },
-  sendingContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-    width: 20,
-    height: "100%",
-    marginRight: 10,
-    borderWidth: 1,
-  },
-  image: {
-    width: 150,
-    height: 100,
-    borderRadius: 13,
-    margin: 3,
-    resizeMode: "cover",
-  },
-  listViewStyle: {},
-  loader: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  contentContainerStyle: {},
-  container: {
-    flex: 1,
-    paddingBottom: getBottomSpace(),
-    backgroundColor: "white",
-  },
-});
+import { useState } from "react";
+import Loader from "../../components/common/Loader";
 
-export default class App extends Component {
-  state = {
+const Chat = () => {
+  const [state, setState] = useState({
+    loading: true,
     messages: [],
-  };
-  changeImage = (test) => {
-    this.setState({ image: test }, () => {
-      console.log("Hello World");
-    });
-  };
+  });
 
-  renderMessageImage(props) {
-    console.log(props.currentMessage.image);
-    const images = [
-      {
-        // Simplest usage.
-        url: props.currentMessage.image,
-        // You can pass props to <Image />.
-        props: {
-          // headers: ...
-        },
-      },
-      {
-        props: {
-          // Or you can set source directory.
-          source: require("../../assets/imgs/android.png"),
-        },
-      },
-    ];
-    return (
-      <TouchableOpacity
-        onPress={() => {
-          console.log(props.currentMessage.image);
-        }}
-      >
-        <Image
-          source={{ uri: props.currentMessage.image }}
-          style={styles.image}
-        />
-      </TouchableOpacity>
-    );
-  }
-
-  renderSend = (props) => {
-    return (
-      <Send {...props}>
-        <View style={styles.sendingContainer}>
-          <Ionicons name={"ios-arrow-forward"} size={25}></Ionicons>
-        </View>
-      </Send>
+  const changeImage = (test) => {
+    setState(
+      (prev) => ({ ...prev, image: test }),
+      () => {
+        console.log("Hello World");
+      }
     );
   };
-  renderCustomView = (props) => {
-    if (props.currentMessage.location) {
-      return (
-        <View style={props.containerStyle}>
-          <MapView
-            provider={PROVIDER_GOOGLE}
-            style={[styles.mapView]}
-            region={{
-              latitude: props.currentMessage.location.latitude,
-              longitude: props.currentMessage.location.longitude,
-              latitudeDelta: 0.1,
-              longitudeDelta: 0.1,
-            }}
-            scrollEnabled={false}
-            zoomEnabled={false}
-          >
-            <MapView.Marker
-              coordinate={{
-                latitude: props.currentMessage.location.latitude,
-                longitude: props.currentMessage.location.longitude,
-              }}
-            />
-          </MapView>
-        </View>
-      );
-    }
-    return null;
-  };
 
-  componentDidUpdate() {
-    console.log(this.state);
-  }
-
-  UNSAFE_componentWillMount() {
-    if (!this.state.messages.length) {
-      this.setState({
+  useEffect(() => {
+    console.log(state);
+    if (!state.messages?.length) {
+      setState({
+        loading: false,
         messages: [
           {
             _id: Math.round(Math.random() * 1000000),
@@ -157,7 +63,8 @@ export default class App extends Component {
         ],
       });
     }
-    this.setState({
+    setState({
+      loading: false,
       messages: [
         {
           _id: Math.round(Math.random() * 1000000),
@@ -243,88 +150,126 @@ export default class App extends Component {
         },
       ],
     });
-  }
+  }, []);
 
-  onSend(messages = []) {
+  const onSend = (messages = []) => {
     console.log(messages);
-    this.setState((previousState) => ({
+    setState((previousState) => ({
       messages: GiftedChat.append(previousState.messages, messages),
     }));
-  }
-  get _listViewProps() {
-    return {
-      style: styles.listViewStyle,
-      contentContainerStyle: styles.contentContainerStyle,
-    };
-  }
+  };
+  const _listViewProps = {
+    style: styles.listViewStyle,
+    contentContainerStyle: styles.contentContainerStyle,
+  };
+
   //  https://stackoverflow.com/a/54550286/1458375
-  render() {
-    return (
-      <>
-        {this.state.messages.length === 0 && (
-          <View
-            style={[
-              StyleSheet.absoluteFill,
-              {
-                backgroundColor: "white",
-                justifyContent: "center",
-                alignItems: "center",
-                bottom: 50,
-              },
-            ]}
-          >
-            <Image
-              source={{ uri: "https://i.stack.imgur.com/qLdPt.png" }}
-              style={{
-                ...StyleSheet.absoluteFillObject,
-                resizeMode: "contain",
-              }}
-            />
-          </View>
-        )}
-        <View style={styles.container}>
-          <GiftedChat
-            messages={this.state.messages}
-            onSend={(messages) => this.onSend(messages)}
-            wrapInSafeArea={false}
-            bottomOffset={getBottomSpace()}
-            scrollToBottom
-            scrollToBottomComponent={renderScrollToBottom}
-            renderSystemMessage={renderSystemMessage}
-            renderMessage={renderMessage}
-            onPressAvatar={console.log}
-            renderCustomView={this.renderCustomView}
-            renderMessageImage={this.renderMessageImage}
-            renderBubble={renderBubble}
-            messagesContainerStyle={{ backgroundColor: "white" }}
-            user={{
-              _id: 1,
-              name: "Developers",
-              avatar: "https://placeimg.com/150/150/any",
-            }}
-            renderUsername={renderUsername}
-            renderComposer={renderComposer}
-            renderSend={this.renderSend}
-            renderInputToolbar={renderInputToolbar}
-            renderActions={renderActions(this.changeImage)}
-            listViewProps={this._listViewProps}
-            renderTime={renderTime}
-            renderDay={renderDay}
-            renderCustomView={renderCustomView}
-            renderAvatar={renderAvatar}
-            renderAvatarOnTop={true}
-            parsePatterns={(linkStyle) => {
-              return [
-                {
-                  pattern: /#(\w+)/,
-                  style: { ...linkStyle[0], color: "lightgreen" },
-                  onPress: (props) => alert(`press on ${props}`),
-                },
-              ];
+  return state.loading ? (
+    <Loader></Loader>
+  ) : (
+    <>
+      {state.messages?.length === 0 && (
+        <View
+          style={[
+            StyleSheet.absoluteFill,
+            {
+              backgroundColor: "white",
+              justifyContent: "center",
+              alignItems: "center",
+              bottom: 50,
+            },
+          ]}
+        >
+          <Image
+            source={{ uri: "https://i.stack.imgur.com/qLdPt.png" }}
+            style={{
+              ...StyleSheet.absoluteFillObject,
+              resizeMode: "contain",
             }}
           />
         </View>
-      </>
-    );
-  }
-}
+      )}
+      <View style={styles.container}>
+        <GiftedChat
+          messages={state.messages}
+          onSend={(messages) => onSend(messages)}
+          wrapInSafeArea={false}
+          bottomOffset={getBottomSpace()}
+          scrollToBottom
+          scrollToBottomComponent={renderScrollToBottom}
+          renderSystemMessage={renderSystemMessage}
+          renderMessage={renderMessage}
+          onPressAvatar={console.log}
+          renderCustomView={renderCustomView}
+          renderMessageImage={renderMessageImage}
+          renderBubble={renderBubble}
+          messagesContainerStyle={{ backgroundColor: "white" }}
+          user={{
+            _id: 1,
+            name: "Developers",
+            avatar: "https://placeimg.com/150/150/any",
+          }}
+          renderUsername={renderUsername}
+          renderComposer={renderComposer}
+          renderSend={renderSend}
+          renderInputToolbar={renderInputToolbar}
+          renderActions={renderActions(changeImage)}
+          listViewProps={_listViewProps}
+          renderTime={renderTime}
+          renderDay={renderDay}
+          renderCustomView={renderCustomView}
+          renderAvatar={renderAvatar}
+          renderAvatarOnTop={true}
+          parsePatterns={(linkStyle) => {
+            return [
+              {
+                pattern: /#(\w+)/,
+                style: { ...linkStyle[0], color: "lightgreen" },
+                onPress: (props) => alert(`press on ${props}`),
+              },
+            ];
+          }}
+        />
+      </View>
+    </>
+  );
+};
+
+const styles = StyleSheet.create({
+  mapView: {
+    width: 150,
+    height: 100,
+    borderRadius: 13,
+    margin: 3,
+  },
+  sendingContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    width: 20,
+    height: "100%",
+    marginRight: 10,
+    borderWidth: 1,
+  },
+  image: {
+    width: 150,
+    height: 100,
+    borderRadius: 13,
+    margin: 3,
+    resizeMode: "cover",
+  },
+  listViewStyle: {},
+  loader: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  contentContainerStyle: {},
+  container: {
+    flex: 1,
+    paddingBottom: getBottomSpace(),
+    backgroundColor: "white",
+    paddingTop: UnderHeader,
+  },
+});
+
+export default Chat;
