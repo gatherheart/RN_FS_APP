@@ -19,6 +19,7 @@ import {
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import { formatAMPM, getYearMonthDayKr } from "../../utils/DateFormat";
 import { GREEN_COLOR } from "../../constants/Color";
+import { _pickImage, _pickDocument } from "../../utils/FileSystem";
 
 export const renderInputToolbar = (props) => (
   <InputToolbar
@@ -32,27 +33,6 @@ export const renderInputToolbar = (props) => (
     primaryStyle={{}}
   />
 );
-
-export const renderKeyboard = (props) => {
-  const {
-    commentForm: { text },
-  } = props;
-  return (
-    <TextInput
-      autoGrow={true}
-      style={{ flex: 1 }}
-      onChangeText={this.handleOnChangeText}
-      value={text}
-      multiline={true}
-      placeholder="Write a message..."
-      autoCorrect={false}
-      underlineColorAndroid="transparent"
-      blurOnSubmit={false}
-      onFocus={() => this.setState({ focusOnInput: true })}
-      onBlur={() => this.setState({ focusOnInput: false })}
-    />
-  );
-};
 
 export const renderSystemMessage = (props) => (
   <SystemMessage
@@ -78,11 +58,18 @@ export const renderActions = (change) => (props) => (
     }}
     icon={() => <Ionicons name={"ios-add"} size={20}></Ionicons>}
     options={{
-      "Choose From Library": () => {
-        console.log("Choose From Library");
-        change("image");
+      "이미지 선택": async () => {
+        const _picked = await _pickImage();
+        console.log(_picked);
+        const _handleOnPress = () => {
+          const { onSend } = props;
+          if (_picked && onSend) {
+            onSend({ image: _picked.uri }, true);
+          }
+        };
+        _handleOnPress();
       },
-      Cancel: () => {
+      닫기: () => {
         console.log("Cancel");
       },
     }}

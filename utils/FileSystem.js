@@ -70,6 +70,7 @@ export const _pickDocument = async () => {
 
 // Using ImagePicker instead of loading all images
 export const _pickImage = async () => {
+  console.log("_pickImage");
   const { status: cameraRollPerm } = await Permissions.askAsync(
     Permissions.CAMERA_ROLL
   );
@@ -81,7 +82,6 @@ export const _pickImage = async () => {
         mediaTypes: ImagePicker.MediaTypeOptions.All,
         quality: 1,
         allowsEditing: false,
-        aspect: [4, 3],
         allowsMultipleSelection: true,
       });
     } catch (e) {

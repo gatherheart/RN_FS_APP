@@ -44,6 +44,7 @@ import { useState } from "react";
 import Loader from "../../components/common/Loader";
 import messagesData from "./Messages";
 import { useKeyboard } from "react-native-keyboard-height";
+import { _pickImage } from "../../utils/FileSystem";
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
 const Chat = () => {
   const [state, setState] = useState({
@@ -60,20 +61,20 @@ const Chat = () => {
     setemojiEnabled(false);
     setViewHeight(height);
   };
-
   const didHide = () => {
     console.log("Keyboard hide");
   };
   const [keyboardHeight] = useKeyboard(didShow, didHide);
-  const [viewHeight, setViewHeight] = useState(
-    0
-  ); /* for example with didShow and didHide */
+  const [viewHeight, setViewHeight] = useState(0);
+
+  const getDate = async () => {};
 
   const changeImage = (test) => {
     setState((prev) => ({ ...prev, image: test }));
   };
 
   useEffect(() => {
+    getDate();
     console.log(state);
     if (!state.messages?.length) {
       setState({
