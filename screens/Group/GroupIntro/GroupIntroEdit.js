@@ -22,7 +22,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import PropTypes from "prop-types";
 import { HeaderHeight, UnderHeader } from "../../../utils/HeaderHeight";
 import styled, { ThemeContext } from "styled-components/native";
-import CustomHeader from "../../../components/common/AnimatedCustomHeader";
+import CustomHeader from "../../../components/common/CustomHeader";
 import { trimText, formatDate } from "../../../utils/String";
 import {
   simplifiedFormat,
@@ -211,8 +211,10 @@ export default ({}) => {
           <CustomHeader
             headerPosition={headerPosition}
             headerOpacity={headerOpacity}
-            style={{ zIndex: 4 }}
             rightButtonEnabled={false}
+            iconColor={themeContext.backgroundColor}
+            styles={{ ...styles.customHeader, zIndex: 4 }}
+            statusStyle={styles.customStatus}
           ></CustomHeader>
           <KeyboardAvoidingView
             style={{ flex: 1 }}
@@ -452,6 +454,8 @@ export default ({}) => {
 };
 
 const styles = StyleSheet.create({
+  customHeader: { backgroundColor: "rgba(0, 0, 0, 0)" },
+  customStatus: { backgroundColor: "rgba(0, 0, 0, 0)" },
   profile: {
     borderColor: "black",
     borderWidth: 1,

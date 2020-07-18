@@ -13,6 +13,7 @@ import {
 import { GiftedChat, Send } from "react-native-gifted-chat";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import KeyboardSpacer from "react-native-keyboard-spacer";
+import EmojiBoard from "react-native-emoji-board";
 
 import PropTypes from "prop-types";
 import { Ionicons } from "@expo/vector-icons";
@@ -54,7 +55,24 @@ const Chat = () => {
   });
   const animation = useRef(null);
   const [emojiEnabled, setemojiEnabled] = useState(false);
-  const onClick = (emoji) => {
+
+  const onEmojiClick = (emoji) => {
+    const _handleOnPress = (emoji) => {
+      if (emoji && onSend) {
+        onSend(
+          {
+            text: emoji.code,
+            _id: Math.round(Math.random() * 1000000),
+            user: {
+              _id: 1,
+              name: "Developer",
+            },
+          },
+          true
+        );
+      }
+    };
+    _handleOnPress(emoji);
     console.log(emoji);
   };
   const [viewHeight, setViewHeight] = useState(244);
@@ -166,7 +184,7 @@ const Chat = () => {
           renderAvatarOnTop={true}
           isKeyboardInternallyHandled={false}
           messagesContainerStyle={{
-            paddingBottom: 0,
+            paddingBottom: emojiEnabled ? viewHeight : 0,
           }}
           alwaysShowSend
           keyboardShouldPersistTaps={"never"}
@@ -180,6 +198,18 @@ const Chat = () => {
             ];
           }}
         />
+        <EmojiBoard
+          showBoard={emojiEnabled}
+          onClick={(emoji) => {
+            onEmojiClick(emoji);
+
+            setemojiEnabled(false);
+          }}
+          containerStyle={{ borderWidth: 0, paddingTop: 0 }}
+          onRemove={() => {
+            setemojiEnabled(false);
+          }}
+        ></EmojiBoard>
       </KeyboardAvoidingView>
     </View>
   );

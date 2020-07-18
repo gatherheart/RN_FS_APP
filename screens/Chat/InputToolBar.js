@@ -93,7 +93,7 @@ export const renderComposer = (onFocusHandler) => (props) => (
 
 export const renderSend = (keyboardHeight, emojiButtonFunc) => (props) => {
   const _enabled = !props.text && !props.emoji && !keyboardHeight;
-  return false ? (
+  return _enabled ? (
     <TouchableOpacity style={styles.emojiButton} onPress={emojiButtonFunc}>
       <FontAwesome name="lemon-o" size={24} color={GREEN_COLOR} />
     </TouchableOpacity>
