@@ -62,7 +62,6 @@ const renderUsername = (props) => {
 export const renderTime = (props) => {
   const { currentMessage, previousMessage } = props;
   const _nextPageExist = !!Object.keys(props.nextMessage).length;
-  console.log(props.currentMessage, _nextPageExist);
   const isSameThread =
     isSameUser(currentMessage, previousMessage) &&
     isSameTime(currentMessage, previousMessage) &&
@@ -77,7 +76,6 @@ export const renderTime = (props) => {
         right: props.currentMessage.user._id === props.user._id ? 50 : -50,
       }}
     >
-      {console.log(props.currentMessage.user._id === props.user._id)}
       <Text
         style={{
           fontSize: 10,
@@ -103,7 +101,6 @@ export const renderDay = (props) => (
       width: "100%",
     }}
   >
-    {console.log(props.currentMessage.user._id === props.user._id)}
     <Text
       style={{
         fontSize: 10,
@@ -203,7 +200,6 @@ export const renderMessageText = (props) => (
 );
 
 export const renderMessageImage = (props) => {
-  console.log(props.currentMessage.image);
   const images = [
     {
       // Simplest usage.
@@ -248,7 +244,6 @@ export const renderSend = (props) => {
 export const renderCustomView = (props) => {
   let animation = null;
   const rePlay = () => {
-    console.log("clicked");
     animation.play();
   };
   if (props.currentMessage.location) {
@@ -276,8 +271,6 @@ export const renderCustomView = (props) => {
       </View>
     );
   } else if (props.currentMessage.emoji) {
-    console.log(props.currentMessage.emoji);
-
     return (
       <TouchableWithoutFeedback onPress={() => rePlay()}>
         <View style={{ height: 200, width: 200 }}>

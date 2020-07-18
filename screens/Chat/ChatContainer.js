@@ -45,6 +45,7 @@ import Loader from "../../components/common/Loader";
 import messagesData from "./Messages";
 import { useKeyboard } from "react-native-keyboard-height";
 import { _pickImage } from "../../utils/FileSystem";
+import CustomHeader from "../../components/common/CustomHeader";
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
 const Chat = () => {
   const [state, setState] = useState({
@@ -56,26 +57,35 @@ const Chat = () => {
   const onClick = (emoji) => {
     console.log(emoji);
   };
-  const didShow = (height) => {
-    console.log("Keyboard show. Height is " + height);
-    setemojiEnabled(false);
-    setViewHeight(height);
-  };
-  const didHide = () => {
-    console.log("Keyboard hide");
-  };
-  const [keyboardHeight] = useKeyboard(didShow, didHide);
-  const [viewHeight, setViewHeight] = useState(0);
+  const [viewHeight, setViewHeight] = useState(244);
 
+  const didShow = (height) => {
+    console.log("Keyboard show. Height is " + height, emojiEnabled, viewHeight);
+    setViewHeight(height !== 0 ? height : viewHeight);
+  };
+  const didHide = () => {};
+  const [keyboardHeight] = useKeyboard(didShow, didHide);
+  const _closeEmojiPanel = () => {
+    setemojiEnabled(false);
+  };
   const getDate = async () => {};
 
   const changeImage = (test) => {
     setState((prev) => ({ ...prev, image: test }));
   };
+  useEffect(() => {
+    Keyboard.addListener("keyboardWillShow", () => {
+      setemojiEnabled(false);
+    });
+
+    return () =>
+      Keyboard.removeListener("keyboardWillShow", () => {
+        setemojiEnabled(false);
+      });
+  }, []);
 
   useEffect(() => {
     getDate();
-    console.log(state);
     if (!state.messages?.length) {
       setState({
         loading: false,
@@ -101,10 +111,9 @@ const Chat = () => {
     }));
   };
   const emojiButtonFunc = () => {
-    console.log("Hello World");
+    console.log("Hello emojiButtonFunc");
     setemojiEnabled((prev) => !prev);
-    console.log(keyboardHeight);
-    Keyboard.dismiss();
+    if (keyboardHeight !== 0) Keyboard.dismiss();
   };
 
   const _listViewProps = {
@@ -112,45 +121,24 @@ const Chat = () => {
     contentContainerStyle: styles.contentContainerStyle,
     keyboardDismissMode: "on-drag",
   };
-  useEffect(() => {
-    console.log(viewHeight);
-  }, [viewHeight]);
 
   //  https://stackoverflow.com/a/54550286/1458375
   return state.loading ? (
     <Loader></Loader>
   ) : (
-    <>
-      {state.messages?.length === 0 && (
-        <View
-          style={[
-            StyleSheet.absoluteFill,
-            {
-              backgroundColor: "white",
-              justifyContent: "center",
-              alignItems: "center",
-              bottom: 50,
-            },
-          ]}
-        >
-          <Image
-            source={{ uri: "https://i.stack.imgur.com/qLdPt.png" }}
-            style={{
-              ...StyleSheet.absoluteFillObject,
-              resizeMode: "contain",
-            }}
-          />
-        </View>
-      )}
-      <View style={styles.container}>
+    <View style={styles.main}>
+      <CustomHeader></CustomHeader>
+
+      <KeyboardAvoidingView
+        style={{ ...styles.container }}
+        behavior={Platform.OS == "ios" ? "padding" : "height"}
+        enabled={true}
+      >
         <GiftedChat
           messages={state.messages}
           onSend={(messages) => onSend(messages)}
           wrapInSafeArea={false}
-          bottomOffset={
-            getBottomSpace() +
-            (emojiEnabled ? viewHeight - getBottomSpace() : 0)
-          }
+          bottomOffset={getBottomSpace()}
           scrollToBottom
           scrollToBottomComponent={renderScrollToBottom}
           renderSystemMessage={renderSystemMessage}
@@ -166,7 +154,7 @@ const Chat = () => {
             avatar: "https://placeimg.com/150/150/any",
           }}
           renderUsername={renderUsername}
-          renderComposer={renderComposer}
+          renderComposer={renderComposer(_closeEmojiPanel)}
           renderSend={renderSend(keyboardHeight, emojiButtonFunc)}
           renderInputToolbar={renderInputToolbar}
           renderActions={renderActions(changeImage)}
@@ -176,14 +164,9 @@ const Chat = () => {
           renderCustomView={renderCustomView}
           renderAvatar={renderAvatar}
           renderAvatarOnTop={true}
-          renderAccessory={
-            emojiEnabled ? () => <View style={{ borderWidth: 1 }}></View> : null
-          }
-          accessoryStyle={{
-            height: viewHeight - getBottomSpace(),
-          }}
+          isKeyboardInternallyHandled={false}
           messagesContainerStyle={{
-            paddingBottom: emojiEnabled ? viewHeight - getBottomSpace() : 0,
+            paddingBottom: 0,
           }}
           alwaysShowSend
           keyboardShouldPersistTaps={"never"}
@@ -197,8 +180,8 @@ const Chat = () => {
             ];
           }}
         />
-      </View>
-    </>
+      </KeyboardAvoidingView>
+    </View>
   );
 };
 
@@ -233,10 +216,11 @@ const styles = StyleSheet.create({
   contentContainerStyle: {},
   container: {
     flex: 1,
-    paddingBottom: getBottomSpace(),
+    marginBottom: getBottomSpace(),
     backgroundColor: "white",
-    paddingTop: UnderHeader,
+    paddingTop: HeaderHeight,
   },
+  main: { flex: 1, backgroundColor: "white" },
 });
 
 export default Chat;

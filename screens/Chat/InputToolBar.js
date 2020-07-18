@@ -69,7 +69,7 @@ export const renderActions = (change) => (props) => (
         };
         _handleOnPress();
       },
-      닫기: () => {
+      Cancel: () => {
         console.log("Cancel");
       },
     }}
@@ -77,7 +77,7 @@ export const renderActions = (change) => (props) => (
   />
 );
 
-export const renderComposer = (props) => (
+export const renderComposer = (onFocusHandler) => (props) => (
   <Composer
     {...props}
     textInputProps={{
@@ -85,6 +85,7 @@ export const renderComposer = (props) => (
       autoCapitalize: "none",
       autoGrow: true,
       autoFocus: false,
+      onFocus: onFocusHandler,
     }}
     placeholder={""}
   />
@@ -92,7 +93,7 @@ export const renderComposer = (props) => (
 
 export const renderSend = (keyboardHeight, emojiButtonFunc) => (props) => {
   const _enabled = !props.text && !props.emoji && !keyboardHeight;
-  return _enabled ? (
+  return false ? (
     <TouchableOpacity style={styles.emojiButton} onPress={emojiButtonFunc}>
       <FontAwesome name="lemon-o" size={24} color={GREEN_COLOR} />
     </TouchableOpacity>
