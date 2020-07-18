@@ -84,6 +84,7 @@ export const renderComposer = (props) => (
       autoCorrect: false,
       autoCapitalize: "none",
       autoGrow: true,
+      autoFocus: false,
     }}
     placeholder={""}
   />

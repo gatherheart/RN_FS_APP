@@ -106,9 +106,11 @@ const Chat = () => {
     console.log(keyboardHeight);
     Keyboard.dismiss();
   };
+
   const _listViewProps = {
     style: styles.listViewStyle,
     contentContainerStyle: styles.contentContainerStyle,
+    keyboardDismissMode: "on-drag",
   };
   useEffect(() => {
     console.log(viewHeight);
@@ -184,6 +186,7 @@ const Chat = () => {
             paddingBottom: emojiEnabled ? viewHeight - getBottomSpace() : 0,
           }}
           alwaysShowSend
+          keyboardShouldPersistTaps={"never"}
           parsePatterns={(linkStyle) => {
             return [
               {
