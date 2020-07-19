@@ -47,35 +47,44 @@ export const renderScrollToBottom = (props) => (
   <Ionicons name={"ios-arrow-down"} size={20}></Ionicons>
 );
 
-export const renderActions = (change) => (props) => (
-  <Actions
-    {...props}
-    containerStyle={{
-      height: 44,
-      alignItems: "center",
-      justifyContent: "center",
-      marginBottom: 0,
-    }}
-    icon={() => <Ionicons name={"ios-add"} size={20}></Ionicons>}
-    options={{
-      "이미지 선택": async () => {
-        const _picked = await _pickImage();
-        console.log(_picked);
-        const _handleOnPress = () => {
-          const { onSend } = props;
-          if (_picked && onSend) {
-            onSend({ image: _picked.uri }, true);
-          }
-        };
-        _handleOnPress();
-      },
-      Cancel: () => {
-        console.log("Cancel");
-      },
-    }}
-    optionTintColor="#222B45"
-  />
-);
+export const renderActions = (change) => (props) => {
+  return (
+    <Actions
+      {...props}
+      containerStyle={{
+        height: 44,
+        alignItems: "center",
+        justifyContent: "center",
+        marginBottom: 0,
+      }}
+      icon={() => <Ionicons name={"ios-add"} size={20}></Ionicons>}
+      options={{
+        "이미지 선택": async () => {
+          const _picked = await _pickImage();
+          console.log(_picked);
+          const _handleOnPress = () => {
+            const { onSend, user } = props;
+            if (_picked && onSend) {
+              onSend(
+                {
+                  text: "",
+                  image: _picked.uri,
+                  user: user,
+                },
+                true
+              );
+            }
+          };
+          _handleOnPress();
+        },
+        Cancel: () => {
+          console.log("Cancel");
+        },
+      }}
+      optionTintColor="#222B45"
+    />
+  );
+};
 
 export const renderComposer = (onFocusHandler) => (props) => (
   <Composer

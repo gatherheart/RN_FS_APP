@@ -8,7 +8,18 @@ const messages = [
       name: "Developer",
     },
   },
-
+  {
+    _id: Math.round(Math.random() * 1000000),
+    text: "응 안뇽",
+    createdAt: new Date(new Date().setDate(new Date().getDate() - 1)),
+    user: {
+      _id: 2,
+      name: "김현우",
+    },
+    image: undefined,
+    sent: true,
+    received: true,
+  },
   {
     _id: Math.round(Math.random() * 1000000),
     text: "",
