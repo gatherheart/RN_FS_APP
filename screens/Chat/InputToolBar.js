@@ -18,7 +18,11 @@ import {
 } from "react-native-gifted-chat";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import { formatAMPM, getYearMonthDayKr } from "../../utils/DateFormat";
-import { GREEN_COLOR } from "../../constants/Color";
+import {
+  GREEN_COLOR,
+  LIGHT_GREY_COLOR,
+  LIGHT_GREEN_COLOR,
+} from "../../constants/Color";
 import { _pickImage, _pickDocument } from "../../utils/FileSystem";
 
 export const renderInputToolbar = (props) => (
@@ -26,11 +30,12 @@ export const renderInputToolbar = (props) => (
     {...props}
     containerStyle={{
       backgroundColor: "#fff",
-      borderWidth: 1,
-      alignItems: "center",
-      justifyContent: "center",
+      alignItems: "flex-start",
+      justifyContent: "flex-start",
     }}
-    primaryStyle={{}}
+    primaryStyle={{
+      borderTopWidth: 0.2,
+    }}
   />
 );
 
@@ -38,8 +43,8 @@ export const renderSystemMessage = (props) => (
   <SystemMessage
     {...props}
     containerStyle={{ backgroundColor: "white" }}
-    wrapperStyle={{ borderWidth: 10, borderColor: "white" }}
-    textStyle={{ color: "blue", fontWeight: "900" }}
+    wrapperStyle={{ borderWidth: 0, borderColor: "white" }}
+    textStyle={{ color: GREEN_COLOR, fontWeight: "900" }}
   />
 );
 
@@ -53,15 +58,19 @@ export const renderActions = (change) => (props) => {
       {...props}
       containerStyle={{
         height: 44,
+        width: 44,
+        left: -10,
         alignItems: "center",
         justifyContent: "center",
         marginBottom: 0,
+        borderRightWidth: 0.2,
       }}
-      icon={() => <Ionicons name={"ios-add"} size={20}></Ionicons>}
+      icon={() => (
+        <Ionicons name={"ios-add"} size={25} color={GREEN_COLOR}></Ionicons>
+      )}
       options={{
         "이미지 선택": async () => {
           const _picked = await _pickImage();
-          console.log(_picked);
           const _handleOnPress = () => {
             const { onSend, user } = props;
             if (_picked && onSend) {

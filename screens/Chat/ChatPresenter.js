@@ -73,6 +73,7 @@ const Chat = ({ loading, messages, participants, setState }) => {
               _id: 1,
               name: "Developer",
             },
+            createdAt: new Date(),
           },
           true
         );
@@ -115,7 +116,6 @@ const Chat = ({ loading, messages, participants, setState }) => {
     setemojiEnabled((prev) => !prev);
     if (keyboardHeight !== 0) Keyboard.dismiss();
   };
-
   const _listViewProps = {
     style: styles.listViewStyle,
     contentContainerStyle: styles.contentContainerStyle,
@@ -193,6 +193,7 @@ const Chat = ({ loading, messages, participants, setState }) => {
             isKeyboardInternallyHandled={false}
             messagesContainerStyle={{
               paddingBottom: emojiEnabled ? viewHeight - getBottomSpace() : 0,
+              paddingTop: UnderHeader,
             }}
             alwaysShowSend
             keyboardShouldPersistTaps={"never"}
@@ -255,9 +256,8 @@ const styles = StyleSheet.create({
   contentContainerStyle: {},
   container: {
     flex: 1,
-    marginBottom: getBottomSpace(),
+    paddingBottom: getBottomSpace(),
     backgroundColor: "white",
-    paddingTop: HeaderHeight,
   },
   main: { flex: 1, backgroundColor: "white" },
 });
