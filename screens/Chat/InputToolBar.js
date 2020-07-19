@@ -29,13 +29,9 @@ export const renderInputToolbar = (props) => (
   <InputToolbar
     {...props}
     containerStyle={{
-      backgroundColor: "#fff",
-      alignItems: "flex-start",
-      justifyContent: "flex-start",
+      backgroundColor: "#ececec",
     }}
-    primaryStyle={{
-      borderTopWidth: 0.2,
-    }}
+    primaryStyle={{}}
   />
 );
 
@@ -98,12 +94,16 @@ export const renderActions = (change) => (props) => {
 export const renderComposer = (onFocusHandler) => (props) => (
   <Composer
     {...props}
+    multiline
     textInputProps={{
       autoCorrect: false,
       autoCapitalize: "none",
       autoGrow: true,
       autoFocus: false,
       onFocus: onFocusHandler,
+      backgroundColor: "#EDF1F7",
+      borderWidth: 1,
+      borderColor: "#E4E9F2",
     }}
     placeholder={""}
   />

@@ -1,7 +1,11 @@
 import React from "react";
 import { Text, Dimensions, ScrollView, StyleSheet, View } from "react-native";
 import { BG_COLOR, LIGHT_GREY_COLOR } from "../../constants/Color";
-import { UnderHeader, BottomSafeAreaHeight } from "../../utils/HeaderHeight";
+import {
+  UnderHeader,
+  BottomSafeAreaHeight,
+  HeaderHeight,
+} from "../../utils/HeaderHeight";
 import ChatUserCard from "../Chat/ChatUserCard";
 import styled from "styled-components/native";
 
@@ -54,15 +58,14 @@ export default drawerContent;
 const styles = StyleSheet.create({
   animatedBoxContainer: {
     backgroundColor: BG_COLOR,
-    paddingTop: UnderHeader,
+    borderWidth: 1,
   },
   animatedBox: {
     justifyContent: "flex-start",
     alignItems: "flex-start",
-    paddingBottom: BottomSafeAreaHeight,
+    paddingTop: UnderHeader,
   },
   drawerBody: {
-    flex: 1,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -76,10 +79,7 @@ const styles = StyleSheet.create({
     borderBottomColor: "black",
   },
   memberContainer: {
-    marginTop: 15,
     backgroundColor: "#EAFECA",
   },
-  empty: {
-    height: 100,
-  },
+  empty: {},
 });

@@ -2,11 +2,7 @@
   "expo": {
     "name": "forest-app",
     "slug": "forest-app",
-    "platforms": [
-      "ios",
-      "android",
-      "web"
-    ],
+    "platforms": ["ios", "android", "web"],
     "packagerOpts": {
       "config": "metro.config.js",
       "sourceExts": [
@@ -34,16 +30,16 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
-        "LSApplicationQueriesSchemes": [
-          "supertoss"
-        ]
-      }
+        "LSApplicationQueriesSchemes": ["supertoss"]
+      },
+      "bundleIdentifier": "com.yourcompany.yourappname"
+    },
+    "android": {
+      "package": "com.yourcompany.yourappname"
     },
     "description": ""
   }

@@ -252,7 +252,10 @@ export default () => {
                   <TouchableOpacity
                     style={{ width: "100%", alignItems: "flex-end" }}
                     onPress={() =>
-                      navigation.navigate("BillMemberList", { id: data.billId })
+                      navigation.navigate("BillMemberList", {
+                        id: data.billId,
+                        from: "GroupReadBill",
+                      })
                     }
                   >
                     <Text>전체 보기</Text>

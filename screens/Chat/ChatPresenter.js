@@ -32,6 +32,7 @@ import {
   BottomSafeAreaHeight,
   HeaderHeight,
   UnderHeader,
+  StatusHeight,
 } from "../../utils/HeaderHeight";
 import {
   renderMessage,
@@ -147,6 +148,18 @@ const Chat = ({ loading, messages, participants, setState }) => {
           </TouchableOpacity>
         }
       ></CustomHeader>
+      <EmojiBoard
+        showBoard={emojiEnabled}
+        onClick={(emoji) => {
+          onEmojiClick(emoji);
+
+          setemojiEnabled(false);
+        }}
+        containerStyle={{ borderWidth: 0, paddingTop: 0 }}
+        onRemove={() => {
+          setemojiEnabled(false);
+        }}
+      ></EmojiBoard>
       <MenuDrawer
         open={drawerOpened}
         drawerContent={drawerContent({ participants })}
@@ -164,7 +177,6 @@ const Chat = ({ loading, messages, participants, setState }) => {
             messages={messages}
             onSend={(messages) => onSend(messages)}
             wrapInSafeArea={false}
-            bottomOffset={getBottomSpace()}
             scrollToBottom
             scrollToBottomComponent={renderScrollToBottom}
             renderSystemMessage={renderSystemMessage}
@@ -193,7 +205,7 @@ const Chat = ({ loading, messages, participants, setState }) => {
             isKeyboardInternallyHandled={false}
             messagesContainerStyle={{
               paddingBottom: emojiEnabled ? viewHeight - getBottomSpace() : 0,
-              paddingTop: UnderHeader,
+              paddingTop: HeaderHeight,
             }}
             alwaysShowSend
             keyboardShouldPersistTaps={"never"}
@@ -201,24 +213,12 @@ const Chat = ({ loading, messages, participants, setState }) => {
               return [
                 {
                   pattern: /#(\w+)/,
-                  style: { ...linkStyle[0], color: "lightgreen" },
+                  style: { ...linkStyle[0], color: "white" },
                   onPress: (props) => alert(`press on ${props}`),
                 },
               ];
             }}
           />
-          <EmojiBoard
-            showBoard={emojiEnabled}
-            onClick={(emoji) => {
-              onEmojiClick(emoji);
-
-              setemojiEnabled(false);
-            }}
-            containerStyle={{ borderWidth: 0, paddingTop: 0 }}
-            onRemove={() => {
-              setemojiEnabled(false);
-            }}
-          ></EmojiBoard>
         </KeyboardAvoidingView>
       </MenuDrawer>
     </View>
@@ -256,8 +256,9 @@ const styles = StyleSheet.create({
   contentContainerStyle: {},
   container: {
     flex: 1,
-    paddingBottom: getBottomSpace(),
+    marginBottom: getBottomSpace(),
     backgroundColor: "white",
+    borderWidth: 1,
   },
   main: { flex: 1, backgroundColor: "white" },
 });
