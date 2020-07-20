@@ -18,7 +18,7 @@ import {
   utils,
 } from "react-native-gifted-chat";
 import { formatAMPM, getYearMonthDayKr } from "../../utils/DateFormat";
-import { isSameTime } from "./customUtils";
+import { isSameTime } from "../../utils/ChatUtils";
 import { getBottomSpace } from "react-native-iphone-x-helper";
 import { UnderHeader } from "../../utils/HeaderHeight";
 import LottiView from "lottie-react-native";

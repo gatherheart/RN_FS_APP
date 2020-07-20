@@ -29,7 +29,7 @@ import {
   renderSend,
   renderCustomInputToolBar,
 } from "./InputToolBar";
-import renderDay from "./RenderDay";
+import renderDay from "../../components/Chat/RenderDay";
 import { isIphoneX, getBottomSpace } from "react-native-iphone-x-helper";
 import {
   BottomSafeAreaHeight,
@@ -61,6 +61,7 @@ import {
 import drawerContent from "../../components/Chat/DrawerComponent";
 import Drawer from "../../components/Group/GroupDrawer";
 import SideMenu from "react-native-side-menu";
+import { customEmojis, defaultProps } from "./CustomEmojis";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
 
@@ -74,7 +75,7 @@ const Chat = ({ loading, messages, participants, setState }) => {
       if (emoji && onSend) {
         onSend(
           {
-            text: emoji.code,
+            text: emoji.code || emoji.img,
             _id: Math.round(Math.random() * 1000000),
             user: {
               _id: 1,
@@ -208,7 +209,7 @@ const Chat = ({ loading, messages, participants, setState }) => {
           renderAvatarOnTop={true}
           isKeyboardInternallyHandled={false}
           messagesContainerStyle={{
-            paddingBottom: emojiEnabled ? viewHeight - 2 * getBottomSpace() : 0,
+            paddingBottom: emojiEnabled ? viewHeight : 0,
             paddingTop: HeaderHeight,
           }}
           alwaysShowSend
@@ -225,9 +226,10 @@ const Chat = ({ loading, messages, participants, setState }) => {
         />
         <EmojiBoard
           showBoard={emojiEnabled}
+          customEmoji={customEmojis}
+          defaultProps={defaultProps}
           onClick={(emoji) => {
             onEmojiClick(emoji);
-
             setemojiEnabled(false);
           }}
           containerStyle={{ borderWidth: 0, paddingTop: 0 }}
