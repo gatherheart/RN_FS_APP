@@ -25,6 +25,7 @@ import {
   renderSystemMessage,
   renderScrollToBottom,
   renderSend,
+  renderCustomInputToolBar,
 } from "./InputToolBar";
 import renderDay from "./RenderDay";
 import { isIphoneX, getBottomSpace } from "react-native-iphone-x-helper";
@@ -56,66 +57,14 @@ import {
   BG_COLOR,
 } from "../../constants/Color";
 import drawerContent from "../../components/Chat/DrawerComponent";
-import SideMenu from "react-native-side-menu";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
-
-const Menu = function ({ onItemSelected }) {
-  return (
-    <ScrollView scrollsToTop={false} style={styles2.menu}>
-      <View style={styles2.avatarContainer}>
-        <Text style={styles2.name}>Your name</Text>
-      </View>
-
-      <Text onPress={() => onItemSelected("About")} style={styles.item}>
-        About
-      </Text>
-
-      <Text onPress={() => onItemSelected("Contacts")} style={styles.item}>
-        Contacts
-      </Text>
-    </ScrollView>
-  );
-};
-const styles2 = StyleSheet.create({
-  menu: {
-    flex: 1,
-    width: window.width,
-    height: window.height,
-    backgroundColor: "gray",
-    padding: 20,
-  },
-  avatarContainer: {
-    marginBottom: 20,
-    marginTop: 20,
-  },
-  avatar: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    flex: 1,
-  },
-  name: {
-    position: "absolute",
-    left: 70,
-    top: 20,
-  },
-  item: {
-    fontSize: 14,
-    fontWeight: "300",
-    paddingTop: 5,
-  },
-});
 
 const Chat = ({ loading, messages, participants, setState }) => {
   const animation = useRef(null);
   const [emojiEnabled, setemojiEnabled] = useState(false);
   const [drawerOpened, setDrawerOpend] = useState(false);
-  const onItemSelected = (item) => {
-    setState(false);
-  };
-  const menu = <Menu onItemSelected={onItemSelected} />;
-
+  const [text, setText] = useState("");
   const onEmojiClick = (emoji) => {
     const _handleOnPress = (emoji) => {
       if (emoji && onSend) {
@@ -183,16 +132,7 @@ const Chat = ({ loading, messages, participants, setState }) => {
   return loading ? (
     <Loader></Loader>
   ) : (
-    <SideMenu
-      menu={menu}
-      isOpen={drawerOpened}
-      onChange={(isOpen) => {
-        console.log("onChange", isOpen);
-        setDrawerOpend(isOpen);
-      }}
-      useNativeDriver={true}
-      menuPosition={"right"}
-    >
+    <View style={styles.main}>
       <CustomHeader
         rightButtonEnabled={true}
         rightButton={
@@ -210,18 +150,6 @@ const Chat = ({ loading, messages, participants, setState }) => {
           </TouchableOpacity>
         }
       ></CustomHeader>
-      <EmojiBoard
-        showBoard={emojiEnabled}
-        onClick={(emoji) => {
-          onEmojiClick(emoji);
-
-          setemojiEnabled(false);
-        }}
-        containerStyle={{ borderWidth: 0, paddingTop: 0 }}
-        onRemove={() => {
-          setemojiEnabled(false);
-        }}
-      ></EmojiBoard>
 
       <KeyboardAvoidingView
         style={{ ...styles.container }}
@@ -231,6 +159,7 @@ const Chat = ({ loading, messages, participants, setState }) => {
           messages={messages}
           onSend={(messages) => onSend(messages)}
           wrapInSafeArea={false}
+          bottomOffset={getBottomSpace()}
           scrollToBottom
           scrollToBottomComponent={renderScrollToBottom}
           renderSystemMessage={renderSystemMessage}
@@ -248,7 +177,7 @@ const Chat = ({ loading, messages, participants, setState }) => {
           renderUsername={renderUsername}
           renderComposer={renderComposer(_closeEmojiPanel)}
           renderSend={renderSend(keyboardHeight, emojiButtonFunc)}
-          renderInputToolbar={renderInputToolbar}
+          renderInputToolbar={renderCustomInputToolBar(text, setText)}
           renderActions={renderActions(changeImage)}
           listViewProps={_listViewProps}
           renderTime={renderTime}
@@ -267,14 +196,26 @@ const Chat = ({ loading, messages, participants, setState }) => {
             return [
               {
                 pattern: /#(\w+)/,
-                style: { ...linkStyle[0], color: "white" },
+                style: { ...linkStyle[0], color: "lightgreen" },
                 onPress: (props) => alert(`press on ${props}`),
               },
             ];
           }}
         />
+        <EmojiBoard
+          showBoard={emojiEnabled}
+          onClick={(emoji) => {
+            onEmojiClick(emoji);
+
+            setemojiEnabled(false);
+          }}
+          containerStyle={{ borderWidth: 0, paddingTop: 0 }}
+          onRemove={() => {
+            setemojiEnabled(false);
+          }}
+        ></EmojiBoard>
       </KeyboardAvoidingView>
-    </SideMenu>
+    </View>
   );
 };
 
@@ -311,7 +252,6 @@ const styles = StyleSheet.create({
     flex: 1,
     marginBottom: getBottomSpace(),
     backgroundColor: "white",
-    borderWidth: 1,
   },
   main: { flex: 1, backgroundColor: "white" },
 });

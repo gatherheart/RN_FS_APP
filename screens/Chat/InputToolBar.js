@@ -1,6 +1,6 @@
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/jsx-props-no-spreading */
-import React from "react";
+import React, { useState } from "react";
 import {
   Image,
   TextInput,
@@ -8,6 +8,7 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
+  Dimensions,
 } from "react-native";
 import {
   InputToolbar,
@@ -24,7 +25,9 @@ import {
   LIGHT_GREEN_COLOR,
 } from "../../constants/Color";
 import { _pickImage, _pickDocument } from "../../utils/FileSystem";
-
+import InputOnKeyboard from "../../components/common/InputOnKeyboard";
+const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
+const ICON_BOX_SIZE = 40;
 export const renderInputToolbar = (props) => (
   <InputToolbar
     {...props}
@@ -34,6 +37,10 @@ export const renderInputToolbar = (props) => (
     primaryStyle={{}}
   />
 );
+
+export const renderCustomInputToolBar = (text, setText) => (props) => {
+  return <InputToolbar {...props} render={null} />;
+};
 
 export const renderSystemMessage = (props) => (
   <SystemMessage
@@ -53,13 +60,12 @@ export const renderActions = (change) => (props) => {
     <Actions
       {...props}
       containerStyle={{
-        height: 44,
-        width: 44,
+        height: ICON_BOX_SIZE,
+        width: ICON_BOX_SIZE,
         left: -10,
         alignItems: "center",
         justifyContent: "center",
         marginBottom: 0,
-        borderRightWidth: 0.2,
       }}
       icon={() => (
         <Ionicons name={"ios-add"} size={25} color={GREEN_COLOR}></Ionicons>
@@ -101,9 +107,14 @@ export const renderComposer = (onFocusHandler) => (props) => (
       autoGrow: true,
       autoFocus: false,
       onFocus: onFocusHandler,
-      backgroundColor: "#EDF1F7",
-      borderWidth: 1,
       borderColor: "#E4E9F2",
+      marginTop: 2,
+      left: -10,
+      style: {
+        width: WIDTH - ICON_BOX_SIZE * 3,
+        height: "80%",
+        alignSelf: "center",
+      },
     }}
     placeholder={""}
   />
@@ -111,27 +122,40 @@ export const renderComposer = (onFocusHandler) => (props) => (
 
 export const renderSend = (keyboardHeight, emojiButtonFunc) => (props) => {
   const _enabled = !props.text && !props.emoji && !keyboardHeight;
-  return _enabled ? (
-    <TouchableOpacity style={styles.emojiButton} onPress={emojiButtonFunc}>
-      <FontAwesome name="lemon-o" size={24} color={GREEN_COLOR} />
-    </TouchableOpacity>
-  ) : (
-    <Send
-      {...props}
-      disabled={_enabled}
-      containerStyle={{
-        width: 44,
-        height: 44,
-        alignItems: "center",
-        justifyContent: "center",
-        marginHorizontal: 4,
-      }}
-    >
-      <FontAwesome name="send-o" size={24} color={GREEN_COLOR} />
-    </Send>
+  return (
+    <View style={styles.send}>
+      <TouchableOpacity style={styles.emojiButton} onPress={emojiButtonFunc}>
+        <FontAwesome name="lemon-o" size={22} color={GREEN_COLOR} />
+      </TouchableOpacity>
+      <Send
+        {...props}
+        disabled={_enabled}
+        containerStyle={{
+          width: ICON_BOX_SIZE,
+          height: ICON_BOX_SIZE,
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <FontAwesome name="send-o" size={22} color={GREEN_COLOR} />
+      </Send>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  emojiButton: { borderWidth: 0, alignSelf: "center", marginRight: 10 },
+  emojiButton: {
+    borderWidth: 0,
+    alignSelf: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 0,
+    width: ICON_BOX_SIZE,
+    height: ICON_BOX_SIZE,
+  },
+  send: {
+    left: -10,
+    alignSelf: "flex-start",
+    flexDirection: "row",
+  },
 });

@@ -54,7 +54,7 @@ const CustomHeader = ({
         style={{
           height: StatusHeight,
           backgroundColor: "white",
-          zIndex: 1,
+          zIndex: 10,
           ...statusStyle,
         }}
       />
