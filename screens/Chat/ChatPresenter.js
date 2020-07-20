@@ -9,6 +9,8 @@ import {
   Dimensions,
   KeyboardAvoidingView,
   ScrollView,
+  Easing,
+  Animated,
 } from "react-native";
 
 import { GiftedChat, Send } from "react-native-gifted-chat";
@@ -57,6 +59,8 @@ import {
   BG_COLOR,
 } from "../../constants/Color";
 import drawerContent from "../../components/Chat/DrawerComponent";
+import Drawer from "../../components/Group/GroupDrawer";
+import SideMenu from "react-native-side-menu";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
 
@@ -132,7 +136,24 @@ const Chat = ({ loading, messages, participants, setState }) => {
   return loading ? (
     <Loader></Loader>
   ) : (
-    <View style={styles.main}>
+    <SideMenu
+      menu={<Drawer onItemSelected={() => {}} />}
+      isOpen={drawerOpened}
+      onChange={(isOpen) => {
+        console.log("onChange", isOpen);
+        setDrawerOpend(isOpen);
+      }}
+      useNativeDriver={true}
+      menuPosition={"right"}
+      animationFunction={(prop, value) =>
+        Animated.timing(prop, {
+          toValue: value,
+          duration: 270,
+          easing: Easing.inOut(Easing.quad),
+          useNativeDriver: true,
+        })
+      }
+    >
       <CustomHeader
         rightButtonEnabled={true}
         rightButton={
@@ -187,7 +208,7 @@ const Chat = ({ loading, messages, participants, setState }) => {
           renderAvatarOnTop={true}
           isKeyboardInternallyHandled={false}
           messagesContainerStyle={{
-            paddingBottom: emojiEnabled ? viewHeight - getBottomSpace() : 0,
+            paddingBottom: emojiEnabled ? viewHeight - 2 * getBottomSpace() : 0,
             paddingTop: HeaderHeight,
           }}
           alwaysShowSend
@@ -215,7 +236,7 @@ const Chat = ({ loading, messages, participants, setState }) => {
           }}
         ></EmojiBoard>
       </KeyboardAvoidingView>
-    </View>
+    </SideMenu>
   );
 };
 
@@ -253,7 +274,6 @@ const styles = StyleSheet.create({
     marginBottom: getBottomSpace(),
     backgroundColor: "white",
   },
-  main: { flex: 1, backgroundColor: "white" },
 });
 
 export default Chat;

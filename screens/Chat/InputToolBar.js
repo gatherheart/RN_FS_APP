@@ -26,6 +26,7 @@ import {
 } from "../../constants/Color";
 import { _pickImage, _pickDocument } from "../../utils/FileSystem";
 import InputOnKeyboard from "../../components/common/InputOnKeyboard";
+import { getBottomSpace } from "react-native-iphone-x-helper";
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
 const ICON_BOX_SIZE = 40;
 export const renderInputToolbar = (props) => (
@@ -39,7 +40,7 @@ export const renderInputToolbar = (props) => (
 );
 
 export const renderCustomInputToolBar = (text, setText) => (props) => {
-  return <InputToolbar {...props} render={null} />;
+  return <InputToolbar {...props} containerStyle={{}} />;
 };
 
 export const renderSystemMessage = (props) => (
