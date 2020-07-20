@@ -56,13 +56,66 @@ import {
   BG_COLOR,
 } from "../../constants/Color";
 import drawerContent from "../../components/Chat/DrawerComponent";
+import SideMenu from "react-native-side-menu";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
+
+const Menu = function ({ onItemSelected }) {
+  return (
+    <ScrollView scrollsToTop={false} style={styles2.menu}>
+      <View style={styles2.avatarContainer}>
+        <Text style={styles2.name}>Your name</Text>
+      </View>
+
+      <Text onPress={() => onItemSelected("About")} style={styles.item}>
+        About
+      </Text>
+
+      <Text onPress={() => onItemSelected("Contacts")} style={styles.item}>
+        Contacts
+      </Text>
+    </ScrollView>
+  );
+};
+const styles2 = StyleSheet.create({
+  menu: {
+    flex: 1,
+    width: window.width,
+    height: window.height,
+    backgroundColor: "gray",
+    padding: 20,
+  },
+  avatarContainer: {
+    marginBottom: 20,
+    marginTop: 20,
+  },
+  avatar: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    flex: 1,
+  },
+  name: {
+    position: "absolute",
+    left: 70,
+    top: 20,
+  },
+  item: {
+    fontSize: 14,
+    fontWeight: "300",
+    paddingTop: 5,
+  },
+});
 
 const Chat = ({ loading, messages, participants, setState }) => {
   const animation = useRef(null);
   const [emojiEnabled, setemojiEnabled] = useState(false);
   const [drawerOpened, setDrawerOpend] = useState(false);
+  const onItemSelected = (item) => {
+    setState(false);
+  };
+  const menu = <Menu onItemSelected={onItemSelected} />;
+
   const onEmojiClick = (emoji) => {
     const _handleOnPress = (emoji) => {
       if (emoji && onSend) {
@@ -130,7 +183,16 @@ const Chat = ({ loading, messages, participants, setState }) => {
   return loading ? (
     <Loader></Loader>
   ) : (
-    <View style={styles.main}>
+    <SideMenu
+      menu={menu}
+      isOpen={drawerOpened}
+      onChange={(isOpen) => {
+        console.log("onChange", isOpen);
+        setDrawerOpend(isOpen);
+      }}
+      useNativeDriver={true}
+      menuPosition={"right"}
+    >
       <CustomHeader
         rightButtonEnabled={true}
         rightButton={
@@ -160,68 +222,59 @@ const Chat = ({ loading, messages, participants, setState }) => {
           setemojiEnabled(false);
         }}
       ></EmojiBoard>
-      <MenuDrawer
-        open={drawerOpened}
-        drawerContent={drawerContent({ participants })}
-        drawerPercentage={65}
-        animationTime={230}
-        overlay={true}
-        opacity={0.5}
-        position={"right"}
+
+      <KeyboardAvoidingView
+        style={{ ...styles.container }}
+        behavior={Platform.OS == "ios" ? "padding" : "height"}
       >
-        <KeyboardAvoidingView
-          style={{ ...styles.container }}
-          behavior={Platform.OS == "ios" ? "padding" : "height"}
-        >
-          <GiftedChat
-            messages={messages}
-            onSend={(messages) => onSend(messages)}
-            wrapInSafeArea={false}
-            scrollToBottom
-            scrollToBottomComponent={renderScrollToBottom}
-            renderSystemMessage={renderSystemMessage}
-            renderMessage={renderMessage}
-            onPressAvatar={console.log}
-            renderCustomView={(props) => renderCustomView(props, animation)}
-            renderMessageImage={renderMessageImage}
-            renderBubble={renderBubble}
-            messagesContainerStyle={{ backgroundColor: "white" }}
-            user={{
-              _id: 1,
-              name: "Developers",
-              avatar: "https://placeimg.com/150/150/any",
-            }}
-            renderUsername={renderUsername}
-            renderComposer={renderComposer(_closeEmojiPanel)}
-            renderSend={renderSend(keyboardHeight, emojiButtonFunc)}
-            renderInputToolbar={renderInputToolbar}
-            renderActions={renderActions(changeImage)}
-            listViewProps={_listViewProps}
-            renderTime={renderTime}
-            renderDay={renderDay}
-            renderCustomView={renderCustomView}
-            renderAvatar={renderAvatar}
-            renderAvatarOnTop={true}
-            isKeyboardInternallyHandled={false}
-            messagesContainerStyle={{
-              paddingBottom: emojiEnabled ? viewHeight - getBottomSpace() : 0,
-              paddingTop: HeaderHeight,
-            }}
-            alwaysShowSend
-            keyboardShouldPersistTaps={"never"}
-            parsePatterns={(linkStyle) => {
-              return [
-                {
-                  pattern: /#(\w+)/,
-                  style: { ...linkStyle[0], color: "white" },
-                  onPress: (props) => alert(`press on ${props}`),
-                },
-              ];
-            }}
-          />
-        </KeyboardAvoidingView>
-      </MenuDrawer>
-    </View>
+        <GiftedChat
+          messages={messages}
+          onSend={(messages) => onSend(messages)}
+          wrapInSafeArea={false}
+          scrollToBottom
+          scrollToBottomComponent={renderScrollToBottom}
+          renderSystemMessage={renderSystemMessage}
+          renderMessage={renderMessage}
+          onPressAvatar={console.log}
+          renderCustomView={(props) => renderCustomView(props, animation)}
+          renderMessageImage={renderMessageImage}
+          renderBubble={renderBubble}
+          messagesContainerStyle={{ backgroundColor: "white" }}
+          user={{
+            _id: 1,
+            name: "Developers",
+            avatar: "https://placeimg.com/150/150/any",
+          }}
+          renderUsername={renderUsername}
+          renderComposer={renderComposer(_closeEmojiPanel)}
+          renderSend={renderSend(keyboardHeight, emojiButtonFunc)}
+          renderInputToolbar={renderInputToolbar}
+          renderActions={renderActions(changeImage)}
+          listViewProps={_listViewProps}
+          renderTime={renderTime}
+          renderDay={renderDay}
+          renderCustomView={renderCustomView}
+          renderAvatar={renderAvatar}
+          renderAvatarOnTop={true}
+          isKeyboardInternallyHandled={false}
+          messagesContainerStyle={{
+            paddingBottom: emojiEnabled ? viewHeight - getBottomSpace() : 0,
+            paddingTop: HeaderHeight,
+          }}
+          alwaysShowSend
+          keyboardShouldPersistTaps={"never"}
+          parsePatterns={(linkStyle) => {
+            return [
+              {
+                pattern: /#(\w+)/,
+                style: { ...linkStyle[0], color: "white" },
+                onPress: (props) => alert(`press on ${props}`),
+              },
+            ];
+          }}
+        />
+      </KeyboardAvoidingView>
+    </SideMenu>
   );
 };
 
