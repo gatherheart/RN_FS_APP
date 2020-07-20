@@ -18,7 +18,6 @@ const WINDOW_WIDTH = Dimensions.get("window").width;
 class CustomTabBar extends React.Component {
   constructor(props) {
     super(props);
-    console.log(this.props);
 
     this._tabsMeasurements = [];
     this.state = {
@@ -126,11 +125,12 @@ class CustomTabBar extends React.Component {
   }
 
   renderTab(name, page, isTabActive, onPressHandler, onLayoutHandler) {
-    console.log("renderTab", this.props);
     const { activeTextColor, inactiveTextColor, textStyle } = this.props;
     const textColor = isTabActive ? activeTextColor : inactiveTextColor;
     const fontWeight = isTabActive ? "bold" : "normal";
-
+    const _backgroundColor =
+      name === "MY" ? "blue" : this.props.tabStyle.backgroundColor;
+    const _opacity = isTabActive ? 1 : 0.7;
     return (
       <TouchableOpacity
         key={`${name}_${page}`}
@@ -140,7 +140,13 @@ class CustomTabBar extends React.Component {
         onPress={() => onPressHandler(page)}
         onLayout={onLayoutHandler}
       >
-        <View style={[styles.tab, this.props.tabStyle]}>
+        <View
+          style={[
+            styles.tab,
+            this.props.tabStyle,
+            { backgroundColor: _backgroundColor, opacity: _opacity },
+          ]}
+        >
           <Text style={[{ color: textColor, fontWeight }, textStyle]}>
             {name}
           </Text>
@@ -291,6 +297,6 @@ const styles = StyleSheet.create({
   },
   tabs: {
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "flex-start",
   },
 });

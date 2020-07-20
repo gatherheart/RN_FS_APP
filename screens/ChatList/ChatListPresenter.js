@@ -1,7 +1,11 @@
 import React from "react";
 import { View, Text, ScrollView, StyleSheet } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { HeaderHeight, UnderHeader } from "../../utils/HeaderHeight";
+import {
+  HeaderHeight,
+  UnderHeader,
+  StatusHeight,
+} from "../../utils/HeaderHeight";
 import ChatListHeader from "../../components/Chat/ChatListHeader";
 import { useNavigation } from "@react-navigation/native";
 import ScrollableTabView, {
@@ -14,52 +18,59 @@ import {
   BG_COLOR,
   GREY_COLOR,
   LIGHT_GREEN_COLOR,
+  BLACK_COLOR,
 } from "../../constants/Color";
 import CustomTabBar from "./CustomTabBar";
 
 export default ({ rooms }) => {
   const navigation = useNavigation();
+  const _classifyRooms = (rooms) => {
+    return rooms.reduce(function (r, a) {
+      const _key = `${a.group.id + "#" + a.group.groupName}`;
+      r[_key] = r[_key] || [];
+      r[_key].push(a);
+      return r;
+    }, Object.create(null));
+  };
+  const _classifiedRooms = _classifyRooms(rooms);
+  console.log(_classifiedRooms);
   return (
     <>
       <ChatListHeader></ChatListHeader>
       <ScrollableTabView
-        style={{ paddingTop: HeaderHeight }}
+        style={{
+          paddingTop: HeaderHeight,
+          backgroundColor: BG_COLOR,
+          borderWidth: 1,
+        }}
         initialPage={0}
         renderTabBar={() => (
           <CustomTabBar
             tabStyle={{
-              backgroundColor: LIGHT_GREEN_COLOR,
-              borderTopLeftRadius: 20,
-              borderTopRightRadius: 20,
-              paddingHorizontal: 10,
+              ...styles.tab,
+              bottom: -10,
+              alignSelf: "center",
             }}
-            activeTextColor={BG_COLOR}
+            activeTextColor={BLACK_COLOR}
             inactiveTextColor={GREY_COLOR}
-            tabUnderlineStyle={{ borderColor: BG_COLOR }}
+            underlineStyle={{ backgroundColor: LIGHT_GREEN_COLOR }}
           />
         )}
       >
-        <View tabLabel={`${trimText("ios-arrow-forward", 20)}`}>
-          <Text>My</Text>
-        </View>
-        <View tabLabel={`${trimText("ios-arrow-forward", 20)}`}>
-          <Text>My</Text>
-        </View>
-        <View tabLabel={`${trimText("ios-arrow-forward", 20)}`}>
-          <Text>My</Text>
-        </View>
-        <View tabLabel={`${trimText("ios-arrow-forward", 20)}`}>
-          <Text>My</Text>
-        </View>
-        <View tabLabel={`${trimText("ios-arrow-forward", 20)}`}>
-          <Text>My</Text>
-        </View>
-        <View tabLabel={`${trimText("ios-arrow-forward", 20)}`}>
-          <Text>My</Text>
-        </View>
-        <View tabLabel={`${trimText("ios-arrow-forward", 20)}`}>
-          <Text>My</Text>
-        </View>
+        {Object.keys(_classifiedRooms).map((groupKey, idx) => {
+          const _groupName = groupKey.split("#")[1];
+          const group = _classifiedRooms[groupKey];
+          return (
+            <ScrollView
+              key={`group-room-page-${idx}`}
+              tabLabel={`${trimText(_groupName, 6)}`}
+            >
+              <View>
+                <Text>Hello World</Text>
+              </View>
+            </ScrollView>
+          );
+        })}
       </ScrollableTabView>
     </>
   );
@@ -68,5 +79,13 @@ export default ({ rooms }) => {
 const styles = StyleSheet.create({
   viewPager: {
     flex: 1,
+  },
+  tab: {
+    width: "100%",
+    height: "70%",
+    backgroundColor: LIGHT_GREEN_COLOR,
+    alignSelf: "center",
+    borderTopRightRadius: 10,
+    borderTopLeftRadius: 10,
   },
 });
