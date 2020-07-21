@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import Modal from "react-native-modal";
 import { areaNames, schoolNames } from "../../constants/Names";
+import SearchInput from "../common/SearchInput";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
@@ -39,7 +40,13 @@ const Name = styled.Text`
 
 const SearchModal = ({ pageType, setOption, changeModal, isModalVisible }) => {
   const [names, setNames] = useState(pageType == 0 ? areaNames : schoolNames);
+  const [keyword, setKeyword] = useState("");
 
+  const onSubmit = () => {
+    if (keyword === "") return;
+    setKeyword("");
+  };
+  const onChange = (text) => setKeyword(text);
   useEffect(() => {
     setNames(pageType == 0 ? schoolNames : areaNames);
   }, [pageType]);
@@ -61,9 +68,18 @@ const SearchModal = ({ pageType, setOption, changeModal, isModalVisible }) => {
         <TitleContainer>
           <Title>{pageType == 0 ? "학교 선택" : "지역 선택"}</Title>
         </TitleContainer>
+        <SearchInput
+          placeholder={"검색"}
+          value={keyword}
+          onChange={onChange}
+          onSubmit={onSubmit}
+          returnKeyType="search"
+          style={styles.searchInput}
+        ></SearchInput>
         <ScrollView>
           {names
             ? names.map((name, idx) => {
+                if (keyword != "" && !name.includes(keyword)) return null;
                 return (
                   <TouchableOpacity
                     key={idx}
@@ -92,6 +108,11 @@ const styles = StyleSheet.create({
     height: 40,
     marginVertical: 5,
     marginHorizontal: 10,
+  },
+
+  searchInput: {
+    marginTop: 10,
+    height: 40,
   },
 });
 

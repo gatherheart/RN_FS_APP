@@ -23,6 +23,10 @@ export default () => {
       setList((prev) => prev.filter((item) => item != area));
       return;
     }
+
+    if (list.length >= 3) {
+      return;
+    }
     setList((prev) => [...prev, area]);
   };
 
@@ -61,7 +65,7 @@ export default () => {
           </View>
           <Text style={{ ...styles.title }}>지역을 선택해주세요!</Text>
         </View>
-        <Text style={styles.info}>다중 선택이 가능합니다</Text>
+        <Text style={styles.info}>최대 3개의 지역까지 선택이 가능합니다</Text>
         <View style={styles.divider}></View>
         <View style={styles.campusContainer}>
           {areaNames.map((area, idx) => {

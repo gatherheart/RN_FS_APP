@@ -23,6 +23,7 @@ import { MaterialCommunityIcons, FontAwesome } from "@expo/vector-icons";
 import AlertModal from "../../../components/common/AlertModal";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
+const hitSlop = { top: 10, bottom: 10, left: WIDTH, right: 50 };
 
 const Container = styled.View`
   background-color: ${(props) => props.theme.backgroundColor};
@@ -373,6 +374,7 @@ export default ({ id }) => {
                 uncheckedIcon="check-circle"
                 checked={multipleOption}
                 onPress={() => setMultipleOption((prev) => !prev)}
+                hitSlop={hitSlop}
               />
             </RowContainer>
           </OptionContainer>
@@ -401,6 +403,7 @@ export default ({ id }) => {
                 uncheckedIcon="check-circle"
                 checked={anonymousOption}
                 onPress={() => setAnonymousOption((prev) => !prev)}
+                hitSlop={hitSlop}
               />
             </RowContainer>
           </OptionContainer>
@@ -414,6 +417,8 @@ export default ({ id }) => {
             style={{
               paddingVertical: 0,
               paddingHorizontal: 10,
+              marginTop: 20,
+              minHeight: 300,
             }}
             autoCorrect={false}
             scrollEnabled={false}
@@ -437,6 +442,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     paddingLeft: 10,
+    width: "100%",
   },
   withShadow: {
     borderWidth: 0,

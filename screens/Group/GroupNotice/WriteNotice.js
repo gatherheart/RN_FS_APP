@@ -114,14 +114,9 @@ export default () => {
       <ScrollView
         style={{
           backgroundColor: themeContext.backgroundColor,
+          paddingTop: HeaderHeight,
         }}
         showsVerticalScrollIndicator={false}
-        contentInset={{
-          top: HeaderHeight,
-        }}
-        contentOffset={{
-          y: -HeaderHeight,
-        }}
       >
         <SubContainer style={{ justifyContent: "space-between" }}>
           <NanumText

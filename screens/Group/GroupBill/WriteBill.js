@@ -201,7 +201,7 @@ export default ({ id }) => {
       behavior={Platform.OS == "ios" ? "padding" : "height"}
     >
       <CustomHeader
-        title={"수금 작성"}
+        title={"더치페이"}
         headerStyle={{
           borderBottomWidth: 1,
           borderBottomColor: themeContext.moreLightGreyColor,
@@ -361,8 +361,10 @@ export default ({ id }) => {
             underlineColorAndroid="transparent"
             returnKeyType="none"
             style={{
-              paddingVertical: 0,
+              paddingVertical: 20,
               paddingHorizontal: 10,
+              minHeight: 200,
+              marginTop: 20,
             }}
             autoCorrect={false}
             scrollEnabled={false}

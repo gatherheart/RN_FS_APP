@@ -203,10 +203,6 @@ export default ({ id, group, loading, refreshFn }) => {
                       <CountText>{group?.memberCount}</CountText>
                       <Text size={12}>Members</Text>
                     </Block>
-                    <Block middle>
-                      <CountText>{group?.followerCount}</CountText>
-                      <Text size={12}>Followers</Text>
-                    </Block>
                   </Block>
                   <Block
                     middle

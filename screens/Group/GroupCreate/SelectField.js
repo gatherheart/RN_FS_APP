@@ -33,9 +33,11 @@ export default () => {
   const [list, setList] = useState([]);
   const navigation = useNavigation();
 
-  const pushNewField = (field) => {
-    if (list.includes(field)) {
-      setList((prev) => prev.filter((item) => item != field));
+  const pushNewField = (category, field) => {
+    if (list.length > 0 && list[0].category !== category) return;
+
+    if (list.some((item) => item.field === field)) {
+      setList((prev) => prev.filter((item) => item.field != field));
       return;
     }
 
@@ -43,13 +45,12 @@ export default () => {
       return;
     }
 
-    setList((prev) => [...prev, field]);
+    setList((prev) => [...prev, { category, field }]);
   };
 
-  const popField = (field) => {
-    setList((prev) => prev.filter((item) => item != field));
+  const popField = (_item) => {
+    setList((prev) => prev.filter((item) => item.field != _item.field));
   };
-
   const fieldIds = Object.keys(secondCategory);
   let _initialState = {};
 
@@ -65,7 +66,7 @@ export default () => {
   const submit = () => {
     navigation.navigate("GroupCreateContainer", {
       from: "SelectField",
-      args: { fields: list },
+      args: { fields: list.map((item) => item.field) },
     });
   };
 
@@ -101,7 +102,9 @@ export default () => {
           </View>
           <Text style={{ ...styles.title }}>분야를 선택해주세요!</Text>
         </View>
-        <Text style={styles.info}>세개까지 선택이 가능합니다</Text>
+        <Text style={styles.info}>
+          동일 대분류에 한해 세개까지 선택이 가능합니다
+        </Text>
         {list.length != 0 ? (
           <View style={styles.selected}>
             {list.map((item, idx) => {
@@ -113,7 +116,7 @@ export default () => {
                     }}
                     style={styles.eachFieldText}
                   >
-                    {item}
+                    {item.field}
                   </Text>
                 </View>
               );
@@ -150,7 +153,7 @@ export default () => {
                         <TouchableOpacity
                           style={styles.categoryButton}
                           key={`second-category-${index}`}
-                          onPress={() => pushNewField(category2)}
+                          onPress={() => pushNewField(category1, category2)}
                         >
                           <Text style={styles.categoryText}>{category2}</Text>
                         </TouchableOpacity>

@@ -1,5 +1,12 @@
 import React from "react";
-import { Text, Dimensions, ScrollView, StyleSheet, View } from "react-native";
+import {
+  Text,
+  Dimensions,
+  ScrollView,
+  StyleSheet,
+  View,
+  Animated,
+} from "react-native";
 import { BG_COLOR, LIGHT_GREY_COLOR } from "../../constants/Color";
 import {
   UnderHeader,
@@ -35,26 +42,28 @@ const MemberClassify = ({ members, type }) => {
   );
 };
 
-const drawerContent = ({ participants: members }) => {
+const DrawerContent = ({ participants: members, style }) => {
   return (
-    <ScrollView
-      style={styles.animatedBoxContainer}
-      contentContainerStyle={styles.animatedBox}
-    >
-      <Text style={styles.memberType}>회장</Text>
-      <MemberClassify members={members} type={0}></MemberClassify>
+    <Animated.View style={[{ flex: 1 }, style]}>
+      <ScrollView
+        style={[styles.animatedBoxContainer]}
+        contentContainerStyle={[styles.animatedBox]}
+      >
+        <Text style={styles.memberType}>회장</Text>
+        <MemberClassify members={members} type={0}></MemberClassify>
 
-      <Text style={styles.memberType}>운영진</Text>
-      <MemberClassify members={members} type={1}></MemberClassify>
+        <Text style={styles.memberType}>운영진</Text>
+        <MemberClassify members={members} type={1}></MemberClassify>
 
-      <Text style={styles.memberType}>멤버</Text>
-      <MemberClassify members={members} type={2}></MemberClassify>
-      <View style={styles.empty} />
-    </ScrollView>
+        <Text style={styles.memberType}>멤버</Text>
+        <MemberClassify members={members} type={2}></MemberClassify>
+        <View style={styles.empty} />
+      </ScrollView>
+    </Animated.View>
   );
 };
 
-export default drawerContent;
+export default DrawerContent;
 const styles = StyleSheet.create({
   animatedBoxContainer: {
     backgroundColor: BG_COLOR,

@@ -52,13 +52,12 @@ import Loader from "../../components/common/Loader";
 import { useKeyboard } from "react-native-keyboard-height";
 import { _pickImage } from "../../utils/FileSystem";
 import CustomHeader from "../../components/common/CustomHeader";
-import MenuDrawer from "react-native-side-drawer";
 import {
   GREEN_COLOR,
   LIGHT_GREEN_COLOR,
   BG_COLOR,
 } from "../../constants/Color";
-import drawerContent from "../../components/Chat/DrawerComponent";
+import DrawerContent from "../../components/Chat/DrawerComponent";
 import Drawer from "../../components/Group/GroupDrawer";
 import SideMenu from "react-native-side-menu";
 import { customEmojis, defaultProps } from "./CustomEmojis";
@@ -67,6 +66,9 @@ const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
 
 const Chat = ({ loading, messages, participants, setState }) => {
   const animation = useRef(null);
+  const _openOpacity = new Animated.Value(0);
+  const _closeOpacity = new Animated.Value(0);
+
   const [emojiEnabled, setemojiEnabled] = useState(false);
   const [drawerOpened, setDrawerOpend] = useState(false);
   const [text, setText] = useState("");
@@ -90,7 +92,6 @@ const Chat = ({ loading, messages, participants, setState }) => {
     _handleOnPress(emoji);
   };
   const [viewHeight, setViewHeight] = useState(250);
-
   const didShow = (height) => {
     setViewHeight(height !== 0 ? height : viewHeight);
   };
@@ -127,8 +128,8 @@ const Chat = ({ loading, messages, participants, setState }) => {
   const _listViewProps = {
     style: styles.listViewStyle,
     contentContainerStyle: styles.contentContainerStyle,
-    keyboardDismissMode: "on-drag",
   };
+
   const _toggleOpen = () => {
     setDrawerOpend((prev) => !prev);
   };
@@ -138,11 +139,34 @@ const Chat = ({ loading, messages, participants, setState }) => {
     <Loader></Loader>
   ) : (
     <SideMenu
-      menu={<Drawer onItemSelected={() => {}} />}
+      menu={
+        <DrawerContent
+          onItemSelected={() => {}}
+          participants={participants}
+          style={{
+            opacity: drawerOpened
+              ? _openOpacity.interpolate({
+                  inputRange: [0, 10],
+                  outputRange: [0, 1],
+                  extrapolate: "clamp",
+                })
+              : _closeOpacity.interpolate({
+                  inputRange: [0, 10],
+                  outputRange: [0, 1],
+                  extrapolate: "clamp",
+                }),
+          }}
+        />
+      }
       isOpen={drawerOpened}
       onChange={(isOpen) => {
         console.log("onChange", isOpen);
-        setDrawerOpend(isOpen);
+        Animated.timing(isOpen ? _openOpacity : _closeOpacity, {
+          toValue: isOpen ? 10 : 0,
+          duration: 270 * 2,
+          easing: Easing.linear,
+          useNativeDriver: true,
+        }).start(() => {});
       }}
       useNativeDriver={true}
       menuPosition={"right"}
@@ -154,6 +178,7 @@ const Chat = ({ loading, messages, participants, setState }) => {
           useNativeDriver: true,
         })
       }
+      onSliding={(fraction) => {}}
     >
       <CustomHeader
         rightButtonEnabled={true}

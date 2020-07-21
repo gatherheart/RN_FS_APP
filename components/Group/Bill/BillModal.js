@@ -186,7 +186,6 @@ export default ({
               {billTitle}
             </Title>
           </RowContainer>
-          <Deadline>{simplifiedFormat(deadline).slice(4)} 까지</Deadline>
           <Body>{billMemo}</Body>
           <ButtonContainer>
             <RowContainer>

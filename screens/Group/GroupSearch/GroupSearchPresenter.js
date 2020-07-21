@@ -93,6 +93,7 @@ const HeaderRightBtn = styled.View`
   flex-direction: row;
   height: 25px;
   align-items: center;
+  justify-content: center;
   overflow: hidden;
 `;
 
@@ -105,10 +106,12 @@ const LeftButton = styled.TouchableOpacity`
   height: 100%;
   border-top-right-radius: 0px;
   border-bottom-right-radius: 0px;
+  justify-content: center;
 `;
 
 const RightButton = styled.TouchableOpacity`
   height: 100%;
+  justify-content: center;
 
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
@@ -211,7 +214,7 @@ export default ({
         <ScrollContainer
           style={{ flex: 1 }}
           refreshFn={refreshFn}
-          loading={loading}
+          loading={false}
           scrollEventThrottle={1}
           onScroll={Animated.event(
             [{ nativeEvent: { contentOffset: { y: position.y } } }],

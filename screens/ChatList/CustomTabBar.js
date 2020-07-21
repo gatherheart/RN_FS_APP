@@ -91,6 +91,8 @@ class CustomTabBar extends React.Component {
       2;
     newScrollX = newScrollX >= 0 ? newScrollX : 0;
 
+    if (this._scrollView === null) return;
+
     if (Platform.OS === "android") {
       this._scrollView.scrollTo({ x: newScrollX, y: 0, animated: false });
     } else {
@@ -289,7 +291,6 @@ const styles = StyleSheet.create({
   },
   container: {
     height: 50,
-    borderWidth: 1,
     borderTopWidth: 0,
     borderLeftWidth: 0,
     borderRightWidth: 0,

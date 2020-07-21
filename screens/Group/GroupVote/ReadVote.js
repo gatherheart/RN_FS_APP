@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import styled, { ThemeContext } from "styled-components/native";
 import CustomHeader from "../../../components/common/CustomHeader";
-import { simplifiedFormat } from "../../../utils/DateFormat";
+import { simplifiedFormat, isFuture } from "../../../utils/DateFormat";
 import SmallUserCard from "../../../components/User/SmallUserCard";
 import Collapsible from "react-native-collapsible";
 import PropTypes from "prop-types";
@@ -265,18 +265,22 @@ export default () => {
             );
           })}
         </Container>
-        <SubContainer style={{ justifyContent: "center", borderTopWidth: 0 }}>
-          <TouchableOpacity>
-            <BarContainer
-              style={{
-                ...styles.reVoteContainer,
-                backgroundColor: themeContext.darkGreenColor,
-              }}
-            >
-              <Text>재투표하기</Text>
-            </BarContainer>
-          </TouchableOpacity>
-        </SubContainer>
+        {isFuture(data.deadline) ? (
+          <SubContainer style={{ justifyContent: "center", borderTopWidth: 0 }}>
+            <TouchableOpacity>
+              <BarContainer
+                style={{
+                  ...styles.reVoteContainer,
+                  backgroundColor: themeContext.darkGreenColor,
+                }}
+              >
+                <Text>재투표하기</Text>
+              </BarContainer>
+            </TouchableOpacity>
+          </SubContainer>
+        ) : (
+          <EmptySpace></EmptySpace>
+        )}
         <Container>
           <SubContainer
             style={{

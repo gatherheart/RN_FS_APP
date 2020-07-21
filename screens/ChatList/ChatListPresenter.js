@@ -41,7 +41,6 @@ export default ({ rooms }) => {
         style={{
           paddingTop: HeaderHeight,
           backgroundColor: BG_COLOR,
-          borderWidth: 1,
         }}
         initialPage={0}
         renderTabBar={() => (
@@ -53,7 +52,7 @@ export default ({ rooms }) => {
             }}
             activeTextColor={BLACK_COLOR}
             inactiveTextColor={GREY_COLOR}
-            underlineStyle={{ backgroundColor: LIGHT_GREEN_COLOR }}
+            underlineStyle={{ backgroundColor: LIGHT_GREEN_COLOR, height: 2 }}
           />
         )}
       >
@@ -66,7 +65,13 @@ export default ({ rooms }) => {
               tabLabel={`${trimText(_groupName, 6)}`}
             >
               <View>
-                <Text>Hello World</Text>
+                <Text
+                  onPress={() => {
+                    navigation.navigate("Chat", {});
+                  }}
+                >
+                  Hello World
+                </Text>
               </View>
             </ScrollView>
           );

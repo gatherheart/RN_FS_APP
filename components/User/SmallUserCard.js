@@ -81,8 +81,9 @@ const SmallUserCard = ({
                 {institution.major ? (
                   <Major>{institution.major}, </Major>
                 ) : null}
-                {institution.college ? (
-                  <Major>{institution.college}, </Major>
+                {false ? <Major>{institution.college}, </Major> : null}
+                {institution.school ? (
+                  <Major>{institution.school}, </Major>
                 ) : null}
                 {admissionYear ? (
                   <Major>{admissionYear.slice(2)}학번</Major>

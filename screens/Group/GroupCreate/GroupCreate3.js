@@ -172,7 +172,7 @@ export default () => {
           </View>
           <View style={{ ...styles.optionContainer }}>
             <View style={{ ...styles.optionName }}>
-              <Text>검색 태그</Text>
+              <Text>소개 태그</Text>
             </View>
             <View style={{ ...styles.optionContent }}>
               <TextInput
@@ -299,6 +299,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderWidth: 1,
     flexDirection: "row",
+    minHeight: 150,
   },
   pageButton: {
     borderWidth: 1,

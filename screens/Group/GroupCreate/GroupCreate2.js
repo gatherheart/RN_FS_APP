@@ -27,7 +27,7 @@ import RNPickerSelect from "react-native-picker-select";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import FlashMessage from "react-native-flash-message";
 const { width: WIDHT, height: HEIGHT } = Dimensions.get("screen");
-
+const hitSlop = { top: 10, bottom: 10, left: 10, right: 10 };
 const Divider = styled.View`
   margin-vertical: 25px;
   margin-top: 40px;
@@ -96,10 +96,10 @@ const nextButtonStyle = StyleSheet.create({
     textAlign: "center",
   },
 });
-const Dropdown = ({ target = "from", state, setState }) => {
-  const selectable = [...Array(100).keys()];
+const Dropdown = ({ target = "from", state, setState, start = 0 }) => {
+  const selectable = [...Array(100).keys()].filter((index) => index >= start);
   const _items = selectable.map((item, idx) => {
-    return { label: idx.toString(), value: idx.toString(), color: "black" };
+    return { label: item.toString(), value: item.toString(), color: "black" };
   });
   let placeholder = { label: "부터", value: "-1" };
   if (target === "from") {
@@ -418,6 +418,7 @@ export default () => {
                     target="to"
                     state={endYear}
                     setState={setEndYear}
+                    start={startYear}
                   ></Dropdown>
                 </View>
               </View>
