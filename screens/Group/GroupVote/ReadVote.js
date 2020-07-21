@@ -20,11 +20,9 @@ import UsersTable from "../../../components/User/UsersTable";
 import { useNavigation } from "@react-navigation/native";
 import VoteModal from "../../../components/Group/Vote/VoteModal";
 
-const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
+const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
 
-const NanumText = styled.Text`
-  font-family: ${(props) => props.theme.regularFont};
-`;
+const NanumText = styled.Text``;
 
 const SubContainer = styled.View`
   border-top-width: 1px;
@@ -94,7 +92,7 @@ const RatioBar = ({ percent, textInBar, textOutBar, users }) => {
             style={{
               height: (HEIGHT * 5) / 100,
               opacity: 0.7,
-              width: percent != 0 ? 1 : 0,
+              width: percent ? 1 : 0,
               backgroundColor: themeContext.darkGreenColor,
               transform: [
                 {
@@ -109,6 +107,7 @@ const RatioBar = ({ percent, textInBar, textOutBar, users }) => {
                     outputRange: [1, (WIDTH * 90 * percent) / 100],
                   }),
                 },
+                { perspective: 1000 }, // without this line this Animation will not render on Android while working fine on iOS
               ],
             }}
           ></Animated.View>
@@ -242,7 +241,7 @@ export default () => {
 
         <Container>
           <SubContainer style={{ justifyContent: "flex-start" }}>
-            <NanumText>투표 결과 </NanumText>
+            <NanumText>투표 결과</NanumText>
             <NanumText
               style={{ marginHorizontal: 10, color: themeContext.greenColor }}
             >

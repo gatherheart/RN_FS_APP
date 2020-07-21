@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import messagesData from "./Messages";
 import Chat from "./ChatPresenter";
 import { membersData } from "./Members";
+import Loader from "../../components/common/Loader";
 
 export default () => {
   const [state, setState] = useState({
@@ -33,5 +34,9 @@ export default () => {
     });
   }, []);
 
-  return <Chat {...state} setState={setState}></Chat>;
+  return state.loading ? (
+    <Loader></Loader>
+  ) : (
+    <Chat {...state} setState={setState}></Chat>
+  );
 };

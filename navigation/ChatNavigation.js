@@ -1,5 +1,8 @@
 import React from "react";
-import { createStackNavigator } from "@react-navigation/stack";
+import {
+  createStackNavigator,
+  CardStyleInterpolators,
+} from "@react-navigation/stack";
 import * as Color from "../constants/Color";
 import ChatScreen from "../screens/Chat";
 import ChatListScreen from "../screens/ChatList";
@@ -20,7 +23,13 @@ const ChatNav = () => {
       headerShown: false,
     }}
   >
-    <ChatStack.Screen name="Chat" component={ChatScreen}></ChatStack.Screen>
+    <ChatStack.Screen
+      name="Chat"
+      component={ChatScreen}
+      options={{
+        cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+      }}
+    ></ChatStack.Screen>
   </ChatStack.Navigator>;
 };
 

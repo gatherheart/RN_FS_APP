@@ -138,48 +138,7 @@ const Chat = ({ loading, messages, participants, setState }) => {
   return loading ? (
     <Loader></Loader>
   ) : (
-    <SideMenu
-      menu={
-        <DrawerContent
-          onItemSelected={() => {}}
-          participants={participants}
-          style={{
-            opacity: drawerOpened
-              ? _openOpacity.interpolate({
-                  inputRange: [0, 10],
-                  outputRange: [0, 1],
-                  extrapolate: "clamp",
-                })
-              : _closeOpacity.interpolate({
-                  inputRange: [0, 10],
-                  outputRange: [0, 1],
-                  extrapolate: "clamp",
-                }),
-          }}
-        />
-      }
-      isOpen={drawerOpened}
-      onChange={(isOpen) => {
-        console.log("onChange", isOpen);
-        Animated.timing(isOpen ? _openOpacity : _closeOpacity, {
-          toValue: isOpen ? 10 : 0,
-          duration: 270 * 2,
-          easing: Easing.linear,
-          useNativeDriver: true,
-        }).start(() => {});
-      }}
-      useNativeDriver={true}
-      menuPosition={"right"}
-      animationFunction={(prop, value) =>
-        Animated.timing(prop, {
-          toValue: value,
-          duration: 270,
-          easing: Easing.inOut(Easing.quad),
-          useNativeDriver: true,
-        })
-      }
-      onSliding={(fraction) => {}}
-    >
+    <>
       <CustomHeader
         rightButtonEnabled={true}
         rightButton={
@@ -263,7 +222,7 @@ const Chat = ({ loading, messages, participants, setState }) => {
           }}
         ></EmojiBoard>
       </KeyboardAvoidingView>
-    </SideMenu>
+    </>
   );
 };
 

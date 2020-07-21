@@ -32,7 +32,6 @@ const TitleContainer = styled.View`
 const VoteResult = () => {
   const themeContext = useContext(ThemeContext);
   const route = useRoute();
-  console.log(route.params);
   const { users, vote } = route.params;
   return (
     <>
@@ -41,7 +40,7 @@ const VoteResult = () => {
       <ScrollView
         style={{
           backgroundColor: themeContext.backgroundColor,
-          paddingTop: "15%",
+          paddingTop: HeaderHeight,
         }}
         contentContainerStyle={{
           fontFamily: themeContext.regularFont,
