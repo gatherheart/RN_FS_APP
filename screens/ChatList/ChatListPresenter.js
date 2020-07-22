@@ -19,7 +19,6 @@ import ScrollableTabView, {
   ScrollableTabBar,
 } from "react-native-scrollable-tab-view";
 import { trimText } from "../../utils/String";
-import FacebookTabBar from "./FacebookTabBar";
 import {
   GREEN_COLOR,
   BG_COLOR,

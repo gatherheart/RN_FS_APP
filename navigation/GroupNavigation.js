@@ -37,6 +37,7 @@ import GroupTestPage from "../screens/Group/GroupTestPage";
 import ReadScheduleContainer from "../screens/Group/GroupSchedule/ReadScheduleContainer";
 import WriteSchedule from "../screens/Group/GroupSchedule/WriteSchedule";
 import GroupRemove from "../screens/Group/GroupDrawer/GroupRemove";
+import SelectPhotos from "../screens/Feed/SelectPhotos";
 
 const Stack = createStackNavigator();
 
@@ -215,6 +216,13 @@ export default () => {
       <Stack.Screen
         name="PostList"
         component={PostListContainer}
+        options={{
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      />
+      <Stack.Screen
+        name="SelectPhotos"
+        component={SelectPhotos}
         options={{
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         }}

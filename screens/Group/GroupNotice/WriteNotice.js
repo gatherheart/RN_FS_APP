@@ -141,7 +141,8 @@ export default () => {
             value={state.title}
             placeholder={"공지 제목"}
             onChangeText={(text) => onChangeInput(text, TITLE_FIELD)}
-            returnKeyType="next"
+            returnKeyType="yahoo"
+            onSubmitEditing={() => {}}
             style={{
               ...styles.keyboard,
               paddingHorizontal: 10,

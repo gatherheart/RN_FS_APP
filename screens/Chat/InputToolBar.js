@@ -116,6 +116,7 @@ export const renderComposer = (onFocusHandler) => (props) => (
         height: "80%",
         alignSelf: "center",
       },
+      selectionColor: GREEN_COLOR,
     }}
     placeholder={""}
   />

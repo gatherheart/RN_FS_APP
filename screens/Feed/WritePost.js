@@ -24,6 +24,7 @@ import { CheckBox } from "react-native-elements";
 import { _pickImage, _pickDocument } from "../../utils/FileSystem";
 import Collapsible from "react-native-collapsible";
 import { UnderHeader, HeaderHeight } from "../../utils/HeaderHeight";
+import { useNavigation } from "@react-navigation/native";
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
 const PUBLIC_FIELD = "accessPolicyState";
@@ -82,7 +83,7 @@ export default () => {
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(false);
-
+  const navigation = useNavigation();
   const onChangeInput = (text, _type) => {
     dispatch({ type: _type, payload: text });
   };
@@ -111,7 +112,12 @@ export default () => {
         title={"히스토리 작성"}
         rightButtonEnabled={true}
         rightButton={
-          <Text onPress={() => setModalVisible((prev) => !prev)}>완료</Text>
+          <Text
+            onPress={() => setModalVisible((prev) => !prev)}
+            style={{ marginRight: 10 }}
+          >
+            완료
+          </Text>
         }
       ></CustomHeader>
 
@@ -135,11 +141,8 @@ export default () => {
           >
             <TouchableOpacity
               activeOpacity={0.8}
-              onPress={async () => {
-                const pickerResult = await _pickImage();
-                setImages((prev) => {
-                  return pickerResult != null ? [...prev, pickerResult] : prev;
-                });
+              onPress={() => {
+                navigation.navigate("SelectPhotos", { from: "PostWrite" });
               }}
               style={{
                 justifyContent: "center",
