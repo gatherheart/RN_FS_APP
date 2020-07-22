@@ -3,7 +3,7 @@ import { TouchableOpacity, Alert } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { StyleSheet } from "react-native";
 import HomeScreen from "../screens/Home";
-import ChatStack from "../navigation/ChatNavigation";
+import ChatListScreen from "../screens/ChatList/ChatListContainer";
 import FeedStack from "../navigation/FeedNavigation";
 import NoticeScreen from "../screens/Notice";
 import ProfileStack from "../navigation/ProfileNavigation";
@@ -99,7 +99,7 @@ export default ({ navigation, route }) => {
       }}
     >
       <Tabs.Screen name="Home" component={HomeScreen}></Tabs.Screen>
-      <Tabs.Screen name="ChatStack" component={ChatStack}></Tabs.Screen>
+      <Tabs.Screen name="ChatStack" component={ChatListScreen}></Tabs.Screen>
       <Tabs.Screen name="FeedStack" component={FeedStack}></Tabs.Screen>
       <Tabs.Screen name="Notice" component={NoticeScreen}></Tabs.Screen>
       <Tabs.Screen name="ProfileStack" component={ProfileStack}></Tabs.Screen>

@@ -17,6 +17,7 @@ import { GiftedChat, Send } from "react-native-gifted-chat";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import KeyboardSpacer from "react-native-keyboard-spacer";
 import EmojiBoard from "react-native-emoji-board";
+import { DrawerActions } from "@react-navigation/drawer";
 
 import PropTypes from "prop-types";
 import { Ionicons } from "@expo/vector-icons";
@@ -61,6 +62,7 @@ import DrawerContent from "../../components/Chat/DrawerComponent";
 import Drawer from "../../components/Group/GroupDrawer";
 import SideMenu from "react-native-side-menu";
 import { customEmojis, defaultProps } from "./CustomEmojis";
+import { useNavigation } from "@react-navigation/native";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
 
@@ -68,7 +70,7 @@ const Chat = ({ loading, messages, participants, setState }) => {
   const animation = useRef(null);
   const _openOpacity = new Animated.Value(0);
   const _closeOpacity = new Animated.Value(0);
-
+  const navigation = useNavigation();
   const [emojiEnabled, setemojiEnabled] = useState(false);
   const [drawerOpened, setDrawerOpend] = useState(false);
   const [text, setText] = useState("");
@@ -130,9 +132,7 @@ const Chat = ({ loading, messages, participants, setState }) => {
     contentContainerStyle: styles.contentContainerStyle,
   };
 
-  const _toggleOpen = () => {
-    setDrawerOpend((prev) => !prev);
-  };
+  const _toggleOpen = () => {};
 
   //  https://stackoverflow.com/a/54550286/1458375
   return loading ? (

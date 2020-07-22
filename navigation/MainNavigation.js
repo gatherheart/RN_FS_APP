@@ -9,7 +9,7 @@ import GroupSearchNav from "./GroupSearchNavigation";
 import GroupCreateScreen1 from "../screens/Group/GroupCreate/GroupCreate1";
 import GroupCreateScreen2 from "../screens/Group/GroupCreate/GroupCreate2";
 import GroupCreateScreen3 from "../screens/Group/GroupCreate/GroupCreate3";
-
+import { ChatStackNav } from "./ChatNavigation";
 import ChatScreen from "../screens/Chat";
 import HomeSchedule from "../screens/Home/HomeSchedule";
 import SelectSchool from "../screens/Group/GroupCreate/SelectSchool";
@@ -51,7 +51,9 @@ export default () => {
         }}
         initialParams={{ schedule: [] }}
       ></Stack.Screen>
-      <Stack.Screen name="Chat" component={ChatScreen}></Stack.Screen>
+      <Stack.Screen name="GroupChat" component={ChatScreen}></Stack.Screen>
+      <Stack.Screen name="Chat" component={ChatStackNav}></Stack.Screen>
+
       <Stack.Screen
         name="GroupSearchNav"
         component={GroupSearchNav}

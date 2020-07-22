@@ -3,13 +3,15 @@ import messagesData from "./Messages";
 import Chat from "./ChatPresenter";
 import { membersData } from "./Members";
 import Loader from "../../components/common/Loader";
-
+import { useNavigation } from "@react-navigation/native";
+import { DrawerActions } from "@react-navigation/native";
 export default () => {
   const [state, setState] = useState({
     loading: true,
     messages: [],
     participants: [],
   });
+  const navigation = useNavigation();
   const getDate = async () => {};
 
   useEffect(() => {
