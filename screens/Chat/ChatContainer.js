@@ -12,6 +12,7 @@ export default () => {
     participants: [],
   });
   const navigation = useNavigation();
+
   const getDate = async () => {};
 
   useEffect(() => {
@@ -34,6 +35,8 @@ export default () => {
       messages: messagesData,
       participants: membersData,
     });
+    console.log("setParams");
+    navigation.setParams({ participants: membersData });
   }, []);
 
   return state.loading ? (

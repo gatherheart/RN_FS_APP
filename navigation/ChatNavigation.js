@@ -13,21 +13,26 @@ import {
   DrawerItemList,
   DrawerItem,
 } from "@react-navigation/drawer";
-import { Linking } from "react-native";
+import { Linking, View, Text } from "react-native";
 import GroupTestPage from "../screens/Group/GroupTestPage";
-
+import DrawerContent from "../components/Chat/DrawerComponent";
+import { useRoute } from "@react-navigation/native";
 const Stack = createStackNavigator();
 const ChatStack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
 function CustomDrawerContent(props) {
+  const route = useRoute();
+  console.log(route);
+  const participants = route.state?.routes?.[0].params?.participants;
   return (
     <DrawerContentScrollView {...props}>
-      <DrawerItemList {...props} />
+      {/*<DrawerItemList {...props} />
       <DrawerItem
         label="Help"
         onPress={() => Linking.openURL("https://mywebsite.com/help")}
-      />
+      />*/}
+      <DrawerContent participants={participants}></DrawerContent>
     </DrawerContentScrollView>
   );
 }
@@ -44,13 +49,6 @@ const ChatDrawer = () => {
       <Drawer.Screen
         name="Chat"
         component={ChatScreen}
-        options={{
-          cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
-        }}
-      ></Drawer.Screen>
-      <Drawer.Screen
-        name="GroupTestPagee"
-        component={GroupTestPage}
         options={{
           cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
         }}

@@ -132,7 +132,9 @@ const Chat = ({ loading, messages, participants, setState }) => {
     contentContainerStyle: styles.contentContainerStyle,
   };
 
-  const _toggleOpen = () => {};
+  const _toggleOpen = () => {
+    navigation.openDrawer();
+  };
 
   //  https://stackoverflow.com/a/54550286/1458375
   return loading ? (

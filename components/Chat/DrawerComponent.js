@@ -43,7 +43,9 @@ const MemberClassify = ({ members, type }) => {
 };
 
 const DrawerContent = ({ participants: members, style }) => {
-  return (
+  return !members ? (
+    <View style={{ flex: 1, backgroundColor: "rgba(52, 52, 52, 0)" }}></View>
+  ) : (
     <Animated.View style={[{ flex: 1 }, style]}>
       <ScrollView
         style={[styles.animatedBoxContainer]}
