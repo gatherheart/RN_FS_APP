@@ -70,7 +70,7 @@ export default ({ rooms }) => {
           return (
             <ScrollView
               key={`group-room-page-${idx}`}
-              tabLabel={`${trimText(_groupName, 6)}`}
+              tabLabel={`${trimText(_groupName, 5)}`}
             >
               {groupRooms.map((room, i) => {
                 return (

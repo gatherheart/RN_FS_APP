@@ -82,7 +82,12 @@ const ChatListHeader = ({
           <Text style={{ fontSize: 16 }}>{title}</Text>
         </MiddleContainer>
         <RightContainer>
-          <TouchableOpacity style={styles.createChat}>
+          <TouchableOpacity
+            style={styles.createChat}
+            onPress={() => {
+              navigation.navigate("CreateChatList", { from: "ChatList" });
+            }}
+          >
             <SimpleLineIcons name="bubbles" size={24} color="black" />
           </TouchableOpacity>
         </RightContainer>

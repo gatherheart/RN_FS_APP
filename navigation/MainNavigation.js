@@ -20,6 +20,7 @@ import SelectCollege from "../screens/Group/GroupCreate/SelectCollege";
 import SelectMajor from "../screens/Group/GroupCreate/SelectMajor";
 import { useRoute } from "@react-navigation/native";
 import SlideImageModal from "../components/common/SlideImageModal";
+import CreateChatList from "../screens/ChatList/CreateChatList";
 
 const Stack = createStackNavigator();
 
@@ -131,6 +132,13 @@ export default () => {
         options={{
           cardStyleInterpolator:
             CardStyleInterpolators.forFadeFromBottomAndroid,
+        }}
+      ></Stack.Screen>
+      <Stack.Screen
+        name="CreateChatList"
+        component={CreateChatList}
+        options={{
+          cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
         }}
       ></Stack.Screen>
     </Stack.Navigator>

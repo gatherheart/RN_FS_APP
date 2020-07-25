@@ -85,7 +85,7 @@ export default ({ navigation, route }) => {
           let tabIcon =
             route.name === "Home"
               ? firstTabIcon
-              : route.name === "Chat"
+              : route.name === "ChatList"
               ? secondTabIcon
               : route.name === "Notice"
               ? thirdTabIcon
@@ -99,8 +99,7 @@ export default ({ navigation, route }) => {
       }}
     >
       <Tabs.Screen name="Home" component={HomeScreen}></Tabs.Screen>
-      <Tabs.Screen name="ChatStack" component={ChatListScreen}></Tabs.Screen>
-      <Tabs.Screen name="FeedStack" component={FeedStack}></Tabs.Screen>
+      <Tabs.Screen name="ChatList" component={ChatListScreen}></Tabs.Screen>
       <Tabs.Screen name="Notice" component={NoticeScreen}></Tabs.Screen>
       <Tabs.Screen name="ProfileStack" component={ProfileStack}></Tabs.Screen>
     </Tabs.Navigator>
