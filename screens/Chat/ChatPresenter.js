@@ -46,7 +46,6 @@ import {
   renderUsername,
   renderTime,
   renderMessageImage,
-  renderMessageText,
 } from "./MessageContainer";
 import { useState } from "react";
 import Loader from "../../components/common/Loader";
@@ -58,9 +57,6 @@ import {
   LIGHT_GREEN_COLOR,
   BG_COLOR,
 } from "../../constants/Color";
-import DrawerContent from "../../components/Chat/DrawerComponent";
-import Drawer from "../../components/Group/GroupDrawer";
-import SideMenu from "react-native-side-menu";
 import { customEmojis, defaultProps } from "./CustomEmojis";
 import { useNavigation } from "@react-navigation/native";
 
@@ -141,28 +137,27 @@ const Chat = ({ loading, messages, participants, setState }) => {
     <Loader></Loader>
   ) : (
     <>
-      <CustomHeader
-        rightButtonEnabled={true}
-        rightButton={
-          <TouchableOpacity
-            onPress={() => {
-              _toggleOpen();
-            }}
-            style={{ marginHorizontal: 10 }}
-          >
-            <Ionicons
-              name={"ios-menu"}
-              color={LIGHT_GREEN_COLOR}
-              size={30}
-            ></Ionicons>
-          </TouchableOpacity>
-        }
-      ></CustomHeader>
-
       <KeyboardAvoidingView
         style={{ ...styles.container }}
         behavior={Platform.OS == "ios" ? "padding" : "height"}
       >
+        <CustomHeader
+          rightButtonEnabled={true}
+          rightButton={
+            <TouchableOpacity
+              onPress={() => {
+                _toggleOpen();
+              }}
+              style={{ marginHorizontal: 10 }}
+            >
+              <Ionicons
+                name={"ios-menu"}
+                color={LIGHT_GREEN_COLOR}
+                size={30}
+              ></Ionicons>
+            </TouchableOpacity>
+          }
+        ></CustomHeader>
         <GiftedChat
           messages={messages}
           onSend={(messages) => onSend(messages)}

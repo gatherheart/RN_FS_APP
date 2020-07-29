@@ -32,48 +32,12 @@ import { ALBUM_NAME } from "./constants/Systems";
  */
 
 export default function App() {
-  console.log("APP");
   // For checking if app is loading or not
   const [loaded, setLoaded] = useState(false);
   // Apollo Client
   const [client, setClient] = useState(null);
   // Check User logged in or not
   const [isLoggedIn, setIsloggedIn] = useState(null);
-  const [permissions, setPermissions] = useState(false);
-
-  async function _getiOSNotificationPermission() {
-    const { status } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
-    if (status !== "granted") {
-      await Permissions.askAsync(Permissions.NOTIFICATIONS);
-    }
-  }
-
-  const _getPermissions = async () => {
-    let { status: CAMERA_status } = await Permissions.getAsync(
-      Permissions.CAMERA
-    );
-    let { status: CAMERA_ROLL_status } = await Permissions.getAsync(
-      Permissions.CAMERA_ROLL
-    );
-
-    //const { CAMERA_status } = await Permissions.askAsync(
-    //  Permissions.NOTIFICATIONS
-    //);
-    if (CAMERA_ROLL_status === "granted") {
-      //let album = await MediaLibrary.getAlbumAsync(ALBUM_NAME);
-      //if (album === null) {
-      //  album = await MediaLibrary.createAlbumAsync(ALBUM_NAME);
-      //}
-
-      if (CAMERA_status === "granted") {
-        setPermissions(true);
-      } else {
-        await Permissions.askAsync(Permissions.CAMERA);
-      }
-    } else {
-      await Permissions.askAsync(Permissions.CAMERA_ROLL);
-    }
-  };
 
   // Prefeching Image Cache
   const cacheImages = (images) =>
@@ -140,10 +104,7 @@ export default function App() {
     preload();
   }, []);
 
-  useMemo(() => {
-    _getPermissions();
-    _getiOSNotificationPermission();
-  }, []);
+  useMemo(() => {}, []);
 
   //console.log(loaded, client?.cache?.data?.data, isLoggedIn);
   return loaded && client && isLoggedIn !== null ? (

@@ -74,7 +74,6 @@ const styles = StyleSheet.create({
   animatedBox: {
     justifyContent: "flex-start",
     alignItems: "flex-start",
-    paddingTop: UnderHeader,
   },
   drawerBody: {
     alignItems: "center",

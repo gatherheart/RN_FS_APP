@@ -1,10 +1,4 @@
-import React, {
-  useEffect,
-  useState,
-  useRef,
-  useMemo,
-  useCallback,
-} from "react";
+import React, { useEffect, useState, useRef, useMemo } from "react";
 import {
   View,
   Text,
@@ -14,30 +8,19 @@ import {
   Dimensions,
 } from "react-native";
 import CustomHeader from "../../components/common/CustomHeader";
-import { CalendarList } from "react-native-calendars";
-import { StatusHeight, HeaderHeight } from "../../utils/HeaderHeight";
+import { HeaderHeight } from "../../utils/HeaderHeight";
 import { useRoute, useNavigation } from "@react-navigation/native";
-import { moderateScale, scale } from "react-native-size-matters";
+import { scale } from "react-native-size-matters";
 import {
   getYearMonthDay,
   getMonth,
-  getDate,
   timePickedConverter,
-  simplifiedFormat,
-  formatDate,
   getYearMonthDayKr,
 } from "../../utils/DateFormat";
-import {
-  GREEN_COLOR,
-  BG_COLOR,
-  GREY_COLOR,
-  LIGHT_GREY_COLOR,
-  LIGHT_GREEN_COLOR,
-} from "../../constants/Color";
+import { BG_COLOR, LIGHT_GREEN_COLOR } from "../../constants/Color";
 import Schedule from "../../components/common/Schedule";
 import PropTypes from "prop-types";
 import { CycleType } from "../../constants/Enum";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
 const DAY = Object.freeze({
@@ -224,7 +207,7 @@ const styles = StyleSheet.create({
 });
 
 HomeSchedule.propTypes = {
-  schedule: PropTypes.array.isRequired,
+  schedule: PropTypes.array,
 };
 
 export default HomeSchedule;

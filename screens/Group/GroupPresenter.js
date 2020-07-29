@@ -114,7 +114,6 @@ export default ({ id, group, loading, refreshFn }) => {
   const onItemSelected = (item) => {
     setIsOpen(false);
   };
-
   const [isOpen, setIsOpen] = useState(false);
   const [page, setPage] = useState(0);
 

@@ -39,7 +39,7 @@ const RightContainer = styled.View`
   align-items: flex-end;
 `;
 
-const ChatListHeader = ({
+const ProfileHeader = ({
   styles: stylesProps,
   statusStyle,
   iconColor,
@@ -75,7 +75,7 @@ const ChatListHeader = ({
             title="goBack"
             style={{}}
           >
-            <Text style={styles.messageTitle}>메세지</Text>
+            <Text style={styles.messageTitle}>내 정보</Text>
           </View>
         </LeftContainer>
         <MiddleContainer>
@@ -85,10 +85,10 @@ const ChatListHeader = ({
           <TouchableOpacity
             style={styles.createChat}
             onPress={() => {
-              navigation.navigate("CreateChatList", { from: "ChatList" });
+              navigation.navigate("AppInfo", { from: "Profile" });
             }}
           >
-            <SimpleLineIcons name="bubbles" size={24} color="black" />
+            <SimpleLineIcons name="settings" size={24} color="black" />
           </TouchableOpacity>
         </RightContainer>
       </View>
@@ -96,7 +96,7 @@ const ChatListHeader = ({
   );
 };
 
-export default ChatListHeader;
+export default ProfileHeader;
 
 const fixedStyles = StyleSheet.create({
   header: {
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
   },
 });
 
-ChatListHeader.propTypes = {
+ProfileHeader.propTypes = {
   style: PropTypes.object,
   statusStyle: PropTypes.object,
   iconColor: PropTypes.string,

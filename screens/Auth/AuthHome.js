@@ -22,6 +22,41 @@ const Text = styled.Text``;
 
 export default ({ navigation }) => {
   const [isVisible, setVisible] = useState(true);
+  const [permissions, setPermissions] = useState(false);
+
+  async function _getiOSNotificationPermission() {
+    const { status } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+    if (status !== "granted") {
+      await Permissions.askAsync(Permissions.NOTIFICATIONS);
+    }
+  }
+
+  const _getPermissions = async () => {
+    let { status: CAMERA_status } = await Permissions.getAsync(
+      Permissions.CAMERA
+    );
+    let { status: CAMERA_ROLL_status } = await Permissions.getAsync(
+      Permissions.CAMERA_ROLL
+    );
+
+    //const { CAMERA_status } = await Permissions.askAsync(
+    //  Permissions.NOTIFICATIONS
+    //);
+    if (CAMERA_ROLL_status === "granted") {
+      //let album = await MediaLibrary.getAlbumAsync(ALBUM_NAME);
+      //if (album === null) {
+      //  album = await MediaLibrary.createAlbumAsync(ALBUM_NAME);
+      //}
+
+      if (CAMERA_status === "granted") {
+        setPermissions(true);
+      } else {
+        await Permissions.askAsync(Permissions.CAMERA);
+      }
+    } else {
+      await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    }
+  };
   return (
     <View>
       <Text
@@ -64,6 +99,8 @@ export default ({ navigation }) => {
           style={styles.button}
           onPress={() => {
             setVisible(false);
+            _getiOSNotificationPermission();
+            _getPermissions();
             setTimeout(() => {
               navigation.navigate("LogIn");
             }, 300);

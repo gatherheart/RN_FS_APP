@@ -5,17 +5,16 @@ import {
   TouchableOpacity,
   TouchableHighlight,
   View,
+  Image,
 } from "react-native";
 
 import { SwipeListView } from "react-native-swipe-list-view";
+import { defaultPoster } from "../../constants/Urls";
+import Poster from "../../components/common/GroupPoster";
 
 const ROW_HEIGHT = 78;
-export default function SwipeViewList() {
-  const [listData, setListData] = useState(
-    Array(20)
-      .fill("")
-      .map((_, i) => ({ key: `${i}`, text: `item #${i}` }))
-  );
+export default function SwipeViewList({ data }) {
+  const [listData, setListData] = useState(data);
 
   const closeRow = (rowMap, rowKey) => {
     if (rowMap[rowKey]) {
@@ -41,8 +40,15 @@ export default function SwipeViewList() {
       style={styles.rowFront}
       underlayColor={"#AAA"}
     >
-      <View>
-        <Text>I am {data.item.text} in a SwipeListView</Text>
+      <View style={styles.alarmContainer}>
+        <Image
+          source={{ uri: data.item.group?.poster || defaultPoster }}
+          style={styles.image}
+        ></Image>
+        <View style={styles.info}>
+          <Text style={styles.title}>{data.item.title} </Text>
+          <Text>{data.item.body}</Text>
+        </View>
       </View>
     </TouchableHighlight>
   );
@@ -71,13 +77,11 @@ export default function SwipeViewList() {
         data={listData}
         renderItem={renderItem}
         renderHiddenItem={renderHiddenItem}
-        leftOpenValue={75}
         rightOpenValue={-150}
-        previewRowKey={"0"}
-        previewOpenValue={-40}
-        previewOpenDelay={3000}
         onRowDidOpen={onRowDidOpen}
         closeOnScroll
+        friction={6.5}
+        tension={2}
         disableRightSwipe
       />
     </View>
@@ -94,12 +98,12 @@ const styles = StyleSheet.create({
     color: "#FFF",
   },
   rowFront: {
-    alignItems: "center",
-    backgroundColor: "#CCC",
+    backgroundColor: "#fff",
     borderBottomColor: "black",
-    borderBottomWidth: 1,
+    borderBottomWidth: 0.3,
     justifyContent: "center",
     height: ROW_HEIGHT,
+    paddingLeft: 10,
   },
   rowBack: {
     alignItems: "center",
@@ -123,5 +127,21 @@ const styles = StyleSheet.create({
   backRightBtnRight: {
     backgroundColor: "red",
     right: 0,
+  },
+  image: {
+    width: 60,
+    height: undefined,
+    aspectRatio: 1,
+    borderRadius: 30,
+  },
+  alarmContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  info: {
+    marginLeft: 20,
+  },
+  title: {
+    fontWeight: "bold",
   },
 });

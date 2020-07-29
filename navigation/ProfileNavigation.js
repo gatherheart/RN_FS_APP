@@ -3,6 +3,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import EditProfileScreen from "../screens/Profile/EditProfile";
 import ProfileScreen from "../screens/Profile";
 import * as Color from "../constants/Color";
+import AppInfo from "../screens/Profile/AppInfo";
 
 const Stack = createStackNavigator();
 
@@ -16,6 +17,7 @@ export default () => (
       },
       headerTintColor: Color.TINT_COLOR,
       headerBackTitleVisible: false,
+      headerShown: false,
     }}
   >
     <Stack.Screen name="Profile" component={ProfileScreen}></Stack.Screen>
@@ -23,5 +25,6 @@ export default () => (
       name="EditProfile"
       component={EditProfileScreen}
     ></Stack.Screen>
+    <Stack.Screen name="AppInfo" component={AppInfo}></Stack.Screen>
   </Stack.Navigator>
 );

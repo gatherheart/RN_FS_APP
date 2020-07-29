@@ -6,9 +6,6 @@ import {
   StyleSheet,
   TouchableOpacity,
   Dimensions,
-  Alert,
-  Button,
-  Modal,
   TextInput,
   KeyboardAvoidingView,
 } from "react-native";
@@ -129,7 +126,6 @@ export default ({ id }) => {
   const [account, setAccount] = useState("");
   const [bank, setBank] = useState("");
   const [message, setMessage] = useState("");
-  let amountPerOne = 0;
   const [memberList, setMemberList] = useState([]);
 
   const navigation = useNavigation();
@@ -144,17 +140,6 @@ export default ({ id }) => {
   }, [route]);
 
   const themeContext = useContext(ThemeContext);
-
-  const submitVote = () => {
-    if (billTitle === "") {
-      setMessage("제목을 채워주세요.");
-    } else if (billTitle === "") {
-      setMessage("제목을 입력해주세요.");
-    } else {
-      setMessage("투표를 등록하였습니다.");
-    }
-    changeModal();
-  };
 
   const onSubmitbillTitle = () => {
     if (billTitle === "") return;
@@ -320,7 +305,6 @@ export default ({ id }) => {
               returnKeyType="next"
               style={{
                 ...styles.keyboard,
-                fontFamily: themeContext.regularFont,
               }}
             ></TextInput>
           </OptionContainer>
@@ -340,7 +324,6 @@ export default ({ id }) => {
                 returnKeyType="next"
                 style={{
                   ...styles.keyboard,
-                  fontFamily: themeContext.regularFont,
                   color: "black",
                   paddingRight: 20,
                   width: 200,

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -33,6 +33,18 @@ const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
 
 export default ({ rooms }) => {
   const navigation = useNavigation();
+  const [currentPage, setPage] = useState({
+    i: 0,
+    // currentPage object
+    ref: null,
+    // previousPage
+    from: 0,
+  });
+
+  useEffect(() => {
+    console.log(currentPage.i);
+  }, [currentPage]);
+
   const _classifyRooms = (rooms) => {
     return rooms.reduce(function (r, a) {
       const _key = `${a.group.id + "#" + a.group.groupName}`;
@@ -63,6 +75,9 @@ export default ({ rooms }) => {
             underlineStyle={{ backgroundColor: LIGHT_GREEN_COLOR, height: 2 }}
           />
         )}
+        onChangeTab={(tab) => {
+          setPage(tab);
+        }}
       >
         {Object.keys(_classifiedRooms).map((groupKey, idx) => {
           const _groupName = groupKey.split("#")[1];

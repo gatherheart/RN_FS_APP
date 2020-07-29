@@ -14,7 +14,6 @@ import { simplifiedFormat } from "../../../utils/DateFormat";
 import Collapsible from "react-native-collapsible";
 import PropTypes from "prop-types";
 import Loader from "../../../components/common/Loader";
-import CustumIcon from "../../../components/common/CustomIcon";
 import UsersTable from "../../../components/User/UsersTable";
 import { useNavigation } from "@react-navigation/native";
 import BillModal from "../../../components/Group/Bill/BillModal";
