@@ -1,1 +1,1 @@
-# club-management software
+club-management software developed with React Native
