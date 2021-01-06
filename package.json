@@ -21,7 +21,7 @@
     "apollo-cache-inmemory": "^1.6.5",
     "apollo-cache-persist": "^0.1.1",
     "apollo-link-http": "^1.5.17",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "emoji-utils": "^1.0.1",
     "expo": "^37.0.6",
     "expo-asset": "~8.1.3",
